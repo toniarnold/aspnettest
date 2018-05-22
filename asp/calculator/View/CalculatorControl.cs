@@ -1,0 +1,30 @@
+﻿using System.Web.UI;
+
+using asplib.View;
+
+using asp.calculator.Control;
+
+namespace asp.calculator.View
+
+{
+    /// <summary>
+    /// Base class for all UserControls in the page element hierarchy
+    /// </summary>
+    public abstract class CalculatorControl : UserControl, IMainControl<Calculator, CalculatorContext, CalculatorContext.CalculatorState>
+    {
+        public Calculator Main { get; set; }
+        public CalculatorContext Fsm
+        {
+            get { return this.Main.Fsm; }
+        }
+        public CalculatorContext.CalculatorState State
+        {
+            get { return this.Main.State; }
+            set { this.Main.State = value; }
+        }
+        public new StateBag ViewState
+        {
+            get { return base.ViewState; }
+        }
+    }
+}
