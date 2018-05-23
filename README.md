@@ -47,7 +47,7 @@ public void SqrtTest()
 	Assert.That(this.Stack.Peek(), Is.EqualTo("7"));
 	Assert.That(this.Stack.Count, Is.EqualTo(before));
 }
-</pre>/td><td><pre>
+</pre></td><td><pre>
 [Test]
 public void SqrtTest()
 {
