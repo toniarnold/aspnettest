@@ -73,5 +73,4 @@ To quote again:
 
 >Since one video is worth a thousand pictures, check out this screencast recorded on a ~~Mac~~ win10 box running an initial GUI test suite:
 
-![Tests running...][running]
-[running]: https://raw.githubusercontent.com/toniarnold/aspnettest/master/doc/running.gif "Tests running..."
+![Tests running...](doc/running.gif)
