@@ -17,21 +17,27 @@ namespace testie.asp
     [TestFixture]
     public class CalculatorTest : IIE
     {
-        public IMainControl<Calculator, CalculatorContext, CalculatorContext.CalculatorState> MainControl
+        private IMainControl<Calculator, CalculatorContext, CalculatorContext.CalculatorState> MainControl
         {
             get { return (IMainControl<Calculator, CalculatorContext, CalculatorContext.CalculatorState>)
                             iie.IEExtension.MainControl; }
         }
 
-        public Calculator Main
+        private Calculator Main
         {
-            get { return (Calculator)this.MainControl.Main; }
+            get { return this.MainControl.Main; }
         }
 
-        public Stack<string> Stack
+        private Stack<string> Stack
         {
             get { return this.MainControl.Main.Stack; }
         }
+
+        private CalculatorContext.CalculatorState State
+        {
+            get { return this.MainControl.State; }
+        }
+
 
         [OneTimeSetUp]
         public void OneTimeSetUp()
@@ -45,13 +51,14 @@ namespace testie.asp
             this.TearDownIE();
         }
 
+
         [Test]
         public void NavigateDefaultTest()
         {
             this.Navigate("/asp/default.aspx");
             Assert.That(this.Html(), Does.Contain("RPN calculator"));
             Assert.That(this.Html(), Does.Contain("Map1.Splash"));          // even later than "late binding"
-            Assert.That(this.MainControl.State, Is.EqualTo(CalculatorContext.Map1.Splash)); // "early binding"
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Splash)); // "early binding"
         }
 
         [Test]
@@ -59,8 +66,22 @@ namespace testie.asp
         {
             this.Navigate("/asp/default.aspx");
             this.Click("footer.enterButton");
-            Assert.That(this.MainControl.State, Is.EqualTo(CalculatorContext.Map1.Enter));
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
             Assert.That(this.Html(), Does.Contain("Map1.Enter"));
+        }
+
+        [Test]
+        public void EnterTest()
+        {
+            this.Navigate("/asp/default.aspx");
+            this.Click("footer.enterButton");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
+            this.Write("enter.operandTextBox", "1");
+            this.Click("footer.enterButton");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
+            Assert.That(this.Stack.Peek(), Is.EqualTo("1"));
+            Assert.That(this.Stack.Count, Is.EqualTo(1));
+            Assert.That(this.Html(), Does.Contain(" 1\n"));
         }
 
         [Test]
@@ -68,13 +89,18 @@ namespace testie.asp
         {
             this.Navigate("/asp/default.aspx");
             this.Click("footer.enterButton");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
             this.Write("enter.operandTextBox", "2");
             this.Click("footer.enterButton");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             this.Click("footer.enterButton");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
             this.Write("enter.operandTextBox", "3");
             this.Click("footer.enterButton");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             var before = this.Stack.Count;
             this.Click("calculate.addButton");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             Assert.That(this.Stack.Peek(), Is.EqualTo("5"));
             Assert.That(this.Stack.Count, Is.EqualTo(before - 1));
             Assert.That(this.Html(), Does.Contain(" 5\n"));
@@ -85,13 +111,18 @@ namespace testie.asp
         {
             this.Navigate("/asp/default.aspx");
             this.Click("footer.enterButton");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
             this.Write("enter.operandTextBox", "2");
             this.Click("footer.enterButton");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             this.Click("footer.enterButton");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
             this.Write("enter.operandTextBox", "3");
             this.Click("footer.enterButton");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             var before = this.Stack.Count;
             this.Click("calculate.clrButton");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             Assert.That(this.Stack.Count, Is.EqualTo(before - 1));
         }
 
@@ -100,13 +131,18 @@ namespace testie.asp
         {
             this.Navigate("/asp/default.aspx");
             this.Click("footer.enterButton");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
             this.Write("enter.operandTextBox", "2");
             this.Click("footer.enterButton");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             this.Click("footer.enterButton");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
             this.Write("enter.operandTextBox", "3");
             this.Click("footer.enterButton");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             var before = this.Stack.Count;
             this.Click("calculate.clrAllButton");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             Assert.That(this.Stack.Count, Is.EqualTo(0));
         }
 
@@ -115,28 +151,21 @@ namespace testie.asp
         {
             this.Navigate("/asp/default.aspx");
             this.Click("footer.enterButton");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
             this.Write("enter.operandTextBox", "12");
             this.Click("footer.enterButton");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             this.Click("footer.enterButton");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
             this.Write("enter.operandTextBox", "3");
             this.Click("footer.enterButton");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             var before = this.Stack.Count;
             this.Click("calculate.divButton");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             Assert.That(this.Stack.Peek(), Is.EqualTo("4"));
             Assert.That(this.Stack.Count, Is.EqualTo(before - 1));
             Assert.That(this.Html(), Does.Contain(" 4\n"));
-        }
-
-        [Test]
-        public void EnterTest()
-        {
-            this.Navigate("/asp/default.aspx");
-            this.Click("footer.enterButton");
-            this.Write("enter.operandTextBox", "1");
-            this.Click("footer.enterButton");
-            Assert.That(this.Stack.Peek(), Is.EqualTo("1"));
-            Assert.That(this.Stack.Count, Is.EqualTo(1));
-            Assert.That(this.Html(), Does.Contain(" 1\n"));
         }
 
         [Test]
@@ -144,13 +173,18 @@ namespace testie.asp
         {
             this.Navigate("/asp/default.aspx");
             this.Click("footer.enterButton");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
             this.Write("enter.operandTextBox", "4");
             this.Click("footer.enterButton");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             this.Click("footer.enterButton");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
             this.Write("enter.operandTextBox", "3");
             this.Click("footer.enterButton");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             var before = this.Stack.Count;
             this.Click("calculate.mulButton");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             Assert.That(this.Stack.Peek(), Is.EqualTo("12"));
             Assert.That(this.Stack.Count, Is.EqualTo(before - 1));
             Assert.That(this.Html(), Does.Contain(" 12\n"));
@@ -162,10 +196,13 @@ namespace testie.asp
 
             this.Navigate("/asp/default.aspx");
             this.Click("footer.enterButton");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
             this.Write("enter.operandTextBox", "2");
             this.Click("footer.enterButton");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             var before = this.Stack.Count;
             this.Click("calculate.powButton");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             Assert.That(this.Stack.Peek(), Is.EqualTo("4"));
             Assert.That(this.Stack.Count, Is.EqualTo(before));
             Assert.That(this.Html(), Does.Contain(" 4\n"));
@@ -176,10 +213,13 @@ namespace testie.asp
         {
             this.Navigate("/asp/default.aspx");
             this.Click("footer.enterButton");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
             this.Write("enter.operandTextBox", "49");
             this.Click("footer.enterButton");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             var before = this.Stack.Count;
             this.Click("calculate.sqrtButton");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             Assert.That(this.Stack.Peek(), Is.EqualTo("7"));
             Assert.That(this.Stack.Count, Is.EqualTo(before));
             Assert.That(this.Html(), Does.Contain(" 7\n"));
@@ -190,13 +230,18 @@ namespace testie.asp
         {
             this.Navigate("/asp/default.aspx");
             this.Click("footer.enterButton");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
             this.Write("enter.operandTextBox", "12");
             this.Click("footer.enterButton");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             this.Click("footer.enterButton");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
             this.Write("enter.operandTextBox", "3");
             this.Click("footer.enterButton");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             var before = this.Stack.Count;
             this.Click("calculate.subButton");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             Assert.That(this.Stack.Peek(), Is.EqualTo("9"));
             Assert.That(this.Stack.Count, Is.EqualTo(before - 1));
             Assert.That(this.Html(), Does.Contain(" 9\n"));

@@ -20,6 +20,7 @@ namespace test.asp.calculator.Control
             base.Construct();
         }
 
+
         [Test]
         public void InitTest()
         {
@@ -37,14 +38,30 @@ namespace test.asp.calculator.Control
         }
 
         [Test]
+        public void EnterTest()
+        {
+            this._fsm.Enter("");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
+            this._fsm.Enter("1");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
+            Assert.That(this.Stack.Peek(), Is.EqualTo("1"));
+            Assert.That(this.Stack.Count, Is.EqualTo(1));
+        }
+
+        [Test]
         public void AddTest()
         {
             this._fsm.Enter("");
-            this.Enter("2");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
+            this._fsm.Enter("2");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             this._fsm.Enter("");
-            this.Enter("3");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
+            this._fsm.Enter("3");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             var before = this.Stack.Count;
-            this.Add();
+            this._fsm.Add(this.Stack);
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             Assert.That(this.Stack.Peek(), Is.EqualTo("5"));
             Assert.That(this.Stack.Count, Is.EqualTo(before - 1));
         }
@@ -53,11 +70,16 @@ namespace test.asp.calculator.Control
         public void ClrTest()
         {
             this._fsm.Enter("");
-            this.Enter("2");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
+            this._fsm.Enter("2");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             this._fsm.Enter("");
-            this.Enter("3");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
+            this._fsm.Enter("3");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             var before = this.Stack.Count;
-            this.Clr();
+            this._fsm.Clr(this.Stack);
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             Assert.That(this.Stack.Count, Is.EqualTo(before - 1));
         }
 
@@ -65,11 +87,16 @@ namespace test.asp.calculator.Control
         public void ClrAllTest()
         {
             this._fsm.Enter("");
-            this.Enter("2");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
+            this._fsm.Enter("2");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             this._fsm.Enter("");
-            this.Enter("3");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
+            this._fsm.Enter("3");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             var before = this.Stack.Count;
-            this.ClrAll();
+            this._fsm.ClrAll(this.Stack);
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             Assert.That(this.Stack.Count, Is.EqualTo(0));
         }
 
@@ -77,33 +104,32 @@ namespace test.asp.calculator.Control
         public void DivTest()
         {
             this._fsm.Enter("");
-            this.Enter("12");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
+            this._fsm.Enter("12");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             this._fsm.Enter("");
-            this.Enter("3");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
+            this._fsm.Enter("3");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             var before = this.Stack.Count;
-            this.Div();
+            this._fsm.Div(this.Stack);
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             Assert.That(this.Stack.Peek(), Is.EqualTo("4"));
             Assert.That(this.Stack.Count, Is.EqualTo(before - 1));
-        }
-
-        [Test]
-        public void EnterTest()
-        {
-            this._fsm.Enter("");
-            this.Enter("1");
-            Assert.That(this.Stack.Peek(), Is.EqualTo("1"));
-            Assert.That(this.Stack.Count, Is.EqualTo(1));
         }
 
         [Test]
         public void MulTest()
         {
             this._fsm.Enter("");
-            this.Enter("4");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
+            this._fsm.Enter("4");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             this._fsm.Enter("");
-            this.Enter("3");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
+            this._fsm.Enter("3");
             var before = this.Stack.Count;
-            this.Mul();
+            this._fsm.Mul(this.Stack);
             Assert.That(this.Stack.Peek(), Is.EqualTo("12"));
             Assert.That(this.Stack.Count, Is.EqualTo(before - 1));
         }
@@ -112,10 +138,12 @@ namespace test.asp.calculator.Control
         public void PowTest()
         {
             this._fsm.Enter("");
-            this.Enter("2");
-            this._fsm.Enter("");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
+            this._fsm.Enter("2");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             var before = this.Stack.Count;
-            this.Pow();
+            this._fsm.Pow(this.Stack);
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             Assert.That(this.Stack.Peek(), Is.EqualTo("4"));
             Assert.That(this.Stack.Count, Is.EqualTo(before));
         }
@@ -124,9 +152,12 @@ namespace test.asp.calculator.Control
         public void SqrtTest()
         {
             this._fsm.Enter("");
-            this.Enter("49");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
+            this._fsm.Enter("49");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             var before = this.Stack.Count;
-            this.Sqrt();
+            this._fsm.Sqrt(this.Stack);
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             Assert.That(this.Stack.Peek(), Is.EqualTo("7"));
             Assert.That(this.Stack.Count, Is.EqualTo(before));
         }
@@ -135,11 +166,16 @@ namespace test.asp.calculator.Control
         public void SubTest()
         {
             this._fsm.Enter("");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
             this._fsm.Enter("12");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             this._fsm.Enter("");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
             this._fsm.Enter("3");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             var before = this.Stack.Count;
             this._fsm.Sub(this._stack);
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             Assert.That(this.Stack.Peek(), Is.EqualTo("9"));
             Assert.That(this.Stack.Count, Is.EqualTo(before - 1));
         }
