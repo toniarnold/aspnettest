@@ -18,6 +18,11 @@ namespace asp.calculator
 {
     public partial class Main : CalculatorControl
     {
+        protected string SessionStorage
+        {
+            get { return ControlMainExtension.SessionStorage.ToString(); }
+        }
+        
         protected void Page_Load(object sender, EventArgs e)
         {
             this.LoadMain();

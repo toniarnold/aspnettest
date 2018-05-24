@@ -47,16 +47,26 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="asplib\View\ControlMainExtensionTest.cs" />
     <Compile Include="asp\calculator\Control\CalculatorTest.cs" />
+    <Compile Include="iie\IIETest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\asplib\asplib.csproj">
+      <Project>{776e3032-bfd5-4c20-9867-942f045a8b0f}</Project>
+      <Name>asplib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\asp\asp.csproj">
       <Project>{36e1692e-9b7c-467c-adbe-a3f86575269a}</Project>
       <Name>asp</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\iie\iie.csproj">
+      <Project>{fbae78a0-e68c-4ed9-a1a8-5fcfd1695f39}</Project>
+      <Name>iie</Name>
     </ProjectReference>
     <ProjectReference Include="..\SMC\SMC.csproj">
       <Project>{95a23f32-99ae-4315-8319-56bee5d63b2f}</Project>

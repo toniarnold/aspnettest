@@ -15,25 +15,26 @@ using asp.calculator.View;
 namespace testie.asp
 {
     [TestFixture]
+    [Category("SHDocVw.InternetExplorer")]
     public class CalculatorTest : IIE
     {
-        private IMainControl<Calculator, CalculatorContext, CalculatorContext.CalculatorState> MainControl
+        protected IMainControl<Calculator, CalculatorContext, CalculatorContext.CalculatorState> MainControl
         {
             get { return (IMainControl<Calculator, CalculatorContext, CalculatorContext.CalculatorState>)
                             iie.IEExtension.MainControl; }
         }
 
-        private Calculator Main
+        protected Calculator Main
         {
             get { return this.MainControl.Main; }
         }
 
-        private Stack<string> Stack
+        protected Stack<string> Stack
         {
             get { return this.MainControl.Main.Stack; }
         }
 
-        private CalculatorContext.CalculatorState State
+        protected CalculatorContext.CalculatorState State
         {
             get { return this.MainControl.State; }
         }
@@ -51,6 +52,11 @@ namespace testie.asp
             this.TearDownIE();
         }
 
+        [SetUp]
+        public virtual void SetUpStorage()
+        {
+            ControlMainExtension.SessionStorage = Storage.Viewstate;    // default, no special TearDown required
+        }
 
         [Test]
         public void NavigateDefaultTest()
@@ -193,7 +199,6 @@ namespace testie.asp
         [Test]
         public void PowTest()
         {
-
             this.Navigate("/asp/default.aspx");
             this.Click("footer.enterButton");
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));

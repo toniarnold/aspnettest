@@ -6,7 +6,9 @@ using System.Threading.Tasks;
 
 using NUnit.Framework;
 
-namespace iie.test
+using iie;
+
+namespace test.iie
 {
     /// <summary>
     /// Local smoke tests within the iie project

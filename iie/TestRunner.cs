@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -8,10 +9,12 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Xml;
 
+using NUnit.Framework;
 using NUnit.Engine;
 
 namespace iie
 {
+    [TestOfAttribute("SHDocVw.InternetExplorer")]   // ensures that NUnit.Framework.dll gets included
     public class TestRunner : ITestEventListener
     {
         public TestRunner(int port)
@@ -73,7 +76,15 @@ namespace iie
             using (var engine = TestEngineActivator.CreateInstance())
             using (var runner = engine.GetRunner(package))
             {
-                this.result = runner.Run(this, TestFilter.Empty);
+                var filter = TestFilter.Empty;
+                var where = ConfigurationManager.AppSettings["TestFilterWhere"];
+                if (!String.IsNullOrEmpty(where))
+                { 
+                    var builder = new TestFilterBuilder();
+                    builder.SelectWhere(where);
+                    filter = builder.GetFilter();   // TestFilter.Empty when no TestFilterWhere is given
+                }
+                this.result = runner.Run(this, filter);
             }
         }
     }

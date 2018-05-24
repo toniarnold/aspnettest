@@ -91,6 +91,7 @@
     <Content Include="calculator\View\Footer.ascx" />
     <Content Include="calculator\View\Splash.ascx" />
     <Content Include="calculator\View\Title.ascx" />
+    <Content Include="clear.aspx" />
     <Content Include="default.aspx" />
     <Content Include="nunit.png" />
     <Content Include="Web.config" />
@@ -149,6 +150,13 @@
     </Compile>
     <Compile Include="calculator\View\Title.ascx.designer.cs">
       <DependentUpon>Title.ascx</DependentUpon>
+    </Compile>
+    <Compile Include="clear.aspx.cs">
+      <DependentUpon>clear.aspx</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="clear.aspx.designer.cs">
+      <DependentUpon>clear.aspx</DependentUpon>
     </Compile>
     <Compile Include="default.aspx.cs">
       <DependentUpon>default.aspx</DependentUpon>

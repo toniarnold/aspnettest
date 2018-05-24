@@ -38,7 +38,9 @@ namespace iie
         public static int Port { get; set; }
 
         // Configuration
-        private static int millisecondsTimeout = int.Parse(ConfigurationManager.AppSettings["RequestTimeout"]) * 1000;
+        private static int millisecondsTimeout =
+            String.IsNullOrEmpty(ConfigurationManager.AppSettings["RequestTimeout"]) ? 1 :
+            int.Parse(ConfigurationManager.AppSettings["RequestTimeout"]) * 1000;
 
         // Internet explorer
         private static SHDocVw.InternetExplorer ie;
@@ -128,6 +130,7 @@ namespace iie
             var button = GetElement(MainControl, path);
             button.click();
             mre.WaitOne(millisecondsTimeout);
+            Thread.Sleep(1000); // TODO - why do we get duplicate button events otherwise?
         }
 
         /// <summary>

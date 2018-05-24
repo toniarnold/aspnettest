@@ -6,7 +6,8 @@
 <%@ Register TagPrefix="uc" TagName="Splash" Src="~/calculator/View/Splash.ascx" %>
 <%@ Register TagPrefix="uc" TagName="Title" Src="~/calculator/View/Title.ascx" %>
 
-<h1>Calculator</h1>
+<h1 style="display: inline;">Calculator</h1>
+<span style="vertical-align: top; margin-left:100px;">Session Storage: <%= this.SessionStorage %></span>
 
 <uc:Title ID="title" runat="server" />
 <hr />

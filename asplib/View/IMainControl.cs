@@ -2,7 +2,10 @@
 - * Extension methods for direct accessors and the implementation of the persistence of Main within an UserControl
 -*/
 
+using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -82,6 +85,11 @@ namespace asplib.View
     public static class ControlMainExtension
     {
         /// <summary>
+        /// Type of the session storage, read from AppSettings["SessionStorage"], but can be changed programmatically
+        /// </summary>
+        public static Storage? SessionStorage { get; set; }
+
+        /// <summary>
         /// To be called in Page_Load():
         /// Load the Main object from the storage, propagate it to all subcontrols 
         /// and recursively hide them all below the main control.
@@ -90,20 +98,26 @@ namespace asplib.View
         /// <typeparam name="M"></typeparam>
         /// <param name="controlMain"></param>
         /// <param name="storage"></param>
-        public static void LoadMain<M, F, S>(this IMainControl<M, F, S> controlMain, Storage storage = Storage.Viewstate)
+        public static void LoadMain<M, F, S>(this IMainControl<M, F, S> controlMain)
             where M : new()
             where F : statemap.FSMContext
             where S : statemap.State
         {
             var key = controlMain.ClientID + "_Main";
 
-            switch (storage)
+            if (SessionStorage == null)
             {
-                case Storage.Session:
-                    controlMain.Main = (M)controlMain.Session[key];
-                    break;
+                var configStorage = ConfigurationManager.AppSettings["SessionStorage"];
+                SessionStorage = String.IsNullOrEmpty(configStorage) ? Storage.Viewstate : (Storage)Enum.Parse(typeof(Storage), configStorage);
+            }
+
+            switch (SessionStorage)
+            {
                 case Storage.Viewstate:
                     controlMain.Main = (M)controlMain.ViewState[key];
+                    break;
+                case Storage.Session:
+                    controlMain.Main = (M)controlMain.Session[key];
                     break;
                 case Storage.Database:
                     using (var stream = new MemoryStream())
@@ -143,20 +157,21 @@ namespace asplib.View
         /// <typeparam name="M"></typeparam>
         /// <param name="controlMain"></param>
         /// <param name="storage"></param>
-        public static void SaveMain<M, F, S>(this IMainControl<M, F, S> controlMain, Storage storage = Storage.Viewstate)
+        public static void SaveMain<M, F, S>(this IMainControl<M, F, S> controlMain)
             where M : new()
             where F : statemap.FSMContext
             where S : statemap.State
         {
             var key = controlMain.ClientID + "_Main";
 
-            switch (storage)
+            Trace.Assert(SessionStorage != null, "SaveMain() without preceding LoadMain()");
+            switch (SessionStorage)
             {
-                case Storage.Session:
-                    controlMain.Session[key] = controlMain.Main;
-                    break;
                 case Storage.Viewstate:
                     controlMain.ViewState[key] = controlMain.Main;
+                    break;
+                case Storage.Session:
+                    controlMain.Session[key] = controlMain.Main;
                     break;
                 case Storage.Database:
                     using (var stream = new MemoryStream())
