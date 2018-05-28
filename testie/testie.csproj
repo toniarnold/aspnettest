@@ -47,8 +47,9 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="asp\CalculatorDatabaseTest.cs" />
     <Compile Include="asp\CalculatorSessionTest.cs" />
-    <Compile Include="asp\CalculatorTest.cs" />
+    <Compile Include="asp\CalculatorViewstateTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

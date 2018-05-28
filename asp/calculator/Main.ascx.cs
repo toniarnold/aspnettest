@@ -18,11 +18,11 @@ namespace asp.calculator
 {
     public partial class Main : CalculatorControl
     {
-        protected string SessionStorage
+        public string StorageLinkUrl
         {
-            get { return ControlMainExtension.SessionStorage.ToString(); }
+            set { this.storageLink.NavigateUrl = value; }
         }
-        
+
         protected void Page_Load(object sender, EventArgs e)
         {
             this.LoadMain();

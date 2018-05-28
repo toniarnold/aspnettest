@@ -21,7 +21,8 @@
 
 <asp:ImageButton ID="testButton" runat="server" OnClick="testButton_Click"
     ImageUrl="nunit.png" CssClass="nunitimg" />
-<uc:calculator ID="calculator" runat="server" />
+<uc:calculator ID="calculator" runat="server" 
+    StorageLinkUrl="~/triptych.aspx" />
 
 </form>
 </body>

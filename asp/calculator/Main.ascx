@@ -5,9 +5,24 @@
 <%@ Register TagPrefix="uc" TagName="Footer" Src="~/calculator/View/Footer.ascx" %>
 <%@ Register TagPrefix="uc" TagName="Splash" Src="~/calculator/View/Splash.ascx" %>
 <%@ Register TagPrefix="uc" TagName="Title" Src="~/calculator/View/Title.ascx" %>
-
-<h1 style="display: inline;">Calculator</h1>
-<span style="vertical-align: top; margin-left:100px;">Session Storage: <%= this.SessionStorage %></span>
+<style>
+.headlink-container { 
+    width: 100%;
+}
+.headlink-box {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+</style>
+<div class="headlink-container">
+    <asp:HyperLink ID="storageLink" runat="server"
+        CssClass="headlink-box"
+        ToolTip="click to select the storage type"
+        >
+        Session Storage: <%= this.Storage %>
+    </asp:HyperLink>
+</div>
 
 <uc:Title ID="title" runat="server" />
 <hr />

@@ -5,6 +5,7 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -18,6 +19,8 @@ using System.Web.UI;
 using System.Web.SessionState;
 
 using iie;
+
+using asplib.Model;
 
 
 namespace asplib.View
@@ -48,10 +51,18 @@ namespace asplib.View
         /// </summary>
         S State { get; set; }
 
+        /// <summary>
+        /// Local session storage type overriding the global config
+        /// </summary>
+        Storage? SessionStorage { get; set; }
+
         // Inherited UserControl properties
         bool Visible { get; set; }
         string ClientID { get; }
         HttpSessionState Session { get; }
+        HttpRequest Request { get; }
+        HttpResponse Response { get; }
+        bool IsPostBack { get; }
         /// <summary>
         /// Make the protected ViewState public
         /// </summary>
@@ -90,6 +101,69 @@ namespace asplib.View
         public static Storage? SessionStorage { get; set; }
 
         /// <summary>
+        /// Set the local session storage type from an .ascx attribute string. Case insensitive.
+        /// </summary>
+        /// <typeparam name="M"></typeparam>
+        /// <typeparam name="F"></typeparam>
+        /// <typeparam name="S"></typeparam>
+        /// <param name="controlMain"></param>
+        /// <param name="storage"></param>
+        public static void SetStorage<M, F, S>(this IMainControl<M, F, S> controlMain, string storage)
+            where M : new()
+            where F : statemap.FSMContext
+            where S : statemap.State
+        {
+            controlMain.SessionStorage = (Storage)Enum.Parse(typeof(Storage), storage, true);
+        }
+
+        /// <summary>
+        /// Set the local session storage type from code
+        /// </summary>
+        /// <typeparam name="M"></typeparam>
+        /// <typeparam name="F"></typeparam>
+        /// <typeparam name="S"></typeparam>
+        /// <param name="controlMain"></param>
+        /// <param name="storage"></param>
+        public static void SetStorage<M, F, S>(this IMainControl<M, F, S> controlMain, Storage storage)
+            where M : new()
+            where F : statemap.FSMContext
+            where S : statemap.State
+        {
+            controlMain.SessionStorage = storage;
+        }
+
+        /// <summary>
+        /// Get the actual storage type to use in this precedence:
+        /// 1. Local session storage if set by SetStorage
+        /// 2. Global config override in ControlMainExtension.SessionStorage e-g- from unit tests
+        /// 3. Configured storage in key="SessionStorage" value="Database"
+        /// 4. Defaults to Viewstate
+        /// </summary>
+        /// <typeparam name="M"></typeparam>
+        /// <typeparam name="F"></typeparam>
+        /// <typeparam name="S"></typeparam>
+        /// <param name="controlMain"></param>
+        /// <returns></returns>
+        public static Storage GetStorage<M, F, S>(this IMainControl<M, F, S> controlMain)
+            where M : new()
+            where F : statemap.FSMContext
+            where S : statemap.State
+        {
+            var storage = controlMain.SessionStorage;
+            if (storage == null)
+            {
+                storage = SessionStorage;
+            }
+            if (storage == null)
+            {
+                var configStorage = ConfigurationManager.AppSettings["SessionStorage"];
+                storage = String.IsNullOrEmpty(configStorage) ? Storage.Viewstate : (Storage)Enum.Parse(typeof(Storage), configStorage);
+            }
+            return (Storage)storage;
+        }
+
+
+        /// <summary>
         /// To be called in Page_Load():
         /// Load the Main object from the storage, propagate it to all subcontrols 
         /// and recursively hide them all below the main control.
@@ -103,30 +177,36 @@ namespace asplib.View
             where F : statemap.FSMContext
             where S : statemap.State
         {
-            var key = controlMain.ClientID + "_Main";
-
-            if (SessionStorage == null)
-            {
-                var configStorage = ConfigurationManager.AppSettings["SessionStorage"];
-                SessionStorage = String.IsNullOrEmpty(configStorage) ? Storage.Viewstate : (Storage)Enum.Parse(typeof(Storage), configStorage);
-            }
-
-            switch (SessionStorage)
+            var storage = controlMain.GetStorage();
+            controlMain.ClearIfRequested(storage);
+            switch (storage)
             {
                 case Storage.Viewstate:
-                    controlMain.Main = (M)controlMain.ViewState[key];
+                    controlMain.Main = (M)controlMain.ViewState[controlMain.StorageID()];
                     break;
                 case Storage.Session:
-                    controlMain.Main = (M)controlMain.Session[key];
+                    controlMain.Main = (M)controlMain.Session[controlMain.StorageID()];
                     break;
                 case Storage.Database:
-                    using (var stream = new MemoryStream())
+                    // 1. Get the Session Guid for Main
+                    var cookie = controlMain.Request.Cookies[controlMain.StorageID()];
+                    if (cookie != null)
                     {
-                        //byte[] main;
-                        var formattter = new BinaryFormatter();
-                        controlMain.Main = (M)formattter.Deserialize(stream);
+                        var session = Guid.Parse(cookie.Value);
+                        // 2. Read the byte array from the db
+                        using (var db = new ASP_DBEntities())
+                        {
+                            var query = from m in db.Main
+                                        where m.session == session
+                                        select m;
+                            var main = query.FirstOrDefault();
+                            if (main != null)
+                            {
+                                // 3. Deserialize Main from the read bytes if found in the database
+                                controlMain.Main = (M)Deserialize(main.main);
+                            }
+                        }
                     }
-
                     break;
             }
             if (controlMain.Main != null)
@@ -162,26 +242,156 @@ namespace asplib.View
             where F : statemap.FSMContext
             where S : statemap.State
         {
-            var key = controlMain.ClientID + "_Main";
-
-            Trace.Assert(SessionStorage != null, "SaveMain() without preceding LoadMain()");
-            switch (SessionStorage)
+            var storage = controlMain.GetStorage();
+            Trace.Assert(controlMain.Main != null, "SaveMain() without preceding LoadMain()");
+            switch (storage)
             {
                 case Storage.Viewstate:
-                    controlMain.ViewState[key] = controlMain.Main;
+                    controlMain.ViewState[controlMain.StorageID()] = controlMain.Main;
                     break;
                 case Storage.Session:
-                    controlMain.Session[key] = controlMain.Main;
+                    controlMain.Session[controlMain.StorageID()] = controlMain.Main;
                     break;
                 case Storage.Database:
-                    using (var stream = new MemoryStream())
+                    // 1. Get the Guid for Main
+                    Guid session = new Guid();  // uninitialized, created on insert by the database
+                    var cookie = controlMain.Request.Cookies[controlMain.StorageID()];
+                    if (cookie != null)
                     {
-                        var formattter = new BinaryFormatter();
-                        formattter.Serialize(stream, controlMain.Main);
-                        byte[] main = stream.ToArray();
+                        session = Guid.Parse(cookie.Value);
                     }
-
+                    // 2. Serialize the contained Main
+                    byte[] bytes = Serialize(controlMain.Main);
+                    // 3. Write the byte array to the db
+                    using (var db = new ASP_DBEntities())
+                    {
+                        var query = from m in db.Main
+                                    where m.session == session
+                                    select m;
+                        var main = query.FirstOrDefault();
+                        if (main == null)
+                        {
+                            main = new Main();
+                            db.Main.Add(main);   // INSERT
+                        }
+                        main.main = bytes;       // UPDATE
+                        db.SaveChanges();
+                        session = main.session;  // get new session guid after insert
+                    }
+                    // 4. Store the Guid for Main
+                    var configDays = ConfigurationManager.AppSettings["DatabaseStorageExpires"];
+                    var days = String.IsNullOrEmpty(configDays) ? 1 : int.Parse(configDays);
+                    controlMain.Response.Cookies[controlMain.StorageID()].Value = session.ToString();
+                    controlMain.Response.Cookies[controlMain.StorageID()].Expires = DateTime.Now.AddDays(days);
                     break;
+            }
+        }
+
+
+        /// <summary>
+        /// StorageID-String unique to the control instance to store/retrieve/clear the Main()
+        /// </summary>
+        /// <typeparam name="M"></typeparam>
+        /// <typeparam name="F"></typeparam>
+        /// <typeparam name="S"></typeparam>
+        /// <param name="controlMain"></param>
+        /// <returns></returns>
+        private static string StorageID<M, F, S>(this IMainControl<M, F, S> controlMain)
+            where M : new()
+            where F : statemap.FSMContext
+            where S : statemap.State
+        {
+            return controlMain.ClientID + "_Main";
+        }
+
+
+        /// <summary>
+        /// Hook to clear the storage for that control with ?clear=[True|False]&endresponse=[True|False]
+        /// ViewState is reset anyway on GET requests, therefore NOP in that case.
+        /// </summary>
+        /// <typeparam name="M"></typeparam>
+        /// <typeparam name="F"></typeparam>
+        /// <typeparam name="S"></typeparam>
+        /// <param name="controlMain"></param>
+        /// <param name="storage"></param>
+        /// <returns></returns>
+        private static void ClearIfRequested<M, F, S>(this IMainControl<M, F, S> controlMain, Storage? storage)
+            where M : new()
+            where F : statemap.FSMContext
+            where S : statemap.State
+        {
+            if (!controlMain.IsPostBack)
+            {
+                bool clear = false;
+                bool.TryParse(controlMain.Request.QueryString["clear"], out clear);
+                bool endresponse = false;
+                bool.TryParse(controlMain.Request.QueryString["endresponse"], out endresponse);
+
+                if (clear)
+                {
+                    switch (storage)
+                    {
+                        case Storage.Viewstate:
+                            break;
+                        case Storage.Session:
+                            controlMain.Session.Remove(controlMain.StorageID());
+                            break;
+                        case Storage.Database:
+                            // delete from database and expire the cookie
+                            var cookie = controlMain.Request.Cookies[controlMain.StorageID()];
+                            if (cookie != null)
+                            {
+                                var session = Guid.Parse(cookie.Value);
+                                using (var db = new ASP_DBEntities())
+                                {
+                                    var main = new Main { session = session };
+                                    db.Main.Attach(main);
+                                    db.Main.Remove(main);
+                                    db.SaveChanges();
+                                }
+                                controlMain.Request.Cookies[controlMain.StorageID()].Expires = DateTime.Now.AddDays(-1);
+                            }
+                            break;
+                        default:
+                            throw new NotImplementedException(String.Format("Storage {0}", storage));
+                    }
+                    if (endresponse)
+                    {
+                        controlMain.Response.Clear();
+                        controlMain.Response.End();
+                    }
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// Serializes any object into a byte array
+        /// </summary>
+        /// <param name="obj"></param>
+        /// <returns></returns>
+        internal static byte[] Serialize(object obj)
+        {
+            using (var stream = new MemoryStream())
+            {
+                var formattter = new BinaryFormatter();
+                formattter.Serialize(stream, obj);
+                return stream.ToArray();
+            }
+        }
+
+        /// <summary>
+        /// Deserializes a byte array into an object
+        /// </summary>
+        /// <param name="bytes"></param>
+        /// <returns></returns>
+        internal static object Deserialize(byte[] bytes)
+        {
+            using (var stream = new MemoryStream(bytes))
+            using (var writer = new BinaryWriter(stream))
+            {
+                var formattter = new BinaryFormatter();
+                return formattter.Deserialize(stream);
             }
         }
 

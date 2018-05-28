@@ -1,4 +1,5 @@
-﻿using System.Web.UI;
+﻿using System.Web;
+using System.Web.UI;
 
 using asplib.View;
 
@@ -13,18 +14,34 @@ namespace asp.calculator.View
     public abstract class CalculatorControl : UserControl, IMainControl<Calculator, CalculatorContext, CalculatorContext.CalculatorState>
     {
         public Calculator Main { get; set; }
+
         public CalculatorContext Fsm
         {
             get { return this.Main.Fsm; }
         }
+
         public CalculatorContext.CalculatorState State
         {
             get { return this.Main.State; }
             set { this.Main.State = value; }
         }
+
         public new StateBag ViewState
         {
             get { return base.ViewState; }
         }
+
+        /// <summary>
+        /// For dynamic assignment in the .ascx
+        /// </summary>
+        public string Storage
+        {
+            get { return this.GetStorage().ToString(); }
+            set { this.SetStorage(value); }
+        }
+        /// <summary>
+        /// The local storage type field as enum
+        /// </summary>
+        public Storage? SessionStorage { get; set; }
     }
 }

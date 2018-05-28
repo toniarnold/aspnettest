@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
+using System.Threading;
 
 using NUnit.Framework;
 
@@ -16,7 +16,7 @@ namespace testie.asp
 {
     [TestFixture]
     [Category("SHDocVw.InternetExplorer")]
-    public class CalculatorTest : IIE
+    public class CalculatorViewstateTest : IIE
     {
         protected IMainControl<Calculator, CalculatorContext, CalculatorContext.CalculatorState> MainControl
         {
@@ -62,9 +62,12 @@ namespace testie.asp
         public void NavigateDefaultTest()
         {
             this.Navigate("/asp/default.aspx");
-            Assert.That(this.Html(), Does.Contain("RPN calculator"));
-            Assert.That(this.Html(), Does.Contain("Map1.Splash"));          // even later than "late binding"
-            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Splash)); // "early binding"
+            Assert.Multiple(() =>
+            {
+                Assert.That(this.Html(), Does.Contain("RPN calculator"));
+                Assert.That(this.Html(), Does.Contain("Map1.Splash"));          // even later than "late binding"
+                Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Splash)); // "early binding"
+            });
         }
 
         [Test]
@@ -72,8 +75,11 @@ namespace testie.asp
         {
             this.Navigate("/asp/default.aspx");
             this.Click("footer.enterButton");
-            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
-            Assert.That(this.Html(), Does.Contain("Map1.Enter"));
+            Assert.Multiple(() =>
+            {
+                Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
+                Assert.That(this.Html(), Does.Contain("Map1.Enter"));
+            });
         }
 
         [Test]
@@ -84,10 +90,13 @@ namespace testie.asp
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
             this.Write("enter.operandTextBox", "1");
             this.Click("footer.enterButton");
-            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
-            Assert.That(this.Stack.Peek(), Is.EqualTo("1"));
-            Assert.That(this.Stack.Count, Is.EqualTo(1));
-            Assert.That(this.Html(), Does.Contain(" 1\n"));
+            Assert.Multiple(() =>
+            {
+                Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
+                Assert.That(this.Stack.Peek(), Is.EqualTo("1"));
+                Assert.That(this.Stack.Count, Is.EqualTo(1));
+                Assert.That(this.Html(), Does.Contain(" 1\n"));
+            });
         }
 
         [Test]
@@ -106,10 +115,13 @@ namespace testie.asp
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             var before = this.Stack.Count;
             this.Click("calculate.addButton");
-            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
-            Assert.That(this.Stack.Peek(), Is.EqualTo("5"));
-            Assert.That(this.Stack.Count, Is.EqualTo(before - 1));
-            Assert.That(this.Html(), Does.Contain(" 5\n"));
+            Assert.Multiple(() =>
+            {
+                Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
+                Assert.That(this.Stack.Peek(), Is.EqualTo("5"));
+                Assert.That(this.Stack.Count, Is.EqualTo(before - 1));
+                Assert.That(this.Html(), Does.Contain(" 5\n"));
+            });
         }
 
         [Test]
@@ -128,8 +140,11 @@ namespace testie.asp
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             var before = this.Stack.Count;
             this.Click("calculate.clrButton");
-            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
-            Assert.That(this.Stack.Count, Is.EqualTo(before - 1));
+            Assert.Multiple(() =>
+            {
+                Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
+                Assert.That(this.Stack.Count, Is.EqualTo(before - 1));
+            });
         }
 
         [Test]
@@ -148,8 +163,11 @@ namespace testie.asp
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             var before = this.Stack.Count;
             this.Click("calculate.clrAllButton");
-            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
-            Assert.That(this.Stack.Count, Is.EqualTo(0));
+            Assert.Multiple(() =>
+            {
+                Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
+                Assert.That(this.Stack.Count, Is.EqualTo(0));
+            });
         }
 
         [Test]
@@ -168,10 +186,13 @@ namespace testie.asp
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             var before = this.Stack.Count;
             this.Click("calculate.divButton");
-            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
-            Assert.That(this.Stack.Peek(), Is.EqualTo("4"));
-            Assert.That(this.Stack.Count, Is.EqualTo(before - 1));
-            Assert.That(this.Html(), Does.Contain(" 4\n"));
+            Assert.Multiple(() =>
+            {
+                Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
+                Assert.That(this.Stack.Peek(), Is.EqualTo("4"));
+                Assert.That(this.Stack.Count, Is.EqualTo(before - 1));
+                Assert.That(this.Html(), Does.Contain(" 4\n"));
+            });
         }
 
         [Test]
@@ -190,10 +211,13 @@ namespace testie.asp
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             var before = this.Stack.Count;
             this.Click("calculate.mulButton");
-            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
-            Assert.That(this.Stack.Peek(), Is.EqualTo("12"));
-            Assert.That(this.Stack.Count, Is.EqualTo(before - 1));
-            Assert.That(this.Html(), Does.Contain(" 12\n"));
+            Assert.Multiple(() =>
+            {
+                Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
+                Assert.That(this.Stack.Peek(), Is.EqualTo("12"));
+                Assert.That(this.Stack.Count, Is.EqualTo(before - 1));
+                Assert.That(this.Html(), Does.Contain(" 12\n"));
+            });
         }
 
         [Test]
@@ -207,10 +231,13 @@ namespace testie.asp
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             var before = this.Stack.Count;
             this.Click("calculate.powButton");
-            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
-            Assert.That(this.Stack.Peek(), Is.EqualTo("4"));
-            Assert.That(this.Stack.Count, Is.EqualTo(before));
-            Assert.That(this.Html(), Does.Contain(" 4\n"));
+            Assert.Multiple(() =>
+            {
+                Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
+                Assert.That(this.Stack.Peek(), Is.EqualTo("4"));
+                Assert.That(this.Stack.Count, Is.EqualTo(before));
+                Assert.That(this.Html(), Does.Contain(" 4\n"));
+            });
         }
 
         [Test]
@@ -224,10 +251,13 @@ namespace testie.asp
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             var before = this.Stack.Count;
             this.Click("calculate.sqrtButton");
-            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
-            Assert.That(this.Stack.Peek(), Is.EqualTo("7"));
-            Assert.That(this.Stack.Count, Is.EqualTo(before));
-            Assert.That(this.Html(), Does.Contain(" 7\n"));
+            Assert.Multiple(() =>
+            {
+                Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
+                Assert.That(this.Stack.Peek(), Is.EqualTo("7"));
+                Assert.That(this.Stack.Count, Is.EqualTo(before));
+                Assert.That(this.Html(), Does.Contain(" 7\n"));
+            });
         }
 
         [Test]
@@ -246,10 +276,13 @@ namespace testie.asp
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             var before = this.Stack.Count;
             this.Click("calculate.subButton");
-            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
-            Assert.That(this.Stack.Peek(), Is.EqualTo("9"));
-            Assert.That(this.Stack.Count, Is.EqualTo(before - 1));
-            Assert.That(this.Html(), Does.Contain(" 9\n"));
+            Assert.Multiple(() =>
+            {
+                Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
+                Assert.That(this.Stack.Peek(), Is.EqualTo("9"));
+                Assert.That(this.Stack.Count, Is.EqualTo(before - 1));
+                Assert.That(this.Html(), Does.Contain(" 9\n"));
+            });
         }
     }
 }

@@ -130,7 +130,6 @@ namespace iie
             var button = GetElement(MainControl, path);
             button.click();
             mre.WaitOne(millisecondsTimeout);
-            Thread.Sleep(1000); // TODO - why do we get duplicate button events otherwise?
         }
 
         /// <summary>
