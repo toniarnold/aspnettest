@@ -1,5 +1,5 @@
 ﻿/*
-- * Extension methods for direct accessors and the implementation of the persistence of Main within an UserControl
+- * Extension methods for direct accessors and the implementation of the persistence of R within an UserControl
 -*/
 
 using System;
@@ -26,7 +26,7 @@ using asplib.Model;
 namespace asplib.View
 {
     /// <summary>
-    /// Extension interface for an UserControl with a reference to Main
+    /// Extension interface for an UserControl with a reference to R
     /// </summary>
     /// <typeparam name="M"></typeparam>
     /// <typeparam name="F"></typeparam>
@@ -71,7 +71,7 @@ namespace asplib.View
 
 
     /// <summary>
-    /// Storate method for the persistency of Main
+    /// Storate method for the persistency of R
     /// </summary>
     public enum Storage
     {
@@ -165,7 +165,7 @@ namespace asplib.View
 
         /// <summary>
         /// To be called in Page_Load():
-        /// Load the Main object from the storage, propagate it to all subcontrols 
+        /// Load the R object from the storage, propagate it to all subcontrols 
         /// and recursively hide them all below the main control.
         /// Also sets a global reference to the main control in iie for testing.
         /// </summary>
@@ -173,42 +173,39 @@ namespace asplib.View
         /// <param name="controlMain"></param>
         /// <param name="storage"></param>
         public static void LoadMain<M, F, S>(this IMainControl<M, F, S> controlMain)
-            where M : new()
+            where M : class, new()
             where F : statemap.FSMContext
             where S : statemap.State
         {
             var storage = controlMain.GetStorage();
             controlMain.ClearIfRequested(storage);
-            switch (storage)
+
+            Guid sessionOverride;
+            if (Guid.TryParse(controlMain.Request.QueryString["session"], out sessionOverride))
             {
-                case Storage.Viewstate:
-                    controlMain.Main = (M)controlMain.ViewState[controlMain.StorageID()];
-                    break;
-                case Storage.Session:
-                    controlMain.Main = (M)controlMain.Session[controlMain.StorageID()];
-                    break;
-                case Storage.Database:
-                    // 1. Get the Session Guid for Main
-                    var cookie = controlMain.Request.Cookies[controlMain.StorageID()];
-                    if (cookie != null)
-                    {
-                        var session = Guid.Parse(cookie.Value);
-                        // 2. Read the byte array from the db
-                        using (var db = new ASP_DBEntities())
-                        {
-                            var query = from m in db.Main
-                                        where m.session == session
-                                        select m;
-                            var main = query.FirstOrDefault();
-                            if (main != null)
-                            {
-                                // 3. Deserialize Main from the read bytes if found in the database
-                                controlMain.Main = (M)Deserialize(main.main);
-                            }
-                        }
-                    }
-                    break;
+                controlMain.Main = Main.LoadMain<M>(sessionOverride);
             }
+            else
+            { 
+                switch (storage)
+                {
+                    case Storage.Viewstate:
+                        controlMain.Main = (M)controlMain.ViewState[controlMain.StorageID()];
+                        break;
+                    case Storage.Session:
+                        controlMain.Main = (M)controlMain.Session[controlMain.StorageID()];
+                        break;
+                    case Storage.Database:
+                        var cookie = controlMain.Request.Cookies[controlMain.StorageID()];
+                        if (cookie != null)
+                        {
+                            var session = Guid.Parse(cookie.Value);
+                            controlMain.Main = Main.LoadMain<M>(session);
+                        }
+                        break;
+                }
+            }
+
             if (controlMain.Main != null)
             {
                 // SMC Manual Section 9
@@ -232,13 +229,13 @@ namespace asplib.View
 
         /// <summary>
         /// To be called at the end of OnPreRender():
-        /// Persist the in this page lifecycle stage immutable Main object.
+        /// Persist the in this page lifecycle stage immutable R object.
         /// </summary>
         /// <typeparam name="M"></typeparam>
         /// <param name="controlMain"></param>
         /// <param name="storage"></param>
         public static void SaveMain<M, F, S>(this IMainControl<M, F, S> controlMain)
-            where M : new()
+            where M : class, new()
             where F : statemap.FSMContext
             where S : statemap.State
         {
@@ -253,32 +250,8 @@ namespace asplib.View
                     controlMain.Session[controlMain.StorageID()] = controlMain.Main;
                     break;
                 case Storage.Database:
-                    // 1. Get the Guid for Main
-                    Guid session = new Guid();  // uninitialized, created on insert by the database
                     var cookie = controlMain.Request.Cookies[controlMain.StorageID()];
-                    if (cookie != null)
-                    {
-                        session = Guid.Parse(cookie.Value);
-                    }
-                    // 2. Serialize the contained Main
-                    byte[] bytes = Serialize(controlMain.Main);
-                    // 3. Write the byte array to the db
-                    using (var db = new ASP_DBEntities())
-                    {
-                        var query = from m in db.Main
-                                    where m.session == session
-                                    select m;
-                        var main = query.FirstOrDefault();
-                        if (main == null)
-                        {
-                            main = new Main();
-                            db.Main.Add(main);   // INSERT
-                        }
-                        main.main = bytes;       // UPDATE
-                        db.SaveChanges();
-                        session = main.session;  // get new session guid after insert
-                    }
-                    // 4. Store the Guid for Main
+                    var session = Main.SaveMain(controlMain.Main, (cookie != null) ? (Guid?)Guid.Parse(cookie.Value) : null);
                     var configDays = ConfigurationManager.AppSettings["DatabaseStorageExpires"];
                     var days = String.IsNullOrEmpty(configDays) ? 1 : int.Parse(configDays);
                     controlMain.Response.Cookies[controlMain.StorageID()].Value = session.ToString();
@@ -289,7 +262,7 @@ namespace asplib.View
 
 
         /// <summary>
-        /// StorageID-String unique to the control instance to store/retrieve/clear the Main()
+        /// StorageID-String unique to the control instance to store/retrieve/clear the R()
         /// </summary>
         /// <typeparam name="M"></typeparam>
         /// <typeparam name="F"></typeparam>
@@ -366,38 +339,7 @@ namespace asplib.View
 
 
         /// <summary>
-        /// Serializes any object into a byte array
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        internal static byte[] Serialize(object obj)
-        {
-            using (var stream = new MemoryStream())
-            {
-                var formattter = new BinaryFormatter();
-                formattter.Serialize(stream, obj);
-                return stream.ToArray();
-            }
-        }
-
-        /// <summary>
-        /// Deserializes a byte array into an object
-        /// </summary>
-        /// <param name="bytes"></param>
-        /// <returns></returns>
-        internal static object Deserialize(byte[] bytes)
-        {
-            using (var stream = new MemoryStream(bytes))
-            using (var writer = new BinaryWriter(stream))
-            {
-                var formattter = new BinaryFormatter();
-                return formattter.Deserialize(stream);
-            }
-        }
-
-
-        /// <summary>
-        /// Recursively add a reference to the global Main and to all subcontrols
+        /// Recursively add a reference to the global R and to all subcontrols
         /// </summary>
         /// <typeparam name="M"></typeparam>
         /// <param name="controlMain"></param>

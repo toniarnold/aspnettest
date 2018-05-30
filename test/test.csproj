@@ -56,6 +56,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="asplib\Model\DbTest.cs" />
+    <Compile Include="asplib\Model\MainTest.cs" />
     <Compile Include="asplib\View\ControlMainExtensionTest.cs" />
     <Compile Include="asp\calculator\Control\CalculatorTest.cs" />
     <Compile Include="iie\IIETest.cs" />

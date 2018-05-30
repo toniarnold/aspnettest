@@ -15,7 +15,7 @@ namespace asp.calculator.View
     public partial class Enter : CalculatorControl
     {
         /// <summary>
-        /// Always store the opreand into the "global variable" this.Main.Operand
+        /// Always store the opreand into the "global variable" this.R.Operand
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

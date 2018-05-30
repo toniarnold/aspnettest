@@ -1,11 +1,6 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="default.aspx.cs" Inherits="asp._default" %>
+﻿<%@ Page Title="Calculator" Language="C#" MasterPageFile="~/asp.Master" AutoEventWireup="true" CodeBehind="default.aspx.cs" Inherits="asp._default" %>
 <%@ Register TagPrefix="uc" TagName="calculator" Src="~/calculator/Main.ascx" %>
-<!DOCTYPE html>
-
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head runat="server">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-<title>Calculator</title>
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 <style>
 .nunitimg { 
     position: absolute;
@@ -15,15 +10,11 @@
     width: 50px;
 }
 </style>
-</head>
-<body>
-<form id="form1" runat="server">
-
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 <asp:ImageButton ID="testButton" runat="server" OnClick="testButton_Click"
     ImageUrl="nunit.png" CssClass="nunitimg" />
 <uc:calculator ID="calculator" runat="server" 
     StorageLinkUrl="~/triptych.aspx" />
+</asp:Content>
 
-</form>
-</body>
-</html>

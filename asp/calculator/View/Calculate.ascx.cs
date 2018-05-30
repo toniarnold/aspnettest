@@ -18,7 +18,7 @@ namespace asp.calculator.View
         {
             get
             {
-                return String.Join("<br />", this.Main.Stack);
+                return this.Main.StackHtmlString;
             }
         }
 

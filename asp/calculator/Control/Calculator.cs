@@ -45,7 +45,15 @@ namespace asp.calculator.Control
         }
 
         /// <summary>
-        /// Main is the access point for fhe equivalent of global variables in PHP (volatile between requests)
+        /// String represenation of the stack for HTML presentation
+        /// </summary>
+        public string StackHtmlString
+        {
+           get { return String.Join("<br />", this.Stack); }
+        }
+
+        /// <summary>
+        /// R is the access point for fhe equivalent of global variables in PHP (volatile between requests)
         /// </summary>
         public string Operand
         {

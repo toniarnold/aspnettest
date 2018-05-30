@@ -22,6 +22,42 @@ namespace asp.calculator {
         protected global::System.Web.UI.WebControls.HyperLink storageLink;
         
         /// <summary>
+        /// headlinkDiv-Steuerelement
+        /// </summary>
+        /// <remarks>
+        /// Automatisch generiertes Feld
+        /// Zum Ändern Felddeklaration aus der Designerdatei in eine Code-Behind-Datei verschieben.
+        /// </remarks>
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl headlinkDiv;
+        
+        /// <summary>
+        /// PopEx-Steuerelement
+        /// </summary>
+        /// <remarks>
+        /// Automatisch generiertes Feld
+        /// Zum Ändern Felddeklaration aus der Designerdatei in eine Code-Behind-Datei verschieben.
+        /// </remarks>
+        protected global::AjaxControlToolkit.PopupControlExtender PopEx;
+        
+        /// <summary>
+        /// sessionDumpDataSource-Steuerelement
+        /// </summary>
+        /// <remarks>
+        /// Automatisch generiertes Feld
+        /// Zum Ändern Felddeklaration aus der Designerdatei in eine Code-Behind-Datei verschieben.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ObjectDataSource sessionDumpDataSource;
+        
+        /// <summary>
+        /// sessionDumpGridView-Steuerelement
+        /// </summary>
+        /// <remarks>
+        /// Automatisch generiertes Feld
+        /// Zum Ändern Felddeklaration aus der Designerdatei in eine Code-Behind-Datei verschieben.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.GridView sessionDumpGridView;
+        
+        /// <summary>
         /// title-Steuerelement
         /// </summary>
         /// <remarks>

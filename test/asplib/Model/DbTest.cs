@@ -12,11 +12,14 @@ using asplib.Model;
 namespace test.asplib.Model
 {
     [TestFixture]
+    [Category("DbContext")]
     public class DbTest
     {
         [Test]
         public void SaveUpdateTest()
         {
+            const int DB_ROUNDTRIP_MILLISECONDS = 200;
+
             using (var db = new ASP_DBEntities())
             using (var trans = db.Database.BeginTransaction(IsolationLevel.ReadUncommitted))
             {
@@ -33,7 +36,7 @@ namespace test.asplib.Model
                     {
                         Assert.That(main.main, Is.EqualTo(new byte[3] { 1, 2, 3 }));
                         Assert.That(main.created, Is.EqualTo(main.changed));    // exact time from the db
-                        Assert.That(main.changed, Is.EqualTo(insertedAt).Within(100).Milliseconds); // db rounttrip time
+                        Assert.That(main.changed, Is.EqualTo(insertedAt).Within(DB_ROUNDTRIP_MILLISECONDS).Milliseconds); // db rounttrip time
                     });
 
                     // UDPATE: read back updated and computed values
@@ -47,7 +50,7 @@ namespace test.asplib.Model
                         Assert.That(main.main, Is.EqualTo(new byte[3] { 4, 5, 6 }));
                         Assert.That(main.created, Is.EqualTo(createdAt));
                         Assert.That(main.changed, Is.GreaterThan(main.created));
-                        Assert.That(main.changed, Is.EqualTo(changedAt).Within(100).Milliseconds);  // db rounttrip time
+                        Assert.That(main.changed, Is.EqualTo(changedAt).Within(DB_ROUNDTRIP_MILLISECONDS).Milliseconds);
                     });
 
                     // DELETE: delete with initially detached object

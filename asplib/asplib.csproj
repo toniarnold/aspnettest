@@ -70,6 +70,7 @@
     <Compile Include="Model\Main.cs">
       <DependentUpon>Db.tt</DependentUpon>
     </Compile>
+    <Compile Include="Model\MainInstance.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="View\IMainControl.cs" />
   </ItemGroup>

@@ -18,14 +18,5 @@ namespace test.asplib.View
         {
             Assert.That(ControlMainExtension.SessionStorage, Is.Null);
         }
-
-        [Test]
-        public void SerializeDeserializeTest()
-        {
-            var obj = new List<string> { "Hello", "World" };
-            var bytes = ControlMainExtension.Serialize(obj);
-            var copy = ControlMainExtension.Deserialize(bytes);
-            Assert.That(copy, Is.EquivalentTo(obj));
-        }
     }
 }

@@ -44,6 +44,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AjaxControlToolkit, Version=18.1.0.0, Culture=neutral, PublicKeyToken=28f01b0e84b6d53e, processorArchitecture=MSIL">
+      <HintPath>..\packages\AjaxControlToolkit.18.1.0\lib\net40\AjaxControlToolkit.dll</HintPath>
+    </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
     </Reference>
@@ -105,6 +108,13 @@
     <Content Include="Web.config" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="asp.Master.cs">
+      <DependentUpon>asp.Master</DependentUpon>
+      <SubType>ASPXCodeBehind</SubType>
+    </Compile>
+    <Compile Include="asp.Master.designer.cs">
+      <DependentUpon>asp.Master</DependentUpon>
+    </Compile>
     <Compile Include="calculator\Main.ascx.cs">
       <DependentUpon>Main.ascx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -178,6 +188,7 @@
   <ItemGroup>
     <Content Include="calculator\Control\Calculator.sm" />
     <Content Include="calculator\Control\Calculator_sm.dot" />
+    <Content Include="asp.Master" />
     <None Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>

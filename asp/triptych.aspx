@@ -1,11 +1,6 @@
-﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="triptych.aspx.cs" Inherits="asp.triptych" %>
+﻿<%@ Page Title="Triptych" Language="C#" MasterPageFile="~/asp.Master" AutoEventWireup="true" CodeBehind="triptych.aspx.cs" Inherits="asp.triptych" %>
 <%@ Register TagPrefix="uc" TagName="calculator" Src="~/calculator/Main.ascx" %>
-<!DOCTYPE html>
-
-<html xmlns="http://www.w3.org/1999/xhtml">
-<head runat="server">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
-<title>Calculator</title>
+<asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
 <style>
 .calc-container {
     display: inline-grid;
@@ -18,11 +13,8 @@
     padding: 30px;
 }
 </style>
-</head>
-<body>
-<form id="form1" runat="server">
-<asp:ScriptManager ID="ScriptManager1" runat="server" />
-
+</asp:Content>
+<asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
 <div class="calc-container">
     <div class="calc-box ">
         <asp:UpdatePanel id="UpdatePanel1" runat="server"
@@ -58,7 +50,4 @@
         </asp:UpdatePanel>
     </div>
 </div>
-
-</form>
-</body>
-</html>
+</asp:Content>
