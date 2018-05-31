@@ -49,6 +49,15 @@ namespace asp.calculator {
         protected global::System.Web.UI.WebControls.ObjectDataSource sessionDumpDataSource;
         
         /// <summary>
+        /// gridViewPanel-Steuerelement
+        /// </summary>
+        /// <remarks>
+        /// Automatisch generiertes Feld
+        /// Zum Ändern Felddeklaration aus der Designerdatei in eine Code-Behind-Datei verschieben.
+        /// </remarks>
+        protected global::System.Web.UI.UpdatePanel gridViewPanel;
+        
+        /// <summary>
         /// sessionDumpGridView-Steuerelement
         /// </summary>
         /// <remarks>

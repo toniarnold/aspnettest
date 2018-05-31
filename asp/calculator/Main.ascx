@@ -44,7 +44,7 @@
     </div>
     <ajaxToolkit:PopupControlExtender ID="PopEx" runat="server"
         TargetControlID="headlinkDiv"
-        PopupControlID="sessionDumpGridView"
+        PopupControlID="gridViewPanel"
         Position="Bottom" 
         OffsetX="-180"
         />
@@ -52,36 +52,49 @@
         TypeName="asp.calculator.Main"
         SelectMethod="AllMainRows"
         />
-    <asp:GridView ID="sessionDumpGridView" runat="server"
-        DataSourceID="sessionDumpDataSource"
-        ItemType="asplib.Model.Main"
-        OnRowCommand="gridView_RowCommand"
-        DataKeyNames="session"
-        AutoGenerateColumns="false"
-        EmptyDataText="no saved session objects found"
-        CssClass="grid"
-        >
-        <Columns>
-            <asp:BoundField DataField="created" HeaderText="Created" />
-            <asp:BoundField DataField="changed" HeaderText="Changed" />
-            <asp:TemplateField HeaderText="Stack">
-                <ItemTemplate>
-                    <%# Item.GetInstance<asp.calculator.Control.Calculator>().StackHtmlString %>
-                </ItemTemplate>
-            </asp:TemplateField>
-            <asp:TemplateField>
-                <ItemTemplate>
-                    <asp:LinkButton ID="link" runat="server" 
-                        CommandName="Open"
-                        CommandArgument="<%# Item.session %>"
-                        CssClass="link"
-                        Text="&#x1f517;" 
-                        />
-                    
-                </ItemTemplate>
-            </asp:TemplateField>
-        </Columns>
-    </asp:GridView>
+    <asp:UpdatePanel id="gridViewPanel" runat="server"
+        UpdateMode="Always" >
+        <ContentTemplate>
+            <asp:GridView ID="sessionDumpGridView" runat="server"
+                DataSourceID="sessionDumpDataSource"
+                ItemType="asplib.Model.Main"
+                OnRowCommand="gridView_RowCommand"
+                DataKeyNames="session"
+                AutoGenerateColumns="false"
+                EmptyDataText="no saved session objects found"
+                CssClass="grid"
+                >
+                <Columns>
+                    <asp:BoundField DataField="created" HeaderText="Created" />
+                    <asp:BoundField DataField="changed" HeaderText="Changed" />
+                    <asp:TemplateField HeaderText="Stack">
+                        <ItemTemplate>
+                            <%# Item.GetInstance<asp.calculator.Control.Calculator>().StackHtmlString %>
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField>
+                        <ItemTemplate>
+                            <asp:LinkButton ID="deleteButton" runat="server" 
+                                CommandName="Del"
+                                CommandArgument="<%# Item.session %>"
+                                CssClass="link"
+                                Text="&#x232b;"
+                                />
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                    <asp:TemplateField>
+                        <ItemTemplate>
+                            <asp:HyperLink ID="link" runat="server" 
+                                CssClass="link"
+                                Text="&#x1f517;" 
+                                NavigateUrl="<%# this.Url(Item.session) %>"
+                                />                    
+                        </ItemTemplate>
+                    </asp:TemplateField>
+                </Columns>
+            </asp:GridView>
+        </ContentTemplate>
+    </asp:UpdatePanel>
 </div>
 
 <uc:Title ID="title" runat="server" />

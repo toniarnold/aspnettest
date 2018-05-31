@@ -21,6 +21,10 @@ namespace asp.calculator.View
         /// <param name="e"></param>
         protected void Page_Load(object sender, EventArgs e)
         {
+            if (String.Compare(this.operandTextBox.Text, "except", true) == 0)
+            {
+                throw new Exception("Deliberate Exception");
+            }
             this.Main.Operand = this.operandTextBox.Text;
         }
     }

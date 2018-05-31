@@ -94,11 +94,15 @@ namespace asplib.View
     /// Extension implementation
     /// </summary>
     public static class ControlMainExtension
-    {
+    { 
         /// <summary>
         /// Type of the session storage, read from AppSettings["SessionStorage"], but can be changed programmatically
         /// </summary>
         public static Storage? SessionStorage { get; set; }
+        /// <summary>
+        /// Typeless reference to the current M Main for storage in Global.asax
+        /// </summary>
+        public static object CurrentMain { get; set; }
 
         /// <summary>
         /// Set the local session storage type from an .ascx attribute string. Case insensitive.
@@ -219,6 +223,7 @@ namespace asplib.View
             {
                 controlMain.Main = new M();
             }
+            CurrentMain = controlMain.Main;
 
             controlMain.PropagateMain(controlMain.Main);
             controlMain.HideAll();

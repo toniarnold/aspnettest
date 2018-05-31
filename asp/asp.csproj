@@ -103,6 +103,7 @@
     <Content Include="calculator\View\Splash.ascx" />
     <Content Include="calculator\View\Title.ascx" />
     <Content Include="default.aspx" />
+    <Content Include="Global.asax" />
     <Content Include="nunit.png" />
     <Content Include="triptych.aspx" />
     <Content Include="Web.config" />
@@ -175,6 +176,9 @@
     </Compile>
     <Compile Include="default.aspx.designer.cs">
       <DependentUpon>default.aspx</DependentUpon>
+    </Compile>
+    <Compile Include="Global.asax.cs">
+      <DependentUpon>Global.asax</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="triptych.aspx.cs">

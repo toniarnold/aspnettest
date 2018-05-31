@@ -10,6 +10,7 @@ using System.Web.UI;
 using System.Web.UI.WebControls;
 
 using MainRow = asplib.Model.Main;
+using asplib.Model;
 using asplib.View;
 using StorageEnum = asplib.View.Storage;
 
@@ -36,7 +37,7 @@ namespace asp.calculator
         }
 
         /// <summary>
-        /// Redirect to the default page with the session-Main Calculator overriden with ?session=guid
+        /// Delete the Main row with the given session guid with a custom "Del" command
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -44,15 +45,30 @@ namespace asp.calculator
         {
             switch(e.CommandName)
             {
-                case "Open":
-                    var session = e.CommandArgument.ToString();
-                    var uri = this.Page.ResolveUrl("~/default.aspx");
-                    var url = string.Format("{0}?session={1}", uri, this.Server.UrlEncode(session));
-                    this.Response.Redirect(url, true);
+                case "Del":
+                    var session = Guid.Parse(e.CommandArgument.ToString());
+                    using (var db = new ASP_DBEntities())
+                    {
+                        var main = new MainRow { session = session };
+                        db.Main.Attach(main);
+                        db.Main.Remove(main);
+                        db.SaveChanges();
+                    }
                     break;
                 default:
                     throw new NotImplementedException(String.Format("e.CommandName='{0}'", e.CommandName));
             }
+        }
+
+        /// <summary>
+        /// URL to open the page with an explicit session guid
+        /// </summary>
+        /// <param name="session"></param>
+        /// <returns></returns>
+        protected string Url(Guid session)
+        {
+            var uri = this.Page.ResolveUrl("~/default.aspx");
+            return String.Format("{0}?session={1}", uri, this.Server.UrlEncode(session.ToString()));
         }
 
         protected override void OnPreRender(EventArgs e)
