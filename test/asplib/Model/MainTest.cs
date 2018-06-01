@@ -25,6 +25,19 @@ namespace test.asplib.Model
         }
 
         [Test]
+        public void SerializeDeserializeFilteredTest()
+        {
+            Func<byte[], byte[]> filter = x => { var y = (byte[])x.Clone();  Array.Reverse(y); return y; };
+            var obj = new List<string> { "Hello", "World" };
+            var bytes = this.Serialize(obj, filter);
+            var copy = this.Deserialize(bytes, filter);
+            Assert.That(copy, Is.EquivalentTo(obj));
+
+            var failure = this.Deserialize(bytes);
+            Assert.That(failure, Is.Null);
+        }
+
+        [Test]
         public void DeserializeNullTest()
         {
             var none = this.Deserialize(new byte[] { 1, 2, 3 });

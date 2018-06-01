@@ -190,7 +190,7 @@ namespace asplib.View
                 controlMain.Main = Main.LoadMain<M>(sessionOverride);
             }
             else
-            { 
+            {
                 switch (storage)
                 {
                     case Storage.Viewstate:
@@ -202,9 +202,21 @@ namespace asplib.View
                     case Storage.Database:
                         var cookie = controlMain.Request.Cookies[controlMain.StorageID()];
                         if (cookie != null)
-                        {
-                            var session = Guid.Parse(cookie.Value);
-                            controlMain.Main = Main.LoadMain<M>(session);
+                        { 
+                            Guid session;
+                            if (Guid.TryParse(cookie["session"], out session))
+                            {
+                                Func<byte[], byte[]> filter = null;
+                                var configEncrypt = ConfigurationManager.AppSettings["EncryptDatabaseStorage"];
+                                var encrypt = String.IsNullOrEmpty(configEncrypt) ? false : Boolean.Parse(configEncrypt);
+                                if (encrypt)
+                                {
+                                    var secret = controlMain.GetSecret();
+                                    filter = x => Crypt.Decrypt(secret, x); // closure
+                                }
+
+                                controlMain.Main = Main.LoadMain<M>(session, filter);
+                            }
                         }
                         break;
                 }
@@ -255,19 +267,78 @@ namespace asplib.View
                     controlMain.Session[controlMain.StorageID()] = controlMain.Main;
                     break;
                 case Storage.Database:
+                    Guid session = Guid.NewGuid();  // cannot exist in the database -> will get a new one on SaveMain()
                     var cookie = controlMain.Request.Cookies[controlMain.StorageID()];
-                    var session = Main.SaveMain(controlMain.Main, (cookie != null) ? (Guid?)Guid.Parse(cookie.Value) : null);
+                    if (cookie != null)
+                    {
+                        Guid.TryParse(controlMain.Request.Cookies[controlMain.StorageID()]["session"], out session);
+                    }
+
+                    var configEncrypt = ConfigurationManager.AppSettings["EncryptDatabaseStorage"];
+                    var encrypt = String.IsNullOrEmpty(configEncrypt) ? false : Boolean.Parse(configEncrypt);
+                    Func<byte[], byte[]> filter = null;
+                    if (encrypt)
+                    {
+                        var secret = controlMain.GetSecret();
+                        filter = x => Crypt.Encrypt(secret, x); // closure
+                    }
+                    session = Main.SaveMain(controlMain.Main, session, filter);
+
                     var configDays = ConfigurationManager.AppSettings["DatabaseStorageExpires"];
                     var days = String.IsNullOrEmpty(configDays) ? 1 : int.Parse(configDays);
-                    controlMain.Response.Cookies[controlMain.StorageID()].Value = session.ToString();
+                    controlMain.Response.Cookies[controlMain.StorageID()]["session"] = session.ToString();
                     controlMain.Response.Cookies[controlMain.StorageID()].Expires = DateTime.Now.AddDays(days);
                     break;
             }
         }
 
+        /// <summary>
+        /// Get the Key/IV secret from the cookies and generate the parts that don't yet exist
+        /// and directly save it to the cookies collection
+        /// </summary>
+        /// <returns></returns>
+        private static Crypt.Secret GetSecret<M, F, S>(this IMainControl<M, F, S> controlMain)
+            where M : class, new()
+            where F : statemap.FSMContext
+            where S : statemap.State
+        {
+            Crypt.Secret secret;
+            string keyString;
+            string ivString;
+            var cookie = controlMain.Request.Cookies[controlMain.StorageID()];
+            if (cookie != null)
+            {
+                keyString = cookie["key"];
+                ivString = cookie["iv"];
+                if (keyString != null)
+                {
+                    var key = Convert.FromBase64String(keyString);
+                    if (ivString != null)
+                    {
+                        var iv = Convert.FromBase64String(ivString);
+                        secret = new Crypt.Secret(key, iv);
+                    }
+                    else
+                    {
+                        secret = Crypt.NewSecret(key);
+                    }
+                }
+                else
+                {
+                    secret = Crypt.NewSecret();
+                }
+            }
+            else
+            {
+                secret = Crypt.NewSecret();
+            }
+            controlMain.Response.Cookies[controlMain.StorageID()]["key"] = Convert.ToBase64String(secret.Key);
+            controlMain.Response.Cookies[controlMain.StorageID()]["iv"] = Convert.ToBase64String(secret.IV);
+            return secret;
+        }
 
         /// <summary>
-        /// StorageID-String unique to the control instance to store/retrieve/clear the R()
+        /// StorageID-String unique to the control instance to store/retrieve/clear the M
         /// </summary>
         /// <typeparam name="M"></typeparam>
         /// <typeparam name="F"></typeparam>
@@ -275,9 +346,9 @@ namespace asplib.View
         /// <param name="controlMain"></param>
         /// <returns></returns>
         private static string StorageID<M, F, S>(this IMainControl<M, F, S> controlMain)
-            where M : new()
-            where F : statemap.FSMContext
-            where S : statemap.State
+        where M : new()
+        where F : statemap.FSMContext
+        where S : statemap.State
         {
             return controlMain.ClientID + "_Main";
         }

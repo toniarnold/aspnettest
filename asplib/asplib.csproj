@@ -52,6 +52,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Control\IMain.cs" />
+    <Compile Include="Model\Crypt.cs" />
     <Compile Include="Model\Db.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
