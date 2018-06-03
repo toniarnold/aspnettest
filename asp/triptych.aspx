@@ -20,9 +20,10 @@
         <asp:UpdatePanel id="UpdatePanel1" runat="server"
             UpdateMode="Always" >
             <ContentTemplate>
-                <uc:calculator ID="calculator1" runat="server"
+                <uc:calculator ID="calculatorViewstate" runat="server"
                     Storage="Viewstate"
-                    StorageLinkUrl="~/default.aspx?storage=viewstate"
+                    StorageLinkUrl="default.aspx?storage=viewstate"
+                    StorageLinkClientID="StorageLinkViewstate"
                     />
             </ContentTemplate>
         </asp:UpdatePanel>
@@ -31,9 +32,10 @@
         <asp:UpdatePanel id="UpdatePanel2" runat="server"
             UpdateMode="Always" >
             <ContentTemplate>
-                <uc:calculator ID="calculator2" runat="server"
+                <uc:calculator ID="calculatorSession" runat="server"
                     Storage="Session"
-                    StorageLinkUrl="~/default.aspx?storage=session"
+                    StorageLinkUrl="default.aspx?storage=session"
+                    StorageLinkClientID="StorageLinkSession"
                     />
             </ContentTemplate>
         </asp:UpdatePanel>
@@ -42,9 +44,10 @@
         <asp:UpdatePanel id="UpdatePanel3" runat="server"
             UpdateMode="Always" >
             <ContentTemplate>
-                <uc:calculator ID="calculator3" runat="server"
+                <uc:calculator ID="calculatorDatabase" runat="server"
                     Storage="Database"
-                    StorageLinkUrl="~/default.aspx?storage=database"
+                    StorageLinkUrl="default.aspx?storage=database"
+                    StorageLinkClientID="StorageLinkDatabase"
                     />
             </ContentTemplate>
         </asp:UpdatePanel>

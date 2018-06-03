@@ -52,7 +52,8 @@ namespace iie
         }
 
         /// <summary>
-        /// Run the test suite in the given project name
+        /// Run the test suite in the given project name with the given TestFilterWhere
+        /// For the Where syntax, see NUnit.Engine.TestSelectionParser.ParseFilterElement()
         /// </summary>
         /// <param name="testproject"></param>
         public void Run(string testproject)
@@ -82,7 +83,7 @@ namespace iie
                 { 
                     var builder = new TestFilterBuilder();
                     builder.SelectWhere(where);
-                    filter = builder.GetFilter();   // TestFilter.Empty when no TestFilterWhere is given
+                    filter = builder.GetFilter();   // returns TestFilter.Empty when no TestFilterWhere is given
                 }
                 this.result = runner.Run(this, filter);
             }

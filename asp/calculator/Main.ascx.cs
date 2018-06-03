@@ -21,10 +21,8 @@ namespace asp.calculator
 {
     public partial class Main : CalculatorControl
     {
-        public string StorageLinkUrl
-        {
-            set { this.storageLink.NavigateUrl = value; }
-        }
+        public string StorageLinkUrl { get; set; }
+        public string StorageLinkClientID { get; set; }
 
         public static IEnumerable<MainRow> AllMainRows()
         {
@@ -73,10 +71,6 @@ namespace asp.calculator
 
         protected override void OnPreRender(EventArgs e)
         {
-            var isDatabaseStorage = (this.GetStorage() == StorageEnum.Database);
-            this.headlinkDiv.Visible = isDatabaseStorage;
-            this.sessionDumpGridView.Visible = isDatabaseStorage;
-
             this.title.Visible = true;
 
             if (this.State == CalculatorContext.Map1.Calculate)

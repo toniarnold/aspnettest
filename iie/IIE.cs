@@ -9,8 +9,12 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Web.UI;
 
+using NUnit.Framework;
+
 using SHDocVw;
 using mshtml;
+
+using asplib.View;
 
 
 namespace iie
@@ -27,19 +31,22 @@ namespace iie
     /// </summary>
     public static class IEExtension
     {
+        public const string EXCEPTION_LINK_ID = "exception-link";
+
         /// <summary>
-        /// Global reference to the main control of an application under test
+        /// MainControl.Response.StatusCode after the last request
         /// </summary>
-        public static Control MainControl { get; set; }
+        public static int StatusCode { get; set; }
 
         /// <summary>
         /// Port of the web development server to send callback HTTP requests to.
         /// </summary>
         public static int Port { get; set; }
 
+
         // Configuration
         private static int millisecondsTimeout =
-            String.IsNullOrEmpty(ConfigurationManager.AppSettings["RequestTimeout"]) ? 1 :
+            String.IsNullOrEmpty(ConfigurationManager.AppSettings["RequestTimeout"]) ? 1000 :
             int.Parse(ConfigurationManager.AppSettings["RequestTimeout"]) * 1000;
 
         // Internet explorer
@@ -81,10 +88,11 @@ namespace iie
         /// </summary>
         /// <param name="inst"></param>
         /// <param name="url"></param>
-        public static void Navigate(this IIE inst, string path)
+        /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>
+        public static void Navigate(this IIE inst, string path, int expectedStatusCode = 200)
         {
             Trace.Assert(path.StartsWith("/"), "path must be absolute");
-            NavigateURL(inst, String.Format("http://127.0.0.1:{0}{1}", Port, path));
+            NavigateURL(inst, String.Format("http://127.0.0.1:{0}{1}", Port, path), expectedStatusCode);
         }
 
         /// <summary>
@@ -92,10 +100,12 @@ namespace iie
         /// </summary>
         /// <param name="inst"></param>
         /// <param name="url"></param>
-        internal static void NavigateURL(this IIE inst, string url)
+        /// <param name="expectedStatusCode">Expected StatusCofe of the response</param> 
+        internal static void NavigateURL(this IIE inst, string url, int expectedStatusCode = 200)
         {
             ie.Navigate2(url);
             mre.WaitOne(millisecondsTimeout);
+            Assert.That(IEExtension.StatusCode, Is.EqualTo(expectedStatusCode));
         }
 
         /// <summary>
@@ -124,23 +134,78 @@ namespace iie
         /// Click the ASP.NET control element (usually a Button instance) at the given path and wait for the response
         /// </summary>
         /// <param name="inst"></param>
-        /// <param name="path"></param>
-        public static void Click(this IIE inst, string path)
+        /// <param name="path">Member name path to the control starting at the main control</param>
+        /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>
+        /// <param name="delay">Optional delay time in milliseconds before clicking the element</param>
+        /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete</param>
+        public static void Click(this IIE inst, string path, int expectedStatusCode = 200, int delay = 0, int pause = 0)
         {
-            var button = GetElement(MainControl, path);
-            button.click();
-            mre.WaitOne(millisecondsTimeout);
+            var button = GetElement(inst, ControlMainExtension.MainControl, path);
+            Click(button, expectedStatusCode, delay, pause);
         }
 
         /// <summary>
-        /// Write ASP.NET control element (usually a TextBox instance) at the given path
+        /// Click the ASP.NET control element (usually a Button instance) with the given clientID and wait for the response
         /// </summary>
         /// <param name="inst"></param>
-        /// <param name="path"></param>
+        /// <param name="clientId">Member name path to the control starting at the main control</param>
+        /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>        /// 
+        /// <param name="delay">Optional delay time in milliseconds before clicking the element</param>
+        /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete</param>
+        public static void ClickID(this IIE inst, string clientId, int expectedStatusCode = 200, int delay = 0, int pause = 0)
+        {
+            var button = GetHTMLElement(inst, clientId);
+            Click(button, expectedStatusCode, delay, pause);
+        }
+
+        private static void Click(IHTMLElement element, int expectedStatusCode = 200, int delay = 0, int pause = 0)
+        {
+            Thread.Sleep(delay);
+            element.click();
+            mre.WaitOne(millisecondsTimeout);
+            Thread.Sleep(pause);
+            Assert.That(IEExtension.StatusCode, Is.EqualTo(expectedStatusCode));
+        }
+
+        /// <summary>
+        /// Write into the ASP.NET control (usually a TextBox instance) at the given path
+        /// </summary>
+        /// <param name="inst"></param>
+        /// <param name="path">Member name path to the control starting at the main control</param>
+        /// <param name="text">Text to write</param>
         public static void Write(this IIE inst, string path, string text)
         {
-            var input = GetElement(MainControl, path);
+            var input = GetElement(inst, ControlMainExtension.MainControl, path);
             input.setAttribute("value", text);
+        }
+
+        /// <summary>
+        /// Returns the ASP.NET control instance at the given path
+        /// </summary>
+        /// <param name="inst"></param>
+        /// <param name="path">Member name path to the control starting at the main control</param>
+        /// <returns></returns>
+        public static Control GetControl(this IIE inst, string path)
+        {
+            return GetControl(inst, ControlMainExtension.MainControl, path);
+        }
+
+        /// <summary>
+        /// Get the element with the given clientID
+        /// </summary>
+        /// <param name="clientID">ClientID resp. HTML id of the element</param>
+        /// <returns></returns>
+        public static IHTMLElement GetHTMLElement(this IIE inst, string clientID)
+        {
+            var element = Document.getElementById(clientID);
+            if (element == null)
+            {
+                throw new Exception(String.Format("HTML element with ClientID='{0}' not found", clientID));
+            }
+            else
+            {
+                return element;
+            }
         }
 
 
@@ -152,20 +217,19 @@ namespace iie
             get { return (mshtml.IHTMLDocument3)ie.Document; }
         }
 
-        private static IHTMLElement GetElement(Control parentnode, string path)
+        /// <summary>
+        /// NAvigates to the element through the given path, reads
+        /// </summary>
+        /// <param name="parentnode"></param>
+        /// <param name="path">Member name path to the control starting at the main control</param>
+        /// <returns></returns>
+        private static IHTMLElement GetElement(this IIE inst, Control parentnode, string path)
         {
-            Trace.Assert(MainControl != null, "IE tests must run in the w3wp.exe adrdress space");
-            var control = GetControl(MainControl, path);
-            var element = Document.getElementById(control.ClientID);
-            if (element == null)
-            {
-                throw new Exception(String.Format("HTML element with ClientID='{0}' not found", control.ClientID));
-            }
-            else
-            {
-                return element;
-            }
+            Trace.Assert(ControlMainExtension.MainControl != null, "IE tests must run in the w3wp.exe adrdress space");
+            var control = GetControl(inst, ControlMainExtension.MainControl, path);
+            return GetHTMLElement(inst, control.ClientID);
         }
+
 
         /// <summary>
         /// Recursively walk down the path starting at the MainControl instance  and return
@@ -173,13 +237,13 @@ namespace iie
         /// </summary>
         /// <param name="path"></param>
         /// <returns></returns>
-        private static Control GetControl(Control parentnode, string path)
+        private static Control GetControl(this IIE inst, Control parentnode, string path)
         {
             var fields = path.Split('.');
-            return GetControl(parentnode, fields);
+            return GetControl(inst, parentnode, fields);
         }
 
-        private static Control GetControl(Control parentnode, IEnumerable<string> fields)
+        private static Control GetControl(this IIE inst, Control parentnode, IEnumerable<string> fields)
         {
             var fieldname = fields.First();
             var node = (Control)parentnode.GetType().GetField(fieldname, BindingFlags.Instance | BindingFlags.NonPublic).GetValue(parentnode);
@@ -190,7 +254,7 @@ namespace iie
             }
             else // walk down the object tree
             {
-                return GetControl(node, fields.Skip(1));
+                return GetControl(inst, node, fields.Skip(1));
             }
         }
     }

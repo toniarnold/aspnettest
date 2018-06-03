@@ -13,15 +13,6 @@ namespace asp.calculator {
     public partial class Main {
         
         /// <summary>
-        /// storageLink-Steuerelement
-        /// </summary>
-        /// <remarks>
-        /// Automatisch generiertes Feld
-        /// Zum Ändern Felddeklaration aus der Designerdatei in eine Code-Behind-Datei verschieben.
-        /// </remarks>
-        protected global::System.Web.UI.WebControls.HyperLink storageLink;
-        
-        /// <summary>
         /// headlinkDiv-Steuerelement
         /// </summary>
         /// <remarks>

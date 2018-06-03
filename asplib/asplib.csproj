@@ -88,10 +88,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\iie\iie.csproj">
-      <Project>{fbae78a0-e68c-4ed9-a1a8-5fcfd1695f39}</Project>
-      <Name>iie</Name>
-    </ProjectReference>
     <ProjectReference Include="..\SMC\SMC.csproj">
       <Project>{95a23f32-99ae-4315-8319-56bee5d63b2f}</Project>
       <Name>SMC</Name>

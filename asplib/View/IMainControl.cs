@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
+using System.Data.Entity;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
@@ -17,8 +18,6 @@ using System.Threading.Tasks;
 using System.Web;
 using System.Web.UI;
 using System.Web.SessionState;
-
-using iie;
 
 using asplib.Model;
 
@@ -96,13 +95,17 @@ namespace asplib.View
     public static class ControlMainExtension
     { 
         /// <summary>
-        /// Type of the session storage, read from AppSettings["SessionStorage"], but can be changed programmatically
+        /// Type of the session storage to override AppSettings["SessionStorage"]
         /// </summary>
         public static Storage? SessionStorage { get; set; }
         /// <summary>
         /// Typeless reference to the current M Main for storage in Global.asax
         /// </summary>
         public static object CurrentMain { get; set; }
+        /// <summary>
+        /// Global reference to the main control of an application under test
+        /// </summary>
+        public static System.Web.UI.Control MainControl { get; set; }
 
         /// <summary>
         /// Set the local session storage type from an .ascx attribute string. Case insensitive.
@@ -185,7 +188,7 @@ namespace asplib.View
             controlMain.ClearIfRequested(storage);
 
             Guid sessionOverride;
-            if (Guid.TryParse(controlMain.Request.QueryString["session"], out sessionOverride))
+            if (!controlMain.IsPostBack && Guid.TryParse(controlMain.Request.QueryString["session"], out sessionOverride))
             {
                 controlMain.Main = Main.LoadMain<M>(sessionOverride);
             }
@@ -236,11 +239,10 @@ namespace asplib.View
                 controlMain.Main = new M();
             }
             CurrentMain = controlMain.Main;
+            MainControl = (System.Web.UI.Control)controlMain;
 
             controlMain.PropagateMain(controlMain.Main);
             controlMain.HideAll();
-
-            IEExtension.MainControl = (System.Web.UI.Control)controlMain;
         }
 
 
@@ -390,13 +392,16 @@ namespace asplib.View
                             var cookie = controlMain.Request.Cookies[controlMain.StorageID()];
                             if (cookie != null)
                             {
-                                var session = Guid.Parse(cookie.Value);
+                                Guid session;
+                                Guid.TryParse(controlMain.Request.Cookies[controlMain.StorageID()]["session"], out session);
                                 using (var db = new ASP_DBEntities())
                                 {
-                                    var main = new Main { session = session };
-                                    db.Main.Attach(main);
-                                    db.Main.Remove(main);
-                                    db.SaveChanges();
+                                    var sql = @"
+                                        DELETE FROM Main
+                                        WHERE session = @session
+                                    ";
+                                    var param = new SqlParameter("session", session);
+                                    db.Database.ExecuteSqlCommand(sql, param);
                                 }
                                 controlMain.Request.Cookies[controlMain.StorageID()].Expires = DateTime.Now.AddDays(-1);
                             }

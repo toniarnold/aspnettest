@@ -22,13 +22,13 @@ namespace asp {
         protected global::System.Web.UI.UpdatePanel UpdatePanel1;
         
         /// <summary>
-        /// calculator1-Steuerelement
+        /// calculatorViewstate-Steuerelement
         /// </summary>
         /// <remarks>
         /// Automatisch generiertes Feld
         /// Zum Ändern Felddeklaration aus der Designerdatei in eine Code-Behind-Datei verschieben.
         /// </remarks>
-        protected global::asp.calculator.Main calculator1;
+        protected global::asp.calculator.Main calculatorViewstate;
         
         /// <summary>
         /// UpdatePanel2-Steuerelement
@@ -40,13 +40,13 @@ namespace asp {
         protected global::System.Web.UI.UpdatePanel UpdatePanel2;
         
         /// <summary>
-        /// calculator2-Steuerelement
+        /// calculatorSession-Steuerelement
         /// </summary>
         /// <remarks>
         /// Automatisch generiertes Feld
         /// Zum Ändern Felddeklaration aus der Designerdatei in eine Code-Behind-Datei verschieben.
         /// </remarks>
-        protected global::asp.calculator.Main calculator2;
+        protected global::asp.calculator.Main calculatorSession;
         
         /// <summary>
         /// UpdatePanel3-Steuerelement
@@ -58,12 +58,12 @@ namespace asp {
         protected global::System.Web.UI.UpdatePanel UpdatePanel3;
         
         /// <summary>
-        /// calculator3-Steuerelement
+        /// calculatorDatabase-Steuerelement
         /// </summary>
         /// <remarks>
         /// Automatisch generiertes Feld
         /// Zum Ändern Felddeklaration aus der Designerdatei in eine Code-Behind-Datei verschieben.
         /// </remarks>
-        protected global::asp.calculator.Main calculator3;
+        protected global::asp.calculator.Main calculatorDatabase;
     }
 }

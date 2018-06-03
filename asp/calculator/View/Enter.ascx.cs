@@ -12,10 +12,15 @@ using asp.calculator.Control;
 
 namespace asp.calculator.View
 {
+    public class DeliberateException : Exception
+    {
+        public DeliberateException(string msg) : base(msg) { }
+    }
+
     public partial class Enter : CalculatorControl
     {
         /// <summary>
-        /// Always store the opreand into the "global variable" this.R.Operand
+        /// Always store the operand into the "global variable" this.R.Operand
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
@@ -23,7 +28,7 @@ namespace asp.calculator.View
         {
             if (String.Compare(this.operandTextBox.Text, "except", true) == 0)
             {
-                throw new Exception("Deliberate Exception");
+                throw new DeliberateException("Deliberate Exception");
             }
             this.Main.Operand = this.operandTextBox.Text;
         }

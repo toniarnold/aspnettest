@@ -32,13 +32,10 @@
 }
 </style>
 <div class="headlink-container">
-    <div></div>
-    <asp:HyperLink ID="storageLink" runat="server"
-        CssClass="headlink-box"
-        ToolTip="click to select the storage type"
-        >
+    <div class="headlink-box"></div>
+    <a href="<%= this.StorageLinkUrl %>" id=<%= this.StorageLinkClientID %> class="headlink-box">
         Session Storage: <%= this.Storage %>
-    </asp:HyperLink>
+    </a>
     <div class="headlink-box" ID="headlinkDiv" runat="server">
         <span class="hamburger">&#x2630;</span>
     </div>
@@ -46,7 +43,7 @@
         TargetControlID="headlinkDiv"
         PopupControlID="gridViewPanel"
         Position="Bottom" 
-        OffsetX="-180"
+        OffsetX="-100"
         />
     <asp:ObjectDataSource ID="sessionDumpDataSource" runat="server" 
         TypeName="asp.calculator.Main"

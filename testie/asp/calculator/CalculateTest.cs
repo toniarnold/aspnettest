@@ -12,52 +12,12 @@ using asplib.View;
 using asp.calculator.Control;
 using asp.calculator.View;
 
-namespace testie.asp
+namespace testie.asp.calculator
 {
     [TestFixture]
     [Category("SHDocVw.InternetExplorer")]
-    public class CalculatorViewstateTest : IIE
+    public class CalculateTest : TestBase
     {
-        protected IMainControl<Calculator, CalculatorContext, CalculatorContext.CalculatorState> MainControl
-        {
-            get { return (IMainControl<Calculator, CalculatorContext, CalculatorContext.CalculatorState>)
-                            iie.IEExtension.MainControl; }
-        }
-
-        protected Calculator Main
-        {
-            get { return this.MainControl.Main; }
-        }
-
-        protected Stack<string> Stack
-        {
-            get { return this.MainControl.Main.Stack; }
-        }
-
-        protected CalculatorContext.CalculatorState State
-        {
-            get { return this.MainControl.State; }
-        }
-
-
-        [OneTimeSetUp]
-        public void OneTimeSetUp()
-        {
-            this.SetUpIE();
-        }
-
-        [OneTimeTearDown]
-        public void OneTimeTearDown()
-        {
-            this.TearDownIE();
-        }
-
-        [SetUp]
-        public virtual void SetUpStorage()
-        {
-            ControlMainExtension.SessionStorage = Storage.Viewstate;    // default, no special TearDown required
-        }
-
         [Test]
         public void NavigateDefaultTest()
         {

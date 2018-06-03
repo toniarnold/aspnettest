@@ -31,7 +31,7 @@ namespace test.iie
         [Test]
         public void NavigateURLEmptyTest()
         {
-            this.NavigateURL("about:blank");
+            this.NavigateURL("about:blank", expectedStatusCode: 0);
             Assert.That(this.Html(), Is.EqualTo("<body></body>"));
         }
     }
