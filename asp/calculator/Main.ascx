@@ -8,12 +8,12 @@
 <%@ Register TagPrefix="uc" TagName="Splash" Src="~/calculator/View/Splash.ascx" %>
 <%@ Register TagPrefix="uc" TagName="Title" Src="~/calculator/View/Title.ascx" %>
 <style>
-.headlink-container { 
+.hamburger-container { 
     display: inline-grid;
     grid-template-columns: auto auto auto;
     width: 100%;
 }
-.headlink-box {
+.hamburger-box {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -31,16 +31,16 @@
     text-decoration: none;
 }
 </style>
-<div class="headlink-container">
-    <div class="headlink-box"></div>
-    <a href="<%= this.StorageLinkUrl %>" id=<%= this.StorageLinkClientID %> class="headlink-box">
-        Session Storage: <%= this.Storage %>
+<div class="hamburger-container">
+    <div class="hamburger-box"></div>
+    <a href="<%= this.StorageLinkUrl %>" id=<%= this.StorageLinkClientID %> class="hamburger-box">
+        Session Storage: <%= this.Storage %> <%= this.Encrypted %>
     </a>
-    <div class="headlink-box" ID="headlinkDiv" runat="server">
+    <div class="hamburger-box" ID="hamburgerDiv" runat="server">
         <span class="hamburger">&#x2630;</span>
     </div>
     <ajaxToolkit:PopupControlExtender ID="PopEx" runat="server"
-        TargetControlID="headlinkDiv"
+        TargetControlID="hamburgerDiv"
         PopupControlID="gridViewPanel"
         Position="Bottom" 
         OffsetX="-100"
@@ -66,12 +66,13 @@
                     <asp:BoundField DataField="changed" HeaderText="Changed" />
                     <asp:TemplateField HeaderText="Stack">
                         <ItemTemplate>
-                            <%# Item.GetInstance<asp.calculator.Control.Calculator>().StackHtmlString %>
+                            <asp:Label ID="stackLabel" runat="server"
+                                Text='<%# Item.GetInstance<asp.calculator.Control.Calculator>().StackHtmlString %>' />
                         </ItemTemplate>
                     </asp:TemplateField>
                     <asp:TemplateField>
                         <ItemTemplate>
-                            <asp:LinkButton ID="deleteButton" runat="server" 
+                            <asp:LinkButton ID="deleteLinkButton" runat="server" 
                                 CommandName="Del"
                                 CommandArgument="<%# Item.session %>"
                                 CssClass="link"
@@ -81,7 +82,7 @@
                     </asp:TemplateField>
                     <asp:TemplateField>
                         <ItemTemplate>
-                            <asp:HyperLink ID="link" runat="server" 
+                            <asp:HyperLink ID="linkHyperLink" runat="server" 
                                 CssClass="link"
                                 Text="&#x1f517;" 
                                 NavigateUrl="<%# this.Url(Item.session) %>"

@@ -39,6 +39,7 @@ namespace asp.calculator.View
             get { return this.GetStorage().ToString(); }
             set { this.SetStorage(value); }
         }
+
         /// <summary>
         /// The local storage type field as enum
         /// </summary>

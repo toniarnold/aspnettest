@@ -17,7 +17,13 @@ namespace asp
         {
             if (!this.IsPostBack && !String.IsNullOrEmpty(this.Request.QueryString["storage"]))
             {
-                this.calculator.SetStorage(this.Request.QueryString["storage"]);
+                this.ViewState["storage_override"] = this.Request.QueryString["storage"];
+            }
+            var viewstateStorage = (string)this.ViewState["storage_override"];
+            if (!String.IsNullOrEmpty(viewstateStorage))
+            {
+                // by itself non-persistent:
+                this.calculator.SetStorage(this.Request.QueryString["storage"]);   
             }
         }
 
@@ -26,10 +32,18 @@ namespace asp
             var testRunner = new TestRunner(this.Request.Url.Port);
             testRunner.Run("testie");
 
-            this.Response.Clear();
-            this.Response.AddHeader("Content-Type", "application/xml");
-            this.Response.Write(testRunner.ResultString);
-            this.Response.End();
+            if (testRunner.Passed)
+            {
+                this.testResultLabel.Text = testRunner.PassedString;
+
+            }
+            else
+            {
+                this.Response.Clear();
+                this.Response.AddHeader("Content-Type", "application/xml");
+                this.Response.Write(testRunner.ResultString);
+                this.Response.End();
+            }
         }
     }
 }

@@ -4,6 +4,7 @@
 
 using System;
 using System.Collections.Generic;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.UI;
@@ -23,6 +24,14 @@ namespace asp.calculator
     {
         public string StorageLinkUrl { get; set; }
         public string StorageLinkClientID { get; set; }
+        public string Encrypted
+        {
+            get
+            {
+                return (this.GetStorage() == StorageEnum.Database && this.GetEncryptDatabaseStorage()) ?
+                    "&#x1f512;" : String.Empty;
+            }
+        }
 
         public static IEnumerable<MainRow> AllMainRows()
         {
@@ -47,10 +56,12 @@ namespace asp.calculator
                     var session = Guid.Parse(e.CommandArgument.ToString());
                     using (var db = new ASP_DBEntities())
                     {
-                        var main = new MainRow { session = session };
-                        db.Main.Attach(main);
-                        db.Main.Remove(main);
-                        db.SaveChanges();
+                        var sql = @"
+                            DELETE FROM Main
+                            WHERE session = @session
+                        ";
+                        var param = new SqlParameter("session", session);
+                        db.Database.ExecuteSqlCommand(sql, param);
                     }
                     break;
                 default:

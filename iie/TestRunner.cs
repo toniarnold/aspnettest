@@ -41,6 +41,27 @@ namespace iie
             }
         }
 
+        public bool Passed
+        {
+            get
+            {
+                return this.result.Attributes["result"].Value == "Passed";
+            }
+        }
+
+        public string PassedString
+        {
+            get
+            {
+                return string.Format("Passed<br/>Tests: {0}<br/>Asserts: {1}<br/>Duration: {2}",
+                    this.result.Attributes["total"].Value,
+                    this.result.Attributes["asserts"].Value,
+                    this.result.Attributes["duration"].Value
+                    );
+            }
+        }
+
+
         public List<string> Reports
         {
             get { return this.reports; }

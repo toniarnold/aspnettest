@@ -67,10 +67,11 @@ namespace testie.asp.calculator
             this.Click("calculate.addButton");
             this.AssertAddFinalState(before);
             this.RestartIE();
+            this.AssertAddFinalState(before);
         }
 
         /// <summary>
-        /// Assert twice, once after reloading
+        /// Assert twice, first time at the end, then a second time after RestartIE()
         /// </summary>
         private void AssertAddFinalState(int before)
         {

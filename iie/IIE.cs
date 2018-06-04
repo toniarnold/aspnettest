@@ -138,10 +138,24 @@ namespace iie
         /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>
         /// <param name="delay">Optional delay time in milliseconds before clicking the element</param>
         /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete</param>
-        public static void Click(this IIE inst, string path, int expectedStatusCode = 200, int delay = 0, int pause = 0)
+        public static void Click(this IIE inst, string path, int expectedStatusCode = 200, bool expectPostBack = true, int delay = 0, int pause = 0)
         {
             var button = GetElement(inst, ControlMainExtension.MainControl, path);
-            Click(button, expectedStatusCode, delay, pause);
+            Click(button, expectedStatusCode, expectPostBack, delay, pause);
+        }
+
+        /// <summary>
+        /// Click the ASP.NET control element (usually a Button instance) directly and wait for the response
+        /// </summary>
+        /// <param name="inst"></param>
+        /// <param name="clientId">Member name path to the control starting at the main control</param>
+        /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>        /// 
+        /// <param name="delay">Optional delay time in milliseconds before clicking the element</param>
+        /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete</param>
+        public static void Click(this IIE inst, Control control, int expectedStatusCode = 200, bool expectPostBack = true, int delay = 0, int pause = 0)
+        {
+            var button = GetHTMLElement(inst, control.ClientID);
+            Click(button, expectedStatusCode, expectPostBack, delay, pause);
         }
 
         /// <summary>
@@ -152,17 +166,20 @@ namespace iie
         /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>        /// 
         /// <param name="delay">Optional delay time in milliseconds before clicking the element</param>
         /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete</param>
-        public static void ClickID(this IIE inst, string clientId, int expectedStatusCode = 200, int delay = 0, int pause = 0)
+        public static void ClickID(this IIE inst, string clientId, int expectedStatusCode = 200, bool expectPostBack = true, int delay = 0, int pause = 0)
         {
             var button = GetHTMLElement(inst, clientId);
-            Click(button, expectedStatusCode, delay, pause);
+            Click(button, expectedStatusCode, expectPostBack, delay, pause);
         }
 
-        private static void Click(IHTMLElement element, int expectedStatusCode = 200, int delay = 0, int pause = 0)
+        private static void Click(IHTMLElement element, int expectedStatusCode = 200, bool expectPostBack = true, int delay = 0, int pause = 0)
         {
             Thread.Sleep(delay);
             element.click();
-            mre.WaitOne(millisecondsTimeout);
+            if (expectPostBack)
+            { 
+                mre.WaitOne(millisecondsTimeout);
+            }
             Thread.Sleep(pause);
             Assert.That(IEExtension.StatusCode, Is.EqualTo(expectedStatusCode));
         }

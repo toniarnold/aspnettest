@@ -99,6 +99,10 @@ namespace asplib.View
         /// </summary>
         public static Storage? SessionStorage { get; set; }
         /// <summary>
+        /// Encrypt the serialization byte[] when database storage is used
+        /// </summary>
+        public static bool? EncryptDatabaseStorage { get; set; }
+        /// <summary>
         /// Typeless reference to the current M Main for storage in Global.asax
         /// </summary>
         public static object CurrentMain { get; set; }
@@ -108,7 +112,7 @@ namespace asplib.View
         public static System.Web.UI.Control MainControl { get; set; }
 
         /// <summary>
-        /// Set the local session storage type from an .ascx attribute string. Case insensitive.
+        /// Set the control-local session storage type from an .ascx attribute string. Case insensitive.
         /// </summary>
         /// <typeparam name="M"></typeparam>
         /// <typeparam name="F"></typeparam>
@@ -124,7 +128,7 @@ namespace asplib.View
         }
 
         /// <summary>
-        /// Set the local session storage type from code
+        /// Set the control-local session storage type from code
         /// </summary>
         /// <typeparam name="M"></typeparam>
         /// <typeparam name="F"></typeparam>
@@ -142,7 +146,7 @@ namespace asplib.View
         /// <summary>
         /// Get the actual storage type to use in this precedence:
         /// 1. Local session storage if set by SetStorage
-        /// 2. Global config override in ControlMainExtension.SessionStorage e-g- from unit tests
+        /// 2. Global config override in ControlMainExtension.SessionStorage e.g. from unit tests
         /// 3. Configured storage in key="SessionStorage" value="Database"
         /// 4. Defaults to Viewstate
         /// </summary>
@@ -167,6 +171,31 @@ namespace asplib.View
                 storage = String.IsNullOrEmpty(configStorage) ? Storage.Viewstate : (Storage)Enum.Parse(typeof(Storage), configStorage);
             }
             return (Storage)storage;
+        }
+
+        /// <summary>
+        /// Get whether to encrypt database storage in this precedence:
+        /// 1. Global config override in ControlMainExtension.SessionStorage e.g. from unit tests
+        /// 2. Configured encryption in key="EncryptDatabaseStorage" value="True"
+        /// 3. Defaults to false
+        /// </summary>
+        /// <typeparam name="M"></typeparam>
+        /// <typeparam name="F"></typeparam>
+        /// <typeparam name="S"></typeparam>
+        /// <param name="controlMain"></param>
+        /// <returns></returns>
+        public static bool GetEncryptDatabaseStorage<M, F, S>(this IMainControl<M, F, S> controlMain)
+            where M : new()
+            where F : statemap.FSMContext
+            where S : statemap.State
+        {
+            bool? encrypt = EncryptDatabaseStorage;
+            if (encrypt == null)
+            {
+                var configEncrypt = ConfigurationManager.AppSettings["EncryptDatabaseStorage"];
+                encrypt = String.IsNullOrEmpty(configEncrypt) ? false : Boolean.Parse(configEncrypt);
+            }
+            return (bool)encrypt;
         }
 
 
@@ -210,9 +239,7 @@ namespace asplib.View
                             if (Guid.TryParse(cookie["session"], out session))
                             {
                                 Func<byte[], byte[]> filter = null;
-                                var configEncrypt = ConfigurationManager.AppSettings["EncryptDatabaseStorage"];
-                                var encrypt = String.IsNullOrEmpty(configEncrypt) ? false : Boolean.Parse(configEncrypt);
-                                if (encrypt)
+                                if (controlMain.GetEncryptDatabaseStorage())
                                 {
                                     var secret = controlMain.GetSecret();
                                     filter = x => Crypt.Decrypt(secret, x); // closure
@@ -276,10 +303,8 @@ namespace asplib.View
                         Guid.TryParse(controlMain.Request.Cookies[controlMain.StorageID()]["session"], out session);
                     }
 
-                    var configEncrypt = ConfigurationManager.AppSettings["EncryptDatabaseStorage"];
-                    var encrypt = String.IsNullOrEmpty(configEncrypt) ? false : Boolean.Parse(configEncrypt);
                     Func<byte[], byte[]> filter = null;
-                    if (encrypt)
+                    if (controlMain.GetEncryptDatabaseStorage())
                     {
                         var secret = controlMain.GetSecret();
                         filter = x => Crypt.Encrypt(secret, x); // closure
@@ -388,7 +413,7 @@ namespace asplib.View
                             controlMain.Session.Remove(controlMain.StorageID());
                             break;
                         case Storage.Database:
-                            // delete from database and expire the cookie
+                            // delete from the database and expire the cookie
                             var cookie = controlMain.Request.Cookies[controlMain.StorageID()];
                             if (cookie != null)
                             {

@@ -71,15 +71,21 @@ namespace testie.asp
             this.AssertTriptychHtml();
             this.ClickID("StorageLinkSession");
             Assert.That(this.Html(), Does.Contain("Session Storage: Session"));
-            Assert.That(this.MainControl.GetStorage(), Is.EqualTo(Storage.Session));
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Splash));
+            Assert.That(this.MainControl.GetStorage(), Is.EqualTo(Storage.Session));
+            // Assert that the overridden storage is locally persisted (in the ViewState)
+            this.Click("footer.enterButton");
+            Assert.That(this.MainControl.GetStorage(), Is.EqualTo(Storage.Session));
 
             this.ClickID("TriptychLink");
             this.AssertTriptychHtml();
             this.ClickID("StorageLinkDatabase");
             Assert.That(this.Html(), Does.Contain("Session Storage: Database"));
-            Assert.That(this.MainControl.GetStorage(), Is.EqualTo(Storage.Database));
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Splash));
+            Assert.That(this.MainControl.GetStorage(), Is.EqualTo(Storage.Database));
+            this.Click("footer.enterButton");
+            Assert.That(this.MainControl.GetStorage(), Is.EqualTo(Storage.Database));
+
         }
     }
 }

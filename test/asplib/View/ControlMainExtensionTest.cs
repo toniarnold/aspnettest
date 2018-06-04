@@ -18,5 +18,11 @@ namespace test.asplib.View
         {
             Assert.That(ControlMainExtension.SessionStorage, Is.Null);
         }
+
+        [Test]
+        public void EncryptDatabaseStorageUninitializedTest()
+        {
+            Assert.That(ControlMainExtension.EncryptDatabaseStorage, Is.Null);
+        }
     }
 }

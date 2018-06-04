@@ -13,13 +13,13 @@ namespace asp.calculator {
     public partial class Main {
         
         /// <summary>
-        /// headlinkDiv-Steuerelement
+        /// hamburgerDiv-Steuerelement
         /// </summary>
         /// <remarks>
         /// Automatisch generiertes Feld
         /// Zum Ändern Felddeklaration aus der Designerdatei in eine Code-Behind-Datei verschieben.
         /// </remarks>
-        protected global::System.Web.UI.HtmlControls.HtmlGenericControl headlinkDiv;
+        protected global::System.Web.UI.HtmlControls.HtmlGenericControl hamburgerDiv;
         
         /// <summary>
         /// PopEx-Steuerelement

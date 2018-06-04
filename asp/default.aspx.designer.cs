@@ -22,6 +22,15 @@ namespace asp {
         protected global::System.Web.UI.WebControls.ImageButton testButton;
         
         /// <summary>
+        /// testResultLabel-Steuerelement
+        /// </summary>
+        /// <remarks>
+        /// Automatisch generiertes Feld
+        /// Zum Ändern Felddeklaration aus der Designerdatei in eine Code-Behind-Datei verschieben.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.Label testResultLabel;
+        
+        /// <summary>
         /// calculator-Steuerelement
         /// </summary>
         /// <remarks>

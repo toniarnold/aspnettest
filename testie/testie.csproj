@@ -54,6 +54,8 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="asp\calculator\SessionGridViewTest.cs" />
+    <Compile Include="asp\calculator\WithDatabaseEncryptedTest.cs" />
     <Compile Include="asp\ExceptionDumpTest.cs" />
     <Compile Include="asp\calculator\WithDatabaseTest.cs" />
     <Compile Include="asp\calculator\WithSessionTest.cs" />

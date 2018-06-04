@@ -56,7 +56,7 @@ namespace test.asplib.Model
                     // DELETE: delete with initially detached object
                     var session = main.session;
                     var detached = new Main { session = session };
-                    db.Main.Attach(main);
+                    db.Main.Attach(main);   // must exist, otherwise SaveChanges() throws an exception
                     db.Main.Remove(main);
                     db.SaveChanges();
                     this.TestReadInexistent(db, session);
