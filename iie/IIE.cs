@@ -242,7 +242,10 @@ namespace iie
         /// <returns></returns>
         private static IHTMLElement GetElement(this IIE inst, Control parentnode, string path)
         {
-            Trace.Assert(ControlMainExtension.MainControl != null, "IE tests must run in the w3wp.exe adrdress space");
+            if (ControlMainExtension.MainControl == null)
+            {
+                throw new InvalidOperationException("IE tests must run in the w3wp.exe address space");
+            }
             var control = GetControl(inst, ControlMainExtension.MainControl, path);
             return GetHTMLElement(inst, control.ClientID);
         }

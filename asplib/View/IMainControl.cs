@@ -25,7 +25,7 @@ using asplib.Model;
 namespace asplib.View
 {
     /// <summary>
-    /// Extension interface for an UserControl with a reference to R
+    /// Extension interface for a Control with a reference to an FSMContext with State
     /// </summary>
     /// <typeparam name="M"></typeparam>
     /// <typeparam name="F"></typeparam>

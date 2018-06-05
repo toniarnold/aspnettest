@@ -80,9 +80,12 @@ namespace iie
         public void Run(string testproject)
         {
             // To avoid a cyclic project dependency, the dll must be read from an explict path in the filesystem
-            Trace.Assert(HttpContext.Current != null, "IE tests must run in the w3wp.exe adrdress space");
+            if (HttpContext.Current == null)
+            {
+                throw new InvalidOperationException("IE tests must run in the w3wp.exe address space");
+            }
             var approot = HttpContext.Current.Server.MapPath("~");
-            var bin = Path.Combine(approot, @"..\testie\bin");
+            var bin = Path.Combine(approot, String.Format(@"..\{0}\bin", testproject));
 #if DEBUG
             string folder = "Debug";
 #else
