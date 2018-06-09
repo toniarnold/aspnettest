@@ -13,7 +13,7 @@ namespace asplib.Model
     {
         private object mainInstance;
         /// <summary>
-        /// Returns all Database rows with a matching R instance which is already lazy loaded
+        /// Returns all Database rows with a matching M instance which is already lazy loaded
         /// </summary>
         /// <typeparam name="M"></typeparam>
         /// <returns></returns>
@@ -118,8 +118,8 @@ namespace asplib.Model
 
 
         /// <summary>
-        /// Lazy Loads and returns a deserialized object instance from the column byte[] main
-        /// or null if it is not of the generic type
+        /// Lazy Loads and returns a deserialized object instance from the 
+        /// [Main]  table column byte[] main member or null if it is not of the generic type
         /// </summary>
         /// <typeparam name="M"></typeparam>
         /// <returns></returns>
@@ -132,7 +132,7 @@ namespace asplib.Model
         }
 
         /// <summary>
-        /// Writes the serialized object to the the column byte[] main and to the instance.
+        /// Serializes the object instance to the [Main] table column byte[] main member
         /// </summary>
         /// <typeparam name="M"></typeparam>
         /// <param name="obj"></param>
@@ -160,6 +160,7 @@ namespace asplib.Model
 
         /// <summary>
         /// Deserializes a byte array into an object and apply the crypto filter if given
+        /// Returns null if the deserialization fails for whatever reason (wrong key, old version...)
         /// </summary>
         /// <param name="bytes"></param>
         /// <returns></returns>
@@ -173,7 +174,7 @@ namespace asplib.Model
                 {
                     return formattter.Deserialize(stream);
                 }
-                catch (Exception e) when (e is SerializationException || e is FormatException)
+                catch
                 {
                     return null;
                 }

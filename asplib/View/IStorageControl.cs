@@ -274,24 +274,14 @@ namespace asplib.View
         {
             Crypt.Secret secret;
             string keyString;
-            string ivString;
             var cookie = controlStorage.Request.Cookies[controlStorage.StorageID()];
             if (cookie != null)
             {
                 keyString = cookie["key"];
-                ivString = cookie["iv"];
                 if (keyString != null)
                 {
                     var key = Convert.FromBase64String(keyString);
-                    if (ivString != null)
-                    {
-                        var iv = Convert.FromBase64String(ivString);
-                        secret = new Crypt.Secret(key, iv);
-                    }
-                    else
-                    {
-                        secret = Crypt.NewSecret(key);
-                    }
+                    secret = Crypt.NewSecret(key);
                 }
                 else
                 {
@@ -303,7 +293,6 @@ namespace asplib.View
                 secret = Crypt.NewSecret();
             }
             controlStorage.Response.Cookies[controlStorage.StorageID()]["key"] = Convert.ToBase64String(secret.Key);
-            controlStorage.Response.Cookies[controlStorage.StorageID()]["iv"] = Convert.ToBase64String(secret.IV);
             return secret;
         }
 

@@ -20,6 +20,7 @@ namespace test.asplib.Model
             var secret = Crypt.NewSecret();
             Assert.That(secret, Is.Not.Null);
             Assert.That(secret.Key, Has.Exactly(32).Items); // default AES256
+            Assert.That(secret.IV, Has.Exactly(Crypt.IV_LENGTH).Items);
         }
 
         [Test]

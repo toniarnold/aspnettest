@@ -23,6 +23,8 @@ namespace asplib.Model
             }
         }
 
+        public const int IV_LENGTH = 16;    // as CreateDecryptor() for getting the length already requires the IV
+
 
         private static AesCryptoServiceProvider GetAesProvider()
         {
@@ -58,22 +60,34 @@ namespace asplib.Model
             }
         }
 
-
+        /// <summary>
+        /// Encrypt the plain byte[] and prepends the IV
+        /// </summary>
+        /// <param name="secret"></param>
+        /// <param name="plain"></param>
+        /// <returns></returns>
         public static byte[] Encrypt(Secret secret, byte[] plain)
         {
             using (var aes = GetAesProvider())
             using (var encrypt = aes.CreateEncryptor(secret.Key, secret.IV))
             {
-                return encrypt.TransformFinalBlock(plain, 0, plain.Length);
+                return secret.IV.Concat(encrypt.TransformFinalBlock(plain, 0, plain.Length)).ToArray();
             }
         }
 
+        /// <summary>
+        /// Decrypt the cipher byte[] with the IV prefix
+        /// </summary>
+        /// <param name="secret"></param>
+        /// <param name="cipher"></param>
+        /// <returns></returns>
         public static byte[] Decrypt(Secret secret, byte[] cipher)
         {
+            var iv = cipher.Take(IV_LENGTH).ToArray();
             using (var aes = GetAesProvider())
-            using (var decrypt = aes.CreateDecryptor(secret.Key, secret.IV))
+            using (var decrypt = aes.CreateDecryptor(secret.Key, iv))
             {
-                return decrypt.TransformFinalBlock(cipher, 0, cipher.Length);
+                return decrypt.TransformFinalBlock(cipher, IV_LENGTH, cipher.Length - IV_LENGTH);
             }
         }
     }

@@ -55,7 +55,7 @@ namespace testie.asp.calculator
             using (var db = new ASP_DBEntities())
             {
                 var sql = @"
-                    SELECT MAX(mainid) 
+                    SELECT ISNULL(MAX(mainid), 0)
                     FROM Main
                     ";
                 this.max_mainid = db.Database.SqlQuery<long>(sql).FirstOrDefault();
