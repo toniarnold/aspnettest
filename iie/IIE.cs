@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Web.UI;
+using System.Web.UI.WebControls;
 
 using NUnit.Framework;
 
@@ -140,7 +141,7 @@ namespace iie
         /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete</param>
         public static void Click(this IIE inst, string path, int expectedStatusCode = 200, bool expectPostBack = true, int delay = 0, int pause = 0)
         {
-            var button = GetElement(inst, ControlMainExtension.MainControl, path);
+            var button = GetElement(inst, ControlRootExtension.RootControl, path);
             Click(button, expectedStatusCode, expectPostBack, delay, pause);
         }
 
@@ -172,6 +173,29 @@ namespace iie
             Click(button, expectedStatusCode, expectPostBack, delay, pause);
         }
 
+
+        public static void Select(this IIE inst, string path, string value, int expectedStatusCode = 200, bool expectPostBack = true, int delay = 0, int pause = 0)
+        {
+            var list = GetControl(inst, path) as ListControl;
+            if (list == null)
+            {
+                throw new Exception(String.Format("ListControl at '{0}' not found", path));
+            }
+            for (int idx = 0; idx <= list.Items.Count; idx++)
+            {
+                if (idx == list.Items.Count)
+                {
+                    throw new Exception(String.Format("ListControl at '{0}': value '{0}' not found", path, value));
+                }
+                else if (list.Items[idx].Value == value)
+                {
+                    string itemID = String.Format("{0}_{1}", list.ClientID, idx);
+                    ClickID(inst, itemID, expectedStatusCode, expectPostBack, delay, pause);
+                    break;
+                }
+            }
+        }
+
         private static void Click(IHTMLElement element, int expectedStatusCode = 200, bool expectPostBack = true, int delay = 0, int pause = 0)
         {
             Thread.Sleep(delay);
@@ -192,7 +216,7 @@ namespace iie
         /// <param name="text">Text to write</param>
         public static void Write(this IIE inst, string path, string text)
         {
-            var input = GetElement(inst, ControlMainExtension.MainControl, path);
+            var input = GetElement(inst, ControlRootExtension.RootControl, path);
             input.setAttribute("value", text);
         }
 
@@ -204,7 +228,7 @@ namespace iie
         /// <returns></returns>
         public static Control GetControl(this IIE inst, string path)
         {
-            return GetControl(inst, ControlMainExtension.MainControl, path);
+            return GetControl(inst, ControlRootExtension.RootControl, path);
         }
 
         /// <summary>
@@ -242,11 +266,11 @@ namespace iie
         /// <returns></returns>
         private static IHTMLElement GetElement(this IIE inst, Control parentnode, string path)
         {
-            if (ControlMainExtension.MainControl == null)
+            if (ControlRootExtension.RootControl == null)
             {
                 throw new InvalidOperationException("IE tests must run in the w3wp.exe address space");
             }
-            var control = GetControl(inst, ControlMainExtension.MainControl, path);
+            var control = GetControl(inst, ControlRootExtension.RootControl, path);
             return GetHTMLElement(inst, control.ClientID);
         }
 

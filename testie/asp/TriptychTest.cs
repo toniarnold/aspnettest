@@ -22,17 +22,17 @@ namespace testie.asp
         [SetUp]
         public void UnsetStorage()
         {
-            ControlMainExtension.SessionStorage = null;
+            ControlStorageExtension.SessionStorage = null;
         }
 
         [TearDown]
         public void ClearStorage()
         {
-            ControlMainExtension.SessionStorage = Storage.Database;
+            ControlStorageExtension.SessionStorage = Storage.Database;
             this.Navigate("/asp/default.aspx?clear=true&endresponse=true");
-            ControlMainExtension.SessionStorage = Storage.Session;
+            ControlStorageExtension.SessionStorage = Storage.Session;
             this.Navigate("/asp/default.aspx?clear=true&endresponse=true");
-            ControlMainExtension.SessionStorage = null;
+            ControlStorageExtension.SessionStorage = null;
         }
 
         [Test]

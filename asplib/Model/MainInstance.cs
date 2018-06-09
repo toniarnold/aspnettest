@@ -12,7 +12,6 @@ namespace asplib.Model
     public partial class Main
     {
         private object mainInstance;
-
         /// <summary>
         /// Returns all Database rows with a matching R instance which is already lazy loaded
         /// </summary>
@@ -174,7 +173,7 @@ namespace asplib.Model
                 {
                     return formattter.Deserialize(stream);
                 }
-                catch (SerializationException)
+                catch (Exception e) when (e is SerializationException || e is FormatException)
                 {
                     return null;
                 }

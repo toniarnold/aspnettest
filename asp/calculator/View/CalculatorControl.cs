@@ -11,7 +11,7 @@ namespace asp.calculator.View
     /// <summary>
     /// Base class for all UserControls in the page element hierarchy
     /// </summary>
-    public abstract class CalculatorControl : UserControl, IMainControl<Calculator, CalculatorContext, CalculatorContext.CalculatorState>
+    public abstract class CalculatorControl : UserControl, ISmcControl<Calculator, CalculatorContext, CalculatorContext.CalculatorState>
     {
         public Calculator Main { get; set; }
 

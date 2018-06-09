@@ -20,13 +20,13 @@ namespace testie.asp.calculator
         [OneTimeSetUp]
         public void EnableEncryption()
         {
-            ControlMainExtension.EncryptDatabaseStorage = true;
+            ControlStorageExtension.EncryptDatabaseStorage = true;
         }
 
         [OneTimeTearDown]
         public void ResetEncryption()
         {
-            ControlMainExtension.EncryptDatabaseStorage = null;
+            ControlStorageExtension.EncryptDatabaseStorage = null;
         }
     }
 }

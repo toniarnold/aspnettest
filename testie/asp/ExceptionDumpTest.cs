@@ -45,7 +45,7 @@ namespace testie.asp
             Assert.Multiple(() =>
             {
                 // The non-initial State and the random number must come from the database with Storage.Viewstate
-                Assert.That(ControlMainExtension.SessionStorage, Is.EqualTo(Storage.Viewstate));
+                Assert.That(ControlStorageExtension.SessionStorage, Is.EqualTo(Storage.Viewstate));
                 Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
                 Assert.That(this.Stack, Does.Contain(unique));
             });

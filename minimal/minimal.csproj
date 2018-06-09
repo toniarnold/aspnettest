@@ -82,6 +82,7 @@
     <Content Include="withroot.aspx" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ContentStorage.cs" />
     <Compile Include="default.aspx.cs">
       <DependentUpon>default.aspx</DependentUpon>
       <SubType>ASPXCodeBehind</SubType>
@@ -95,7 +96,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="withstorage.aspx.cs">
       <DependentUpon>withstorage.aspx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="withstorage.aspx.designer.cs">
       <DependentUpon>withstorage.aspx</DependentUpon>

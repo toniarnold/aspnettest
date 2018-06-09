@@ -24,12 +24,12 @@ namespace testie.asp.calculator
     {
         protected long max_mainid;
 
-        protected IMainControl<Calculator, CalculatorContext, CalculatorContext.CalculatorState> MainControl
+        protected ISmcControl<Calculator, CalculatorContext, CalculatorContext.CalculatorState> MainControl
         {
             get
             {
-                return (IMainControl<Calculator, CalculatorContext, CalculatorContext.CalculatorState>)
-                          ControlMainExtension.MainControl;
+                return (ISmcControl<Calculator, CalculatorContext, CalculatorContext.CalculatorState>)
+                          ControlRootExtension.RootControl;
             }
         }
 
@@ -83,7 +83,7 @@ namespace testie.asp.calculator
         [SetUp]
         public virtual void SetUpStorage()
         {
-            ControlMainExtension.SessionStorage = Storage.Viewstate;    // default, no special TearDown required
+            ControlStorageExtension.SessionStorage = Storage.Viewstate;    // default, no special TearDown required
         }
     }
 }

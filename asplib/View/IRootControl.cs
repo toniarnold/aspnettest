@@ -13,11 +13,19 @@ namespace asplib.View
     {
     }
 
+    /// <summary>
+    /// Extension implementation with minimal dependencies
+    /// </summary>
     public static class ControlRootExtension
     {
+        /// <summary>
+        /// Global reference to the root control of an application under test
+        /// </summary>
+        public static System.Web.UI.Control RootControl { get; set; }
+
         public static void SetRoot(this IRootControl controlRoot)
         {
-            ControlMainExtension.MainControl = (System.Web.UI.Control)controlRoot;
+            ControlRootExtension.RootControl = (System.Web.UI.Control)controlRoot;
         }
     }
 }

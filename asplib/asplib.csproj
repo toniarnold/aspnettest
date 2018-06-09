@@ -73,7 +73,7 @@
     </Compile>
     <Compile Include="Model\MainInstance.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="View\IMainControl.cs" />
+    <Compile Include="View\ISmcControl.cs" />
     <Compile Include="View\IRootControl.cs" />
     <Compile Include="View\IStorageControl.cs" />
   </ItemGroup>

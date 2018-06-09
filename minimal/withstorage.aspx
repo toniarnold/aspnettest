@@ -42,7 +42,7 @@
             <asp:RadioButtonList ID="storageList" runat="server" RepeatDirection="Horizontal"
                 AutoPostBack="true"
                 OnSelectedIndexChanged="storageList_SelectedIndexChanged">
-                <asp:ListItem Text="Viewstate" Value="Viewstate" Selected></asp:ListItem>
+                <asp:ListItem Text="Viewstate" Value="Viewstate" Selected="True"></asp:ListItem>
                 <asp:ListItem Text="Session" Value="Session"></asp:ListItem>
                 <asp:ListItem Text="Database" Value="Database"></asp:ListItem>
             </asp:RadioButtonList>
@@ -50,7 +50,9 @@
             <asp:Button ID="submitButton" runat="server"
                 Text="Submit"
                 OnClick="submitButton_Click" />
-            <asp:BulletedList ID="contentList" runat="server"></asp:BulletedList>
+            <asp:BulletedList ID="contentList" runat="server"
+                EnableViewState="false"
+                ></asp:BulletedList>
         </div>
     </form>
 </body>

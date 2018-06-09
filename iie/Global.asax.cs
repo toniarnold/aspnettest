@@ -27,12 +27,12 @@ namespace iie
             var encrypt = String.IsNullOrEmpty(configEncrypt) ? false : Boolean.Parse(configEncrypt);
             if (!encrypt)
             {
-                if (Server.GetLastError() is HttpException exception && ControlMainExtension.CurrentMain != null)
+                if (Server.GetLastError() is HttpException exception && ControlStorageExtension.CurrentMain != null)
                 {
                     string ysod = exception.GetHtmlErrorMessage();
                     if (ysod != null)
                     {
-                        var session = Main.SaveMain(ControlMainExtension.CurrentMain, null);
+                        var session = Main.SaveMain(ControlStorageExtension.CurrentMain, null);
                         var requestUrl = HttpContext.Current.Request.Url.ToString();
                         var url = requestUrl + (requestUrl.Contains("?") ? "&" : "?") +
                                   String.Format("session={0}", this.Server.UrlEncode(session.ToString()));

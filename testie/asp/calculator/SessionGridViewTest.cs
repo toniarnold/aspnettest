@@ -26,7 +26,7 @@ namespace testie.asp.calculator
         [OneTimeSetUp]
         public override void SetUpStorage()
         {
-            ControlMainExtension.SessionStorage = Storage.Database;
+            ControlStorageExtension.SessionStorage = Storage.Database;
             this.ClearSession();
             this.Navigate("/asp/default.aspx");
         }
@@ -109,8 +109,8 @@ namespace testie.asp.calculator
             row = this.SelectRowContainig(unique);
             var delete = row.FindControl("deleteLinkButton");
             // Partial PostBack does not trigger DocumentComplete, 
-            // as a fall back just wait for the row to disappear
-            this.Click(delete, expectPostBack: false, pause: 100);  
+            // as a fall back just wait long enough for the row to disappear
+            this.Click(delete, expectPostBack: false, pause: 500);  
             Assert.That(this.GridView.Rows.Count, Is.EqualTo(this.rowCountBefore));  // as in the beginning<
         }
 

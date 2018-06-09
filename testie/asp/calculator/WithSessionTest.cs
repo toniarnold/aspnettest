@@ -23,7 +23,7 @@ namespace testie.asp.calculator
         [OneTimeSetUp]
         public override void SetUpStorage()
         {
-            ControlMainExtension.SessionStorage = Storage.Session;
+            ControlStorageExtension.SessionStorage = Storage.Session;
         }
 
         /// <summary>

@@ -11,18 +11,18 @@ using asplib.View;
 namespace test.asplib.View
 {
     [TestFixture]
-    public class ControlMainExtensionTest
+    public class ControlStorageExtensionTest
     {
         [Test]
         public void StorageUninitializedTest()
         {
-            Assert.That(ControlMainExtension.SessionStorage, Is.Null);
+            Assert.That(ControlStorageExtension.SessionStorage, Is.Null);
         }
 
         [Test]
         public void EncryptDatabaseStorageUninitializedTest()
         {
-            Assert.That(ControlMainExtension.EncryptDatabaseStorage, Is.Null);
+            Assert.That(ControlStorageExtension.EncryptDatabaseStorage, Is.Null);
         }
     }
 }

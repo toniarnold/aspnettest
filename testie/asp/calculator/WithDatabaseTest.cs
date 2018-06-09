@@ -20,7 +20,7 @@ namespace testie.asp.calculator
         [OneTimeSetUp]
         public override void SetUpStorage()
         {
-            ControlMainExtension.SessionStorage = Storage.Database;
+            ControlStorageExtension.SessionStorage = Storage.Database;
         }
 
         /// <summary>
@@ -33,7 +33,7 @@ namespace testie.asp.calculator
         }
 
         /// <summary>
-        /// Restart Internet explorer and navigate to the page, session storage should survive
+        /// Restart Internet explorer and navigate to the page, database storage should survive
         /// </summary>
         private void RestartIE()
         {
