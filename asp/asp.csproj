@@ -94,9 +94,9 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="calculator\Control\Calculator_sm.png" />
     <Content Include="calculator\Main.ascx" />
     <Content Include="calculator\View\Calculate.ascx" />
-    <Content Include="calculator\View\Calculator_sm.png" />
     <Content Include="calculator\View\Enter.ascx" />
     <Content Include="calculator\View\Error.ascx" />
     <Content Include="calculator\View\Footer.ascx" />
@@ -137,7 +137,6 @@
     </Compile>
     <Compile Include="calculator\View\Enter.ascx.cs">
       <DependentUpon>Enter.ascx</DependentUpon>
-      <SubType>ASPXCodeBehind</SubType>
     </Compile>
     <Compile Include="calculator\View\Enter.ascx.designer.cs">
       <DependentUpon>Enter.ascx</DependentUpon>
@@ -193,6 +192,7 @@
     <Content Include="calculator\Control\Calculator.sm" />
     <Content Include="calculator\Control\Calculator_sm.dot" />
     <Content Include="asp.Master" />
+    <Content Include="calculator\Control\Makefile" />
     <None Include="packages.config" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
@@ -252,10 +252,9 @@
     <Error Condition="!Exists('..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.1.0.8\build\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.props'))" />
   </Target>
   <PropertyGroup>
-    <PreBuildEvent>cd $(ProjectDir)\calculator\Control
-java -jar ..\..\..\SMC\Smc.jar -csharp -serial -reflection -generic Calculator.sm
-java -jar ..\..\..\SMC\Smc.jar  -graph -glevel 1 Calculator.sm
-dot -T png -o ..\View\Calculator_sm.png Calculator_sm.dot
+    <PreBuildEvent>CALL "C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Auxiliary\Build\vcvarsall.bat" x86
+cd $(ProjectDir)\calculator\Control
+nmake
 </PreBuildEvent>
   </PropertyGroup>
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
