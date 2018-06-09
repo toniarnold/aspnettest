@@ -23,6 +23,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "minimaltest", "minimaltest\
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{2E42CFF2-10DD-4670-9A65-FB77780C0860}"
 	ProjectSection(SolutionItems) = preProject
+		AUTHORS = AUTHORS
+		LICENSE = LICENSE
 		README.md = README.md
 	EndProjectSection
 EndProject
