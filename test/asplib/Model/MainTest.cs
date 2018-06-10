@@ -1,14 +1,9 @@
-﻿using System;
+﻿using asplib.Model;
+using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using NUnit.Framework;
-
-using asplib.Model;
-
 
 namespace test.asplib.Model
 {
@@ -27,7 +22,7 @@ namespace test.asplib.Model
         [Test]
         public void SerializeDeserializeFilteredTest()
         {
-            Func<byte[], byte[]> filter = x => { var y = (byte[])x.Clone();  Array.Reverse(y); return y; };
+            Func<byte[], byte[]> filter = x => { var y = (byte[])x.Clone(); Array.Reverse(y); return y; };
             var obj = new List<string> { "Hello", "World" };
             var bytes = this.Serialize(obj, filter);
             var copy = this.Deserialize(bytes, filter);
@@ -92,7 +87,6 @@ namespace test.asplib.Model
             }
         }
 
-
         [Test]
         [Category("DbContext")]
         public void AllMainRowsInsertTest()
@@ -134,7 +128,6 @@ namespace test.asplib.Model
                         Assert.That(found1.GetInstance<List<string>>(),
                             Is.Not.SameAs(found2.GetInstance<List<string>>()));
                     });
-
                 }
                 finally
                 {

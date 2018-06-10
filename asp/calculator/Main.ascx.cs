@@ -1,22 +1,13 @@
-﻿/*
- * R web control containing the state machine
-*/
-
+﻿using asp.calculator.Control;
+using asp.calculator.View;
+using asplib.Model;
+using asplib.View;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
 using System.Web.UI.WebControls;
-
 using MainRow = asplib.Model.Main;
-using asplib.Model;
-using asplib.View;
 using StorageEnum = asplib.View.Storage;
-
-using asp.calculator.Control;
-using asp.calculator.View;
 
 namespace asp.calculator
 {
@@ -24,6 +15,7 @@ namespace asp.calculator
     {
         public string StorageLinkUrl { get; set; }
         public string StorageLinkClientID { get; set; }
+
         public string Encrypted
         {
             get
@@ -50,7 +42,7 @@ namespace asp.calculator
         /// <param name="e"></param>
         protected void gridView_RowCommand(object sender, GridViewCommandEventArgs e)
         {
-            switch(e.CommandName)
+            switch (e.CommandName)
             {
                 case "Del":
                     var session = Guid.Parse(e.CommandArgument.ToString());
@@ -64,6 +56,7 @@ namespace asp.calculator
                         db.Database.ExecuteSqlCommand(sql, param);
                     }
                     break;
+
                 default:
                     throw new NotImplementedException(String.Format("e.CommandName='{0}'", e.CommandName));
             }

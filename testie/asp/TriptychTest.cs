@@ -1,17 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using NUnit.Framework;
-
+﻿using asplib.View;
 using iie;
-
-using asplib.View;
-
+using NUnit.Framework;
 using testie.asp.calculator;
-
 
 namespace testie.asp
 {
@@ -43,7 +33,7 @@ namespace testie.asp
         }
 
         /// <summary>
-        /// We can't use the member navigation as there are 3 competing Calculator instances, 
+        /// We can't use the member navigation as there are 3 competing Calculator instances,
         /// thus assert the presence of the three calculators superficially by text.
         /// </summary>
         private void AssertTriptychHtml()
@@ -85,7 +75,6 @@ namespace testie.asp
             Assert.That(this.MainControl.GetStorage(), Is.EqualTo(Storage.Database));
             this.Click("footer.enterButton");
             Assert.That(this.MainControl.GetStorage(), Is.EqualTo(Storage.Database));
-
         }
     }
 }

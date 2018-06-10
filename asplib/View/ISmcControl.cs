@@ -1,26 +1,6 @@
-﻿/*
-- * Extension methods for direct accessors and the implementation of the persistence of R within an UserControl
--*/
-
-using System;
+﻿using asplib.Model;
 using System.Collections.Generic;
-using System.Configuration;
-using System.Data.SqlClient;
-using System.Data.Entity;
-using System.Diagnostics;
-using System.IO;
 using System.Linq;
-using System.Reflection;
-using System.Runtime.Serialization;
-using System.Runtime.Serialization.Formatters.Binary;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
-using System.Web.UI;
-using System.Web.SessionState;
-
-using asplib.Model;
-
 
 namespace asplib.View
 {
@@ -34,7 +14,7 @@ namespace asplib.View
     where M : new()
     where F : statemap.FSMContext
     where S : statemap.State
-    {       
+    {
         /// <summary>
         /// The generated FSM class
         /// </summary>
@@ -49,16 +29,14 @@ namespace asplib.View
         bool Visible { get; set; }
     }
 
-
-
     /// <summary>
     /// Extension implementation with structural SMC dependency
     /// </summary>
     public static class ControlSmcExtension
-    { 
+    {
         /// <summary>
         /// To be called in Page_Load():
-        /// Load the R object from the storage, propagate it to all sub-controls 
+        /// Load the R object from the storage, propagate it to all sub-controls
         /// and recursively hide them all below the main control.
         /// Also sets a global reference to the main control in IIE for testing.
         /// </summary>
@@ -71,17 +49,16 @@ namespace asplib.View
         where S : statemap.State
         {
             ControlStorageExtension.LoadMain<M>(controlMain);
-            
+
             // SMC Manual Section 9
-            // SMC considers the code it generates to be subservient to the application code. For this reason the SMC code does not serialize 
-            // its references to the FSM context owner or property listeners.The application code after deserializing 
+            // SMC considers the code it generates to be subservient to the application code. For this reason the SMC code does not serialize
+            // its references to the FSM context owner or property listeners.The application code after deserializing
             // the FSM must call the Owner property setter to re - establish the application/ FSM link.
             // If the application listens for FSM state transitions, then event handlers must also be put back in place.
             controlMain.Fsm.GetType().GetProperty("Owner").SetValue(controlMain.Fsm, controlMain.Main);
 
             controlMain.HideAll();
         }
-
 
         /// <summary>
         /// To be called at the end of OnPreRender():
@@ -97,7 +74,6 @@ namespace asplib.View
         {
             ControlStorageExtension.SaveMain<M>(controlMain);
         }
-
 
         /// <summary>
         /// Set the control-local session storage type from an .ascx attribute string. Case insensitive.
@@ -170,7 +146,6 @@ namespace asplib.View
             return ControlStorageExtension.GetEncryptDatabaseStorage<M>(controlMain);
         }
 
-
         /// <summary>
         /// Get the Key/IV secret from the cookies and generate the parts that don't yet exist
         /// and directly save it to the cookies collection
@@ -181,17 +156,15 @@ namespace asplib.View
         where F : statemap.FSMContext
         where S : statemap.State
         {
-
             return ControlStorageExtension.GetSecret<M>(controlMain);
         }
-
 
         /// <summary>
         /// Hook to clear the storage for that control with ?clear=true
         /// ViewState is reset anyway on GET requests, therefore NOP in that casefa
         /// GET-arguments:
         /// clear=[true|false]  triggers clearing the storage
-        /// endresponse=[true|false]    whether the page at the given URL 
+        /// endresponse=[true|false]    whether the page at the given URL
         /// storage=[Viewstate|Session|Database]    clears the selected storage type regardless off config
         /// </summary>
         /// <typeparam name="M"></typeparam>
@@ -206,7 +179,6 @@ namespace asplib.View
         {
             ControlStorageExtension.ClearIfRequested<M>(controlMain);
         }
-
 
         /// <summary>
         /// StorageID-String unique to the control instance to store/retrieve/clear the M
@@ -224,7 +196,6 @@ namespace asplib.View
             return ControlStorageExtension.StorageID<M>(controlMain);
         }
 
-
         /// <summary>
         /// Recursively add a reference to the global M and to all sub-controls
         /// </summary>
@@ -238,23 +209,21 @@ namespace asplib.View
             ControlStorageExtension.PropagateMain<M>(controlMain, main);
         }
 
-
         /// <summary>
         /// Enumerate all contained sub-controls of type ISmcControl
         /// </summary>
         /// <typeparam name="M"></typeparam>
         /// <param name="controlMain"></param>
         /// <returns></returns>
-        internal static IEnumerable<ISmcControl<M, F, S>>Subcontrols<M, F, S>(this ISmcControl<M, F, S> controlMain)
+        internal static IEnumerable<ISmcControl<M, F, S>> Subcontrols<M, F, S>(this ISmcControl<M, F, S> controlMain)
         where M : new()
         where F : statemap.FSMContext
         where S : statemap.State
         {
             return from c in ControlStorageExtension.Subcontrols<M>(controlMain)
                    where c is ISmcControl<M, F, S>
-                   select (ISmcControl< M, F, S>)c;
+                   select (ISmcControl<M, F, S>)c;
         }
-
 
         /// <summary>
         /// Recursively make all contained sub-controls of type ISmcControl invisible

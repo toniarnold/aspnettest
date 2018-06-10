@@ -1,36 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.IO;
+﻿using System.Linq;
 using System.Security.Cryptography;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace asplib.Model
 {
+    /// <summary>
+    /// Encapsulates the encryption of the [Main].[main] storage column
+    /// </summary>
     public static class Crypt
     {
         /// <summary>
-        /// Key/IV pair vor storing in a cookie
+        /// Key/IV pair value type to minimize accidental proliferation of the key
         /// </summary>
         public struct Secret
         {
             public readonly byte[] Key, IV;
-            public Secret(byte[] key, byte[] iv)
+
+            internal Secret(byte[] key, byte[] iv)  // internal to avoid accidentally reusing the same IV
             {
                 Key = key;
                 IV = iv;
             }
         }
 
-        public const int IV_LENGTH = 16;    // as CreateDecryptor() for getting the length already requires the IV
-
-
-        private static AesCryptoServiceProvider GetAesProvider()
-        {
-            var aes = new AesCryptoServiceProvider();
-            return aes;
-        }
+        internal const int IV_LENGTH = 16;  // constant to avoid instantiating AesCryptoServiceProvider twice
 
         /// <summary>
         /// Generate a new Key/IV pair
@@ -38,7 +30,7 @@ namespace asplib.Model
         /// <returns></returns>
         public static Secret NewSecret()
         {
-            using (var aes = GetAesProvider())
+            using (var aes = new AesCryptoServiceProvider())
             {
                 aes.GenerateKey();
                 aes.GenerateIV();
@@ -53,7 +45,7 @@ namespace asplib.Model
         /// <returns></returns>
         public static Secret NewSecret(byte[] key)
         {
-            using (var aes = GetAesProvider())
+            using (var aes = new AesCryptoServiceProvider())
             {
                 aes.GenerateIV();
                 return new Secret(key, aes.IV);
@@ -68,7 +60,7 @@ namespace asplib.Model
         /// <returns></returns>
         public static byte[] Encrypt(Secret secret, byte[] plain)
         {
-            using (var aes = GetAesProvider())
+            using (var aes = new AesCryptoServiceProvider())
             using (var encrypt = aes.CreateEncryptor(secret.Key, secret.IV))
             {
                 return secret.IV.Concat(encrypt.TransformFinalBlock(plain, 0, plain.Length)).ToArray();
@@ -84,7 +76,7 @@ namespace asplib.Model
         public static byte[] Decrypt(Secret secret, byte[] cipher)
         {
             var iv = cipher.Take(IV_LENGTH).ToArray();
-            using (var aes = GetAesProvider())
+            using (var aes = new AesCryptoServiceProvider())
             using (var decrypt = aes.CreateDecryptor(secret.Key, iv))
             {
                 return decrypt.TransformFinalBlock(cipher, IV_LENGTH, cipher.Length - IV_LENGTH);

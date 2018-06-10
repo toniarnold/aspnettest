@@ -1,18 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using asplib.View;
+using iie;
+using System;
 using System.Web.UI;
-using System.Web.UI.WebControls;
-using asplib.View;
 
 namespace minimal
 {
-    public class MaliciousContentException : Exception
-    {
-        public MaliciousContentException(string msg) : base(msg) { }
-    }
-
     public partial class withstorage : System.Web.UI.Page, IStorageControl<ContentStorage>
     {
         public ContentStorage Main { get; set; }
@@ -36,7 +28,6 @@ namespace minimal
         /// </summary>
         public Storage? SessionStorage { get; set; }
 
-
         protected void Page_Load(object sender, EventArgs e)
         {
             this.SetStorage(storageList.SelectedValue);
@@ -48,7 +39,7 @@ namespace minimal
         {
             if (String.Compare(this.contentTextBox.Text, "except", true) == 0)
             {
-                throw new MaliciousContentException("Malicious Content Exception");
+                throw new TestException("Malicious Content Exception");
             }
             this.Main.Content.Add(contentTextBox.Text);
             this.contentTextBox.Text = String.Empty;

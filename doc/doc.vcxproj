@@ -67,9 +67,11 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <NMakeOutput>doc.exe</NMakeOutput>
+    <NMakeOutput>
+    </NMakeOutput>
     <NMakePreprocessorDefinitions>WIN32;_DEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
     <NMakeBuildCommandLine>nmake</NMakeBuildCommandLine>
+    <NMakeReBuildCommandLine>nmake clean &amp;&amp; nmake</NMakeReBuildCommandLine>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <NMakeOutput>doc.exe</NMakeOutput>

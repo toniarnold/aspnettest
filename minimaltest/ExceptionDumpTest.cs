@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.UI.WebControls;
+﻿using iie;
 using NUnit.Framework;
-using iie;
+using System.Web.UI.WebControls;
 
 namespace minimaltest
 {
     /// <summary>
-    /// Exception dumps into the database require storage (IStorageControl), but 
+    /// Exception dumps into the database require storage (IStorageControl), but
     /// work also when the site's storage is only Viewstate.
     /// </summary>
     [TestFixture]
@@ -37,7 +32,7 @@ namespace minimaltest
             this.AssertBenignLine();
             this.Write("contentTextBox", "Except");
             this.Click("submitButton", expectedStatusCode: 500);
-            Assert.That(this.Html(), Does.Contain("Malicious Content Exception")); 
+            Assert.That(this.Html(), Does.Contain("Malicious Content Exception"));
 
             // The benign content in the Viewstate is lost -> Navigate to the Main dump on the ysod-Page
             var linkToDump = this.GetHTMLElement(IEExtension.EXCEPTION_LINK_ID);

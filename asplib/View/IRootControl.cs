@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace asplib.View
+﻿namespace asplib.View
 {
     /// <summary>
-    /// Extension interface for a Control to access SetRoot() method
+    /// Extension interface for a Control to access the SetRoot() method
     /// </summary>
     public interface IRootControl
     {

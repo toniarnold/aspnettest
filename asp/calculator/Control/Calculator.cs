@@ -1,7 +1,6 @@
-﻿using System;
+﻿using asplib.Control;
+using System;
 using System.Collections.Generic;
-
-using asplib.Control;
 
 namespace asp.calculator.Control
 {
@@ -49,7 +48,7 @@ namespace asp.calculator.Control
         /// </summary>
         public string StackHtmlString
         {
-           get { return String.Join("<br />", this.Stack); }
+            get { return String.Join("<br />", this.Stack); }
         }
 
         /// <summary>
@@ -60,6 +59,7 @@ namespace asp.calculator.Control
             get { return this.operand; }
             set { this.operand = value; }
         }
+
         [NonSerialized]
         private string operand;
 
@@ -81,6 +81,7 @@ namespace asp.calculator.Control
             var r = x + y;
             this.Push(r.ToString());
         }
+
         public void Sub()
         {
             var y = Double.Parse(this._stack.Pop());
@@ -88,6 +89,7 @@ namespace asp.calculator.Control
             var r = x - y;
             this.Push(r.ToString());
         }
+
         public void Mul()
         {
             var y = Double.Parse(this._stack.Pop());
@@ -95,6 +97,7 @@ namespace asp.calculator.Control
             var r = x * y;
             this.Push(r.ToString());
         }
+
         public void Div()
         {
             var y = Double.Parse(this._stack.Pop());
@@ -102,22 +105,26 @@ namespace asp.calculator.Control
             var r = x / y;
             this.Push(r.ToString());
         }
+
         public void Pow()
         {
             var x = Double.Parse(this._stack.Pop());
             var r = Math.Pow(x, 2);
             this.Push(r.ToString());
         }
+
         public void Sqrt()
         {
             var x = Double.Parse(this._stack.Pop());
             var r = Math.Sqrt(x);
             this.Push(r.ToString());
         }
+
         public void Clr()
         {
             this._stack.Pop();
         }
+
         public void ClrAll()
         {
             this._stack = new Stack<string>();

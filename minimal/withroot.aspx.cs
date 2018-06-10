@@ -1,10 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
+﻿using asplib.View;
+using System;
 using System.Web.UI.WebControls;
-using asplib.View;
 
 namespace minimal
 {

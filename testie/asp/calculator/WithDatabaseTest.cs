@@ -1,15 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using NUnit.Framework;
-
+﻿using asplib.View;
 using iie;
-
-using asplib.View;
-
+using NUnit.Framework;
 
 namespace testie.asp.calculator
 {

@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.UI.WebControls;
-
+﻿using iie;
 using NUnit.Framework;
-using iie;
+using System.Web.UI.WebControls;
 
 namespace minimaltest
 {

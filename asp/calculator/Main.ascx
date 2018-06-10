@@ -8,49 +8,50 @@
 <%@ Register TagPrefix="uc" TagName="Splash" Src="~/calculator/View/Splash.ascx" %>
 <%@ Register TagPrefix="uc" TagName="Title" Src="~/calculator/View/Title.ascx" %>
 <style>
-.hamburger-container { 
-    display: inline-grid;
-    grid-template-columns: auto auto auto;
-    width: 100%;
-}
-.hamburger-box {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-.hamburger {
-    border: 1px solid black;
-    padding: 2px; 
-    display: block;
-}
-.grid {
-    background-color:rgba(255, 255, 255, 1);
-    font-size: small;
-}
-.link {
-    text-decoration: none;
-}
+    .hamburger-container {
+        display: inline-grid;
+        grid-template-columns: auto auto auto;
+        width: 100%;
+    }
+
+    .hamburger-box {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .hamburger {
+        border: 1px solid black;
+        padding: 2px;
+        display: block;
+    }
+
+    .grid {
+        background-color: rgba(255, 255, 255, 1);
+        font-size: small;
+    }
+
+    .link {
+        text-decoration: none;
+    }
 </style>
 <div class="hamburger-container">
     <div class="hamburger-box"></div>
-    <a href="<%= this.StorageLinkUrl %>" id=<%= this.StorageLinkClientID %> class="hamburger-box">
-        Session Storage: <%= this.Storage %> <%= this.Encrypted %>
+    <a href="<%= this.StorageLinkUrl %>" id="<%= this.StorageLinkClientID %>" class="hamburger-box">Session Storage: <%= this.Storage %> <%= this.Encrypted %>
     </a>
-    <div class="hamburger-box" ID="hamburgerDiv" runat="server">
+    <div class="hamburger-box" id="hamburgerDiv" runat="server">
         <span class="hamburger">&#x2630;</span>
     </div>
     <ajaxToolkit:PopupControlExtender ID="PopEx" runat="server"
         TargetControlID="hamburgerDiv"
         PopupControlID="gridViewPanel"
-        Position="Bottom" 
-        OffsetX="-100"
-        />
-    <asp:ObjectDataSource ID="sessionDumpDataSource" runat="server" 
+        Position="Bottom"
+        OffsetX="-100" />
+    <asp:ObjectDataSource ID="sessionDumpDataSource" runat="server"
         TypeName="asp.calculator.Main"
-        SelectMethod="AllMainRows"
-        />
-    <asp:UpdatePanel id="gridViewPanel" runat="server"
-        UpdateMode="Always" >
+        SelectMethod="AllMainRows" />
+    <asp:UpdatePanel ID="gridViewPanel" runat="server"
+        UpdateMode="Always">
         <ContentTemplate>
             <asp:GridView ID="sessionDumpGridView" runat="server"
                 DataSourceID="sessionDumpDataSource"
@@ -59,8 +60,7 @@
                 DataKeyNames="session"
                 AutoGenerateColumns="false"
                 EmptyDataText="no saved session objects found"
-                CssClass="grid"
-                >
+                CssClass="grid">
                 <Columns>
                     <asp:BoundField DataField="created" HeaderText="Created" />
                     <asp:BoundField DataField="changed" HeaderText="Changed" />
@@ -72,21 +72,19 @@
                     </asp:TemplateField>
                     <asp:TemplateField>
                         <ItemTemplate>
-                            <asp:LinkButton ID="deleteLinkButton" runat="server" 
+                            <asp:LinkButton ID="deleteLinkButton" runat="server"
                                 CommandName="Del"
                                 CommandArgument="<%# Item.session %>"
                                 CssClass="link"
-                                Text="&#x232b;"
-                                />
+                                Text="&#x232b;" />
                         </ItemTemplate>
                     </asp:TemplateField>
                     <asp:TemplateField>
                         <ItemTemplate>
-                            <asp:HyperLink ID="linkHyperLink" runat="server" 
+                            <asp:HyperLink ID="linkHyperLink" runat="server"
                                 CssClass="link"
-                                Text="&#x1f517;" 
-                                NavigateUrl="<%# this.Url(Item.session) %>"
-                                />                    
+                                Text="&#x1f517;"
+                                NavigateUrl="<%# this.Url(Item.session) %>" />
                         </ItemTemplate>
                     </asp:TemplateField>
                 </Columns>

@@ -1,13 +1,9 @@
-﻿using System;
+﻿using asplib.Model;
+using NUnit.Framework;
+using System;
 using System.Data;
-using System.Data.Entity.Infrastructure;
 using System.Linq;
 using System.Threading;
-
-using NUnit.Framework;
-
-using asplib.Model;
-
 
 namespace test.asplib.Model
 {
@@ -24,7 +20,7 @@ namespace test.asplib.Model
             using (var trans = db.Database.BeginTransaction(IsolationLevel.ReadUncommitted))
             {
                 try
-                { 
+                {
                     var main = new Main();
                     db.Main.Add(main);  // add incomplete object, possible unlike with Strongly Typed Datasets
                     main.main = new byte[3] { 1, 2, 3 };
@@ -43,7 +39,7 @@ namespace test.asplib.Model
                     Thread.Sleep(500);  // greater than db roundtrip time
                     main.main = new byte[3] { 4, 5, 6 };
                     db.SaveChanges();
-                    var createdAt = main.created;   // exact time from the db 
+                    var createdAt = main.created;   // exact time from the db
                     var changedAt = DateTime.Now;
                     Assert.Multiple(() =>   // direct assertions on the model object
                     {
@@ -67,7 +63,6 @@ namespace test.asplib.Model
                 }
             }
         }
-
 
         [Test]
         public void ReadInexistentTest()

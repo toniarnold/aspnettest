@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.UI.WebControls;
+﻿using iie;
 using NUnit.Framework;
-using iie;
+using System;
+using System.Linq;
+using System.Web.UI.WebControls;
 
 namespace minimaltest
 {
@@ -36,7 +33,6 @@ namespace minimaltest
         {
             this.Navigate(String.Format("/minimal/withstorage.aspx?clear=true&endresponse=true&storage={0}", storage));
         }
-
 
         [Test]
         public void NavigateWithStorageTest()
@@ -70,7 +66,6 @@ namespace minimaltest
             this.WriteContentTest(() => this.RestartIE());
         }
 
-
         // "survives()"-Method implementations with explicit storage selection,
         // as the storage type itself is not persisted.
 
@@ -98,7 +93,6 @@ namespace minimaltest
             this.Navigate("/minimal/withstorage.aspx");
             this.Select("storageList", "Database", expectPostBack: true);
         }
-
 
         /// <summary>
         /// Basically the same test as WithRootTest.WriteContentTest(),

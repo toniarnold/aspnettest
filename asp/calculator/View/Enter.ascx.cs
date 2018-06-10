@@ -1,22 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-
-using asplib.View;
-
-using asp.calculator.Control;
-
+﻿using iie;
+using System;
 
 namespace asp.calculator.View
 {
-    public class DeliberateException : Exception
-    {
-        public DeliberateException(string msg) : base(msg) { }
-    }
-
     public partial class Enter : CalculatorControl
     {
         /// <summary>
@@ -28,7 +14,7 @@ namespace asp.calculator.View
         {
             if (String.Compare(this.operandTextBox.Text, "except", true) == 0)
             {
-                throw new DeliberateException("Deliberate Exception");
+                throw new TestException("Deliberate Exception");
             }
             this.Main.Operand = this.operandTextBox.Text;
         }

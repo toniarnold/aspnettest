@@ -1,13 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using asp.calculator.Control;
 using NUnit.Framework;
-
-using asp.calculator.Control;
-
 
 namespace test.asp.calculator.Control
 {
@@ -19,7 +11,6 @@ namespace test.asp.calculator.Control
         {
             base.Construct();
         }
-
 
         [Test]
         public void InitTest()

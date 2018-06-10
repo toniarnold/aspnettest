@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
+﻿using iie;
 using NUnit.Framework;
-using iie;
+using System;
 
 namespace minimaltest
 {
@@ -59,6 +54,5 @@ namespace minimaltest
             // If this would work here, it would be evocative of Goethe's "The Sorcerer's Apprentice"...
             Assert.That(() => this.Click("testButton"), Throws.Exception.TypeOf<InvalidOperationException>());
         }
-
     }
 }

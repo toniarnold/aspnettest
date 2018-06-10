@@ -1,12 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using iie;
 using NUnit.Framework;
-
-using iie;
 
 namespace test.iie
 {

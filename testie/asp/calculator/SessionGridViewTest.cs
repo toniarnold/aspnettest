@@ -1,15 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web.UI.WebControls;
-
-using NUnit.Framework;
-
+﻿using asplib.View;
 using iie;
-
-using asplib.View;
+using NUnit.Framework;
+using System;
+using System.Linq;
+using System.Web.UI.WebControls;
 
 namespace testie.asp.calculator
 {
@@ -21,7 +15,6 @@ namespace testie.asp.calculator
     public class SessionGridViewTest : TestBase
     {
         private int rowCountBefore = 0;
-
 
         [OneTimeSetUp]
         public override void SetUpStorage()
@@ -40,7 +33,6 @@ namespace testie.asp.calculator
         [SetUp]
         public void RowCount()
         {
-            
         }
 
         // Accessors for the control under test
@@ -48,7 +40,6 @@ namespace testie.asp.calculator
         {
             get { return (GridView)this.GetControl("sessionDumpGridView"); }
         }
-
 
         [Test]
         public void InsertOrphaneDeleteTest()
@@ -67,12 +58,11 @@ namespace testie.asp.calculator
             Assert.That(this.Stack, Does.Contain(unique));
             Assert.That(this.GridView.Rows.Count, Is.EqualTo(this.rowCountBefore));
 
-            // Click on the hamburger to make that number optically visible 
+            // Click on the hamburger to make that number optically visible
             // and find the row containing the number
             this.Click("hamburgerDiv", expectPostBack: false);
             var row = this.SelectRowContainig(unique);
             Assert.That(row, Is.Not.Null);
-
 
             // Throw an exception to create a session dump row (as a duplicate) and return
             this.Click("footer.enterButton");
@@ -108,9 +98,9 @@ namespace testie.asp.calculator
             this.Click("hamburgerDiv", expectPostBack: false);
             row = this.SelectRowContainig(unique);
             var delete = row.FindControl("deleteLinkButton");
-            // Partial PostBack does not trigger DocumentComplete, 
+            // Partial PostBack does not trigger DocumentComplete,
             // as a fall back just wait long enough for the row to disappear
-            this.Click(delete, expectPostBack: false, pause: 500);  
+            this.Click(delete, expectPostBack: false, pause: 500);
             Assert.That(this.GridView.Rows.Count, Is.EqualTo(this.rowCountBefore));  // as in the beginning<
         }
 

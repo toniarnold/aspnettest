@@ -1,15 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
-
-using NUnit.Framework;
-
+﻿using asplib.View;
 using iie;
-
-using asplib.View;
+using NUnit.Framework;
 
 namespace testie.asp.calculator
 {
@@ -34,7 +25,6 @@ namespace testie.asp.calculator
         {
             this.Navigate("/asp/default.aspx?clear=true&endresponse=true");
         }
-
 
         /// <summary>
         /// Reload the page, session storage should survive
@@ -76,7 +66,7 @@ namespace testie.asp.calculator
         /// </summary>
         private void AssertAddFinalState(int before)
         {
-            Assert.Multiple(() => 
+            Assert.Multiple(() =>
             {
                 Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
                 Assert.That(this.Stack.Peek(), Is.EqualTo("5"));

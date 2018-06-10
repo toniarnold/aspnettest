@@ -1,10 +1,4 @@
-﻿/*
- * Interface for the SMC AppClass
- */
-
-using statemap;
-
-namespace asplib.Control
+﻿namespace asplib.Control
 {
     /// <summary>
     /// Interface for the SMC AppClass

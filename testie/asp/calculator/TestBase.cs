@@ -1,19 +1,11 @@
-﻿using System;
+﻿using asp.calculator.Control;
+using asplib.Model;
+using asplib.View;
+using iie;
+using NUnit.Framework;
 using System.Collections.Generic;
 using System.Data.SqlClient;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-using NUnit.Framework;
-
-using iie;
-
-using asplib.Model;
-using asplib.View;
-
-using asp.calculator.Control;
-
 
 namespace testie.asp.calculator
 {
@@ -47,7 +39,6 @@ namespace testie.asp.calculator
         {
             get { return this.MainControl.State; }
         }
-
 
         [OneTimeSetUp]
         public void OneTimeSetUp()

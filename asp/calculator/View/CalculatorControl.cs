@@ -1,9 +1,6 @@
-﻿using System.Web;
-using System.Web.UI;
-
+﻿using asp.calculator.Control;
 using asplib.View;
-
-using asp.calculator.Control;
+using System.Web.UI;
 
 namespace asp.calculator.View
 

@@ -1,30 +1,27 @@
-﻿using System;
+﻿using asplib.Model;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web;
-using System.Web.UI;
 using System.Web.SessionState;
-
-using asplib.Model;
+using System.Web.UI;
 
 namespace asplib.View
 {
     /// <summary>
     /// Extension interface for a Control to access to the LoadStorage()/SaveStorage() methods
     /// </summary>
-    public interface IStorageControl<M>
+    public interface IStorageControl<M> : IRootControl
     where M : new()
     {
-        /// <summary> 
+        /// <summary>
         /// The central access point made persistent across requests
         /// </summary>
-        /// 
+        ///
         M Main { get; set; }
 
         /// <summary>
@@ -34,17 +31,17 @@ namespace asplib.View
 
         // Inherited Control properties
         string ClientID { get; }
+
         bool IsPostBack { get; }
         HttpSessionState Session { get; }
         HttpRequest Request { get; }
         HttpResponse Response { get; }
+
         /// <summary>
         /// Make the protected ViewState public
         /// </summary>
         StateBag ViewState { get; }
     }
-
-
 
     /// <summary>
     /// Storage method for the persistence of M
@@ -55,16 +52,17 @@ namespace asplib.View
         /// Viewstate is the least persistent storage, cleared when navigating to the url
         /// </summary>
         Viewstate,
+
         /// <summary>
         /// Session is the middle persistent storage, cleared when closing the browser
         /// </summary>
         Session,
+
         /// <summary>
         /// Database is the most persistent storage, cleared when persistent cookies are deleted
         /// </summary>
         Database,
     }
-
 
     /// <summary>
     /// Extension implementation with storage dependency using Entity Framework 6
@@ -75,19 +73,20 @@ namespace asplib.View
         /// Type of the session storage to override AppSettings["SessionStorage"]
         /// </summary>
         public static Storage? SessionStorage { get; set; }
+
         /// <summary>
         /// Encrypt the serialization byte[] when database storage is used
         /// </summary>
         public static bool? EncryptDatabaseStorage { get; set; }
+
         /// <summary>
         /// Typeless reference to the current M Main for storage in Global.asax
         /// </summary>
         public static object CurrentMain { get; set; }
 
-
         /// <summary>
         /// To be called in Page_Load():
-        /// Load the R object from the storage, propagate it to all sub-controls 
+        /// Load the R object from the storage, propagate it to all sub-controls
         /// and recursively hide them all below the main control.
         /// Also sets a global reference to the main control in IIE for testing.
         /// </summary>
@@ -110,9 +109,11 @@ namespace asplib.View
                     case Storage.Viewstate:
                         controlStorage.Main = (M)controlStorage.ViewState[controlStorage.StorageID()];
                         break;
+
                     case Storage.Session:
                         controlStorage.Main = (M)controlStorage.Session[controlStorage.StorageID()];
                         break;
+
                     case Storage.Database:
                         var cookie = controlStorage.Request.Cookies[controlStorage.StorageID()];
                         if (cookie != null)
@@ -123,10 +124,8 @@ namespace asplib.View
                                 Func<byte[], byte[]> filter = null;
                                 if (controlStorage.GetEncryptDatabaseStorage())
                                 {
-                                    var secret = controlStorage.GetSecret();
-                                    filter = x => Crypt.Decrypt(secret, x); // closure
+                                    filter = x => Crypt.Decrypt(controlStorage.GetSecret(), x); // closure
                                 }
-
                                 controlStorage.Main = Main.LoadMain<M>(session, filter);
                             }
                         }
@@ -144,7 +143,6 @@ namespace asplib.View
             controlStorage.PropagateMain(controlStorage.Main);
         }
 
-
         /// <summary>
         /// To be called at the end of OnPreRender():
         /// Persist the in this page life-cycle stage immutable Main object.
@@ -161,9 +159,11 @@ namespace asplib.View
                 case Storage.Viewstate:
                     controlStorage.ViewState[controlStorage.StorageID()] = controlStorage.Main;
                     break;
+
                 case Storage.Session:
                     controlStorage.Session[controlStorage.StorageID()] = controlStorage.Main;
                     break;
+
                 case Storage.Database:
                     Guid session = Guid.NewGuid();  // cannot exist in the database -> will get a new one on SaveMain()
                     var cookie = controlStorage.Request.Cookies[controlStorage.StorageID()];
@@ -175,20 +175,17 @@ namespace asplib.View
                     Func<byte[], byte[]> filter = null;
                     if (controlStorage.GetEncryptDatabaseStorage())
                     {
-                        var secret = controlStorage.GetSecret();
-                        filter = x => Crypt.Encrypt(secret, x); // closure
+                        filter = x => Crypt.Encrypt(controlStorage.GetSecret(), x); // closure
                     }
                     session = Main.SaveMain(controlStorage.Main, session, filter);
 
                     var configDays = ConfigurationManager.AppSettings["DatabaseStorageExpires"];
-                    var days = String.IsNullOrEmpty(configDays) ? 1 : int.Parse(configDays);
+                    var days = String.IsNullOrWhiteSpace(configDays) ? 1 : int.Parse(configDays);
                     controlStorage.Response.Cookies[controlStorage.StorageID()]["session"] = session.ToString();
                     controlStorage.Response.Cookies[controlStorage.StorageID()].Expires = DateTime.Now.AddDays(days);
                     break;
             }
         }
-
-
 
         /// <summary>
         /// Set the control-local session storage type from an .ascx attribute string. Case insensitive.
@@ -237,7 +234,7 @@ namespace asplib.View
             if (storage == null)
             {
                 var configStorage = ConfigurationManager.AppSettings["SessionStorage"];
-                storage = String.IsNullOrEmpty(configStorage) ? Storage.Viewstate : (Storage)Enum.Parse(typeof(Storage), configStorage);
+                storage = String.IsNullOrWhiteSpace(configStorage) ? Storage.Viewstate : (Storage)Enum.Parse(typeof(Storage), configStorage);
             }
             return (Storage)storage;
         }
@@ -258,11 +255,10 @@ namespace asplib.View
             if (encrypt == null)
             {
                 var configEncrypt = ConfigurationManager.AppSettings["EncryptDatabaseStorage"];
-                encrypt = String.IsNullOrEmpty(configEncrypt) ? false : Boolean.Parse(configEncrypt);
+                encrypt = String.IsNullOrWhiteSpace(configEncrypt) ? false : Boolean.Parse(configEncrypt);
             }
             return (bool)encrypt;
         }
-
 
         /// <summary>
         /// Get the Key/IV secret from the cookies and generate the parts that don't yet exist
@@ -296,13 +292,12 @@ namespace asplib.View
             return secret;
         }
 
-
         /// <summary>
         /// Hook to clear the storage for that control with ?clear=true
         /// ViewState is reset anyway on GET requests, therefore NOP in that casefa
         /// GET-arguments:
         /// clear=[true|false]  triggers clearing the storage
-        /// endresponse=[true|false]    whether the page at the given URL 
+        /// endresponse=[true|false]    whether the page at the given URL
         /// storage=[Viewstate|Session|Database]    clears the selected storage type regardless off config
         /// </summary>
         /// <typeparam name="M"></typeparam>
@@ -321,8 +316,8 @@ namespace asplib.View
                     Storage storage;
                     Enum.TryParse<Storage>(controlStorage.Request.QueryString["storage"], true, out storage);
                     if (storage == Storage.Viewstate)   // no meaningful override given
-                    { 
-                         storage = controlStorage.GetStorage();
+                    {
+                        storage = controlStorage.GetStorage();
                     }
 
                     bool endresponse = false;
@@ -332,9 +327,11 @@ namespace asplib.View
                     {
                         case Storage.Viewstate:
                             break;
+
                         case Storage.Session:
                             controlStorage.Session.Remove(controlStorage.StorageID());
                             break;
+
                         case Storage.Database:
                             // delete from the database and expire the cookie
                             var cookie = controlStorage.Request.Cookies[controlStorage.StorageID()];
@@ -354,6 +351,7 @@ namespace asplib.View
                                 controlStorage.Request.Cookies[controlStorage.StorageID()].Expires = DateTime.Now.AddDays(-1);
                             }
                             break;
+
                         default:
                             throw new NotImplementedException(String.Format("Storage {0}", storage));
                     }
@@ -366,7 +364,6 @@ namespace asplib.View
             }
         }
 
-
         /// <summary>
         /// StorageID-String unique to the control instance to store/retrieve/clear the M
         /// </summary>
@@ -378,7 +375,6 @@ namespace asplib.View
         {
             return controlStorage.ClientID + "_Main";
         }
-
 
         /// <summary>
         /// Recursively add a reference to the global M and to all sub-controls
@@ -395,14 +391,13 @@ namespace asplib.View
             }
         }
 
-
         /// <summary>
         /// Enumerate all contained sub-controls of type IStorageControl
         /// </summary>
         /// <typeparam name="M"></typeparam>
         /// <param name="controlStorage"></param>
         /// <returns></returns>
-        internal static IEnumerable<IStorageControl<M>>Subcontrols<M>(this IStorageControl<M> controlStorage)
+        internal static IEnumerable<IStorageControl<M>> Subcontrols<M>(this IStorageControl<M> controlStorage)
         where M : new()
         {
             return

@@ -1,13 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
-using System.Web.UI;
-using System.Web.UI.WebControls;
-
-using asplib.View;
+﻿using asplib.View;
 using iie;
-
+using System;
+using System.Web.UI;
 
 namespace asp
 {
@@ -23,7 +17,7 @@ namespace asp
             if (!String.IsNullOrEmpty(viewstateStorage))
             {
                 // by itself non-persistent:
-                this.calculator.SetStorage(this.Request.QueryString["storage"]);   
+                this.calculator.SetStorage(this.Request.QueryString["storage"]);
             }
         }
 
@@ -35,7 +29,6 @@ namespace asp
             if (testRunner.Passed)
             {
                 this.testResultLabel.Text = testRunner.PassedString;
-
             }
             else
             {

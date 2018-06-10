@@ -4,35 +4,39 @@
 
 <html xmlns="http://www.w3.org/1999/xhtml">
 <head runat="server">
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <title>minimal</title>
     <style>
         h1 {
-            font-size:1.25em;
+            font-size: 1.25em;
         }
+
         a {
-            text-decoration:none;
+            text-decoration: none;
         }
+
         ul {
-            list-style-type:none;
+            list-style-type: none;
             margin: 0;
             padding: 0;
         }
-        .nunitimg { 
+
+        .nunitimg {
             position: absolute;
             top: 8px;
             right: 8px;
             height: 50px;
             width: 50px;
         }
+
         .testresult {
             position: absolute;
             right: 0px;
             top: 59px;
             width: 140px;
-            background-color:rgba(255, 255, 255, 1);
+            background-color: rgba(255, 255, 255, 1);
         }
-     </style>
+    </style>
 </head>
 <body>
     <form id="form1" runat="server">

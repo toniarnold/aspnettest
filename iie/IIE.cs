@@ -1,22 +1,15 @@
-﻿using System;
+﻿using asplib.View;
+using mshtml;
+using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using System.Text;
 using System.Threading;
-using System.Threading.Tasks;
 using System.Web.UI;
 using System.Web.UI.WebControls;
-
-using NUnit.Framework;
-
-using SHDocVw;
-using mshtml;
-
-using asplib.View;
-
 
 namespace iie
 {
@@ -44,14 +37,14 @@ namespace iie
         /// </summary>
         public static int Port { get; set; }
 
-
         // Configuration
         private static int millisecondsTimeout =
-            String.IsNullOrEmpty(ConfigurationManager.AppSettings["RequestTimeout"]) ? 1000 :
+            String.IsNullOrWhiteSpace(ConfigurationManager.AppSettings["RequestTimeout"]) ? 1000 :
             int.Parse(ConfigurationManager.AppSettings["RequestTimeout"]) * 1000;
 
         // Internet explorer
         private static SHDocVw.InternetExplorer ie;
+
         private static AutoResetEvent mre = new AutoResetEvent(false);
 
         /// <summary>
@@ -83,7 +76,7 @@ namespace iie
         /// <summary>
         /// Asynchronously issue a GET request for the specified absolute path at
         /// http://127.0.0.1 as "localhost" seems to never reach OnDocumentComplete.
-        /// This requires changing the binding in .\.vs\config\applicationhost.config to 
+        /// This requires changing the binding in .\.vs\config\applicationhost.config to
         /// <binding protocol="http" bindingInformation="*:51333:127.0.0.1" />
         /// Wait for the response for AppSettings["RequestTimeout"] seconds.
         /// </summary>
@@ -101,7 +94,7 @@ namespace iie
         /// </summary>
         /// <param name="inst"></param>
         /// <param name="url"></param>
-        /// <param name="expectedStatusCode">Expected StatusCofe of the response</param> 
+        /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>
         internal static void NavigateURL(this IIE inst, string url, int expectedStatusCode = 200)
         {
             ie.Navigate2(url);
@@ -150,7 +143,7 @@ namespace iie
         /// </summary>
         /// <param name="inst"></param>
         /// <param name="clientId">Member name path to the control starting at the main control</param>
-        /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>        /// 
+        /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>        ///
         /// <param name="delay">Optional delay time in milliseconds before clicking the element</param>
         /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete</param>
         public static void Click(this IIE inst, Control control, int expectedStatusCode = 200, bool expectPostBack = true, int delay = 0, int pause = 0)
@@ -164,7 +157,7 @@ namespace iie
         /// </summary>
         /// <param name="inst"></param>
         /// <param name="clientId">Member name path to the control starting at the main control</param>
-        /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>        /// 
+        /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>        ///
         /// <param name="delay">Optional delay time in milliseconds before clicking the element</param>
         /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete</param>
         public static void ClickID(this IIE inst, string clientId, int expectedStatusCode = 200, bool expectPostBack = true, int delay = 0, int pause = 0)
@@ -172,7 +165,6 @@ namespace iie
             var button = GetHTMLElement(inst, clientId);
             Click(button, expectedStatusCode, expectPostBack, delay, pause);
         }
-
 
         public static void Select(this IIE inst, string path, string value, int expectedStatusCode = 200, bool expectPostBack = true, int delay = 0, int pause = 0)
         {
@@ -185,7 +177,7 @@ namespace iie
             {
                 if (idx == list.Items.Count)
                 {
-                    throw new Exception(String.Format("ListControl at '{0}': value '{0}' not found", path, value));
+                    throw new Exception(String.Format("ListControl at '{0}': value '{1}' not found", path, value));
                 }
                 else if (list.Items[idx].Value == value)
                 {
@@ -201,7 +193,7 @@ namespace iie
             Thread.Sleep(delay);
             element.click();
             if (expectPostBack)
-            { 
+            {
                 mre.WaitOne(millisecondsTimeout);
             }
             Thread.Sleep(pause);
@@ -249,7 +241,6 @@ namespace iie
             }
         }
 
-
         /// <summary>
         /// Document type for accessing the DOM
         /// </summary>
@@ -273,7 +264,6 @@ namespace iie
             var control = GetControl(inst, ControlRootExtension.RootControl, path);
             return GetHTMLElement(inst, control.ClientID);
         }
-
 
         /// <summary>
         /// Recursively walk down the path starting at the MainControl instance  and return

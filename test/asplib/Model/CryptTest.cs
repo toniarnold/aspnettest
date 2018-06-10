@@ -1,13 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
+﻿using asplib.Model;
 using NUnit.Framework;
-
-using asplib.Model;
-
+using System.Linq;
 
 namespace test.asplib.Model
 {

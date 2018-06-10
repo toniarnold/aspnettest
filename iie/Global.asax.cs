@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Configuration;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Web;
-
-using asplib.Model;
+﻿using asplib.Model;
 using asplib.View;
+using System;
+using System.Configuration;
+using System.Web;
 
 namespace iie
 {
@@ -15,7 +10,7 @@ namespace iie
     {
         /// <summary>
         /// If EncryptDatabaseStorage is not true:
-        /// Save the last Main object (if present) and write the direkt link with the session in the URL 
+        /// Save the last Main object (if present) and write the direkt link with the session in the URL
         /// to reproduce the error when debugging to the yellow screen of death.
         /// Of course, in a production environment, the URL should be logged to a persistent storage.
         /// </summary>
@@ -24,7 +19,7 @@ namespace iie
         protected virtual void Application_Error(object sender, EventArgs e)
         {
             var configEncrypt = ConfigurationManager.AppSettings["EncryptDatabaseStorage"];
-            var encrypt = String.IsNullOrEmpty(configEncrypt) ? false : Boolean.Parse(configEncrypt);
+            var encrypt = String.IsNullOrWhiteSpace(configEncrypt) ? false : Boolean.Parse(configEncrypt);
             if (!encrypt)
             {
                 if (Server.GetLastError() is HttpException exception && ControlStorageExtension.CurrentMain != null)

@@ -37,4 +37,3 @@ using System.Runtime.InteropServices;
 
 // Manually added
 [assembly: InternalsVisibleTo("test")]
-

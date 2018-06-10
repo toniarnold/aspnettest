@@ -1,17 +1,20 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
 using System.Runtime.Serialization.Formatters.Binary;
-using System.Runtime.Serialization;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace asplib.Model
 {
+    /// <summary>
+    /// High level Db.Main model class providing support for persistence through a filter function
+    /// used for encryption.
+    /// </summary>
     public partial class Main
     {
         private object mainInstance;
+
         /// <summary>
         /// Returns all Database rows with a matching M instance which is already lazy loaded
         /// </summary>
@@ -23,7 +26,7 @@ namespace asplib.Model
             using (var db = new ASP_DBEntities())
             {
                 return AllMainRows<M>(db, filter).ToList(); // enumerate within the DbContext
-            }   
+            }
         }
 
         /// <summary>
@@ -41,10 +44,9 @@ namespace asplib.Model
             var all = from m in db.Main
                       select m;
             return from m in all.AsEnumerable()
-                    where m.GetInstance<M>(filter) != null
-                    select m;
+                   where m.GetInstance<M>(filter) != null
+                   select m;
         }
-
 
         /// <summary>
         /// Factory for fetching a R instance from the database
@@ -116,9 +118,8 @@ namespace asplib.Model
             return main.session;  // get the new session guid set by the db on insert
         }
 
-
         /// <summary>
-        /// Lazy Loads and returns a deserialized object instance from the 
+        /// Lazy Loads and returns a deserialized object instance from the
         /// [Main]  table column byte[] main member or null if it is not of the generic type
         /// </summary>
         /// <typeparam name="M"></typeparam>
@@ -142,7 +143,6 @@ namespace asplib.Model
             this.main = this.Serialize(obj, filter);
         }
 
-
         /// <summary>
         /// Serializes any object into a byte array and apply the crypto filter if given
         /// </summary>
@@ -164,6 +164,7 @@ namespace asplib.Model
         /// </summary>
         /// <param name="bytes"></param>
         /// <returns></returns>
+        [SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
         internal object Deserialize(byte[] bytes, Func<byte[], byte[]> filter = null)
         {
             using (var stream = new MemoryStream((filter == null) ? bytes : filter(bytes)))

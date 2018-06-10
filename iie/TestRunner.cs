@@ -1,16 +1,12 @@
-﻿using System;
+﻿using NUnit.Engine;
+using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Diagnostics;
+using System.Diagnostics.CodeAnalysis;
 using System.IO;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web;
 using System.Xml;
-
-using NUnit.Framework;
-using NUnit.Engine;
 
 namespace iie
 {
@@ -22,19 +18,20 @@ namespace iie
             IEExtension.Port = port;
         }
 
-        XmlNode result;
-        List<string> reports = new List<string>();
+        private XmlNode result;
+        private List<string> reports = new List<string>();
 
         /// <summary>
         /// Return the result as XML string
         /// </summary>
+        [SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
         public string ResultString
         {
             get
             {
                 using (var stringwriter = new StringWriter())
                 using (var xmlwriter = new XmlTextWriter(stringwriter))
-                { 
+                {
                     this.result.WriteTo(xmlwriter);
                     return stringwriter.ToString();
                 }
@@ -60,7 +57,6 @@ namespace iie
                     );
             }
         }
-
 
         public List<string> Reports
         {
@@ -103,8 +99,8 @@ namespace iie
             {
                 var filter = TestFilter.Empty;
                 var where = ConfigurationManager.AppSettings["TestFilterWhere"];
-                if (!String.IsNullOrEmpty(where))
-                { 
+                if (!String.IsNullOrWhiteSpace(where))
+                {
                     var builder = new TestFilterBuilder();
                     builder.SelectWhere(where);
                     filter = builder.GetFilter();   // returns TestFilter.Empty when no TestFilterWhere is given

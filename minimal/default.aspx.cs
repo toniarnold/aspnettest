@@ -1,11 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Web;
+﻿using iie;
 using System.Web.UI;
-using System.Web.UI.WebControls;
-
-using iie;
 
 namespace minimal
 {
@@ -19,7 +13,6 @@ namespace minimal
             if (testRunner.Passed)
             {
                 this.testResultLabel.Text = testRunner.PassedString;
-
             }
             else
             {
