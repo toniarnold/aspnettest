@@ -12,4 +12,4 @@ png: $(PNG)
 	dia $< --export $@
 
 clean:
-	-rm *.png
+	-del *.png

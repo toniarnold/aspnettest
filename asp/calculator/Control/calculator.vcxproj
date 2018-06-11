@@ -18,16 +18,9 @@
       <Platform>x64</Platform>
     </ProjectConfiguration>
   </ItemGroup>
-  <ItemGroup>
-    <None Include="components.dia" />
-    <None Include="Makefile" />
-  </ItemGroup>
-  <ItemGroup>
-    <Image Include="components.png" />
-  </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>
-    <ProjectGuid>{80277C55-F818-4639-A4AB-8E42F013FA8B}</ProjectGuid>
+    <ProjectGuid>{69EB69AB-0D24-4974-8D7D-2D2CDB62DCFA}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
@@ -70,27 +63,40 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <NMakeOutput>
-    </NMakeOutput>
-    <NMakePreprocessorDefinitions>WIN32;_DEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
     <NMakeBuildCommandLine>nmake</NMakeBuildCommandLine>
-    <NMakeReBuildCommandLine>nmake clean &amp;&amp; nmake</NMakeReBuildCommandLine>
     <NMakeCleanCommandLine>nmake clean</NMakeCleanCommandLine>
+    <NMakeReBuildCommandLine>nmake clean &amp;&amp; nmake</NMakeReBuildCommandLine>
+    <NMakePreprocessorDefinitions>WIN32;_DEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <NMakeOutput>doc.exe</NMakeOutput>
+    <NMakeBuildCommandLine>make</NMakeBuildCommandLine>
+    <NMakeCleanCommandLine>make clean</NMakeCleanCommandLine>
+    <NMakeReBuildCommandLine>make clean &amp;&amp; make</NMakeReBuildCommandLine>
     <NMakePreprocessorDefinitions>_DEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <NMakeOutput>doc.exe</NMakeOutput>
+    <NMakeBuildCommandLine>make</NMakeBuildCommandLine>
+    <NMakeCleanCommandLine>make clean</NMakeCleanCommandLine>
+    <NMakeReBuildCommandLine>make clean &amp;&amp; make</NMakeReBuildCommandLine>
     <NMakePreprocessorDefinitions>WIN32;NDEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
-    <NMakeOutput>doc.exe</NMakeOutput>
+    <NMakeBuildCommandLine>make</NMakeBuildCommandLine>
+    <NMakeCleanCommandLine>make clean</NMakeCleanCommandLine>
+    <NMakeReBuildCommandLine>make clean &amp;&amp; make</NMakeReBuildCommandLine>
     <NMakePreprocessorDefinitions>NDEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
   </PropertyGroup>
   <ItemDefinitionGroup>
   </ItemDefinitionGroup>
+  <ItemGroup>
+    <None Include="Calculator.sm" />
+    <None Include="Calculator_sm.cs" />
+    <None Include="Calculator_sm.dot" />
+    <None Include="Makefile" />
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Calculator_sm.png" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>

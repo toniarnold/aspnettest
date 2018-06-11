@@ -2,7 +2,7 @@
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup>
     <Filter Include="Targets">
-      <UniqueIdentifier>{73741df6-d365-4ed6-869a-24f0b6978cbf}</UniqueIdentifier>
+      <UniqueIdentifier>{4a67d8bb-b6cb-4b29-9d1b-2d0c98aaad5d}</UniqueIdentifier>
     </Filter>
     <Filter Include="Sources">
       <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
@@ -10,13 +10,19 @@
     </Filter>
   </ItemGroup>
   <ItemGroup>
-    <None Include="components.dia">
+    <None Include="Makefile" />
+    <None Include="Calculator.sm">
       <Filter>Sources</Filter>
     </None>
-    <None Include="Makefile" />
+    <None Include="Calculator_sm.cs">
+      <Filter>Targets</Filter>
+    </None>
+    <None Include="Calculator_sm.dot">
+      <Filter>Targets</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="components.png">
+    <Image Include="Calculator_sm.png">
       <Filter>Targets</Filter>
     </Image>
   </ItemGroup>
