@@ -21,6 +21,8 @@
   <ItemGroup>
     <None Include="components.dia" />
     <None Include="Makefile" />
+    <None Include="setup.md" />
+    <None Include="toc.md" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="components.png" />

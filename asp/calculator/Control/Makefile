@@ -1,6 +1,6 @@
 # Makefile to build the Calculator context and the diagram fron 
 
-all: Calculator_sm.cs Calculator_sm.dot Calculator_sm.png
+all: Calculator_sm.cs Calculator_sm.png
 
 Calculator_sm.cs: Calculator.sm
 	java -jar ..\..\..\SMC\Smc.jar -csharp -serial -reflection -generic Calculator.sm
