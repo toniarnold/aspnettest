@@ -2,9 +2,19 @@
 
 The Visual Studio solution requires some initial tweaking to get it up and running:
 
-### 1. Clone and tweak the solution
+1. [Clone and tweak the solution](#Clone-and-tweak-the-solution)
+2. [Optional rebuild dependencies](#Optional-rebuild-dependencies)
+3. [NuGet package restore](#NuGet-Package-Restore)
+4. [SQL database creation](#SQL-Database-creation)
+5. [Running the unit tests](#Running-the-unit-tests)
+6. [Running the web application self tests](#Running-the-web-application-self-tests)
+7. [Let it rattle](#Let-it-rattle)
+
+
+## 1. Clone and tweak the solution
 
  ```git clone git@github.com:toniarnold/aspnettest.git```
+
 Open ```aspnettest.sln``` (the full solution) with Visual Studio 2017.
 This step will create the hidden ```\.vs\config``` directory within the
 ```aspnettest``` root folder containing the ```applicationhost.config``` 
@@ -21,7 +31,7 @@ as this is exactly the culprit:
 
 Replace ```localhost``` with its IP address ```127.0.0.1``` in both websites, 
 otherwise Internet Explorer will not work with your site (it really seems to be
-a crippled down Internet Explorer, as it doesn't render CSS flexbox nicely, regardless 
+a crippled down Internet Explorer, as it doesn't render CSS Flexbox nicely, regardless 
 of Edge being installed on your system):
 
 ```xml
@@ -38,16 +48,29 @@ If you don't *re*-build the solution, the generated code files are already prese
 and ```nmake``` will not run.
 
 
-### 2. NuGet Package Restore
+## 2. Optional rebuild dependencies
+
+For a complete rebuild from source, the Makefiles in the solution expect these additional binaries
+present in ```%PATH%```:
+
+* [```java.exe```](https://www.oracle.com/java/index.html) Java runtime for executing ./SMC/Smc.jar
+  in order to generate .cs and .dot files from the portable .sm state machine source.
+* [```dot.exe```](https://www.graphviz.org/download/) Graphviz to generate the
+  splash images from .dot files.
+* [```dia.exe```](http://dia-installer.de) GNU Dia for generating .png images from
+  the .dia diagrams in ./doc
+
+
+## 3. NuGet package restore
 
 The whole project heavily depends on NUnit 3, and the database persistency layer
-is built on Entity Framework 6 ("Database First" paradigma), so you'll need to 
+is built on Entity Framework 6 (EF6, with the "Database First" paradigm), so you'll need to 
 perform a NuGet Package Restore.
 
 Now you should be able to build the solution with the Any CPU Debug configuration.
 
 
-### 3. SQL Database creation
+## 4. SQL database creation
 
 The solution contains a nested SQL Server Management Studio 17 solution in the
 ```.\db``` subdirectory, but it is trivial, you only really need the 
@@ -55,8 +78,9 @@ The solution contains a nested SQL Server Management Studio 17 solution in the
 is just ```[ASP_DB]```.
 
 Adjust this connection string (the user iis/pass on my development
-machine is no big secret)...
-```
+machine is no big secret):
+
+```xml
 <connectionStrings>
 <add name="ASP_DBEntities" connectionString="metadata=res://*/Model.Db.csdl|res://*/Model.Db.ssdl|res://*/Model.Db.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=HP;initial catalog=ASP_DB;persist security info=True;user id=iis;password=pass;multipleactiveresultsets=True;application name=EntityFramework&quot;" providerName="System.Data.EntityClient" />
 </connectionStrings>
@@ -68,12 +92,12 @@ machine is no big secret)...
 * ```.\test\App.config``` The unit test suite outside the web applications
 
 
-### 4. Running the unit tests
+## 5. Running the unit tests
 
 "A unit test talking to a database is not an unit test!" - well, then call it
 shallow integration tests or whatever, the point is that the NUnit test suite
 in the ```test``` project is intended to run within Visual Studio, while the
-two test suites in the ```testie``` resp. ```minimaltest``` projects
+two functional test suites in the ```testie``` resp. ```minimaltest``` projects
 can only succeed when called from the respective web application itself.
 
 Therefore open  ```test.playlist``` within the Test Explorer, which contains
@@ -81,7 +105,7 @@ all the tests in only the ```test``` project. They should all succeed, and don't
 the empty Internet Explorer window popping up just for the blink of an eye...
 
 
-### 5. Running the web application self tests
+## 6. Running the web application self tests
 
 It seems that in Windows 10 there is no simple way to grant the web application pool identity
 the right to open Internet Explorer (on Windows 7 it could at least use it, but it had no right
@@ -110,3 +134,15 @@ with the details of the problem:
 
 ![test failure](./img/failure.png)
 
+
+## 7. Let it rattle
+
+Once the minimalist test setup passes without break, chances are high
+that the ```testie``` project (run from the ```asp``` startup project) will 
+pass, too. Expect 1-2 minutes for all tests. 
+
+Take care not to move the mouse pointer over the flashing 
+Internet Explorer instance, as it will interfere with the ASP.NET client
+side JavaScript and cause some tests to fail. Just placing it in a side
+corner of the screen while waiting works best. Also continue with F5 instead
+of mouse clicks when the debugger stops at an exception.

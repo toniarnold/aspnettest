@@ -35,7 +35,9 @@ text of the calculation result in there, too.
 
 <table>
 <tr><th>Unit Test</th><th>GUI Test</th></tr>
-<tr><td><pre>
+<tr><td>
+
+```csharp
 [Test]
 public void SqrtTest()
 {
@@ -49,7 +51,11 @@ public void SqrtTest()
 	Assert.That(this.Stack.Peek(), Is.EqualTo("7"));
 	Assert.That(this.Stack.Count, Is.EqualTo(before));
 }
-</pre></td><td><pre>
+```
+
+</td><td>
+
+```csharp
 [Test]
 public void SqrtTest()
 {
@@ -66,7 +72,9 @@ public void SqrtTest()
 	Assert.That(this.Stack.Count, Is.EqualTo(before));
 	Assert.That(this.Html(), Does.Contain(" 7\n"));
 }
-</pre></td></tr>
+```
+
+</td></tr>
 </table>
 		
 To quote again:

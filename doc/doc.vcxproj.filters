@@ -16,6 +16,7 @@
     <None Include="Makefile" />
     <None Include="toc.md" />
     <None Include="setup.md" />
+    <None Include="writing.md" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="components.png">

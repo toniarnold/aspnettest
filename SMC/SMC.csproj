@@ -58,5 +58,11 @@
     <Compile Include="TransitionUndefinedException.cs" />
     <Compile Include="AssemblyInfo.cs" />
   </ItemGroup>
+  <ItemGroup>
+    <Content Include="LICENSE.txt" />
+    <Content Include="README.txt" />
+    <Content Include="README_SMC.txt" />
+    <Content Include="Smc.jar" />
+  </ItemGroup>
   <Import Project="$(MSBuildBinPath)\Microsoft.CSharp.targets" />
 </Project>
