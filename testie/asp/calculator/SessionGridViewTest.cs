@@ -12,27 +12,26 @@ namespace testie.asp.calculator
     /// Requires Storage.Database
     /// </summary>
     [Category("SHDocVw.InternetExplorer")]
-    public class SessionGridViewTest : TestBase
+    public class SessionGridViewTest : CalculatorTestBase
     {
         private int rowCountBefore = 0;
 
         [OneTimeSetUp]
-        public override void SetUpStorage()
+        public void SetUpStorage()
         {
             ControlStorageExtension.SessionStorage = Storage.Database;
             this.ClearSession();
-            this.Navigate("/asp/default.aspx");
         }
 
         [OneTimeTearDown]
+        public void TearDownStorage()
+        {
+            ControlStorageExtension.SessionStorage = null;
+        }
+
         public void ClearSession()
         {
             this.Navigate("/asp/default.aspx?clear=true&endresponse=true");
-        }
-
-        [SetUp]
-        public void RowCount()
-        {
         }
 
         // Accessors for the control under test

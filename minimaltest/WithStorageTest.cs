@@ -1,4 +1,5 @@
 ﻿using iie;
+using minimal;
 using NUnit.Framework;
 using System;
 using System.Linq;
@@ -11,27 +12,15 @@ namespace minimaltest
     /// such that it maintains its own storage mechanism.
     /// </summary>
     [TestFixture]
-    public class WithStorageTest : IIE
+    public class WithStorageTest : StorageTest<ContentStorage>
     {
+        /// <summary>
+        /// There could be a manually generated row in IE's current cookie, thus explicitly delete.
+        /// </summary>
         [OneTimeSetUp]
-        public void OneTimeSetUp()
+        public void ClearDatabaseStorage()
         {
-            this.SetUpIE();
-            this.ClearStorage("Session");
-            this.ClearStorage("Database");
-        }
-
-        [OneTimeTearDown]
-        public void OneTimeTearDown()
-        {
-            this.ClearStorage("Session");
-            this.ClearStorage("Database");
-            this.TearDownIE();
-        }
-
-        private void ClearStorage(string storage)
-        {
-            this.Navigate(String.Format("/minimal/withstorage.aspx?clear=true&endresponse=true&storage={0}", storage));
+            this.Navigate(String.Format("/minimal/withstorage.aspx?clear=true&storage=database&endresponse=true"));
         }
 
         [Test]
@@ -41,12 +30,17 @@ namespace minimaltest
             Assert.That(this.Html(), Does.Contain("<h1>minimalist test setup with storage</h1>"));
         }
 
+        // Assert that all three storage methods behave as expected with respect to surviving certain actions:
+        // ViewState: Even reload clears the storage
+        // Session: Survives reload
+        // Database: Survives restarting Internet Explorer
+
         [Test]
-        public void StorageViewstateTest()
+        public void StorageViewStateTest()
         {
             this.Navigate("/minimal/withstorage.aspx");
             var storageList = (RadioButtonList)this.GetControl("storageList");
-            Assert.That(storageList.SelectedValue, Is.EqualTo("Viewstate"));    // default
+            Assert.That(storageList.SelectedValue, Is.EqualTo("ViewState"));    // default
             this.WriteContentTest(() => this.Nop());
         }
 
@@ -70,7 +64,7 @@ namespace minimaltest
         // as the storage type itself is not persisted.
 
         /// <summary>
-        /// Viewstate does not survive navigation
+        /// ViewState does not survive navigation
         /// </summary>
         private void Nop() { }
 
@@ -84,7 +78,7 @@ namespace minimaltest
         }
 
         /// <summary>
-        /// Restart Internet explorer and navigate to the page, database storage should survive
+        /// Restart Internet Explorer and navigate to the page, database storage should survive
         /// </summary>
         private void RestartIE()
         {
@@ -103,20 +97,54 @@ namespace minimaltest
             this.Write("contentTextBox", "a first content line");
             this.Click("submitButton");
             Assert.That(((TextBox)this.GetControl("contentTextBox")).Text, Is.Empty);
-            Assert.That(((BulletedList)this.GetControl("contentList")).Items.Count, Is.EqualTo(1));
-            var firstItem = ((BulletedList)this.GetControl("contentList")).Items[0];
-            Assert.That(firstItem.Text, Is.EqualTo("a first content line"));
+            // Assertions on the View level
+            Assert.That(((BulletedList)this.GetControl("contentList")).Items, Has.Exactly(1).Items);
+            Assert.That(((BulletedList)this.GetControl("contentList")).Items[0].Text, Is.EqualTo("a first content line"));
+            // Assertions on the Model level
+            Assert.That(this.Main.Content, Has.Exactly(1).Items);
+            Assert.That(this.Main.Content[0], Is.EqualTo("a first content line"));
 
             survives(); // Reload() or RestartIE()
 
             this.Write("contentTextBox", "a second content line");
             this.Click("submitButton");
             Assert.That(((TextBox)this.GetControl("contentTextBox")).Text, Is.Empty);
-            Assert.That(((BulletedList)this.GetControl("contentList")).Items.Count, Is.EqualTo(2));
-            var firstItem2 = ((BulletedList)this.GetControl("contentList")).Items[0];
-            Assert.That(firstItem2.Text, Is.EqualTo("a first content line"));
-            var secondItem = ((BulletedList)this.GetControl("contentList")).Items[1];
-            Assert.That(secondItem.Text, Is.EqualTo("a second content line"));
+            // Assertions on the View level
+            Assert.That(((BulletedList)this.GetControl("contentList")).Items, Has.Exactly(2).Items);
+            Assert.That(((BulletedList)this.GetControl("contentList")).Items[0].Text, Is.EqualTo("a first content line"));
+            Assert.That(((BulletedList)this.GetControl("contentList")).Items[1].Text, Is.EqualTo("a second content line"));
+            // Assertions on the Model level
+            Assert.That(this.Main.Content, Has.Exactly(2).Items);
+            Assert.That(this.Main.Content[0], Is.EqualTo("a first content line"));
+            Assert.That(this.Main.Content[1], Is.EqualTo("a second content line"));
+        }
+
+        /// <summary>
+        /// Verify that explicitly clearing the current storage item by a specific GET request
+        /// actually does remove the stored entry.
+        /// </summary>
+        [Test]
+        public void ClearStorageTest()
+        {
+            // Local setup: Store a value into the database
+            this.Navigate("/minimal/withstorage.aspx");
+            this.Select("storageList", "Database", expectPostBack: true);
+            this.Write("contentTextBox", "a stored content line");
+            this.Click("submitButton");
+            Assert.That(this.Main.Content, Has.Exactly(1).Items);
+            Assert.That(this.Main.Content[0], Is.EqualTo("a stored content line"));
+
+            // Confirm that the line persistent
+            this.RestartIE();
+            Assert.That(this.Main.Content, Has.Exactly(1).Items);
+            Assert.That(this.Main.Content[0], Is.EqualTo("a stored content line"));
+
+            // Method under test: explicitly clear the database storage
+            this.ClearDatabaseStorage();
+
+            // Confirm that the content is now empty
+            this.RestartIE();
+            Assert.That(this.Main.Content, Has.Exactly(0).Items);
         }
     }
 }

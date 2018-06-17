@@ -24,7 +24,7 @@ The unit test on the left-hand side inherits from the `Calculator` app class,
 directly calls the transition methods on the contained state machine and 
 asserts its result states and the calculation result on the stack.
 
-The GUI test on the right-hand side talks via COM to an internet explorer instance, 
+The GUI test on the right-hand side talks via COM to an Internet Explorer instance, 
 writes into a `TextBox` and clicks an ASP.NET `Button`. Indirectly, these clicks call
 the very same transition methods on the state machine in the embedded `Calculator` instance 
 and - this is the salient point - assert the result states strongly typed directly 
@@ -83,4 +83,5 @@ To quote again:
 
 >Since one video is worth a thousand pictures, check out this screencast recorded on a ~~Mac~~ win10 box running an initial GUI test suite:
 
-![Tests running...](doc/running.gif)
+![Tests running...](doc/gif/running.gif)
+

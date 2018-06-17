@@ -9,13 +9,19 @@ namespace testie.asp.calculator
     public class WithDatabaseTest : CalculateTest
     {
         [OneTimeSetUp]
-        public override void SetUpStorage()
+        public void SetUpStorage()
         {
             ControlStorageExtension.SessionStorage = Storage.Database;
         }
 
+        [OneTimeTearDown]
+        public void TearDownStorage()
+        {
+            ControlStorageExtension.SessionStorage = null;
+        }
+
         /// <summary>
-        /// Database must be cleared after each single test such that the app behaves like the Viewstate Test
+        /// Database must be cleared after each single test such that the app behaves like the ViewState Test
         /// </summary>
         [TearDown]
         public void ClearDatabase()
@@ -24,7 +30,7 @@ namespace testie.asp.calculator
         }
 
         /// <summary>
-        /// Restart Internet explorer and navigate to the page, database storage should survive
+        /// Restart Internet Explorer and navigate to the page, database storage should survive
         /// </summary>
         private void RestartIE()
         {
@@ -34,7 +40,7 @@ namespace testie.asp.calculator
         }
 
         /// <summary>
-        /// Same as AddTest(), but with Internet explorer restart before each action.
+        /// Same as AddTest(), but with Internet Explorer restart before each action.
         /// </summary>
         [Test]
         public void AddSessionPersistsTest()

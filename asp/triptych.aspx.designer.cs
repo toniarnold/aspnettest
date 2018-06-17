@@ -22,13 +22,13 @@ namespace asp {
         protected global::System.Web.UI.UpdatePanel UpdatePanel1;
         
         /// <summary>
-        /// calculatorViewstate-Steuerelement
+        /// calculatorViewState-Steuerelement
         /// </summary>
         /// <remarks>
         /// Automatisch generiertes Feld
         /// Zum Ändern Felddeklaration aus der Designerdatei in eine Code-Behind-Datei verschieben.
         /// </remarks>
-        protected global::asp.calculator.Main calculatorViewstate;
+        protected global::asp.calculator.Main calculatorViewState;
         
         /// <summary>
         /// UpdatePanel2-Steuerelement

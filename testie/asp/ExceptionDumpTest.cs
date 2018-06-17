@@ -8,8 +8,21 @@ namespace testie.asp
 {
     [TestFixture]
     [Category("SHDocVw.InternetExplorer")]
-    public class ExceptionDumpTest : TestBase
+    public class ExceptionDumpTest : CalculatorTestBase
     {
+
+        [OneTimeSetUp]
+        public void SetUpStorage()
+        {
+            ControlStorageExtension.SessionStorage = Storage.ViewState;
+        }
+
+        [OneTimeTearDown]
+        public void TearDownStorage()
+        {
+            ControlStorageExtension.SessionStorage = null;
+        }
+
         [Test]
         public void ThrowDumpTest()
         {
@@ -35,8 +48,8 @@ namespace testie.asp
 
             Assert.Multiple(() =>
             {
-                // The non-initial State and the random number must come from the database with Storage.Viewstate
-                Assert.That(ControlStorageExtension.SessionStorage, Is.EqualTo(Storage.Viewstate));
+                // The non-initial State and the random number must come from the database with Storage.ViewState
+                Assert.That(ControlStorageExtension.SessionStorage, Is.EqualTo(Storage.ViewState));
                 Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
                 Assert.That(this.Stack, Does.Contain(unique));
             });

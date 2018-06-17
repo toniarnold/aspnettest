@@ -1,4 +1,5 @@
 ﻿using iie;
+using minimal;
 using NUnit.Framework;
 using System.Web.UI.WebControls;
 
@@ -6,23 +7,12 @@ namespace minimaltest
 {
     /// <summary>
     /// Exception dumps into the database require storage (IStorageControl), but
-    /// work also when the site's storage is only Viewstate.
+    /// work also when the site's storage is only ViewState, therefore
+    /// inherit from StorageTest for automatic database cleanup.
     /// </summary>
     [TestFixture]
-    public class ExceptionDumpTest : IIE
+    public class ExceptionDumpTest : StorageTest<ContentStorage>
     {
-        [OneTimeSetUp]
-        public void OneTimeSetUp()
-        {
-            this.SetUpIE();
-        }
-
-        [OneTimeTearDown]
-        public void OneTimeTearDown()
-        {
-            this.TearDownIE();
-        }
-
         [Test]
         public void ThrowRetrieveDumpTest()
         {
@@ -33,21 +23,29 @@ namespace minimaltest
             this.Write("contentTextBox", "Except");
             this.Click("submitButton", expectedStatusCode: 500);
             Assert.That(this.Html(), Does.Contain("Malicious Content Exception"));
-
-            // The benign content in the Viewstate is lost -> Navigate to the Main dump on the ysod-Page
+            // The benign content in the ViewState is lost on the ysod-Page -> Click the core dump of Main
             var linkToDump = this.GetHTMLElement(IEExtension.EXCEPTION_LINK_ID);
-            Assert.That(linkToDump.getAttribute("href"), Does.Contain("/withstorage.aspx?session="));
+            var coredumpUrl = (string)linkToDump.getAttribute("href");
+            Assert.That(coredumpUrl, Does.Contain("/withstorage.aspx?session="));
             this.ClickID(IEExtension.EXCEPTION_LINK_ID);
             this.AssertBenignLine();    // restored from the dump before the exception
+            this.TearDownIE();
+            // Next week the bug is still unresolved -> do more postmortem debugging
+            this.SetUpIE();
+            this.NavigateURL(coredumpUrl);
+            this.AssertBenignLine();    // restored again in a new Internet Explorer instance
         }
 
         private void AssertBenignLine()
         {
-            var benign = ((BulletedList)this.GetControl("contentList")).Items[0];
             Assert.Multiple(() =>
             {
+                // Model
+                Assert.That(this.Main.Content, Has.Exactly(1).Items);
+                Assert.That(this.Main.Content[0], Is.EqualTo("a benign content line"));
+                // View
                 Assert.That(((BulletedList)this.GetControl("contentList")).Items.Count, Is.EqualTo(1));
-                Assert.That(benign.Text, Is.EqualTo("a benign content line"));
+                Assert.That(((BulletedList)this.GetControl("contentList")).Items[0].Text, Is.EqualTo("a benign content line"));
             });
         }
     }

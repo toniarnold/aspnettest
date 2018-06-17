@@ -112,7 +112,7 @@ namespace asplib.View
         /// 1. Local session storage if set by SetStorage
         /// 2. Global config override in ControlStorageExtension.SessionStorage e.g. from unit tests
         /// 3. Configured storage in key="SessionStorage" value="Database"
-        /// 4. Defaults to Viewstate
+        /// 4. Defaults to ViewState
         /// </summary>
         /// <typeparam name="M"></typeparam>
         /// <typeparam name="F"></typeparam>
@@ -165,7 +165,7 @@ namespace asplib.View
         /// GET-arguments:
         /// clear=[true|false]  triggers clearing the storage
         /// endresponse=[true|false]    whether the page at the given URL
-        /// storage=[Viewstate|Session|Database]    clears the selected storage type regardless off config
+        /// storage=[ViewState|Session|Database]    clears the selected storage type regardless off config
         /// </summary>
         /// <typeparam name="M"></typeparam>
         /// <typeparam name="F"></typeparam>

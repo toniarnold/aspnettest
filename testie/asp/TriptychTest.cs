@@ -7,7 +7,7 @@ namespace testie.asp
 {
     [TestFixture]
     [Category("SHDocVw.InternetExplorer")]
-    public class TriptychTest : TestBase    // calculator TestBase for CircumambulateStorageTypes
+    public class TriptychTest : CalculatorTestBase    // calculator TestBase for CircumambulateStorageTypes
     {
         [SetUp]
         public void UnsetStorage()
@@ -40,7 +40,7 @@ namespace testie.asp
         {
             Assert.Multiple(() =>
             {
-                Assert.That(this.Html(), Does.Contain("Session Storage: Viewstate"));
+                Assert.That(this.Html(), Does.Contain("Session Storage: ViewState"));
                 Assert.That(this.Html(), Does.Contain("Session Storage: Session"));
                 Assert.That(this.Html(), Does.Contain("Session Storage: Database"));
             });
@@ -51,10 +51,10 @@ namespace testie.asp
         {
             this.Navigate("/asp/triptych.aspx");
             this.AssertTriptychHtml();
-            this.ClickID("StorageLinkViewstate");
-            Assert.That(this.Html(), Does.Contain("Session Storage: Viewstate"));
+            this.ClickID("StorageLinkViewState");
+            Assert.That(this.Html(), Does.Contain("Session Storage: ViewState"));
             // Now we also have a reference to a single Main instance:
-            Assert.That(this.MainControl.GetStorage(), Is.EqualTo(Storage.Viewstate));
+            Assert.That(this.MainControl.GetStorage(), Is.EqualTo(Storage.ViewState));
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Splash));
 
             this.ClickID("TriptychLink");

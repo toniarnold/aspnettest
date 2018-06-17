@@ -46,7 +46,7 @@
             <asp:RadioButtonList ID="storageList" runat="server" RepeatDirection="Horizontal"
                 AutoPostBack="true"
                 OnSelectedIndexChanged="storageList_SelectedIndexChanged">
-                <asp:ListItem Text="Viewstate" Value="Viewstate" Selected="True"></asp:ListItem>
+                <asp:ListItem Text="ViewState" Value="ViewState" Selected="True"></asp:ListItem>
                 <asp:ListItem Text="Session" Value="Session"></asp:ListItem>
                 <asp:ListItem Text="Database" Value="Database"></asp:ListItem>
             </asp:RadioButtonList>

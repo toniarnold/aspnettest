@@ -19,8 +19,10 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <None Include="architecture.md" />
     <None Include="components.dia" />
     <None Include="Makefile" />
+    <None Include="recordings.md" />
     <None Include="setup.md" />
     <None Include="toc.md" />
     <None Include="writing.md" />

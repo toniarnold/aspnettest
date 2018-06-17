@@ -1,7 +1,6 @@
 ﻿using asplib.Model;
 using asplib.View;
 using System;
-using System.Configuration;
 using System.Web;
 
 namespace iie
@@ -9,35 +8,33 @@ namespace iie
     public abstract class Global : HttpApplication
     {
         /// <summary>
-        /// If EncryptDatabaseStorage is not true:
-        /// Save the last Main object (if present) and write the direkt link with the session in the URL
+        /// Uncaught exception handler: add a link to a core dump to the "Yellow Screen Of Death":
+        /// Save the last Main object (if present) and write the direct link with the session in the URL
         /// to reproduce the error when debugging to the yellow screen of death.
         /// Of course, in a production environment, the URL should be logged to a persistent storage.
+        /// If EncryptDatabaseStorage is true, the client's cookie is required to open the core dump, therefore
+        /// potentially sensitive information protected by access control doesn't leak into the publicly readable [Main] table.
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
         protected virtual void Application_Error(object sender, EventArgs e)
         {
-            var configEncrypt = ConfigurationManager.AppSettings["EncryptDatabaseStorage"];
-            var encrypt = String.IsNullOrWhiteSpace(configEncrypt) ? false : Boolean.Parse(configEncrypt);
-            if (!encrypt)
+            if (Server.GetLastError() is HttpException exception && ControlStorageExtension.CurrentMain != null)
             {
-                if (Server.GetLastError() is HttpException exception && ControlStorageExtension.CurrentMain != null)
+                var session = Main.SaveMain(ControlStorageExtension.CurrentMain, null);
+                var requestUrl = this.Request.Url.ToString();
+                var url = requestUrl + (requestUrl.Contains("?") ? "&" : "?") +
+                            String.Format("session={0}", this.Server.UrlEncode(session.ToString()));
+                this.Response.AppendToLog(String.Format("CORE_DUMP={0}", url));
+
+                string ysod = exception.GetHtmlErrorMessage();
+                if (ysod != null)
                 {
-                    string ysod = exception.GetHtmlErrorMessage();
-                    if (ysod != null)
-                    {
-                        var session = Main.SaveMain(ControlStorageExtension.CurrentMain, null);
-                        var requestUrl = HttpContext.Current.Request.Url.ToString();
-                        var url = requestUrl + (requestUrl.Contains("?") ? "&" : "?") +
-                                  String.Format("session={0}", this.Server.UrlEncode(session.ToString()));
-                        var response = HttpContext.Current.Response;
-                        response.Clear();
-                        response.StatusCode = 500;
-                        response.Write(String.Format("<a id='{0}' href='{1}'>{1}</a></br>\n", IEExtension.EXCEPTION_LINK_ID, url));
-                        response.Write(ysod);
-                        response.End();
-                    }
+                    this.Response.Clear();
+                    this.Response.StatusCode = 500;
+                    this.Response.Write(String.Format("<a id='{0}' href='{1}'>{1}</a></br>\n", IEExtension.EXCEPTION_LINK_ID, url));
+                    this.Response.Write(ysod);
+                    this.Response.End();
                 }
             }
         }

@@ -23,11 +23,6 @@ namespace asp.calculator.View
             set { this.Main.State = value; }
         }
 
-        public new StateBag ViewState
-        {
-            get { return base.ViewState; }
-        }
-
         /// <summary>
         /// For dynamic assignment in the .ascx
         /// </summary>
@@ -38,8 +33,16 @@ namespace asp.calculator.View
         }
 
         /// <summary>
-        /// The local storage type field as enum
+        /// Local session storage type in the instance, overrides the global config
         /// </summary>
         public Storage? SessionStorage { get; set; }
+
+        /// <summary>
+        /// Make the protected ViewState public
+        /// </summary>
+        public new StateBag ViewState
+        {
+            get { return base.ViewState; }
+        }
     }
 }

@@ -17,6 +17,8 @@
     <None Include="toc.md" />
     <None Include="setup.md" />
     <None Include="writing.md" />
+    <None Include="architecture.md" />
+    <None Include="recordings.md" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="components.png">

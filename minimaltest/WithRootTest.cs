@@ -9,20 +9,8 @@ namespace minimaltest
     /// to be able to navigate through the control hierarchy.
     /// </summary>
     [TestFixture]
-    public class WithRootTest : IIE
+    public class WithRootTest : IETest
     {
-        [OneTimeSetUp]
-        public void OneTimeSetUp()
-        {
-            this.SetUpIE();
-        }
-
-        [OneTimeTearDown]
-        public void OneTimeTearDown()
-        {
-            this.TearDownIE();
-        }
-
         [Test]
         public void NavigateWithRootTest()
         {

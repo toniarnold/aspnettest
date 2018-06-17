@@ -5,20 +5,26 @@ using NUnit.Framework;
 namespace testie.asp.calculator
 {
     /// <summary>
-    /// Extends CalculatorTest by using Session instead of Viewstate as storage
+    /// Extends CalculatorTest by using Session instead of ViewState as storage
     /// and executes the same tests declared in the base class.
     /// </summary>
     [Category("SHDocVw.InternetExplorer")]
     public class WithSessionTest : CalculateTest
     {
         [OneTimeSetUp]
-        public override void SetUpStorage()
+        public void SetUpStorage()
         {
             ControlStorageExtension.SessionStorage = Storage.Session;
         }
 
+        [OneTimeTearDown]
+        public void TearDownStorage()
+        {
+            ControlStorageExtension.SessionStorage = null;
+        }
+
         /// <summary>
-        /// Session must be cleared after each single test such that the app behaves like the Viewstate Test
+        /// Session must be cleared after each single test such that the app behaves like the ViewState Test
         /// </summary>
         [TearDown]
         public void ClearSession()

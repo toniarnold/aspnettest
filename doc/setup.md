@@ -30,9 +30,8 @@ as this is exactly the culprit:
 ```
 
 Replace ```localhost``` with its IP address ```127.0.0.1``` in both websites, 
-otherwise Internet Explorer will not work with your site (it really seems to be
-a crippled down Internet Explorer, as it doesn't render CSS Flexbox nicely, regardless 
-of Edge being installed on your system):
+otherwise Internet Explorer will not work with your site (it really is
+Internet Explorer 11 in spite of Edge, as it doesn't render CSS Flexbox nicely):
 
 ```xml
 <bindings>

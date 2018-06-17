@@ -22,10 +22,10 @@
             <asp:UpdatePanel ID="UpdatePanel1" runat="server"
                 UpdateMode="Always">
                 <ContentTemplate>
-                    <uc:calculator ID="calculatorViewstate" runat="server"
-                        Storage="Viewstate"
+                    <uc:calculator ID="calculatorViewState" runat="server"
+                        Storage="ViewState"
                         StorageLinkUrl="default.aspx?storage=viewstate"
-                        StorageLinkClientID="StorageLinkViewstate" />
+                        StorageLinkClientID="StorageLinkViewState" />
                 </ContentTemplate>
             </asp:UpdatePanel>
         </div>

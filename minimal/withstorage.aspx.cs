@@ -9,10 +9,10 @@ namespace minimal
     {
         public ContentStorage Main { get; set; }
 
-        public new StateBag ViewState
-        {
-            get { return base.ViewState; }
-        }
+        /// <summary>
+        /// Local session storage type in the instance, overrides the global config
+        /// </summary>
+        public Storage? SessionStorage { get; set; }
 
         /// <summary>
         /// For dynamic assignment in the .ascx
@@ -24,9 +24,12 @@ namespace minimal
         }
 
         /// <summary>
-        /// The local storage type field as enum
+        /// Make the protected ViewState public
         /// </summary>
-        public Storage? SessionStorage { get; set; }
+        public new StateBag ViewState
+        {
+            get { return base.ViewState; }
+        }
 
         protected void Page_Load(object sender, EventArgs e)
         {

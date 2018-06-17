@@ -21,7 +21,6 @@ namespace asplib.View
         /// <summary>
         /// The central access point made persistent across requests
         /// </summary>
-        ///
         M Main { get; set; }
 
         /// <summary>
@@ -49,9 +48,9 @@ namespace asplib.View
     public enum Storage
     {
         /// <summary>
-        /// Viewstate is the least persistent storage, cleared when navigating to the url
+        /// ViewState is the least persistent storage, cleared when navigating to the url
         /// </summary>
-        Viewstate,
+        ViewState,
 
         /// <summary>
         /// Session is the middle persistent storage, cleared when closing the browser
@@ -106,7 +105,7 @@ namespace asplib.View
             {
                 switch (controlStorage.GetStorage())
                 {
-                    case Storage.Viewstate:
+                    case Storage.ViewState:
                         controlStorage.Main = (M)controlStorage.ViewState[controlStorage.StorageID()];
                         break;
 
@@ -156,7 +155,7 @@ namespace asplib.View
             Trace.Assert(controlStorage.Main != null, "SaveMain() without preceding LoadMain()");
             switch (storage)
             {
-                case Storage.Viewstate:
+                case Storage.ViewState:
                     controlStorage.ViewState[controlStorage.StorageID()] = controlStorage.Main;
                     break;
 
@@ -191,12 +190,12 @@ namespace asplib.View
         /// Set the control-local session storage type from an .ascx attribute string. Case insensitive.
         /// </summary>
         /// <typeparam name="T"></typeparam>
-        /// <param name="controStorage"></param>
+        /// <param name="controlStorage"></param>
         /// <param name="storage"></param>
-        public static void SetStorage<M>(this IStorageControl<M> controStorage, string storage)
+        public static void SetStorage<M>(this IStorageControl<M> controlStorage, string storage)
         where M : new()
         {
-            controStorage.SessionStorage = (Storage)Enum.Parse(typeof(Storage), storage, true);
+            controlStorage.SessionStorage = (Storage)Enum.Parse(typeof(Storage), storage, true);
         }
 
         /// <summary>
@@ -207,10 +206,10 @@ namespace asplib.View
         /// <typeparam name="S"></typeparam>
         /// <param name="controlStorage"></param>
         /// <param name="storage"></param>
-        public static void SetStorage<M>(this IStorageControl<M> controStorage, Storage storage)
+        public static void SetStorage<M>(this IStorageControl<M> controlStorage, Storage storage)
         where M : new()
         {
-            controStorage.SessionStorage = storage;
+            controlStorage.SessionStorage = storage;
         }
 
         /// <summary>
@@ -218,7 +217,7 @@ namespace asplib.View
         /// 1. Local session storage if set by SetStorage
         /// 2. Global config override in controlStorageExtension.SessionStorage e.g. from unit tests
         /// 3. Configured storage in key="SessionStorage" value="Database"
-        /// 4. Defaults to Viewstate
+        /// 4. Defaults to ViewState
         /// </summary>
         /// <typeparam name="M"></typeparam>
         /// <param name="controlStorage"></param>
@@ -234,15 +233,15 @@ namespace asplib.View
             if (storage == null)
             {
                 var configStorage = ConfigurationManager.AppSettings["SessionStorage"];
-                storage = String.IsNullOrWhiteSpace(configStorage) ? Storage.Viewstate : (Storage)Enum.Parse(typeof(Storage), configStorage);
+                storage = String.IsNullOrWhiteSpace(configStorage) ? Storage.ViewState : (Storage)Enum.Parse(typeof(Storage), configStorage);
             }
             return (Storage)storage;
         }
 
         /// <summary>
         /// Get whether to encrypt database storage in this precedence:
-        /// 1. Global config override in controlStorageExtension.SessionStorage e.g. from unit tests
-        /// 2. Configured encryption in key="EncryptDatabaseStorage" value="True"
+        /// 1. Encryption enforced  in Web.config if key="EncryptDatabaseStorage" value="True"
+        /// 2. Global Web.config override in controlStorageExtension.SessionStorage e.g. from unit tests
         /// 3. Defaults to false
         /// </summary>
         /// <typeparam name="M"></typeparam>
@@ -251,13 +250,10 @@ namespace asplib.View
         public static bool GetEncryptDatabaseStorage<M>(this IStorageControl<M> controlStorage)
         where M : new()
         {
-            bool? encrypt = EncryptDatabaseStorage;
-            if (encrypt == null)
-            {
-                var configEncrypt = ConfigurationManager.AppSettings["EncryptDatabaseStorage"];
-                encrypt = String.IsNullOrWhiteSpace(configEncrypt) ? false : Boolean.Parse(configEncrypt);
-            }
-            return (bool)encrypt;
+            var encryptConfig = ConfigurationManager.AppSettings["EncryptDatabaseStorage"];
+            bool encrypt = String.IsNullOrWhiteSpace(encryptConfig) ? false : Boolean.Parse(encryptConfig);
+            bool encryptOverride = EncryptDatabaseStorage ?? false;
+            return encrypt || encryptOverride;
         }
 
         /// <summary>
@@ -298,7 +294,7 @@ namespace asplib.View
         /// GET-arguments:
         /// clear=[true|false]  triggers clearing the storage
         /// endresponse=[true|false]    whether the page at the given URL
-        /// storage=[Viewstate|Session|Database]    clears the selected storage type regardless off config
+        /// storage=[ViewState|Session|Database]    clears the selected storage type regardless off config
         /// </summary>
         /// <typeparam name="M"></typeparam>
         /// <param name="controlStorage"></param>
@@ -315,7 +311,7 @@ namespace asplib.View
                 {
                     Storage storage;
                     Enum.TryParse<Storage>(controlStorage.Request.QueryString["storage"], true, out storage);
-                    if (storage == Storage.Viewstate)   // no meaningful override given
+                    if (storage == Storage.ViewState)   // no meaningful override given
                     {
                         storage = controlStorage.GetStorage();
                     }
@@ -325,7 +321,7 @@ namespace asplib.View
 
                     switch (storage)
                     {
-                        case Storage.Viewstate:
+                        case Storage.ViewState:
                             break;
 
                         case Storage.Session:

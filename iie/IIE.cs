@@ -1,9 +1,11 @@
-﻿using asplib.View;
+﻿using asplib.Model;
+using asplib.View;
 using mshtml;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data.SqlClient;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
@@ -42,13 +44,17 @@ namespace iie
             String.IsNullOrWhiteSpace(ConfigurationManager.AppSettings["RequestTimeout"]) ? 1000 :
             int.Parse(ConfigurationManager.AppSettings["RequestTimeout"]) * 1000;
 
-        // Internet explorer
+        // Internet Explorer
         private static SHDocVw.InternetExplorer ie;
 
         private static AutoResetEvent mre = new AutoResetEvent(false);
 
+        // Database maintenance
+        private static long max_mainid;
+
         /// <summary>
-        /// Start internet explorer and set up events
+        /// [OneTimeSetUp]
+        /// Start Internet Explorer and set up events
         /// </summary>
         /// <param name="inst"></param>
         public static void SetUpIE(this IIE inst)
@@ -61,7 +67,8 @@ namespace iie
         }
 
         /// <summary>
-        /// Quit internet explorer
+        /// [OneTimeTearDown]
+        /// Quit Internet Explorer
         /// </summary>
         /// <param name="inst"></param>
         public static void TearDownIE(this IIE inst)
@@ -70,6 +77,39 @@ namespace iie
             {
                 ie.Quit();
                 ie = null;
+            }
+        }
+
+        /// <summary>
+        /// [OneTimeSetUp]
+        /// </summary>
+        /// <param name="inst"></param>
+        public static void StartUpDatabase(this IIE inst)
+        {
+            using (var db = new ASP_DBEntities())
+            {
+                var sql = @"
+                    SELECT ISNULL(MAX(mainid), 0)
+                    FROM Main
+                    ";
+                max_mainid = db.Database.SqlQuery<long>(sql).FirstOrDefault();
+            }
+        }
+
+        /// <summary>
+        /// [OneTimeTearDown]
+        /// </summary>
+        /// <param name="inst"></param>
+        public static void TearDownDatabase(this IIE inst)
+        {
+            using (var db = new ASP_DBEntities())
+            {
+                var sql = @"
+                    DELETE FROM Main
+                    WHERE mainid > @max_mainid
+                ";
+                var param = new SqlParameter("max_mainid", max_mainid);
+                db.Database.ExecuteSqlCommand(sql, param);
             }
         }
 
@@ -95,7 +135,7 @@ namespace iie
         /// <param name="inst"></param>
         /// <param name="url"></param>
         /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>
-        internal static void NavigateURL(this IIE inst, string url, int expectedStatusCode = 200)
+        public static void NavigateURL(this IIE inst, string url, int expectedStatusCode = 200)
         {
             ie.Navigate2(url);
             mre.WaitOne(millisecondsTimeout);
@@ -113,7 +153,7 @@ namespace iie
         }
 
         /// <summary>
-        /// Get the HTML document body of the current document in internet explorer
+        /// Get the HTML document body of the current document in Internet Explorer
         /// </summary>
         /// <param name="inst"></param>
         /// <returns></returns>

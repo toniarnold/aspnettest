@@ -59,7 +59,7 @@
     <Compile Include="asp\ExceptionDumpTest.cs" />
     <Compile Include="asp\calculator\WithDatabaseTest.cs" />
     <Compile Include="asp\calculator\WithSessionTest.cs" />
-    <Compile Include="asp\calculator\TestBase.cs" />
+    <Compile Include="asp\calculator\CalculatorTestBase.cs" />
     <Compile Include="asp\calculator\CalculateTest.cs" />
     <Compile Include="asp\TriptychTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
