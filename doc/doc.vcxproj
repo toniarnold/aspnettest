@@ -21,6 +21,7 @@
   <ItemGroup>
     <None Include="architecture.md" />
     <None Include="components.dia" />
+    <None Include="internet-explorer.dia" />
     <None Include="Makefile" />
     <None Include="recordings.md" />
     <None Include="setup.md" />
@@ -29,6 +30,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="components.png" />
+    <Image Include="internet-explorer.png" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

@@ -1,6 +1,8 @@
 # Architecture
 
 1. [Components](#components)
+2. [Basic Internet Explorer Interaction](#Basic-Internet-Explorer-Interaction)
+
 
 ## 1. Components
 
@@ -21,5 +23,13 @@ The cycle is broken up by providing the ```ITestRunner``` (started by ```asp```)
 only with the late-bound physical path to the ```testie.dll``` file to load the test
 assembly ultimately with a call to ```Assembly.Load()```.
 
-![components](./components.png)
+![Components](components.png)
+
+
+## 2. Basic Internet Explorer Interaction
+
+Opening an URL in Internet Explorer works the same way for all depth levels
+of interaction between the various components:
+
+![iInternet Explorer Sequence](internet-explorer.png)
 

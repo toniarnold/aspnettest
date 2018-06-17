@@ -19,9 +19,15 @@
     <None Include="writing.md" />
     <None Include="architecture.md" />
     <None Include="recordings.md" />
+    <None Include="internet-explorer.dia">
+      <Filter>Sources</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="components.png">
+      <Filter>Targets</Filter>
+    </Image>
+    <Image Include="internet-explorer.png">
       <Filter>Targets</Filter>
     </Image>
   </ItemGroup>
