@@ -71,10 +71,11 @@ Now you should be able to build the solution with the Any CPU Debug configuratio
 
 ## 4. SQL database creation
 
-The solution contains a nested SQL Server Management Studio 17 solution in the
-```.\db``` subdirectory, but it is trivial, you only really need the 
-```Main.sql``` DDL script. Execute it on an SQL Database, its default name
-is just ```[ASP_DB]```.
+There is a nested SQL Server Management Studio 17 solution at ```.\db\db.ssmssln```, 
+the database name is ```[ASP_DB]```. Execute these scripts:
+
+1. ```Main.sql``` -- DDL that creates the table for session storage
+2. ```testie.asp.calculator.FibonacciTest.sql``` -- DML for that test case with a sample session dump
 
 Adjust this connection string (the user iis/pass on my development
 machine is no big secret):

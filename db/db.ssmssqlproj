@@ -31,6 +31,12 @@
           <AssociatedConnUserName />
           <FullPath>Main.sql</FullPath>
         </FileNode>
+        <FileNode Name="testie.asp.calculator.FibonacciTest.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:HP:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>HP</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>testie.asp.calculator.FibonacciTest.sql</FullPath>
+        </FileNode>
       </Items>
     </LogicalFolder>
     <LogicalFolder Name="Sonstiges" Type="3" Sorted="true">

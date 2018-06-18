@@ -1,6 +1,6 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="Main.ascx.cs" Inherits="asp.calculator.Main" %>
 <%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
-<%@ Register Assembly="asplib" Namespace="asplib" TagPrefix="asplib" %>
+<%@ Register Assembly="asplib" Namespace="asplib.View" TagPrefix="asplib" %>
 <%@ Register TagPrefix="uc" TagName="Calculate" Src="~/calculator/View/Calculate.ascx" %>
 <%@ Register TagPrefix="uc" TagName="Enter" Src="~/calculator/View/Enter.ascx" %>
 <%@ Register TagPrefix="uc" TagName="Error" Src="~/calculator/View/Error.ascx" %>
@@ -35,12 +35,14 @@
         text-decoration: none;
     }
 </style>
-<div class="hamburger-container">
-    <div class="hamburger-box"></div>
+ 
+<div class="hamburger-container"> 
+    <asplib:ShareButton ID="shareButton" runat="server"
+        OnServerClick="shareButton_Click" />
     <a href="<%= this.StorageLinkUrl %>" id="<%= this.StorageLinkClientID %>" class="hamburger-box">Session Storage: <%= this.Storage %> <%= this.Encrypted %>
     </a>
     <div class="hamburger-box" id="hamburgerDiv" runat="server">
-        <span class="hamburger">&#x2630;</span>
+        <span class="hamburger">☰</span>
     </div>
     <ajaxToolkit:PopupControlExtender ID="PopEx" runat="server"
         TargetControlID="hamburgerDiv"

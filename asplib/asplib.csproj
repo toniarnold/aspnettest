@@ -76,6 +76,7 @@
     <Compile Include="View\ISmcControl.cs" />
     <Compile Include="View\IRootControl.cs" />
     <Compile Include="View\IStorageControl.cs" />
+    <Compile Include="View\ShareButton.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Model\Db.Context.tt">

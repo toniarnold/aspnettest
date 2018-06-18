@@ -6,6 +6,7 @@
 4. [```testie.asp.calculator.CalculateTest```: Directly access the state machine](#testie.asp.calculator.CalculateTest-Directly-access-the-state-machine)
 5. [```minimaltest.ExceptionDumpTest```: Core Dumps](#minimaltest.ExceptionDumpTest-Core-Dumps)
 6. [Database encryption](#Database-encryption)
+7. [```testie.asp.calculator.FibonacciTest```: Sharing session dumps for test case setup](#testie.asp.calculator.FibonacciTest-Sharing-session-dumps-for-test-case-setup)
 
 As stated in the motivational [README.md](../README.md), this project is all about "teaching 
 the app to test itself". For demonstration purposes, the ```minimal```/```minimaltest```
@@ -382,9 +383,9 @@ public class ExceptionDumpTest : StorageTest<ContentStorage>
 }
 ```
 
-### ```ExceptionDumpTest``` in action
+The ```ExceptionDumpTest``` in action:
 
-![ExceptionDumpTest in action](gif/ExceptionDumpTest.gif)
+![ExceptionDumpTest in action](img/ExceptionDumpTest.gif)
 
 
 ## 6. Database encryption
@@ -404,7 +405,125 @@ and nowhere else. Therefore the page can only be opened statefully in that speci
 instance, therefore when the person causing the exception is actually logged in.
 
 But these encrypted core dumps still empower developers to send session links 
-to the persons causing the error, visit them in person and trying to investigate 
+to the persons experiencing the error, visit them in person and trying to investigate 
 while looking over their shoulder - a new ritual which rapidly curtails tedious interrogations 
-starting with "WTF *precisely* have you done last week to get that alien error 
+starting with "WTF *precisely* have you done last week to get that alien show-stopper error 
 we're unable to reproduce?"
+
+
+## 7. ```testie.asp.calculator.FibonacciTest```: Sharing session dumps for test case setup
+
+*If* you had placed this share button:
+
+```xml
+<asplib:ShareButton ID="shareButton" runat="server"
+    OnServerClick="shareButton_Click" />
+```
+...on the failing web application, you could additionally politely ask the
+error victims to click on it and email the downloaded file to you. This bypasses
+the storage encryption - whether it is a good idea to empower people to email
+around unencrypted session dumps of their otherwise highly protected application data
+is another question.
+
+But that is not the primary use case, the share button addresses another issue
+with automated testing: to easily set up test data sets for complex web applications.
+It is tedious to manually instantiate objects and to populate them property by property
+with test data in a test setup coded purely in C# - when on the other hand you have 
+crafted a custom-tailored rich GUI to enter precisely that particular test data
+you have in mind.
+
+Perform these steps to create a stored test case:
+
+1. Put your application in the desired state through the GUI, just as any user would.
+
+2. When happy with the current state, click on this Share button:  
+   ![Share Button](img/ShareButton.png)
+
+3. Choose "Save As" and enter a filename ending with .sql (if you're not on Edge
+   which tries to protect you from yourself and enforces the .aspx suffix).
+
+4. Open the file in Management Studio. The file SQL should look like this:
+```sql
+INSERT INTO Main (main) SELECT 0x0001000000FFFFFFFF01000000000000000C020000003A617370...
+SELECT session FROM Main WHERE mainid = @@IDENTITY
+```
+
+5. Execute the script. It will output the session GUID just created. To be able to
+   reproduce the test data anywhere, edit the script to include the now fixed GUID
+   such that it looks like ```testie.asp.calculator.FibonacciTest.sql```:
+```sql
+INSERT INTO Main (session, main) SELECT 'DE2CAAF5-6602-456D-B1F9-874095359593', 0x0001000000FFFFFFFF01000000000000000C020000003A617370...
+SELECT session FROM Main WHERE mainid = @@IDENTITY
+```
+
+6. Configure the GUID in the Web.config of the application under test:
+```xml
+<add key="testie.asp.calculator.FibonacciTest" value="DE2CAAF5-6602-456D-B1F9-874095359593"/>
+```
+
+7. Add the setup to your test case by sending the GUID to the application
+   such that you can directly start your tests in the stored state. 
+
+
+This is the *complete* test fixture for the Fibonacci test:
+
+```csharp
+[TestFixture]
+[Category("SHDocVw.InternetExplorer")]
+class FibonacciTest : CalculatorTestBase
+{
+    [Test]
+    public void VerifyFibonacciSums()
+    {
+        // Load the stored canonical test case
+        this.Navigate(string.Format("/asp/default.aspx?session={0}",
+            ConfigurationManager.AppSettings["testie.asp.calculator.FibonacciTest"]));
+        Assert.That(this.Stack.Count, Is.GreaterThan(0));   // non-empty number list
+        Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
+
+        // Assert the sums backwards in the GUI
+        // Note that the test uses string comparison, there is no arithmetic involved
+        // in the assertions - the test gives no hint that it is about math!
+        while (this.Stack.Count >= 3)
+        {
+            var initialStackCount = this.Stack.Count;
+
+            // Get the head of the sequence to check
+            var sum = this.Stack.FirstOrDefault();
+            var summand1 = this.Stack.Skip(1).FirstOrDefault();
+            var summand2 = this.Stack.Skip(2).FirstOrDefault();
+
+            // Check the correctness of the Fibonacci sequence  in the calculator GUI
+
+            // Delete the current sum and recalculate it from the sequence
+            this.Click("calculate.clrButton");
+            this.Click("calculate.addButton");
+            Assert.That(this.Stack.FirstOrDefault(), Is.EqualTo(sum));
+
+            // Delete the calculated check sum 
+            this.Click("calculate.clrButton");
+
+            // Put the original summands onto the stack again
+            this.Click("footer.enterButton");
+            this.Write("enter.operandTextBox", summand2);
+            this.Click("footer.enterButton");
+
+            this.Click("footer.enterButton");
+            this.Write("enter.operandTextBox", summand1);
+            this.Click("footer.enterButton");
+
+            // Check that the loop will terminate by continuing with N-1 elements
+            Assert.That(this.Stack.Count, Is.EqualTo(initialStackCount - 1));
+        }
+    }
+}
+```
+
+This is the direct link to the stored session you inserted with the ```testie.asp.calculator.FibonacciTest.sql```
+during the initial setup:
+[http://127.0.0.1/asp/default.aspx?session=DE2CAAF5-6602-456D-B1F9-874095359593](http://127.0.0.1/asp/default.aspx?session=DE2CAAF5-6602-456D-B1F9-874095359593)
+
+And this is how the Fibonacci test looks like when unleashed. Note that it directly 
+starts with the sequence entered during test case creation:
+
+![FibonacciTest in action](img/FibonacciTest.gif)

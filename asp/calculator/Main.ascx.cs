@@ -5,6 +5,7 @@ using asplib.View;
 using System;
 using System.Collections.Generic;
 using System.Data.SqlClient;
+using System.Web.UI;
 using System.Web.UI.WebControls;
 using MainRow = asplib.Model.Main;
 using StorageEnum = asplib.View.Storage;
@@ -33,6 +34,10 @@ namespace asp.calculator
         protected void Page_Load(object sender, EventArgs e)
         {
             this.LoadMain();
+
+            // Required if used in an UpdatePanel, as a download is a real PostBack
+            var sm = ScriptManager.GetCurrent(this.Page);
+            sm.RegisterPostBackControl(this.shareButton);
         }
 
         /// <summary>

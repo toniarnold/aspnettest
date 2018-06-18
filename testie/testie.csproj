@@ -44,6 +44,7 @@
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
@@ -54,6 +55,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="asp\calculator\FibonacciTest.cs" />
     <Compile Include="asp\calculator\SessionGridViewTest.cs" />
     <Compile Include="asp\calculator\WithDatabaseEncryptedTest.cs" />
     <Compile Include="asp\ExceptionDumpTest.cs" />

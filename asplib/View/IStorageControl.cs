@@ -257,6 +257,27 @@ namespace asplib.View
         }
 
         /// <summary>
+        /// Predefined event handler for the ShareButton to respond with an
+        /// SQL INSERT script for the current Main, just add the button like this:
+        /// <asplib:ShareButton ID="shareButton" runat="server"
+        ///    OnServerClick="shareButton_Click" />
+        /// </summary>
+        /// <typeparam name="M"></typeparam>
+        /// <param name="controlStorage"></param>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public static void shareButton_Click<M>(this IStorageControl<M> controlStorage, object sender, EventArgs e)
+        where M : class, new()
+        {
+            var mainRow = new Main();
+            mainRow.SetInstance(controlStorage.Main); // serialize without filter
+            controlStorage.Response.Clear();
+            controlStorage.Response.AddHeader("Content-Type", "application/sql");
+            controlStorage.Response.Write(mainRow.InsertSQL());
+            controlStorage.Response.End();
+        }
+
+        /// <summary>
         /// Get the Key/IV secret from the cookies and generate the parts that don't yet exist
         /// and directly save it to the cookies collection
         /// </summary>

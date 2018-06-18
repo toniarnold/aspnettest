@@ -83,5 +83,5 @@ To quote again:
 
 >Since one video is worth a thousand pictures, check out this screencast recorded on a ~~Mac~~ win10 box running an initial GUI test suite:
 
-![Tests running...](doc/gif/running.gif)
+![Tests running...](doc/img/running.gif)
 

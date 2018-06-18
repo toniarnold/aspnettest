@@ -1,5 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
+using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Linq;
@@ -138,9 +141,33 @@ namespace asplib.Model
         /// <typeparam name="M"></typeparam>
         /// <param name="obj"></param>
         public void SetInstance<M>(M obj, Func<byte[], byte[]> filter = null)
+            where M : class
         {
             this.mainInstance = obj;
             this.main = this.Serialize(obj, filter);
+        }
+
+        /// <summary>
+        /// Returns the (unencrypted!) literal INSERT string of the loaded object
+        /// for manually exporting session dumps.
+        /// </summary>
+        /// <returns>SQL INSERT string</returns>
+        public string InsertSQL()
+        {
+            Trace.Assert(this.main != null, "Explicit serialization with SetInstance(controlStorage.Main) required beforehand");
+
+            // Let the future consumer SQL Server encode the string representation of the byte[]
+            string hex = String.Empty;
+            var query = " SELECT CONVERT(VARCHAR(MAX), @main, 1) AS [hex]";
+            using (var db = new ASP_DBEntities())
+            {
+                var param = new SqlParameter("main", this.main);
+                hex = db.Database.SqlQuery<String>(query, param).FirstOrDefault();
+            }
+            // Format according to get copy-pasted into Management Studio
+            return String.Format("INSERT INTO Main (main) SELECT {0}\n" +
+                                 "SELECT session FROM Main WHERE mainid = @@IDENTITY\n",
+                                 hex);
         }
 
         /// <summary>

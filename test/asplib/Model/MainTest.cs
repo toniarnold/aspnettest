@@ -77,6 +77,41 @@ namespace test.asplib.Model
 
         [Test]
         [Category("DbContext")]
+        public void InsertSQLTest()
+        {
+            var obj = new List<string> { "Hello", "World" };
+            this.SetInstance(obj);
+            var sql = this.InsertSQL();
+            Assert.That(sql, Does.Contain("INSERT INTO"));
+        }
+
+        [Test]
+        [Category("DbContext")]
+        public void InsertSQLExecutabilityTest()
+        {
+            var obj = new List<string> { "Hello", "World" };
+            this.SetInstance(obj);
+            var sql = this.InsertSQL();
+
+            using (var db = new ASP_DBEntities())
+            using (var trans = db.Database.BeginTransaction(IsolationLevel.ReadUncommitted))
+            {
+                try
+                { 
+                    var session = db.Database.SqlQuery<Guid>(sql).FirstOrDefault();
+                    var copy = LoadMain<List<string>>(db, session);
+                    Assert.That(copy, Is.EquivalentTo(obj));
+                }
+                finally
+                {
+                    trans.Rollback();
+                }
+
+            }
+        }
+
+        [Test]
+        [Category("DbContext")]
         public void GetInstanceMissingTest()
         {
             using (var db = new ASP_DBEntities())

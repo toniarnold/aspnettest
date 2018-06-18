@@ -5,9 +5,14 @@
 
 ## Synopsis in the README
 
-![Tests running...](gif/running.gif)
+![Tests running...](img/running.gif)
 
 
 ## Core Dump on unhandled Exceptions
 
-![ExceptionDumpTest in action](gif/ExceptionDumpTest.gif)
+![ExceptionDumpTest in action](img/ExceptionDumpTest.gif)
+
+
+## Start a test in a pre-stored state (Fibonacci Sequence)
+
+![FibonacciTest in action](img/FibonacciTest.gif)
