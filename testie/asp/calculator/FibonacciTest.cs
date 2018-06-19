@@ -7,7 +7,7 @@ namespace testie.asp.calculator
 {
     [TestFixture]
     [Category("SHDocVw.InternetExplorer")]
-    class FibonacciTest : CalculatorTestBase
+    internal class FibonacciTest : CalculatorTestBase
     {
         [Test]
         public void VerifyFibonacciSums()
@@ -15,7 +15,7 @@ namespace testie.asp.calculator
             // Load the stored canonical test case
             this.Navigate(string.Format("/asp/default.aspx?session={0}",
                 ConfigurationManager.AppSettings["testie.asp.calculator.FibonacciTest"]));
-            Assert.That(this.Stack.Count, Is.GreaterThan(0));   // non-empty number list
+            Assert.That(this.Stack.Count, Is.GreaterThanOrEqualTo(3));  // non-empty sequence
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
 
             // Assert the sums backwards in the GUI
@@ -26,18 +26,18 @@ namespace testie.asp.calculator
                 var initialStackCount = this.Stack.Count;
 
                 // Get the head of the sequence to check
-                var sum = this.Stack.FirstOrDefault();
-                var summand1 = this.Stack.Skip(1).FirstOrDefault();
-                var summand2 = this.Stack.Skip(2).FirstOrDefault();
+                var sum = this.Stack.ElementAt(0);
+                var summand1 = this.Stack.ElementAt(1);
+                var summand2 = this.Stack.ElementAt(2);
 
                 // Check the correctness of the Fibonacci sequence  in the calculator GUI
 
                 // Delete the current sum and recalculate it from the sequence
                 this.Click("calculate.clrButton");
                 this.Click("calculate.addButton");
-                Assert.That(this.Stack.FirstOrDefault(), Is.EqualTo(sum));
+                Assert.That(this.Stack.ElementAt(0), Is.EqualTo(sum));
 
-                // Delete the calculated check sum 
+                // Delete the calculated check sum
                 this.Click("calculate.clrButton");
 
                 // Put the original summands onto the stack again

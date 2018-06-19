@@ -4,7 +4,6 @@ using NUnit.Framework;
 namespace testie.asp.calculator
 {
     [TestFixture]
-    [Category("SHDocVw.InternetExplorer")]
     public class CalculateTest : CalculatorTestBase
     {
         [Test]

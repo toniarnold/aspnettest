@@ -7,10 +7,8 @@ using testie.asp.calculator;
 namespace testie.asp
 {
     [TestFixture]
-    [Category("SHDocVw.InternetExplorer")]
     public class ExceptionDumpTest : CalculatorTestBase
     {
-
         [OneTimeSetUp]
         public void SetUpStorage()
         {

@@ -11,7 +11,6 @@ namespace testie.asp.calculator
     /// Test the sessionDumpGridView functionality in Main.ascx
     /// Requires Storage.Database
     /// </summary>
-    [Category("SHDocVw.InternetExplorer")]
     public class SessionGridViewTest : CalculatorTestBase
     {
         private int rowCountBefore = 0;

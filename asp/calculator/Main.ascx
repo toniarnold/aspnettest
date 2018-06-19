@@ -35,8 +35,8 @@
         text-decoration: none;
     }
 </style>
- 
-<div class="hamburger-container"> 
+
+<div class="hamburger-container">
     <asplib:ShareButton ID="shareButton" runat="server"
         OnServerClick="shareButton_Click" />
     <a href="<%= this.StorageLinkUrl %>" id="<%= this.StorageLinkClientID %>" class="hamburger-box">Session Storage: <%= this.Storage %> <%= this.Encrypted %>

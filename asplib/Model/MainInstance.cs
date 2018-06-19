@@ -158,7 +158,7 @@ namespace asplib.Model
 
             // Let the future consumer SQL Server encode the string representation of the byte[]
             string hex = String.Empty;
-            var query = " SELECT CONVERT(VARCHAR(MAX), @main, 1) AS [hex]";
+            var query = "SELECT CONVERT(VARCHAR(MAX), @main, 1) AS [hex]";
             using (var db = new ASP_DBEntities())
             {
                 var param = new SqlParameter("main", this.main);

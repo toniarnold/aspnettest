@@ -6,7 +6,6 @@ using testie.asp.calculator;
 namespace testie.asp
 {
     [TestFixture]
-    [Category("SHDocVw.InternetExplorer")]
     public class TriptychTest : CalculatorTestBase    // calculator TestBase for CircumambulateStorageTypes
     {
         [SetUp]

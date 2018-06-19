@@ -97,7 +97,7 @@ namespace test.asplib.Model
             using (var trans = db.Database.BeginTransaction(IsolationLevel.ReadUncommitted))
             {
                 try
-                { 
+                {
                     var session = db.Database.SqlQuery<Guid>(sql).FirstOrDefault();
                     var copy = LoadMain<List<string>>(db, session);
                     Assert.That(copy, Is.EquivalentTo(obj));
@@ -106,7 +106,6 @@ namespace test.asplib.Model
                 {
                     trans.Rollback();
                 }
-
             }
         }
 

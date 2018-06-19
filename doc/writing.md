@@ -465,7 +465,11 @@ SELECT session FROM Main WHERE mainid = @@IDENTITY
    such that you can directly start your tests in the stored state. 
 
 
-This is the *complete* test fixture for the Fibonacci test:
+The the direct link to the stored session you have inserted with the ```testie.asp.calculator.FibonacciTest.sql```
+during the initial setup is
+[http://127.0.0.1/asp/default.aspx?session=DE2CAAF5-6602-456D-B1F9-874095359593](http://127.0.0.1/asp/default.aspx?session=DE2CAAF5-6602-456D-B1F9-874095359593)
+
+This is the *complete* test fixture for the Fibonacci GUI test in ```testie.asp.calculator```:
 
 ```csharp
 [TestFixture]
@@ -489,9 +493,9 @@ class FibonacciTest : CalculatorTestBase
             var initialStackCount = this.Stack.Count;
 
             // Get the head of the sequence to check
-            var sum = this.Stack.FirstOrDefault();
-            var summand1 = this.Stack.Skip(1).FirstOrDefault();
-            var summand2 = this.Stack.Skip(2).FirstOrDefault();
+            var sum = this.Stack.ElementAt(0);
+            var summand1 = this.Stack.ElementAt(1);
+            var summand2 = this.Stack.ElementAt(2);
 
             // Check the correctness of the Fibonacci sequence  in the calculator GUI
 
@@ -500,7 +504,7 @@ class FibonacciTest : CalculatorTestBase
             this.Click("calculate.addButton");
             Assert.That(this.Stack.FirstOrDefault(), Is.EqualTo(sum));
 
-            // Delete the calculated check sum 
+            // Delete the calculated check sum
             this.Click("calculate.clrButton");
 
             // Put the original summands onto the stack again
@@ -519,11 +523,63 @@ class FibonacciTest : CalculatorTestBase
 }
 ```
 
-This is the direct link to the stored session you inserted with the ```testie.asp.calculator.FibonacciTest.sql```
-during the initial setup:
-[http://127.0.0.1/asp/default.aspx?session=DE2CAAF5-6602-456D-B1F9-874095359593](http://127.0.0.1/asp/default.aspx?session=DE2CAAF5-6602-456D-B1F9-874095359593)
+And this is the mirror of above test without IE, asserting solely on the POCO Control/Model class in ```test.asp.calculator.Control```:
 
-And this is how the Fibonacci test looks like when unleashed. Note that it directly 
-starts with the sequence entered during test case creation:
+```csharp
+[TestFixture]
+[Category("DbContext")]
+public class FibonacciTest
+{
+    [Test]
+    public void VerifyFibonacciSums()
+    {
+        Calculator inst;
+        using (var db = new ASP_DBEntities())
+        {
+            inst = Main.LoadMain<Calculator>(
+                Guid.Parse(ConfigurationManager.AppSettings["asp.calculator.Control.FibonacciTest"]));
+            inst.Fsm.Owner = inst;  // As in ISmcControl.LoadMain<M, F, S>(), see SMC Manual Section 9
+        }
+        Assert.That(inst.Stack.Count, Is.GreaterThanOrEqualTo(3));  // non-empty sequence
+        Assert.That(inst.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
+
+        // Assert the sums backwards on the model objects instead of the GUI
+        while (inst.Stack.Count >= 3)
+        {
+            var initialStackCount = inst.Stack.Count;
+
+            // Get the head of the sequence to check
+            var sum = inst.Stack.ElementAt(0);
+            var summand1 = inst.Stack.ElementAt(1);
+            var summand2 = inst.Stack.ElementAt(2);
+
+            // Check the correctness of the Fibonacci sequence  in the calculator GUI
+
+            // Delete the current sum and recalculate it from the sequence
+            inst.Fsm.Clr(inst.Stack);       // this.Click("calculate.clrButton");
+            inst.Fsm.Add(inst.Stack);       //this.Click("calculate.addButton");
+            Assert.That(inst.Stack.ElementAt(0), Is.EqualTo(sum));
+
+            // Delete the calculated check sum
+            inst.Fsm.Clr(inst.Stack);       // this.Click("calculate.clrButton");
+
+            // Put the original summands onto the stack again
+            inst.Fsm.Enter("");             // this.Click("footer.enterButton");
+            inst.Fsm.Enter(summand2);       // this.Write("enter.operandTextBox", summand2);
+                                            // this.Click("footer.enterButton");
+
+            inst.Fsm.Enter("");             // this.Click("footer.enterButton");
+            inst.Fsm.Enter(summand1);       // this.Write("enter.operandTextBox", summand1);
+                                            // this.Click("footer.enterButton");
+
+            // Check that the loop will terminate by continuing with N-1 elements
+            Assert.That(inst.Stack.Count, Is.EqualTo(initialStackCount - 1));
+        }
+    }
+}
+```
+
+And this is how the Fibonacci test looks like when unleashed - unit tests don't look as mesmerizing. 
+Note that it directly starts with the sequence entered during test case creation:
 
 ![FibonacciTest in action](img/FibonacciTest.gif)
