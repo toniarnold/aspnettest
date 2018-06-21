@@ -47,7 +47,7 @@ namespace iie
         // Internet Explorer
         private static SHDocVw.InternetExplorer ie;
 
-        private static AutoResetEvent mre = new AutoResetEvent(false);
+        private static AutoResetEvent are = new AutoResetEvent(false);
 
         // Database maintenance
         private static long max_mainid;
@@ -84,7 +84,7 @@ namespace iie
         /// [OneTimeSetUp]
         /// </summary>
         /// <param name="inst"></param>
-        public static void StartUpDatabase(this IIE inst)
+        public static void SetUpDatabase(this IIE inst)
         {
             using (var db = new ASP_DBEntities())
             {
@@ -138,7 +138,7 @@ namespace iie
         public static void NavigateURL(this IIE inst, string url, int expectedStatusCode = 200)
         {
             ie.Navigate2(url);
-            mre.WaitOne(millisecondsTimeout);
+            are.WaitOne(millisecondsTimeout);
             Assert.That(IEExtension.StatusCode, Is.EqualTo(expectedStatusCode));
         }
 
@@ -149,7 +149,7 @@ namespace iie
         /// <param name="URL"></param>
         private static void OnDocumentComplete(object pDisp, ref object URL)
         {
-            mre.Set();
+            are.Set();
         }
 
         /// <summary>
@@ -234,7 +234,7 @@ namespace iie
             element.click();
             if (expectPostBack)
             {
-                mre.WaitOne(millisecondsTimeout);
+                are.WaitOne(millisecondsTimeout);
             }
             Thread.Sleep(pause);
             Assert.That(IEExtension.StatusCode, Is.EqualTo(expectedStatusCode));

@@ -15,13 +15,13 @@ namespace minimaltest
     public class DefaultTest : IIE
     {
         [OneTimeSetUp]
-        public void OneTimeSetUp()
+        public void OneTimeSetUpIE()
         {
             this.SetUpIE();
         }
 
         [OneTimeTearDown]
-        public void OneTimeTearDown()
+        public void OneTimeTearDownIE()
         {
             this.TearDownIE();
         }

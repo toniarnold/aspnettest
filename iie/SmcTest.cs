@@ -1,10 +1,12 @@
 ﻿using asplib.View;
+using NUnit.Framework;
 
 namespace iie
 {
     /// <summary>
     /// Base class for IE tests with accessors for ISmcControl
     /// </summary>
+    [TestFixture]
     public abstract class SmcTest<M, F, S> : StorageTest<M>
     where M : new()
     where F : statemap.FSMContext

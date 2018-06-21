@@ -21,6 +21,9 @@
   <ItemGroup>
     <None Include="architecture.md" />
     <None Include="components.dia" />
+    <None Include="iie-component.dia" />
+    <None Include="iie-page.dia" />
+    <None Include="iie-test.dia" />
     <None Include="internet-explorer.dia" />
     <None Include="Makefile" />
     <None Include="recordings.md" />
@@ -30,6 +33,9 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="components.png" />
+    <Image Include="iie-component.png" />
+    <Image Include="iie-page.png" />
+    <Image Include="iie-test.png" />
     <Image Include="internet-explorer.png" />
   </ItemGroup>
   <PropertyGroup Label="Globals">

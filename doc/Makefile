@@ -1,7 +1,11 @@
 # nmake needs a manually created list of all GNU .dia files
 
 DIA = components.dia \
-	internet-explorer.dia
+	internet-explorer.dia \
+	iie-component.dia \
+	iie-test.dia \
+	iie-page.dia
+
 
 .SUFFIXES: .dia .png
 PNG = $(DIA:.dia=.png)

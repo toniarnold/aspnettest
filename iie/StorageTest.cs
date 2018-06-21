@@ -7,7 +7,7 @@ namespace iie
     /// Base class for IE tests with a [OneTimeSetUp] / [OneTimeTearDown] pair for Storage.Database
     /// Override SetUpStorage() to configure the storage for that specific test suite.
     /// Provides accessors for IStorageControl
-    /// </summary>
+    [TestFixture]
     public abstract class StorageTest<M> : IETest
     where M : new()
     {
@@ -30,7 +30,7 @@ namespace iie
         [OneTimeSetUp]
         public void OneTimeSetUpDatabase()
         {
-            this.StartUpDatabase();
+            this.SetUpDatabase();
         }
 
         /// <summary>

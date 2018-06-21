@@ -22,12 +22,30 @@
     <None Include="internet-explorer.dia">
       <Filter>Sources</Filter>
     </None>
+    <None Include="iie-component.dia">
+      <Filter>Sources</Filter>
+    </None>
+    <None Include="iie-page.dia">
+      <Filter>Sources</Filter>
+    </None>
+    <None Include="iie-test.dia">
+      <Filter>Sources</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="components.png">
       <Filter>Targets</Filter>
     </Image>
     <Image Include="internet-explorer.png">
+      <Filter>Targets</Filter>
+    </Image>
+    <Image Include="iie-component.png">
+      <Filter>Targets</Filter>
+    </Image>
+    <Image Include="iie-page.png">
+      <Filter>Targets</Filter>
+    </Image>
+    <Image Include="iie-test.png">
       <Filter>Targets</Filter>
     </Image>
   </ItemGroup>
