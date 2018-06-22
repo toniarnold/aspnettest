@@ -28,6 +28,8 @@
     <None Include="Makefile" />
     <None Include="recordings.md" />
     <None Include="setup.md" />
+    <None Include="test-with-storage.dia" />
+    <None Include="test-without-storage.dia" />
     <None Include="toc.md" />
     <None Include="writing.md" />
   </ItemGroup>
@@ -37,6 +39,8 @@
     <Image Include="iie-page.png" />
     <Image Include="iie-test.png" />
     <Image Include="internet-explorer.png" />
+    <Image Include="test-with-storage.png" />
+    <Image Include="test-without-storage.png" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <VCProjectVersion>15.0</VCProjectVersion>

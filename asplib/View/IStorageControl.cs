@@ -137,7 +137,7 @@ namespace asplib.View
                 controlStorage.Main = new M();
             }
             CurrentMain = controlStorage.Main;
-            ControlRootExtension.RootControl = (System.Web.UI.Control)controlStorage;
+            ControlRootExtension.SetRoot(controlStorage);
 
             controlStorage.PropagateMain(controlStorage.Main);
         }

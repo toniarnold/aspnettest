@@ -153,6 +153,15 @@ namespace iie
         }
 
         /// <summary>
+        /// Simple setter method for the global HTTP MainControl.Response.StatusCode to check
+        /// </summary>
+        /// <param name="statusCode"></param>
+        public static void SetStatusCode(int statusCode)
+        {
+            StatusCode = statusCode;
+        }
+
+        /// <summary>
         /// Get the HTML document body of the current document in Internet Explorer
         /// </summary>
         /// <param name="inst"></param>

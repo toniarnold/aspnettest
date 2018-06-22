@@ -31,6 +31,12 @@
     <None Include="iie-test.dia">
       <Filter>Sources</Filter>
     </None>
+    <None Include="test-without-storage.dia">
+      <Filter>Sources</Filter>
+    </None>
+    <None Include="test-with-storage.dia">
+      <Filter>Sources</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="components.png">
@@ -46,6 +52,12 @@
       <Filter>Targets</Filter>
     </Image>
     <Image Include="iie-test.png">
+      <Filter>Targets</Filter>
+    </Image>
+    <Image Include="test-without-storage.png">
+      <Filter>Targets</Filter>
+    </Image>
+    <Image Include="test-with-storage.png">
       <Filter>Targets</Filter>
     </Image>
   </ItemGroup>

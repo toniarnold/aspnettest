@@ -2,11 +2,13 @@
 
 1. [Components](#components)
 2. [Basic Internet Explorer Interaction](#Basic-Internet-Explorer-Interaction)
-3. [IIE/IEExtension in Detail](#IIE/IEExtension-in-Detail)
+3. [IIE and IEExtension in Detail](#IIE-and-IEExtension-in-Detail)
    * [Component Environment of IIE](#Component-Environment-of-IIE)
    * [Using IIE in tests](#Using-IIE-in-tests)
    * [ASP.NET pages with IIE](#ASP.NET-pages-with-IIE)
-
+4. [Complete SetUp, Test, TearDown Sequence](#Complete-SetUp-Test-TearDown-Sequence)
+   * [```minimaltest.WithRootTest```](#minimaltest.WithRootTest)
+   * [```minimaltest.WithStorageTest```](#minimaltest.WithStorageTest)
 
 
 ## 1. Components
@@ -31,15 +33,17 @@ assembly ultimately with a call to ```Assembly.Load()```.
 ![Components](components.png)
 
 
+
 ## 2. Basic Internet Explorer Interaction
 
 Opening an URL in Internet Explorer works the same way for all depth levels
-of interaction between the various components. This is the basic call sequence:
+of interaction between the various components. This is the simplified basic calling sequence:
 
 ![iInternet Explorer Sequence](internet-explorer.png)
 
 
-## 3. IIE/IEExtension in Detail
+
+## 3. IIE and IEExtension in Detail
 
 This is a slightly abbreviated description of the static structure
 for all depth levels of interaction between test engine, Internet Explorer
@@ -59,7 +63,7 @@ except some code analysis warning suppression.
 
 ### Using IIE in tests
 
-The test specialized engine itself is implemented in the ```IEExtension``` class.
+The test engine itself is implemented in the ```IEExtension``` class.
 The pure marker interface ```IIE```  is used to pull in the extension methods and  static fields 
 of the ```IEExtension``` into the respective test fixture.
 
@@ -80,3 +84,57 @@ the four beginning sections of the [Writing GUI Tests](writing.md) document, par
 to above test fixtures.
 
 ![IIE/IEExtension Pages](iie-page.png)
+
+
+
+## 4. Complete SetUp, Test, TearDown Sequence
+
+The calling sequences during a test fixture differ only with regard to whether the built-in
+storage mechanism is used or not, thus example 2. and 4. of the [Writing GUI Tests](writing.md) are
+analyzed in detail. The sequence diagrams are close-up views starting with an instantiated test fixture
+in the ```minimaltest``` projects, after the test runner has loaded them in the simplified 
+basic sequence diagram above.
+
+
+### ```minimaltest.WithRootTest```
+
+The following labyrinth covers only this little test case without any further clicks:
+
+```csharp
+[Test]
+public void NavigateWithRootTest()
+{
+    this.Navigate("/minimal/withroot.aspx");
+    Assert.That(this.Html(), Does.Contain("<h1>minimalist test setup with root</h1>"));
+}
+
+```
+
+The main objective of using ```IRootControl``` is to store a reference to the currently executing page
+in the static member of the class ```ControlRootExtension``` in the ```Page_Load``` event
+and the returned HTTP status code in the ```IEExtension```.
+
+![minimaltest.WithRootTest (without storage)](test-without-storage.png)
+
+
+### ```minimaltest.WithStorageTest```
+
+The setup for the same test case, but this time with storage, is exactly identical, and the storage 
+itself is not used at all for simplicity:
+
+```csharp
+[Test]
+public void NavigateWithStorageTest()
+{
+    this.Navigate("/minimal/withstorage.aspx");
+    Assert.That(this.Html(), Does.Contain("<h1>minimalist test setup with storage</h1>"));
+}
+```
+
+With ```IStorageControl<M>```, additionally to the reference stored in ```ControlRootExtension```
+and the returned HTTP status code in ```IEExtension```, the ```M Main``` instance (in 
+the diagram assumed to be already created in a request beforehand) is fetched from the ```Session``` 
+object of the page, eventually modified in a click event in between and at last stored in 
+the ```Session``` again.
+
+![testie.asp.calculator.CalculateTest (with storage)](test-with-storage.png)

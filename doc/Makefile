@@ -4,7 +4,9 @@ DIA = components.dia \
 	internet-explorer.dia \
 	iie-component.dia \
 	iie-test.dia \
-	iie-page.dia
+	iie-page.dia \
+	test-without-storage.dia \
+	test-with-storage.dia
 
 
 .SUFFIXES: .dia .png

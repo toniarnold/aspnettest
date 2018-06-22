@@ -46,7 +46,7 @@ namespace iie
         /// <param name="e"></param>
         protected virtual void Application_EndRequest(object sender, EventArgs e)
         {
-            IEExtension.StatusCode = HttpContext.Current.Response.StatusCode;
+            IEExtension.SetStatusCode(this.Response.StatusCode);
         }
     }
 }
