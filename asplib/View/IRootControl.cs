@@ -15,11 +15,24 @@
         /// <summary>
         /// Global reference to the root control of an application under test
         /// </summary>
-        public static System.Web.UI.Control RootControl { get; set; }
+        private static System.Web.UI.Control RootControl { get; set; }
 
+        /// <summary>
+        /// Set once the global reference to the root control of an application under test
+        /// </summary>
+        /// <param name="controlRoot"></param>
         public static void SetRoot(this IRootControl controlRoot)
         {
             ControlRootExtension.RootControl = (System.Web.UI.Control)controlRoot;
+        }
+
+        /// <summary>
+        /// Get the global reference to the root control of an application under test within tests
+        /// </summary>
+        /// <returns></returns>
+        public static System.Web.UI.Control GetRoot()
+        {
+            return ControlRootExtension.RootControl;
         }
     }
 }

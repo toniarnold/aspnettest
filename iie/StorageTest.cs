@@ -21,7 +21,7 @@ namespace iie
 
         protected IStorageControl<M> MainControl
         {
-            get { return (IStorageControl<M>)ControlRootExtension.RootControl; }
+            get { return (IStorageControl<M>)ControlRootExtension.GetRoot(); }
         }
 
         /// <summary>

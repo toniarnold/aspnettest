@@ -15,8 +15,10 @@
 # Build results
 [Dd]ebug/
 [Dd]ebugPublic/
+[Dd]ebugNoTrace/
 [Rr]elease/
 [Rr]eleases/
+[Rr]eleaseNoTrace/
 x64/
 x86/
 bld/
@@ -328,3 +330,7 @@ ASALocalRun/
 
 # MFractors (Xamarin productivity tool) working folder 
 .mfractor/
+
+# GNU Dia
+*.autosave
+

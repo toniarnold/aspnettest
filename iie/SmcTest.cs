@@ -24,7 +24,7 @@ namespace iie
 
         protected new ISmcControl<M, F, S> MainControl
         {
-            get { return (ISmcControl<M, F, S>)ControlRootExtension.RootControl; }
+            get { return (ISmcControl<M, F, S>)ControlRootExtension.GetRoot(); }
         }
     }
 }

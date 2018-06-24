@@ -6,7 +6,9 @@ DIA = components.dia \
 	iie-test.dia \
 	iie-page.dia \
 	test-without-storage.dia \
-	test-with-storage.dia
+	test-with-storage.dia \
+	interaction-default.dia \
+	interaction-withroot.dia
 
 
 .SUFFIXES: .dia .png

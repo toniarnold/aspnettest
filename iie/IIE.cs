@@ -153,7 +153,7 @@ namespace iie
         }
 
         /// <summary>
-        /// Simple setter method for the global HTTP MainControl.Response.StatusCode to check
+        /// Setter method for the global HTTP MainControl.Response.StatusCode to check
         /// </summary>
         /// <param name="statusCode"></param>
         public static void SetStatusCode(int statusCode)
@@ -175,47 +175,64 @@ namespace iie
 
         /// <summary>
         /// Click the ASP.NET control element (usually a Button instance) at the given path and wait for the response
+        /// when expectPostBack is true.
         /// </summary>
         /// <param name="inst"></param>
         /// <param name="path">Member name path to the control starting at the main control</param>
+        /// <param name="expectPostBack">Whether to expect a server request from the click</param>
         /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>
         /// <param name="delay">Optional delay time in milliseconds before clicking the element</param>
         /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete</param>
-        public static void Click(this IIE inst, string path, int expectedStatusCode = 200, bool expectPostBack = true, int delay = 0, int pause = 0)
+        public static void Click(this IIE inst, string path, bool expectPostBack = true, int expectedStatusCode = 200, int delay = 0, int pause = 0)
         {
-            var button = GetElement(inst, ControlRootExtension.RootControl, path);
-            Click(button, expectedStatusCode, expectPostBack, delay, pause);
+            var button = GetElement(inst, ControlRootExtension.GetRoot(), path);
+            Click(button, expectPostBack, expectedStatusCode, delay, pause);
         }
 
         /// <summary>
         /// Click the ASP.NET control element (usually a Button instance) directly and wait for the response
+        /// when expectPostBack is true.
         /// </summary>
         /// <param name="inst"></param>
-        /// <param name="clientId">Member name path to the control starting at the main control</param>
-        /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>        ///
+        /// <param name="control">The ASP.NET control to click on</param>
+        /// <param name="expectPostBack">Whether to expect a server request from the click</param>
+        /// <param name="expectedStatusCode">Expected StatusCode of the response</param>
         /// <param name="delay">Optional delay time in milliseconds before clicking the element</param>
         /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete</param>
-        public static void Click(this IIE inst, Control control, int expectedStatusCode = 200, bool expectPostBack = true, int delay = 0, int pause = 0)
+        public static void Click(this IIE inst, Control control, bool expectPostBack = true, int expectedStatusCode = 200, int delay = 0, int pause = 0)
         {
             var button = GetHTMLElement(inst, control.ClientID);
-            Click(button, expectedStatusCode, expectPostBack, delay, pause);
+            Click(button, expectPostBack, expectedStatusCode, delay, pause);
         }
 
         /// <summary>
         /// Click the ASP.NET control element (usually a Button instance) with the given clientID and wait for the response
+        /// when expectPostBack is true.
         /// </summary>
         /// <param name="inst"></param>
-        /// <param name="clientId">Member name path to the control starting at the main control</param>
-        /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>        ///
+        /// <param name="clientId">HTML id attribute of the element to click on</param>
+        /// <param name="expectPostBack">Whether to expect a server request from the click</param>
+        /// <param name="expectedStatusCode">Expected StatusCode of the response</param>
         /// <param name="delay">Optional delay time in milliseconds before clicking the element</param>
         /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete</param>
-        public static void ClickID(this IIE inst, string clientId, int expectedStatusCode = 200, bool expectPostBack = true, int delay = 0, int pause = 0)
+        public static void ClickID(this IIE inst, string clientId, bool expectPostBack = true, int expectedStatusCode = 200, int delay = 0, int pause = 0)
         {
             var button = GetHTMLElement(inst, clientId);
-            Click(button, expectedStatusCode, expectPostBack, delay, pause);
+            Click(button, expectPostBack, expectedStatusCode, delay, pause);
         }
 
-        public static void Select(this IIE inst, string path, string value, int expectedStatusCode = 200, bool expectPostBack = true, int delay = 0, int pause = 0)
+        /// <summary>
+        /// Select the item with the given value from a ListControl and wait for the response
+        /// when expectPostBack is true.
+        /// </summary>
+        /// <param name="inst"></param>
+        /// <param name="path">Member name path to the control starting at the main control</param>
+        /// <param name="value">value of the item to click on</param>
+        /// <param name="expectPostBack">Whether to expect a server request from the click. Defaults to false</param>
+        /// <param name="expectedStatusCode">Expected StatusCode of the response</param>
+        /// <param name="delay">Optional delay time in milliseconds before clicking the element</param>
+        /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete</param>
+        public static void Select(this IIE inst, string path, string value, bool expectPostBack = false, int expectedStatusCode = 200, int delay = 0, int pause = 0)
         {
             var list = GetControl(inst, path) as ListControl;
             if (list == null)
@@ -231,13 +248,21 @@ namespace iie
                 else if (list.Items[idx].Value == value)
                 {
                     string itemID = String.Format("{0}_{1}", list.ClientID, idx);
-                    ClickID(inst, itemID, expectedStatusCode, expectPostBack, delay, pause);
+                    ClickID(inst, itemID, expectPostBack, expectedStatusCode, delay, pause);
                     break;
                 }
             }
         }
 
-        private static void Click(IHTMLElement element, int expectedStatusCode = 200, bool expectPostBack = true, int delay = 0, int pause = 0)
+        /// <summary>
+        /// Click on the HTML element and wait for the response when expectPostBack is true.
+        /// </summary>
+        /// <param name="element">The HTML element itself</param>
+        /// <param name="expectPostBack">Whether to expect a server request from the click</param>
+        /// <param name="expectedStatusCode">Expected StatusCode of the response</param>
+        /// <param name="delay">Optional delay time in milliseconds before clicking the element</param>
+        /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete</param>
+        private static void Click(IHTMLElement element, bool expectPostBack = true, int expectedStatusCode = 200, int delay = 0, int pause = 0)
         {
             Thread.Sleep(delay);
             element.click();
@@ -257,7 +282,7 @@ namespace iie
         /// <param name="text">Text to write</param>
         public static void Write(this IIE inst, string path, string text)
         {
-            var input = GetElement(inst, ControlRootExtension.RootControl, path);
+            var input = GetElement(inst, ControlRootExtension.GetRoot(), path);
             input.setAttribute("value", text);
         }
 
@@ -269,13 +294,13 @@ namespace iie
         /// <returns></returns>
         public static Control GetControl(this IIE inst, string path)
         {
-            return GetControl(inst, ControlRootExtension.RootControl, path);
+            return GetControl(inst, ControlRootExtension.GetRoot(), path);
         }
 
         /// <summary>
         /// Get the element with the given clientID
         /// </summary>
-        /// <param name="clientID">ClientID resp. HTML id of the element</param>
+        /// <param name="clientID">ClientID resp. HTML id attribute of the element</param>
         /// <returns></returns>
         public static IHTMLElement GetHTMLElement(this IIE inst, string clientID)
         {
@@ -291,7 +316,7 @@ namespace iie
         }
 
         /// <summary>
-        /// Document type for accessing the DOM
+        /// Get the IHTMLDocument3 Document for accessing the DOM
         /// </summary>
         private static mshtml.IHTMLDocument3 Document
         {
@@ -306,11 +331,11 @@ namespace iie
         /// <returns></returns>
         private static IHTMLElement GetElement(this IIE inst, Control parentnode, string path)
         {
-            if (ControlRootExtension.RootControl == null)
+            if (ControlRootExtension.GetRoot() == null)
             {
                 throw new InvalidOperationException("IE tests must run in the w3wp.exe address space");
             }
-            var control = GetControl(inst, ControlRootExtension.RootControl, path);
+            var control = GetControl(inst, ControlRootExtension.GetRoot(), path);
             return GetHTMLElement(inst, control.ClientID);
         }
 
@@ -318,7 +343,7 @@ namespace iie
         /// Recursively walk down the path starting at the MainControl instance  and return
         /// the Control instance there.
         /// </summary>
-        /// <param name="path"></param>
+        /// <param name="path">Member name path to the control starting at the main control</param>
         /// <returns></returns>
         private static Control GetControl(this IIE inst, Control parentnode, string path)
         {
