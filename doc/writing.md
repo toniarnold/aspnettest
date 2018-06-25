@@ -1,12 +1,12 @@
 # Writing GUI tests
 
-1. [```minimaltest.DefaultTest```: A view from the outside](#minimaltest.DefaultTest-A-view-from-the-outside)
-2. [```minimaltest.WithRootTest```: Don't hunt for web controls](#minimaltest.WithRootTest-Dont-hunt-for-web-controls)
-3. [```minimaltest.WithStorageTest```: Flexible persistency for a model object](#minimaltest.WithStorageTest-Flexible-persistency-for-a-model-object)
-4. [```testie.asp.calculator.CalculateTest```: Directly access the state machine](#testie.asp.calculator.CalculateTest-Directly-access-the-state-machine)
-5. [```minimaltest.ExceptionDumpTest```: Core Dumps](#minimaltest.ExceptionDumpTest-Core-Dumps)
-6. [Database encryption](#Database-encryption)
-7. [```testie.asp.calculator.FibonacciTest```: Sharing session dumps for test case setup](#testie.asp.calculator.FibonacciTest-Sharing-session-dumps-for-test-case-setup)
+1. [```minimaltest.DefaultTest```: A view from the outside](#1-minimaltest.defaulttest-a-view-from-the-outside)
+2. [```minimaltest.WithRootTest```: Don't hunt for web controls](#2-minimaltest.withroottest-dont-hunt-for-web-controls)
+3. [```minimaltest.WithStorageTest```: Flexible persistency for a model object](#3-minimaltest.withstoragetest-flexible-persistency-for-a-model-object)
+4. [```testie.asp.calculator.CalculateTest```: Directly access the state machine](#4-testie.asp.calculator.calculatetest-directly-access-the-state-machine)
+5. [```minimaltest.ExceptionDumpTest```: Core Dumps](#5-minimaltest.exceptiondumptest-core-dumps)
+6. [Database encryption](6-#database-encryption)
+7. [```testie.asp.calculator.FibonacciTest```: Sharing session dumps for test case setup](#7-testie.asp.calculator.fibonaccitest-sharing-session-dumps-for-test-case-setup)
 
 As stated in the motivational [README.md](../README.md), this project is all
 about "teaching the app to test itself". For demonstration purposes, the

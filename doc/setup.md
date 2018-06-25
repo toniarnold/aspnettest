@@ -2,12 +2,12 @@
 
 The Visual Studio solution requires some initial tweaking to get it up and running:
 
-1. [Clone and tweak the solution](#Clone-and-tweak-the-solution)
-2. [Optional rebuild dependencies](#Optional-rebuild-dependencies)
-3. [NuGet package restore](#NuGet-Package-Restore)
-4. [SQL database creation](#SQL-Database-creation)
-5. [Running the unit tests](#Running-the-unit-tests)
-6. [Running the web application self tests](#Running-the-web-application-self-tests)
+1. [Clone and tweak the solution](#1-clone-and-tweak-the-solution)
+2. [Optional rebuild dependencies](#2-optional-rebuild-dependencies)
+3. [NuGet package restore](#3-nuget-package-restore)
+4. [SQL database creation](#4-sql-database-creation)
+5. [Running the unit tests](#5-running-the-unit-tests)
+6. [Running the web application self tests](#6-running-the-web-application-self-tests)
 7. [Let it rattle](#7-let-it-rattle)
 
 

@@ -1,17 +1,17 @@
 # Architecture
 
-1. [Components](#components)
-2. [Basic Internet Explorer Interaction](#Basic-Internet-Explorer-Interaction)
-3. [IIE and IEExtension in Detail](#IIE-and-IEExtension-in-Detail)
-   * [Component Environment of IIE](#Component-Environment-of-IIE)
-   * [Using IIE in tests](#Using-IIE-in-tests)
-   * [ASP.NET pages with IIE](#ASP.NET-pages-with-IIE)
-4. [Complete SetUp, Test, TearDown Sequence](#Complete-SetUp-Test-TearDown-Sequence)
-   * [```minimaltest.WithRootTest``` Fixture](#minimaltest.WithRootTest-Fixture)
-   * [```minimaltest.WithStorageTest``` Fixture](#minimaltest.WithStorageTest-Fixture)
-5. [Interacting with the Site](#Interacting-with-the-Site)
-   * [```minimaltest.DefaultTest``` Interaction](#minimaltest.DefaultTest-Interaction)
-   * [```minimaltest.WithRootTest``` Interaction](#minimaltest.WithRootTest-Interaction)
+1. [Components](#1-components)
+2. [Basic Internet Explorer Interaction](#2-basic-internet-explorer-interaction)
+3. [IIE and IEExtension in Detail](#3-iie-and-ieextension-in-detail)
+   * [Component Environment of IIE](#component-environment-of-iie)
+   * [Using IIE in tests](#using-iie-in-tests)
+   * [ASP.NET pages with IIE](#asp.net-pages-with-iie)
+4. [Complete SetUp, Test, TearDown Sequence](#4-complete-setup-test-teardown-sequence)
+   * [```minimaltest.WithRootTest``` Fixture](#minimaltest.withroottest-fixture)
+   * [```minimaltest.WithStorageTest``` Fixture](#minimaltest.withstoragetest-fixture)
+5. [Interacting with the Site](#5-interacting-with-the-site)
+   * [```minimaltest.DefaultTest``` Interaction](#minimaltest.defaulttest-interaction)
+   * [```minimaltest.WithRootTest``` Interaction](#minimaltest.withroottest-interaction)
 
 
 ## 1. Components
