@@ -5,7 +5,7 @@
 3. [```minimaltest.WithStorageTest```: Flexible persistency for a model object](#3-minimaltestwithstoragetest-flexible-persistency-for-a-model-object)
 4. [```testie.asp.calculator.CalculateTest```: Directly access the state machine](#4-testieaspcalculatorcalculatetest-directly-access-the-state-machine)
 5. [```minimaltest.ExceptionDumpTest```: Core Dumps](#5-minimaltestexceptiondumptest-core-dumps)
-6. [Database encryption](6-#database-encryption)
+6. [Database encryption](#6-database-encryption)
 7. [```testie.asp.calculator.FibonacciTest```: Sharing session dumps for test case setup](#7-testieaspcalculatorfibonaccitest-sharing-session-dumps-for-test-case-setup)
 
 As stated in the motivational [README.md](../README.md), this project is all
