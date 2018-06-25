@@ -8,7 +8,7 @@ The Visual Studio solution requires some initial tweaking to get it up and runni
 4. [SQL database creation](#SQL-Database-creation)
 5. [Running the unit tests](#Running-the-unit-tests)
 6. [Running the web application self tests](#Running-the-web-application-self-tests)
-7. [Let it rattle](#let-it-rattle)
+7. [Let it rattle](#7-let-it-rattle)
 
 
 ## 1. Clone and tweak the solution
