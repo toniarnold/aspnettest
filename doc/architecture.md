@@ -5,13 +5,13 @@
 3. [IIE and IEExtension in Detail](#3-iie-and-ieextension-in-detail)
    * [Component Environment of IIE](#component-environment-of-iie)
    * [Using IIE in tests](#using-iie-in-tests)
-   * [ASP.NET pages with IIE](#asp.net-pages-with-iie)
+   * [ASP.NET pages with IIE](#aspnet-pages-with-iie)
 4. [Complete SetUp, Test, TearDown Sequence](#4-complete-setup-test-teardown-sequence)
-   * [```minimaltest.WithRootTest``` Fixture](#minimaltest.withroottest-fixture)
-   * [```minimaltest.WithStorageTest``` Fixture](#minimaltest.withstoragetest-fixture)
+   * [```minimaltest.WithRootTest``` Fixture](#minimaltestwithroottest-fixture)
+   * [```minimaltest.WithStorageTest``` Fixture](#minimaltestwithstoragetest-fixture)
 5. [Interacting with the Site](#5-interacting-with-the-site)
-   * [```minimaltest.DefaultTest``` Interaction](#minimaltest.defaulttest-interaction)
-   * [```minimaltest.WithRootTest``` Interaction](#minimaltest.withroottest-interaction)
+   * [```minimaltest.DefaultTest``` Interaction](#minimaltestdefaulttest-interaction)
+   * [```minimaltest.WithRootTest``` Interaction](#minimaltestwithroottest-interaction)
 
 
 ## 1. Components
