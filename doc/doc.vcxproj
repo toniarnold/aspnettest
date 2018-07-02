@@ -26,6 +26,7 @@
     <None Include="iie-test.dia" />
     <None Include="internet-explorer.dia" />
     <None Include="Makefile" />
+    <None Include="django-selenium.md" />
     <None Include="recordings.md" />
     <None Include="setup.md" />
     <None Include="test-with-storage.dia" />

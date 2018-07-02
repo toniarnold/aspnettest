@@ -1,20 +1,20 @@
 # Architecture
 
-1. [Components](#1-components)
-2. [Basic Internet Explorer Interaction](#2-basic-internet-explorer-interaction)
-3. [IIE and IEExtension in Detail](#3-iie-and-ieextension-in-detail)
+* [Components](#components)
+* [Basic Internet Explorer Interaction](#basic-internet-explorer-interaction)
+* [IIE and IEExtension in Detail](#iie-and-ieextension-in-detail)
    * [Component Environment of IIE](#component-environment-of-iie)
    * [Using IIE in tests](#using-iie-in-tests)
    * [ASP.NET pages with IIE](#aspnet-pages-with-iie)
-4. [Complete SetUp, Test, TearDown Sequence](#4-complete-setup-test-teardown-sequence)
+* [Complete SetUp, Test, TearDown Sequence](#complete-setup-test-teardown-sequence)
    * [```minimaltest.WithRootTest``` Fixture](#minimaltestwithroottest-fixture)
    * [```minimaltest.WithStorageTest``` Fixture](#minimaltestwithstoragetest-fixture)
-5. [Interacting with the Site](#5-interacting-with-the-site)
+* [Interacting with the Site](#interacting-with-the-site)
    * [```minimaltest.DefaultTest``` Interaction](#minimaltestdefaulttest-interaction)
    * [```minimaltest.WithRootTest``` Interaction](#minimaltestwithroottest-interaction)
 
 
-## 1. Components
+## Components
 
 The various projects are distributed over the components in the dependency tree
 below. The dotted box on the left hand side confines the NUnit address space
@@ -39,7 +39,7 @@ to load the test assembly ultimately with a call to ```Assembly.Load()```.
 
 
 
-## 2. Basic Internet Explorer Interaction
+## Basic Internet Explorer Interaction
 
 Opening an URL in Internet Explorer works the same way for all depth levels of
 interaction between the various components. This is the simplified basic
@@ -49,7 +49,7 @@ calling sequence:
 
 
 
-## 3. IIE and IEExtension in Detail
+## IIE and IEExtension in Detail
 
 This is a slightly abbreviated description of the static structure for all
 depth levels of interaction between test engine, Internet Explorer and the
@@ -94,12 +94,14 @@ document, parallel to above test fixtures.
 
 
 
-## 4. Complete SetUp, Test, TearDown Sequence
+## Complete SetUp, Test, TearDown Sequence
 
 The calling sequences during a test fixture differ only with regard to whether
-the built-in storage mechanism is used or not, thus example 2. and 4. of
-[Writing GUI Tests](writing.md) are analyzed in detail. The sequence diagrams
-are close-up views starting with an instantiated test fixture in the
+the built-in storage mechanism is used or not, thus example
+[```WithRootTest```](writing.md#minimaltestwithroottest-dont-hunt-for-web-controls) and
+[```WithStorageTest```](writing.md#minimaltestwithstoragetest-flexible-persistency-for-a-model-object)
+of [Writing GUI Tests](writing.md) are analyzed in detail. The sequence
+diagrams are close-up views starting with an instantiated test fixture in the
 ```minimaltest``` projects, after the test runner has loaded them in the
 simplified basic sequence diagram above.
 
@@ -151,11 +153,13 @@ stored in the ```Session``` again.
 
 
 
-## 5. Interacting with the Site
+## Interacting with the Site
 
 Here the calling sequences differ with regard to whether there is a dependency
 on ```asplib``` for at least ```IRootControl``` to get the ```ClientID```, thus
-example 1. and 2. of [Writing GUI Tests](writing.md) are analyzed.
+example [```DefaultTest```](writing.md#minimaltestdefaulttest-a-view-from-the-outside) and
+[```WithRootTest```](writing.md#minimaltestwithroottest-dont-hunt-for-web-controls) of
+[Writing GUI Tests](writing.md) are analyzed.
 
 
 ### ```minimaltest.DefaultTest``` Interaction

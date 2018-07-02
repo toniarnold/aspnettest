@@ -1,12 +1,12 @@
 # Writing GUI tests
 
-1. [```minimaltest.DefaultTest```: A view from the outside](#1-minimaltestdefaulttest-a-view-from-the-outside)
-2. [```minimaltest.WithRootTest```: Don't hunt for web controls](#2-minimaltestwithroottest-dont-hunt-for-web-controls)
-3. [```minimaltest.WithStorageTest```: Flexible persistency for a model object](#3-minimaltestwithstoragetest-flexible-persistency-for-a-model-object)
-4. [```testie.asp.calculator.CalculateTest```: Directly access the state machine](#4-testieaspcalculatorcalculatetest-directly-access-the-state-machine)
-5. [```minimaltest.ExceptionDumpTest```: Core Dumps](#5-minimaltestexceptiondumptest-core-dumps)
-6. [Database encryption](#6-database-encryption)
-7. [```testie.asp.calculator.FibonacciTest```: Sharing session dumps for test case setup](#7-testieaspcalculatorfibonaccitest-sharing-session-dumps-for-test-case-setup)
+* [```minimaltest.DefaultTest```: A view from the outside](#minimaltestdefaulttest-a-view-from-the-outside)
+* [```minimaltest.WithRootTest```: Don't hunt for web controls](#minimaltestwithroottest-dont-hunt-for-web-controls)
+* [```minimaltest.WithStorageTest```: Flexible persistency for a model object](#minimaltestwithstoragetest-flexible-persistency-for-a-model-object)
+* [```testie.asp.calculator.CalculateTest```: Directly access the state machine](#testieaspcalculatorcalculatetest-directly-access-the-state-machine)
+* [```minimaltest.ExceptionDumpTest```: Core Dumps](#minimaltestexceptiondumptest-core-dumps)
+* [Database encryption](#database-encryption)
+* [```testie.asp.calculator.FibonacciTest```: Sharing session dumps for test case setup](#testieaspcalculatorfibonaccitest-sharing-session-dumps-for-test-case-setup)
 
 As stated in the motivational [README.md](../README.md), this project is all
 about "teaching the app to test itself". For demonstration purposes, the
@@ -21,7 +21,7 @@ itself serves as an example for putting together a rich user control with
 predictable and auto-documented behavior.
 
 
-## 1. ```minimaltest.DefaultTest```: A view from the outside
+## ```minimaltest.DefaultTest```: A view from the outside
 
 Except for the deliberately failing ```ClickControlThrowsTest()```, this
 simple setup provides no real advantage over any test scripting engine 
@@ -53,7 +53,7 @@ then clicks the first HTML link leading to the ```withroot.aspx``` page
 and verifies its title.
 
 
-## 2. ```minimaltest.WithRootTest```: Don't hunt for web controls
+## ```minimaltest.WithRootTest```: Don't hunt for web controls
 
 The second stage already implements most of the promises of the motivation
 letter by requiring the associated Web Forms resp. Web Controls to inherit from
@@ -149,7 +149,7 @@ complex dashboard-like web application project with many GridViews...
 *concrete* knowledge of the HTML ids given by ASP.NET.
 
 
-## 3. ```minimaltest.WithStorageTest```: Flexible persistency for a model object
+## ```minimaltest.WithStorageTest```: Flexible persistency for a model object
 
 Until now, test cases and assertions solely operated on the View level in a
 traditional Model-Control-View architecture. I'm using the old-fashioned
@@ -219,7 +219,7 @@ public void WriteContentTest()
 ```
 
 
-## 4. ```testie.asp.calculator.CalculateTest```: Directly access the state machine
+## ```testie.asp.calculator.CalculateTest```: Directly access the state machine
 
 The ```ISmcControl<FsmContextMain, FsmClass, StateClass>``` extension interface
 specializes ```IStorageControl<M>``` interface for directly accessing the FSM
@@ -323,7 +323,7 @@ that the result number is surrounded by whitespace (and not an arbitrary digit
 of another number).
 
 
-## 5. ```minimaltest.ExceptionDumpTest```: Core Dumps
+## ```minimaltest.ExceptionDumpTest```: Core Dumps
 
 The database storage mechanism is also enabled if another session storage is
 configured, but the ```Global.asax``` of the web application inherits from
@@ -397,7 +397,7 @@ The ```ExceptionDumpTest``` in action:
 ![ExceptionDumpTest in action](img/ExceptionDumpTest.gif)
 
 
-## 6. Database encryption
+## Database encryption
 
 Above core dumps (and database storage in general) imply a huge security issue
 in itself: Regardless how sophisticated your access control mechanism on the
@@ -422,7 +422,7 @@ curtails tedious interrogations starting with "WTF *precisely* have you done
 last week to get that alien show-stopper error we're unable to reproduce?"
 
 
-## 7. ```testie.asp.calculator.FibonacciTest```: Sharing session dumps for test case setup
+## ```testie.asp.calculator.FibonacciTest```: Sharing session dumps for test case setup
 
 *If* you had placed this share button:
 

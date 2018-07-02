@@ -99,7 +99,7 @@ namespace testie.asp.calculator
             // Partial PostBack does not trigger DocumentComplete,
             // as a fall back just wait long enough for the row to disappear
             this.Click(delete, expectPostBack: false, pause: 500);
-            Assert.That(this.GridView.Rows.Count, Is.EqualTo(this.rowCountBefore));  // as in the beginning<
+            Assert.That(this.GridView.Rows.Count, Is.EqualTo(this.rowCountBefore));  // as in the beginning
         }
 
         private GridViewRow SelectRowContainig(string substr)

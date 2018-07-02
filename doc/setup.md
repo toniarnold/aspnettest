@@ -2,16 +2,16 @@
 
 The Visual Studio solution requires some initial tweaking to get it up and running:
 
-1. [Clone and tweak the solution](#1-clone-and-tweak-the-solution)
-2. [Optional rebuild dependencies](#2-optional-rebuild-dependencies)
-3. [NuGet package restore](#3-nuget-package-restore)
-4. [SQL database creation](#4-sql-database-creation)
-5. [Running the unit tests](#5-running-the-unit-tests)
-6. [Running the web application self tests](#6-running-the-web-application-self-tests)
-7. [Let it rattle](#7-let-it-rattle)
+* [Clone and tweak the solution](#clone-and-tweak-the-solution)
+* [Optional rebuild dependencies](#optional-rebuild-dependencies)
+* [NuGet package restore](#nuget-package-restore)
+* [SQL database creation](#sql-database-creation)
+* [Running the unit tests](#running-the-unit-tests)
+* [Running the web application self tests](#running-the-web-application-self-tests)
+* [Let it rattle](#let-it-rattle)
 
 
-## 1. Clone and tweak the solution
+## Clone and tweak the solution
 
  ```git clone git@github.com:toniarnold/aspnettest.git```
 
@@ -48,7 +48,7 @@ If you don't *re*-build the solution, the generated code files are already
 present and ```nmake``` will not run.
 
 
-## 2. Optional rebuild dependencies
+## Optional rebuild dependencies
 
 For a complete rebuild from source, the Makefiles in the solution expect these additional binaries
 present in ```%PATH%```:
@@ -61,7 +61,7 @@ present in ```%PATH%```:
   the .dia diagrams in ./doc
 
 
-## 3. NuGet package restore
+## NuGet package restore
 
 The whole project heavily depends on NUnit 3, and the database persistency
 layer is built on Entity Framework 6 (EF6, with the "Database First" paradigm),
@@ -71,7 +71,7 @@ Now you should be able to build the solution with the Any CPU Debug
 configuration.
 
 
-## 4. SQL database creation
+## SQL database creation
 
 There is an SQL Server Management Studio 17 solution ```db.ssmssln```
 with the scripts, the database name is ```[ASP_DB]```. Execute these:
@@ -95,7 +95,7 @@ no big secret):
 * ```.\test\App.config``` The unit test suite outside the web applications
 
 
-## 5. Running the unit tests
+## Running the unit tests
 
 "A unit test talking to a database is not an unit test!" - well, then call it
 shallow integration tests or whatever, the point is that the NUnit test suite
@@ -109,7 +109,7 @@ don't mind the empty Internet Explorer window popping up just for the blink of
 an eye...
 
 
-## 6. Running the web application self tests
+## Running the web application self tests
 
 It seems that in Windows 10 there is no simple way to grant the web application
 pool identity the right to open Internet Explorer (on Windows 7 it could at
@@ -140,7 +140,7 @@ the problem:
 ![test failure](./img/failure.png)
 
 
-## 7. Let it rattle
+## Let it rattle
 
 Once the minimalist test setup passes without break, chances are high that the
 ```testie``` project (run from the ```asp``` startup project) will pass, too.

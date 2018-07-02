@@ -37,6 +37,7 @@
     <None Include="test-with-storage.dia">
       <Filter>Sources</Filter>
     </None>
+    <None Include="django-selenium.md" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="components.png">
