@@ -1,5 +1,5 @@
 ﻿<%@ Page Title="Calculator" Language="C#" MasterPageFile="~/asp.Master" AutoEventWireup="true" CodeBehind="default.aspx.cs" Inherits="asp._default" %>
-
+<%@ Register Assembly="iie" Namespace="iie" TagPrefix="iie" %>
 <%@ Register TagPrefix="uc" TagName="calculator" Src="~/calculator/Main.ascx" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <style>
@@ -23,8 +23,8 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <asp:ImageButton ID="testButton" runat="server" OnClick="testButton_Click"
         ImageUrl="nunit.png" CssClass="nunitimg" />
-    <asp:Label ID="testResultLabel" runat="server"
-        Text="" CssClass="testresult" />
+    <iie:TestResult ID="testResult" runat="server"
+        CssClass="testresult" />
     <uc:calculator ID="calculator" runat="server"
         StorageLinkUrl="triptych.aspx"
         StorageLinkClientID="TriptychLink" />

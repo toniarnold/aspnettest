@@ -1,4 +1,4 @@
-# Comparison to Selenium/Python
+# Comparison to Django/Python/Selenium
 
 * [Test-Driven Development with Python](#test-driven-development-with-python)
 * [The Browser with Selenium](#the-browser-with-selenium)
@@ -145,10 +145,11 @@ class NewVisitorTest(unittest.TestCase):
         )
 ```
 
-The corresponding functionality in aspnettest. Note that now the
-```setUp```/```tearDown``` methods closely resemble the corresponding static
-methods implemented in ```IEExtension``` - except the ```DocumentComplete```
-handler which will be discussed later:
+Below is the corresponding functionality in aspnettest. Note that the
+```setUp```/```tearDown``` methods from the Diango unit test closely resemble
+the corresponding static methods implemented in ```IEExtension``` - except the
+```DocumentComplete``` handler which will be discussed
+[later](#implicit-and-explicit-waits):
 
 ```csharp
 public static class IEExtension
@@ -202,7 +203,7 @@ public void ThrowRetrieveDumpTest()
 
 The corresponding method to
 ```inputbox.send_keys('Buy peacock feathers')``` is not even made public, but
-are wrapped in the ```Write``` method:
+is wrapped in the ```Write``` method:
 
 ```csharp
 public static void Write(this IIE inst, string path, string text)
@@ -259,11 +260,13 @@ class ItemModelTest(TestCase):
         self.assertEqual(second_saved_item.text, 'Item the second')
 ```
 
-The [lists/tests.py](https://github.com/hjwp/book-example/blob/chapter_post_and_database/lists/tests.py) 
-example in fact uses a mixture between functional and unit tests: The ```Item```
-class in this example is the ORM object which operates out of the context of
-the web application processing the POST request, thus reading from the database
-in the context of the test framework:
+The
+[lists/tests.py](https://github.com/hjwp/book-example/blob/chapter_post_and_database/lists/tests.py)
+example in fact uses a mixture between functional and unit tests: The
+```Item``` class in this example is the ORM object which operates out of the
+context of the web application processing the POST request, thus reading items
+from the database written in the web application context in the isolated
+context of the test framework:
 
 ```python
 def test_can_save_a_POST_request(self):

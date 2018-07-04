@@ -25,17 +25,15 @@ namespace asp
         {
             var testRunner = new TestRunner(this.Request.Url.Port);
             testRunner.Run("testie");
+            this.testResult.ResultString = testRunner.ResultString;
 
             if (testRunner.Passed)
             {
-                this.testResultLabel.Text = testRunner.PassedString;
+                this.testResult.Text = testRunner.PassedString;
             }
             else
             {
-                this.Response.Clear();
-                this.Response.AddHeader("Content-Type", "application/xml");
-                this.Response.Write(testRunner.ResultString);
-                this.Response.End();
+                this.testResult.RenderTestResult();
             }
         }
     }

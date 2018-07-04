@@ -1,4 +1,5 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="default.aspx.cs" Inherits="minimal._default" %>
+<%@ Register Assembly="iie" Namespace="iie" TagPrefix="iie" %>
 
 <!DOCTYPE html>
 
@@ -48,8 +49,8 @@
             </ul>
             <asp:ImageButton ID="testButton" runat="server" OnClick="testButton_Click"
                 ImageUrl="nunit.png" CssClass="nunitimg" />
-            <asp:Label ID="testResultLabel" runat="server"
-                Text="" CssClass="testresult" />
+            <iie:TestResult ID="testResult" runat="server"
+                CssClass="testresult" />
         </div>
     </form>
 </body>

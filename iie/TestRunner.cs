@@ -75,7 +75,7 @@ namespace iie
         /// <param name="testproject"></param>
         public void Run(string testproject)
         {
-            // To avoid a cyclic project dependency, the dll must be read from an explict path in the filesystem
+            // To avoid a cyclic project dependency, the dll must be read from an explicit path in the filesystem
             if (HttpContext.Current == null)
             {
                 throw new InvalidOperationException("IE tests must run in the w3wp.exe address space");
