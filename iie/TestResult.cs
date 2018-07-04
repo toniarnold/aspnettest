@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Web.UI.WebControls;
 
 namespace iie
@@ -21,7 +17,7 @@ namespace iie
 
         public string ResultString
         {
-            get { return (string)this.ViewState["RESULTSTRING"];  }
+            get { return (string)this.ViewState["RESULTSTRING"]; }
             set { this.ViewState["RESULTSTRING"] = value; }
         }
 
