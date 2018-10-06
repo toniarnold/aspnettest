@@ -41,7 +41,7 @@ by analyzing the result HTML after a click on an element:
 [Test]
 public void ClickWithrootTest()
 {
-    this.Navigate("/minimal/default.aspx");
+    this.Navigate("/minimal.webforms/default.aspx");
     Assert.That(this.Html(), Does.Contain("<h1>minimalist test setup</h1>"));
     this.ClickID("withroot-link");
     Assert.That(this.Html(), Does.Contain("<h1>minimalist test setup with root</h1>"));
@@ -102,7 +102,7 @@ The condensed example test case:
 [Test]
 public void WriteContentTest()
 {
-    this.Navigate("/minimal/withroot.aspx");
+    this.Navigate("/minimal.webforms/withroot.aspx");
     this.Write("contentTextBox", "a first content line");
     this.Click("submitButton");
     Assert.That(((BulletedList)this.GetControl("contentList")).Items.Count, Is.EqualTo(1));
@@ -298,7 +298,7 @@ file:
 [Test]
 public void SqrtTest()
 {
-    this.Navigate("/asp/default.aspx");
+    this.Navigate("/asp.webforms/default.aspx");
     this.Click("footer.enterButton");
     Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
     this.Write("enter.operandTextBox", "49");
@@ -357,7 +357,7 @@ public class ExceptionDumpTest : StorageTest<ContentStorage>
     [Test]
     public void ThrowRetrieveDumpTest()
     {
-        this.Navigate("/minimal/withstorage.aspx");
+        this.Navigate("/minimal.webforms/withstorage.aspx");
         this.Write("contentTextBox", "a benign content line");
         this.Click("submitButton");
         this.AssertBenignLine();
@@ -491,7 +491,7 @@ class FibonacciTest : CalculatorTestBase
     public void VerifyFibonacciSums()
     {
         // Load the stored canonical test case
-        this.Navigate(string.Format("/asp/default.aspx?session={0}",
+        this.Navigate(string.Format("/asp.webforms/default.aspx?session={0}",
             ConfigurationManager.AppSettings["testie.asp.calculator.FibonacciTest"]));
         Assert.That(this.Stack.Count, Is.GreaterThan(0));   // non-empty number list
         Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));

@@ -59,7 +59,7 @@ public void SqrtTest()
 [Test]
 public void SqrtTest()
 {
-	this.Navigate("/asp/default.aspx");
+	this.Navigate("/asp.webforms/default.aspx");
 	this.Click("footer.enterButton");
 	Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
 	this.Write("enter.operandTextBox", "49");
