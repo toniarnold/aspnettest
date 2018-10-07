@@ -22,6 +22,8 @@ namespace iie
         {
             Configuration = config;
             Environment = env;
+
+            this.Configure(Configuration.GetValue<int>("RequestTimeout"));
         }
 
         /// <summary>

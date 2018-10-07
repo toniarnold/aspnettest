@@ -40,7 +40,7 @@ namespace iie
         public static int Port { get; set; }
 
         // Configuration
-        private static int millisecondsTimeout =
+        private static int requestTimeoutMS =
             String.IsNullOrWhiteSpace(ConfigurationManager.AppSettings["RequestTimeout"]) ? 1000 :
             int.Parse(ConfigurationManager.AppSettings["RequestTimeout"]) * 1000;
 
@@ -138,7 +138,7 @@ namespace iie
         public static void NavigateURL(this IIE inst, string url, int expectedStatusCode = 200)
         {
             ie.Navigate2(url);
-            are.WaitOne(millisecondsTimeout);
+            are.WaitOne(requestTimeoutMS);
             Assert.That(IEExtension.StatusCode, Is.EqualTo(expectedStatusCode));
         }
 
@@ -268,7 +268,7 @@ namespace iie
             element.click();
             if (expectPostBack)
             {
-                are.WaitOne(millisecondsTimeout);
+                are.WaitOne(requestTimeoutMS);
             }
             Thread.Sleep(pause);
             Assert.That(IEExtension.StatusCode, Is.EqualTo(expectedStatusCode));

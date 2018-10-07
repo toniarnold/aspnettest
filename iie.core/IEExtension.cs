@@ -53,9 +53,9 @@ namespace iie
         /// </summary>
         /// <param name="url"></param>
         /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>
-        public static void Navigate(this IIE inst, string path, int expectedStatusCode = 200)
+        public static void Navigate(this IIE inst, string path, int expectedStatusCode = 200, int delay = 0, int pause = 0)
         {
-            IEExtensionBase.Navigate(path, expectedStatusCode);
+            IEExtensionBase.Navigate(path, expectedStatusCode, delay, pause);
         }
 
         /// <summary>
@@ -64,9 +64,9 @@ namespace iie
         /// <param name="inst"></param>
         /// <param name="url"></param>
         /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>
-        public static void NavigateURL(this IIE inst, string url, int expectedStatusCode = 200)
+        public static void NavigateURL(this IIE inst, string url, int expectedStatusCode = 200, int delay = 0, int pause = 0)
         {
-            IEExtensionBase.NavigateURL(url, expectedStatusCode);
+            IEExtensionBase.NavigateURL(url, expectedStatusCode, delay, pause);
         }
 
         /// <summary>

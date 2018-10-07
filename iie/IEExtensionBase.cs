@@ -23,10 +23,14 @@ namespace iie
         /// </summary>
         public static int StatusCode { get; set; }
 
+        /// <summary>
+        /// Timeout in milliseconds to wait for a HTTP response.
+        /// </summary>
+        public static int RequestTimeoutMS { get;  set; }
+
         // Internet Explorer
         private static SHDocVw.InternetExplorer ie;
         private static AutoResetEvent are = new AutoResetEvent(false);
-        private static int millisecondsTimeout;
 
         /// <summary>
         /// [OneTimeSetUp]
@@ -63,10 +67,10 @@ namespace iie
         /// </summary>
         /// <param name="url"></param>
         /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>
-        public static void Navigate(string path, int expectedStatusCode = 200)
+        public static void Navigate(string path, int expectedStatusCode = 200, int delay = 0, int pause = 0)
         {
             Trace.Assert(path.StartsWith("/"), "path must be absolute");
-            NavigateURL(String.Format("http://127.0.0.1:{0}{1}", Port, path), expectedStatusCode);
+            NavigateURL(String.Format("http://127.0.0.1:{0}{1}", Port, path), expectedStatusCode, delay, pause);
         }
 
         /// <summary>
@@ -74,10 +78,12 @@ namespace iie
         /// </summary>
         /// <param name="url"></param>
         /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>
-        public static void NavigateURL(string url, int expectedStatusCode = 200)
+        public static void NavigateURL(string url, int expectedStatusCode = 200, int delay = 0, int pause = 0)
         {
+            Thread.Sleep(delay);
             ie.Navigate2(url);
-            are.WaitOne(millisecondsTimeout);
+            are.WaitOne(RequestTimeoutMS);
+            Thread.Sleep(pause);
             Assert.That(StatusCode, Is.EqualTo(expectedStatusCode));
         }
 
@@ -126,7 +132,7 @@ namespace iie
             element.click();
             if (expectPostBack)
             {
-                are.WaitOne(millisecondsTimeout);
+                are.WaitOne(RequestTimeoutMS);
             }
             Thread.Sleep(pause);
             Assert.That(StatusCode, Is.EqualTo(expectedStatusCode));

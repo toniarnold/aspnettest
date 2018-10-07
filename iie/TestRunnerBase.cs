@@ -14,6 +14,7 @@ namespace iie
         {
             IEExtensionBase.Port = port;
         }
+
         protected XmlNode result;
         protected List<string> reports = new List<string>();
 
@@ -67,6 +68,15 @@ namespace iie
         public void OnTestEvent(string report)
         {
             this.reports.Add(report);
+        }
+
+        /// <summary>
+        /// Directly configure the test engine without dependency on a specific
+        /// configuration framework.
+        /// </summary>
+        protected void Configure(int requestTimeout)
+        {
+            IEExtensionBase.RequestTimeoutMS = requestTimeout * 1000;
         }
     }
 }
