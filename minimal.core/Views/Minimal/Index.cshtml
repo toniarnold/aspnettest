@@ -45,6 +45,6 @@
     <a asp-controller="Minimal" asp-action="Test">
         <img src="~/nunit.png" class="nunitimg" />
     </a>
-    <div class="testresult">@Html.Raw(ViewBag.TestResult)</div>
+    <a class="testresult" asp-controller="Minimal" asp-action="Result">@Html.Raw(ViewBag.TestResult)</a>
 </body>
 </html>

@@ -26,8 +26,12 @@ namespace minimal.core.Controllers
         {
             return View();
         }
-        public IActionResult Test()
 
+        /// <summary>
+        /// Run the test suite
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult Test()
         {
             var testRunner = new TestRunner(Configuration, Environment, (int)this.Request.Host.Port);
             testRunner.Run("minimaltest.core");
@@ -38,10 +42,19 @@ namespace minimal.core.Controllers
             }
             else
             {
-                return Content(testRunner.ResultString, "application/xml");
+                return this.Result();
             }
 
             return View("index");
+        }
+
+        /// <summary>
+        /// View the test result as XML page
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult Result()
+        {
+            return Content(TestRunner.ResultString, "application/xml");
         }
     }
 }

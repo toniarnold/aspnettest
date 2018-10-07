@@ -61,7 +61,7 @@ namespace iie
                     builder.SelectWhere(where);
                     filter = builder.GetFilter();   // returns TestFilter.Empty when no TestFilterWhere is given
                 }
-                this.result = runner.Run(this, filter);
+                TestRunnerBase.Result = runner.Run(this, filter);
             }
         }
     }

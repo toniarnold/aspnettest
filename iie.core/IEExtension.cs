@@ -50,6 +50,8 @@ namespace iie
         /// This requires changing the binding in .\.vs\config\applicationhost.config to
         /// <binding protocol="http" bindingInformation="*:51333:127.0.0.1" />
         /// Wait for the response for AppSettings["RequestTimeout"] seconds.
+        /// <param name="delay">Optional delay time in milliseconds before clicking the element</param>
+        /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete</param>
         /// </summary>
         /// <param name="url"></param>
         /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>
@@ -61,12 +63,25 @@ namespace iie
         /// <summary>
         /// Asynchronously issue a GET request for the URL.
         /// </summary>
-        /// <param name="inst"></param>
         /// <param name="url"></param>
         /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>
         public static void NavigateURL(this IIE inst, string url, int expectedStatusCode = 200, int delay = 0, int pause = 0)
         {
             IEExtensionBase.NavigateURL(url, expectedStatusCode, delay, pause);
+        }
+
+        /// <summary>
+        /// Click the ASP.NET control element (usually a Button instance) with the given clientID and wait for the response
+        /// when expectPostBack is true.
+        /// </summary>
+        /// <param name="clientId">HTML id attribute of the element to click on</param>
+        /// <param name="expectPostBack">Whether to expect a server request from the click</param>
+        /// <param name="expectedStatusCode">Expected StatusCode of the response</param>
+        /// <param name="delay">Optional delay time in milliseconds before clicking the element</param>
+        /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete</param>
+        public static void ClickID(this IIE inst, string clientId, bool expectPostBack = true, int expectedStatusCode = 200, int delay = 0, int pause = 0)
+        {
+            IEExtensionBase.ClickID(clientId, expectPostBack, expectedStatusCode, delay, pause);
         }
 
         /// <summary>

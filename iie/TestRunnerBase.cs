@@ -13,22 +13,26 @@ namespace iie
         public TestRunnerBase(int port)
         {
             IEExtensionBase.Port = port;
+            // Initialize static fields when creating a new instance
+            Reports = new List<string>();
+            Result = null;
         }
 
-        protected XmlNode result;
-        protected List<string> reports = new List<string>();
+        protected static List<string> Reports { get; set; }
+        protected static XmlNode Result { get; set; }
 
         /// <summary>
-        /// Return the result as XML string
+        /// Return the result as XML string, static for later retrieval after
+        /// the tests ran
         /// </summary>
-        public string ResultString
+        public static string ResultString
         {
             get
             {
                 using (var stringwriter = new StringWriter())
                 using (var xmlwriter = new XmlTextWriter(stringwriter))
                 {
-                    this.result.WriteTo(xmlwriter);
+                    Result.WriteTo(xmlwriter);
                     return stringwriter.ToString();
                 }
             }
@@ -41,7 +45,7 @@ namespace iie
         {
             get
             {
-                return this.result.Attributes["result"].Value == "Passed";
+                return Result.Attributes["result"].Value == "Passed";
             }
         }
 
@@ -53,21 +57,16 @@ namespace iie
             get
             {
                 return string.Format("Passed<br/>Tests: {0}<br/>Asserts: {1}<br/>Duration: {2}",
-                    this.result.Attributes["total"].Value,
-                    this.result.Attributes["asserts"].Value,
-                    this.result.Attributes["duration"].Value
+                    Result.Attributes["total"].Value,
+                    Result.Attributes["asserts"].Value,
+                    Result.Attributes["duration"].Value
                     );
             }
         }
 
-        public List<string> Reports
-        {
-            get { return this.reports; }
-        }
-
         public void OnTestEvent(string report)
         {
-            this.reports.Add(report);
+            Reports.Add(report);
         }
 
         /// <summary>

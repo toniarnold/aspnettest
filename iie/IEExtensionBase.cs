@@ -32,10 +32,6 @@ namespace iie
         private static SHDocVw.InternetExplorer ie;
         private static AutoResetEvent are = new AutoResetEvent(false);
 
-        /// <summary>
-        /// [OneTimeSetUp]
-        /// Start Internet Explorer and set up events
-        /// </summary>
         public static void SetUpIE()
         {
             Trace.Assert(ie == null, "Only one SHDocVw.InternetExplorer instance allowed");
@@ -45,10 +41,6 @@ namespace iie
             ie.DocumentComplete += new SHDocVw.DWebBrowserEvents2_DocumentCompleteEventHandler(OnDocumentComplete);
         }
 
-        /// <summary>
-        /// [OneTimeTearDown]
-        /// Quit Internet Explorer
-        /// </summary>
         public static void TearDownIE()
         {
             if (ie != null)
@@ -58,26 +50,12 @@ namespace iie
             }
         }
 
-        /// <summary>
-        /// Asynchronously issue a GET request for the specified absolute path at
-        /// http://127.0.0.1 as "localhost" seems to never reach OnDocumentComplete.
-        /// This requires changing the binding in .\.vs\config\applicationhost.config to
-        /// <binding protocol="http" bindingInformation="*:51333:127.0.0.1" />
-        /// Wait for the response for AppSettings["RequestTimeout"] seconds.
-        /// </summary>
-        /// <param name="url"></param>
-        /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>
         public static void Navigate(string path, int expectedStatusCode = 200, int delay = 0, int pause = 0)
         {
             Trace.Assert(path.StartsWith("/"), "path must be absolute");
             NavigateURL(String.Format("http://127.0.0.1:{0}{1}", Port, path), expectedStatusCode, delay, pause);
         }
 
-        /// <summary>
-        /// Asynchronously issue a GET request for the URL.
-        /// </summary>
-        /// <param name="url"></param>
-        /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>
         public static void NavigateURL(string url, int expectedStatusCode = 200, int delay = 0, int pause = 0)
         {
             Thread.Sleep(delay);
@@ -88,7 +66,7 @@ namespace iie
         }
 
         /// <summary>
-        /// Release the lock on http requests
+        /// Release the lock on HTTP requests
         /// </summary>
         /// <param name="pDisp"></param>
         /// <param name="URL"></param>
@@ -106,16 +84,44 @@ namespace iie
             StatusCode = statusCode;
         }
 
-        /// <summary>
-        /// Get the HTML document body of the current document in Internet Explorer
-        /// </summary>
-        /// <param name="inst"></param>
-        /// <returns></returns>
+
         public static string Html()
         {
             var doc = (MSHTML.IHTMLDocument2)ie.Document;
             var html = doc.body.outerHTML;
             return html;
+        }
+
+        public static void ClickID(string clientId, bool expectPostBack = true, int expectedStatusCode = 200, int delay = 0, int pause = 0)
+        {
+            var button = GetHTMLElement(clientId);
+            Click(button, expectPostBack, expectedStatusCode, delay, pause);
+        }
+
+        /// <summary>
+        /// Get the element with the given clientID
+        /// </summary>
+        /// <param name="clientID">ClientID resp. HTML id attribute of the element</param>
+        /// <returns></returns>
+        private static IHTMLElement GetHTMLElement(string clientID)
+        {
+            var element = Document.getElementById(clientID);
+            if (element == null)
+            {
+                throw new Exception(String.Format("HTML element with ClientID='{0}' not found", clientID));
+            }
+            else
+            {
+                return element;
+            }
+        }
+
+        /// <summary>
+        /// Get the IHTMLDocument3 Document for accessing the DOM
+        /// </summary>
+        private static MSHTML.IHTMLDocument3 Document
+        {
+            get { return (MSHTML.IHTMLDocument3)ie.Document; }
         }
 
         /// <summary>
