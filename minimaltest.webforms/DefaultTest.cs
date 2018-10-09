@@ -34,7 +34,7 @@ namespace minimaltest
         }
 
         [Test]
-        public void ClickWithrootTest()
+        public void ClickWithRootTest()
         {
             this.Navigate("/minimal.webforms/default.aspx");
             Assert.That(this.Html(), Does.Contain("<h1>minimalist test setup</h1>"));

@@ -92,10 +92,18 @@ namespace iie
             return html;
         }
 
+
         public static void ClickID(string clientId, bool expectPostBack = true, int expectedStatusCode = 200, int delay = 0, int pause = 0)
         {
             var button = GetHTMLElement(clientId);
             Click(button, expectPostBack, expectedStatusCode, delay, pause);
+        }
+
+
+        public static void WriteID(string clientId, string text)
+        {
+            var input = GetHTMLElement(clientId);
+            input.setAttribute("value", text);
         }
 
         /// <summary>

@@ -34,16 +34,16 @@ namespace minimaltest
         }
 
         [Test]
-        public void ClickWithrootTest()
+        public void ClickWithStaticControllerTest()
         {
             this.Navigate("/");
             Assert.That(this.Html(), Does.Contain("<h1>minimalist test setup</h1>"));
-            this.ClickID("withroot-link");
-            Assert.That(this.Html(), Does.Contain("<h1>minimalist test setup with root</h1>"));
+            this.ClickID("withstatic-link");
+            Assert.That(this.Html(), Does.Contain("<h1>minimalist test setup with static controller</h1>"));
         }
 
         [Test]
-        public void ClickWithstorageTest()
+        public void ClickWithStorageTest()
         {
             this.Navigate("/");
             this.ClickID("withstorage-link");

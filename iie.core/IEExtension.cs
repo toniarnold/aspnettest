@@ -71,7 +71,7 @@ namespace iie
         }
 
         /// <summary>
-        /// Click the ASP.NET control element (usually a Button instance) with the given clientID and wait for the response
+        /// Click the ASP.NET control element (usually a Button) with the given clientID and wait for the response
         /// when expectPostBack is true.
         /// </summary>
         /// <param name="clientId">HTML id attribute of the element to click on</param>
@@ -82,6 +82,17 @@ namespace iie
         public static void ClickID(this IIE inst, string clientId, bool expectPostBack = true, int expectedStatusCode = 200, int delay = 0, int pause = 0)
         {
             IEExtensionBase.ClickID(clientId, expectPostBack, expectedStatusCode, delay, pause);
+        }
+
+        /// <summary>
+        /// Write into the ASP.NET control (usually a Textbox) with the given clientID
+        /// </summary>
+        /// <param name="inst"></param>
+        /// <param name="clientId">HTML id attribute of the element to click on</param>
+        /// <param name="text">Text to write</param>
+        public static void WriteID(this IIE inst, string clientId, string text)
+        {
+            IEExtensionBase.WriteID(clientId, text);
         }
 
         /// <summary>
