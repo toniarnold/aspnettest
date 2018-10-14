@@ -10,6 +10,12 @@
         h1 {
             font-size: 1.25em;
         }
+
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
     </style>
 </head>
 <body>

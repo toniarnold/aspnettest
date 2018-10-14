@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using asplib.core.Controllers;
-using minimal.core.Models;
+using asplib.Controllers;
+using minimal.Models;
 
-namespace minimal.core.Controllers
+namespace minimal.Controllers
 {
     public class WithStaticController : Controller, IStaticController
     {

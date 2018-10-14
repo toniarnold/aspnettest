@@ -1,5 +1,5 @@
 ﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-@using minimal.core.Models
+@using minimal.Models
 @model WithStaticViewModel
 <!DOCTYPE html>
 <html>
@@ -9,6 +9,12 @@
     <style>
         h1 {
             font-size: 1.25em;
+        }
+
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
         }
     </style>
 </head>
@@ -25,5 +31,5 @@
         </ol>
         <input type="hidden" name="ContentString" value="@Model.ContentString" />
     </form>
-    </body>
+</body>
 </html>

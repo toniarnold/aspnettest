@@ -6,15 +6,19 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Mvc.Controllers;
 using iie;
+using asplib.Controllers;
 
-namespace minimal.core
+namespace minimal
 {
     public class Startup
     {
         public IConfigurationRoot Configuration { get; }
         public IHostingEnvironment Environment { get; }
+        public IHttpContextAccessor HttpContext { get; }
 
         public Startup(IHostingEnvironment env)
         {
@@ -29,10 +33,13 @@ namespace minimal.core
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddMvc();
+            services.AddMvc()
+                    .AddControllersAsServices();
+            services.Replace(ServiceDescriptor.Transient<IControllerActivator, StorageControllerActivator>());
             services.AddOptions();
             services.AddSingleton(Configuration);
             services.AddSingleton(Environment);
+            services.AddHttpContextAccessor();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)

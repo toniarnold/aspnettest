@@ -9,14 +9,14 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 
-namespace minimal.core.Controllers
+namespace minimal.Controllers
 {
     public class MinimalController : Controller
     {
         private IConfigurationRoot Configuration { get; }
         private IHostingEnvironment Environment { get; }
 
-        public MinimalController(IConfigurationRoot config, IHostingEnvironment env)
+        public MinimalController(IConfigurationRoot config, IHostingEnvironment env, IHttpContextAccessor http)
         {
             Configuration = config;
             Environment = env;

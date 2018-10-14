@@ -11,10 +11,6 @@
             font-size: 1.25em;
         }
 
-        a {
-            text-decoration: none;
-        }
-
         ul {
             list-style-type: none;
             margin: 0;

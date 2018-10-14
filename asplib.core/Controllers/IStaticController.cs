@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text;
 
-namespace asplib.core.Controllers
+namespace asplib.Controllers
 {
     /// <summary>
     /// Extension interface for a Control to access the SetRoot() method
@@ -39,5 +39,6 @@ namespace asplib.core.Controllers
         {
             return StaticControllerExtension.Controller;
         }
+
     }
 }

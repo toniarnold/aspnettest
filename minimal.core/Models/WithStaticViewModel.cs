@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 
-namespace minimal.core.Models
+namespace minimal.Models
 {
     public class WithStaticViewModel
     {

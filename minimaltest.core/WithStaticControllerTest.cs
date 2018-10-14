@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Text;
 using iie;
 using NUnit.Framework;
-using minimal.core.Controllers;
-using minimal.core.Models;
+using minimal.Controllers;
+using minimal.Models;
     
 namespace minimaltest
 {
