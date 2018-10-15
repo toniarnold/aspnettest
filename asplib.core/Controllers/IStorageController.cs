@@ -43,7 +43,7 @@ namespace asplib.Controllers
         /// </summary>
         /// <param name="inst"></param>
         /// <returns></returns>
-        public static string ViewStateInput(this IStorageController inst)
+        public static string ViewState(this IStorageController inst)
         {
             byte[] bytes;
             if (inst is SerializableController)
@@ -54,7 +54,7 @@ namespace asplib.Controllers
             {
                 bytes = Serialization.Serialize(inst);  // POCO Controller
             }
-            return string.Format("<input type='hidden' name='{0}' value='{1}'/>",
+            return string.Format("{0}:{1}",
                             GetStorageID(inst),
                             Convert.ToBase64String(bytes));
         }
@@ -65,7 +65,7 @@ namespace asplib.Controllers
         /// <param name="inst"></param>
         public static void AddViewState(this IStorageController inst)
         {
-            inst.ViewBag.ViewStateInput = ViewStateInput(inst);
+            inst.ViewBag.ViewState = ViewState(inst);
         }
     }
 }

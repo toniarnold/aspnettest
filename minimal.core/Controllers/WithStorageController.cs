@@ -8,7 +8,6 @@ using minimal.Models;
 
 namespace minimal.Controllers
 {
-    [Serializable]
     public class WithStorageController : SerializableController
     {
         private List<string> ContentList = new List<string>();
@@ -29,7 +28,7 @@ namespace minimal.Controllers
         {
             this.ContentList.Add(model.ContentTextBox);
             model.ContentTextBox = String.Empty; // never updated without RedirectToAction
-            model.Content = this.ContentList;   // persistent, transiently assigned to the transient model
+            model.Content = this.ContentList;   // persistent object transiently assigned to the model
             return View("Index", model);
         }
     }

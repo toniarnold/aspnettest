@@ -1,4 +1,5 @@
 ﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@addTagHelper *, asplib.core
 @using minimal.Models
 @model WithStorageViewModel
 <!DOCTYPE html>
@@ -29,7 +30,7 @@
                 <li>@item</li>
             }
         </ol>
-        @Html.Raw(ViewBag.ViewStateInput)
+        <input viewstate="@ViewBag.ViewState" />
     </form>
 </body>
 </html>
