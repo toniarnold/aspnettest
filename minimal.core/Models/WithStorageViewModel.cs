@@ -6,12 +6,14 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using asplib.Controllers;
 using minimal.Models;
+using asplib.Model;
 
 namespace minimal.Models
 {
     [Serializable]
     public class WithStorageViewModel
     {
+        public Storage Storage { get; set; }
         public string ContentTextBox { get; set; }
 
         [BindNever]

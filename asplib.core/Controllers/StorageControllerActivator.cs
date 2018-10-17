@@ -13,16 +13,23 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.AspNetCore.Http;
 using asplib.Model;
+using System.Linq;
+using System.Reflection;
+
 
 namespace asplib.Controllers
 {
     public class StorageControllerActivator : IControllerActivator
     {
-        private IHttpContextAccessor Http { get; }
+        private IHttpContextAccessor httpContextAccessor;
+        private HttpContext HttpContext
+        {
+            get { return this.httpContextAccessor.HttpContext; }
+        }
 
         public StorageControllerActivator(IHttpContextAccessor http)
         {
-            Http = http;
+            this.httpContextAccessor = http;
         }
 
         /// <summary>
@@ -37,37 +44,61 @@ namespace asplib.Controllers
             var controllerType = controllerTypeInfo.AsType();
             var storageID = ControlStorageExtension.GetStorageID(controllerTypeInfo.Name);
 
-            if (Http.HttpContext.Request.Method == "POST" &&
-                Http.HttpContext.Request.Form.ContainsKey(storageID))
+            if (this.HttpContext.Request.Method == "POST" &&
+                this.HttpContext.Request.Form.ContainsKey(storageID))
             {
                 // input type=hidden from @Html.Raw(ViewBag.ViewStateInput)
-                var controllerString = Http.HttpContext.Request.Form[storageID];
+                var controllerString = this.HttpContext.Request.Form[storageID];
                 var bytes = Convert.FromBase64String(controllerString);
-                if (controllerTypeInfo.IsSubclassOf(typeof(SerializableController)))
-                {
-                    // Instantiate and populate own fields with the serialized objects
-                    controller = actionContext.HttpContext.RequestServices.GetService(controllerType);
-                    ((SerializableController)controller).Deserialize(bytes);
-                }
-                else if (!controllerTypeInfo.IsSubclassOf(typeof(Controller)))
-                {
-                    // POCO Controller is directly instantiated
-                    controller = Serialization.Deserialize(bytes); 
-                }
-                else
-                {
-                    throw new ArgumentException(String.Format(
-                        "Found @Html.Raw(ViewBag.ViewStateInput), but {0} is neither a POCO Controller nor a subclass of SerializableController", controllerType.Name));
-                }
+                controller = DeserializeController(actionContext, controllerTypeInfo, controllerType, bytes);
+            }
+            else if (this.HttpContext.Session.Keys.Where(k => k == storageID).Any())
+            {
+                // Session
+                var bytes = this.HttpContext.Session.Get(storageID);
+                controller = DeserializeController(actionContext, controllerTypeInfo, controllerType, bytes);
             }
             else
             {
-                // ASP.NET Core implementation, just return the controller
+                // ASP.NET Core implementation, , no persistence, just return the controller
                 controller = actionContext.HttpContext.RequestServices.GetService(controllerType);
             }
 
             return controller;
         }
+
+        /// <summary>
+        /// Controller deserialization, either shallow (SerializableController) or deep (POCO controller)
+        /// </summary>
+        /// <param name="actionContext"></param>
+        /// <param name="controllerTypeInfo"></param>
+        /// <param name="controllerType"></param>
+        /// <param name="bytes"></param>
+        /// <returns></returns>
+        internal static object DeserializeController(ControllerContext actionContext, TypeInfo controllerTypeInfo, Type controllerType, byte[] bytes)
+        {
+            object controller;
+            if (controllerTypeInfo.IsSubclassOf(typeof(SerializableController)))
+            {
+                // Instantiate and populate own fields with the serialized objects
+                controller = actionContext.HttpContext.RequestServices.GetService(controllerType);
+                ((SerializableController)controller).Deserialize(bytes);
+            }
+            else if (!controllerTypeInfo.IsSubclassOf(typeof(Controller)))
+            {
+                // POCO Controller is directly instantiated, replacing the instance created by the framework
+                controller = Serialization.Deserialize(bytes);
+            }
+            else
+            {
+                throw new ArgumentException(String.Format(
+                    "{0} is neither a SerializableController nor a POCO controller", 
+                    controllerType.Name));
+            }
+
+            return controller;
+        }
+
 
         /// <summary>
         /// Handle IDisposable Controllers

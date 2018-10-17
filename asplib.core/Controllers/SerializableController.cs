@@ -6,6 +6,10 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using asplib.Model;
 using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Configuration;
+using System.Linq;
+
 
 [assembly: InternalsVisibleTo("test.core")]
 namespace asplib.Controllers
@@ -16,6 +20,18 @@ namespace asplib.Controllers
     /// </summary>
     public class SerializableController : Controller, IStorageController
     {
+        public IConfigurationRoot Configuration { get { return this.configuration; } }
+        [NonSerialized]
+        private IConfigurationRoot configuration;
+        public Storage? SessionStorage { get; set; }
+
+        public SerializableController() { } // NUnit
+        public SerializableController(IConfigurationRoot configuration) : base()
+        {
+            this.configuration = configuration;
+            this.SetController();
+        }
+
         /// <summary>
         /// Serialize the controller shallowly.
         /// </summary>
@@ -40,7 +56,19 @@ namespace asplib.Controllers
 
         public override void OnActionExecuted(ActionExecutedContext context)
         {
-            this.AddViewState();
+            switch(this.GetStorage())
+            {
+                case Storage.ViewState:
+                    this.AddViewState();
+                    break;
+                case Storage.Session:
+                    this.AddSession();
+                    break;
+                default:
+                    throw new NotImplementedException(String.Format("Storage {0} not implemented",
+                                                                    this.GetStorage()));
+            }
+           
             base.OnActionExecuted(context);
         }
 
@@ -82,11 +110,13 @@ namespace asplib.Controllers
         /// <param name="members"></param>
         internal void GetFields(Type type, List<FieldInfo> members)
         {
-            members.AddRange(type.GetFields(BindingFlags.DeclaredOnly |
-                                            BindingFlags.Instance |
-                                            BindingFlags.Public |
-                                            BindingFlags.NonPublic));
-            if (type != typeof(SerializableController))
+            var allFields = type.GetFields(BindingFlags.DeclaredOnly |
+                                           BindingFlags.Instance |
+                                           BindingFlags.Public |
+                                           BindingFlags.NonPublic);
+            var serializalbeFields = allFields.Where(f => !f.Attributes.HasFlag(FieldAttributes.NotSerialized));
+            members.AddRange(serializalbeFields);
+            if (type != typeof(SerializableController)) // ceiling parent
             {
                 this.GetFields(type.BaseType, members);
             }

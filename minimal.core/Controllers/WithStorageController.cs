@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using asplib.Controllers;
 using minimal.Models;
+using Microsoft.Extensions.Configuration;
+
 
 namespace minimal.Controllers
 {
@@ -12,10 +14,7 @@ namespace minimal.Controllers
     {
         private List<string> ContentList = new List<string>();
 
-        public WithStorageController() : base()
-        {
-            this.SetController();
-        }
+        public WithStorageController(IConfigurationRoot configuration) : base(configuration) { }
 
         [HttpGet]
         public IActionResult Index(WithStorageViewModel model)
@@ -26,6 +25,7 @@ namespace minimal.Controllers
         [HttpPost]
         public IActionResult Submit(WithStorageViewModel model) 
         {
+            this.SessionStorage = model.Storage;
             this.ContentList.Add(model.ContentTextBox);
             model.ContentTextBox = String.Empty; // never updated without RedirectToAction
             model.Content = this.ContentList;   // persistent object transiently assigned to the model

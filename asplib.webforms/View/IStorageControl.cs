@@ -225,10 +225,10 @@ namespace asplib.View
         public static Storage GetStorage<M>(this IStorageControl<M> controlStorage)
         where M : new()
         {
-            var storage = controlStorage.SessionStorage;
+            var storage = controlStorage.SessionStorage;    // Web Control property
             if (storage == null)
             {
-                storage = SessionStorage;
+                storage = SessionStorage;   // static
             }
             if (storage == null)
             {

@@ -33,6 +33,12 @@ namespace minimal
 
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddDistributedMemoryCache();
+            services.AddSession(options =>
+            {
+                options.IdleTimeout = TimeSpan.FromMinutes(30);
+                options.Cookie.HttpOnly = true;
+            });
             services.AddMvc()
                     .AddControllersAsServices();
             services.Replace(ServiceDescriptor.Transient<IControllerActivator, StorageControllerActivator>());
@@ -52,6 +58,7 @@ namespace minimal
             app.UseMiddleware<IIEMiddleware>(); // Global.asax
             app.UseDefaultFiles();
             app.UseStaticFiles();
+            app.UseSession();
             app.UseMvc(routes =>
             {
                 routes.MapRoute(

@@ -17,12 +17,21 @@ namespace asplib.Common
 
             // HtmlDecode to avoid <input viewstate="@Html.Raw(ViewBag.ViewState)" />
             var viewstate = WebUtility.HtmlDecode(context.AllAttributes["viewstate"].Value.ToString());
-            var namevalue = viewstate.Split(":");
+            if (!String.IsNullOrEmpty(viewstate))
+            { 
+                var namevalue = viewstate.Split(":");
 
-            output.Attributes.Clear();
-            output.Attributes.SetAttribute("type", "hidden");
-            output.Attributes.SetAttribute("name", namevalue[0]);
-            output.Attributes.SetAttribute("value", (namevalue[1]));
+                output.Attributes.Clear();
+                output.Attributes.SetAttribute("type", "hidden");
+                output.Attributes.SetAttribute("name", namevalue[0]);
+                output.Attributes.SetAttribute("value", (namevalue[1]));
+            }
+            else
+            {
+                // ViewState declared, but not used -> defensively rewrite it as empty hidden input
+                output.Attributes.Clear();  
+                output.Attributes.SetAttribute("type", "hidden");
+            }
         }
     }
 }

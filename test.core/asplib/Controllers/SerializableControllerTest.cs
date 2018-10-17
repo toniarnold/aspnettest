@@ -4,13 +4,20 @@ using System.Text;
 using asplib.Controllers;
 using NUnit.Framework;
 using System.Reflection;
+using Microsoft.Extensions.Configuration;
+using asplib.Model;
+using System.Linq;
 
 namespace test.asplib.Controllers
 {
     // Build a Controller class hierarchy to test recursive member serialization
+    public class NonSerializable { }
+
     public class Controller1: SerializableController
     {
         public string String1 { get; set; }
+        [NonSerialized]
+        private NonSerializable nonserializable = new NonSerializable();
     }
 
     public class Controller2: Controller1
@@ -37,7 +44,7 @@ namespace test.asplib.Controllers
             var obj = new Controller3();
             var members = new List<FieldInfo>();
             obj.GetFields(obj.GetType(), members);
-            Assert.That(members.Count, Is.EqualTo(3));
+            Assert.That(members.Where(m => m.Name == "nonserializable").Any(), Is.False);
         }
 
         [Test]
@@ -58,6 +65,13 @@ namespace test.asplib.Controllers
                 Assert.That(src.String2, Is.EqualTo(dst.String2));
                 Assert.That(src.String3, Is.EqualTo(dst.String3));
             });
+        }
+
+        [Test]
+        public void SerlalizeTest()
+        {
+            var obj = new Controller3();
+            var bytes = obj.Serialize();  // throws if [NonSerialized] is not respected
         }
     }
 }
