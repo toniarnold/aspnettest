@@ -2,6 +2,7 @@
 @addTagHelper *, asplib.core
 @using minimal.Models
 @using asplib.Model
+@using asplib.Common
 @model WithStorageViewModel
 <!DOCTYPE html>
 <html>
@@ -26,7 +27,12 @@
         }
 
         // Poor workaround for ASP.NET AutoPostBack="true"
-        function doStoragePostBack() {
+        function doStoragePostBack(storage) {
+            // "con­t­re cœur" client side: Immediately change the <input sessionstorage /> 
+            // before the PostBack such that the StorageControllerActivator picks up 
+            // the newly chosen storage before the WithStorageController has a chance
+            // to react to the ChangeStorage action.
+            document.getElementById("@SessionStorageInputTagHelper.SESSIONSTORAGE_ID").value = storage;
             document.forms[0].action = "/WithStorage/ChangeStorage";
             document.forms[0].submit();
         }
@@ -36,9 +42,9 @@
     <form asp-controller="WithStorage" asp-action="Submit" method="post">
         <h1>minimalist test setup with storage</h1>
         Session Storage:<br />
-        <input asp-for="Storage" type="radio" value="@Storage.ViewState" checked="checked" onclick="doStoragePostBack()"/> ViewState
-        <input asp-for="Storage" type="radio" value="@Storage.Session" onclick="doStoragePostBack()"/> Session
-        <input asp-for="Storage" type="radio" value="@Storage.Database" onclick="doStoragePostBack(;"/> Database
+        <input asp-for="Storage" type="radio" value="@Storage.ViewState" checked="checked" onclick="doStoragePostBack('ViewState');"/> ViewState
+        <input asp-for="Storage" type="radio" value="@Storage.Session" onclick="doStoragePostBack('Session');"/> Session
+        <input asp-for="Storage" type="radio" value="@Storage.Database" onclick="doStoragePostBack('Database');"/> Database
         <br />
         <input asp-for="ContentTextBox" />
         <button type="submit" id="submitButton">Submit</button>

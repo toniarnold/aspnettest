@@ -10,6 +10,8 @@ namespace asplib.Common
     [HtmlTargetElement("input", Attributes = "sessionstorage")]
     public class SessionStorageInputTagHelper : TagHelper
     {
+        public const string SESSIONSTORAGE_ID = "sessionstorage_input";
+
         public override async Task ProcessAsync(
             TagHelperContext context, TagHelperOutput output)
         {
@@ -21,6 +23,7 @@ namespace asplib.Common
                 var namevalue = sessionstorage.Split(":");
 
                 output.Attributes.Clear();
+                output.Attributes.SetAttribute("id", SESSIONSTORAGE_ID);
                 output.Attributes.SetAttribute("type", "hidden");
                 output.Attributes.SetAttribute("name", namevalue[0]);
                 output.Attributes.SetAttribute("value", (namevalue[1]));
