@@ -19,14 +19,26 @@
             padding: 0;
         }
     </style>
+    <script>
+        // Poor workaround for the ineffective "model.ContentTextBox = String.Empty;" in the controller
+        function clearContentTextBox() {
+            document.getElementById("ContentTextBox").value = "";
+        }
+
+        // Poor workaround for ASP.NET AutoPostBack="true"
+        function doStoragePostBack() {
+            document.forms[0].action = "/WithStorage/ChangeStorage";
+            document.forms[0].submit();
+        }
+    </script>
 </head>
-<body>
+<body onload="clearContentTextBox()">
     <form asp-controller="WithStorage" asp-action="Submit" method="post">
         <h1>minimalist test setup with storage</h1>
         Session Storage:<br />
-        <input asp-for="Storage" type="radio" value="@Storage.ViewState" checked="checked" /> ViewState
-        <input asp-for="Storage" type="radio" value="@Storage.Session" /> Session
-        <input asp-for="Storage" type="radio" value="@Storage.Database" /> Database
+        <input asp-for="Storage" type="radio" value="@Storage.ViewState" checked="checked" onclick="doStoragePostBack()"/> ViewState
+        <input asp-for="Storage" type="radio" value="@Storage.Session" onclick="doStoragePostBack()"/> Session
+        <input asp-for="Storage" type="radio" value="@Storage.Database" onclick="doStoragePostBack(;"/> Database
         <br />
         <input asp-for="ContentTextBox" />
         <button type="submit" id="submitButton">Submit</button>
@@ -36,6 +48,7 @@
                 <li>@item</li>
             }
         </ol>
+        <input sessionstorage="@ViewBag.SessionStorage" />
         <input viewstate="@ViewBag.ViewState" />
     </form>
 </body>

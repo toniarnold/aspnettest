@@ -11,8 +11,9 @@ using System.Runtime.Serialization.Formatters.Binary;
 namespace asplib.Model
 {
     /// <summary>
-    /// High level Db.Main model class providing support for persistence through a filter function
-    /// used for encryption.
+    /// High level Db.Main model class providing support for persistence
+    /// through a filter function (used for encryption) dealing with full Main
+    /// object instances instead of just byte arrays from the table.
     /// </summary>
     public partial class Main
     {
@@ -52,7 +53,7 @@ namespace asplib.Model
         }
 
         /// <summary>
-        /// Factory for fetching a R instance from the database
+        /// Factory for fetching an M instance from the database
         /// </summary>
         /// <typeparam name="M"></typeparam>
         /// <param name="session"></param>
@@ -83,7 +84,7 @@ namespace asplib.Model
         }
 
         /// <summary>
-        /// Inserts or updates (when a row with the session exists) the R instance
+        /// Inserts or updates (when a row with the session exists) the M instance
         /// and returns the new session Guid if none is given or the row was not found
         /// </summary>
         /// <typeparam name="M"></typeparam>
@@ -123,7 +124,7 @@ namespace asplib.Model
 
         /// <summary>
         /// Lazy Loads and returns a deserialized object instance from the
-        /// [Main]  table column byte[] main member or null if it is not of the generic type
+        /// [Main] table column byte[] main member or null if it is not of the generic type
         /// </summary>
         /// <typeparam name="M"></typeparam>
         /// <returns></returns>

@@ -11,6 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.AspNetCore.Mvc.Controllers;
 using iie;
 using asplib.Controllers;
+using asplib.Model;
 
 namespace minimal
 {
@@ -29,6 +30,8 @@ namespace minimal
                 .AddEnvironmentVariables()
                 .Build();
             Configuration = dom;
+
+            ASP_DBEntities.ConnectionString = Configuration["ASP_DBEntities"];  // globally
         }
 
         public void ConfigureServices(IServiceCollection services)

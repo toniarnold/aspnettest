@@ -59,11 +59,17 @@ namespace asplib.Controllers
             switch(this.GetStorage())
             {
                 case Storage.ViewState:
-                    this.AddViewState();
+                    this.SaveViewState();
                     break;
+
                 case Storage.Session:
-                    this.AddSession();
+                    this.SaveSession();
                     break;
+
+                case Storage.Database:
+                    this.SaveDatabase();
+                    break;
+
                 default:
                     throw new NotImplementedException(String.Format("Storage {0} not implemented",
                                                                     this.GetStorage()));
@@ -73,7 +79,9 @@ namespace asplib.Controllers
         }
 
         /// <summary>
-        /// Assign  all name:value pairs  to our fields
+        /// Assign all name:value pairs  to our fields.
+        /// Silently ignores instance fields not available in the members
+        /// dictionary.
         /// </summary>
         /// <param name="members"></param>
         internal void SetValues(Dictionary<string, object> members)
@@ -82,7 +90,10 @@ namespace asplib.Controllers
             this.GetFields(this.GetType(), fields);
             foreach (var field in fields)
             {
-                field.SetValue(this, members[field.Name]);
+                if (members.ContainsKey(field.Name))
+                {
+                    field.SetValue(this, members[field.Name]);
+                }
             }
         }
 

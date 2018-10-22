@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.Specialized;
 using System.Text;
 using asplib.Model;
+using asplib.Common;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
@@ -29,10 +31,9 @@ namespace asplib.Controllers
     /// <summary>
     /// Extension implementation with storage dependency
     /// </summary>
-    public static class ControlStorageExtension
+    public static class StorageControllerExtension
     {
         /// <summary>
-        /// Type of the session storage to override AppSettings["SessionStorage"]
         /// </summary>
         public static Storage? SessionStorage { get; set; }
 
@@ -53,12 +54,12 @@ namespace asplib.Controllers
         /// <returns></returns>
         public static Storage GetStorage(this IStorageController inst)
         {
-            var storage = inst.SessionStorage;  // Controller property
+            var storage = inst.SessionStorage;  // Controller instance property override
             if (storage == null)
             {
-                storage = SessionStorage;   // static
+                storage = SessionStorage;       // static and global override
             }
-            if (storage == null)
+            if (storage == null)                // configuration or default
             {
                 var configStorage = inst.Configuration.GetValue<string>("SessionStorage");
                 storage = String.IsNullOrWhiteSpace(configStorage) ? Storage.ViewState : (Storage)Enum.Parse(typeof(Storage), configStorage);
@@ -87,7 +88,7 @@ namespace asplib.Controllers
         }
 
         /// <summary>
-        /// StorageID-String unique to store/retrieve/clear Controller
+        /// StorageID-String unique to store/retrieve/clear the Controller instance
         /// </summary>
         /// <param name="inst"></param>
         /// <returns></returns>
@@ -97,7 +98,7 @@ namespace asplib.Controllers
         }
 
         /// <summary>
-        /// StorageID-String unique to store/retrieve/clear Controller
+        /// StorageID-String unique to store/retrieve/clear the Controller instance
         /// </summary>
         /// <param name="typeName"></param>
         /// <returns></returns>
@@ -106,18 +107,92 @@ namespace asplib.Controllers
             return String.Format("_CONTROLLER_{0}", typeName);
         }
 
+
+        /// <summary>
+        /// SessionStorageID-String unique to post/retrieve the storage type
+        /// </summary>
+        /// <param name="inst"></param>
+        /// <returns></returns>
+        public static string GetSessionStorageID(this IStorageController inst)
+        {
+            return GetSessionStorageID(inst.GetType().Name);
+        }
+
+        /// <summary>
+        /// SessionStorageID-String unique to store/retrieve/ar the storage type
+        /// </summary>
+        /// </summary>
+        /// <param name="typeName"></param>
+        /// <returns></returns>
+        public static string GetSessionStorageID(string typeName)
+        {
+            return String.Format("_SESSIONSTORAGE_{0}", typeName);
+        }
+
+
+        /// <summary>
+        /// Get whether to encrypt database storage in this precedence:
+        /// 1. Encryption enforced  in appsettings.json if "EncryptDatabaseStorage": "True"
+        /// 2. Global appsettings.json override in ControlStorageExtension.SessionStorage e.g. from unit tests
+        /// 3. Defaults to false
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <returns></returns>
+        public static bool GetEncryptDatabaseStorage(IConfigurationRoot configuration)
+        {
+            var encrypt = configuration.GetValue<bool>("EncryptDatabaseStorage");   // untyped
+            bool encryptOverride = EncryptDatabaseStorage ?? false;
+            return encrypt || encryptOverride;
+        }
+
+
+
+        /// <summary>
+        /// Get the Key/IV secret from the cookie, generate the parts that
+        /// don't yet exist. In ASP.NET Core it is no more possible to modify
+        /// the cookie no more, thus GetSecret is called twice for decrypt and
+        /// encrypt.
+        /// </summary>
+        /// <param name="password"></param>
+        /// <param name="storageID"></param>
+        /// <returns></returns>
+        internal static Crypt.Secret GetSecret(string password, string storageID)
+        {
+            return GetSecret(Crypt.Key(password), storageID);
+        }
+
+
+        /// <summary>
+        /// Get the Key/IV secret from the key byte[]
+        /// </summary>
+        /// <returns></returns>
+        internal static Crypt.Secret GetSecret(byte[] key, string storageID)
+        {
+            Crypt.Secret secret;
+            if (key != null)
+            {
+                secret = Crypt.NewSecret(key);
+            }
+            else
+            {
+                secret = Crypt.NewSecret();
+            }
+            return secret;
+        }
+
+
         /// <summary>
         /// name:value pair for the ViewStateInputTagHelper, to be used as 
         /// <input viewstate="@ViewBag.ViewState" />
         /// </summary>
         /// <param name="inst"></param>
         /// <returns></returns>
-        internal static string ViewState(this IStorageController inst)
+        internal static string ViewState(this IStorageController inst, Func<byte[], byte[]> filter = null)
         {
-            byte[] bytes = Bytes(inst);
+            byte[] bytes = inst.Bytes();
             return string.Format("{0}:{1}",
                             GetStorageID(inst),
-                            Convert.ToBase64String(bytes));
+                            Convert.ToBase64String((filter == null) ? bytes : filter(bytes)));
         }
 
         /// <summary>
@@ -125,14 +200,14 @@ namespace asplib.Controllers
         /// </summary>
         /// <param name="inst"></param>
         /// <returns></returns>
-        private static byte[] Bytes(IStorageController inst)
+        private static byte[] Bytes(this IStorageController inst)
         {
             byte[] bytes;
             if (inst is SerializableController)
             {
                 bytes = ((SerializableController)inst).Serialize(); // shallow
             }
-            else if (!inst.GetType().IsSubclassOf(typeof(Controller)))
+            else if (inst.GetType().IsSerializable)
             {
                 bytes = Serialization.Serialize(inst);  // POCO Controller
             }
@@ -145,24 +220,87 @@ namespace asplib.Controllers
 
             return bytes;
         }
-        
 
         /// <summary>
-        /// Add the ViewState ipnut to the ViewBag for rendering in the view
+        /// name:value pair for the SessionStorageInputTagHelper, to be used as 
+        /// <input viewstate="@ViewBag.ViewState" />
         /// </summary>
         /// <param name="inst"></param>
-        public static void AddViewState(this IStorageController inst)
+        /// <returns></returns>
+        internal static string ViewBagSessionStorage(this IStorageController inst, Storage sessionstorage)
         {
-            inst.ViewBag.ViewState = ViewState(inst);
+            return string.Format("{0}:{1}",
+                            GetSessionStorageID(inst),
+                            sessionstorage);
+        }
+
+
+        /// <summary>
+        /// Add the ViewState input to the ViewBag for rendering in the view
+        /// </summary>
+        /// <param name="inst"></param>
+        public static void SaveViewState(this IStorageController inst)
+        {
+            inst.ViewBag.SessionStorage = ViewBagSessionStorage(inst, Storage.ViewState);
+
+            Func<byte[], byte[]> filter = null;
+            var key = inst.Configuration.GetValue<string>("EncryptViewStateKey");
+            if (!String.IsNullOrEmpty(key))
+            {
+                var secret = GetSecret(key, inst.GetStorageID());
+                filter = x => Crypt.Encrypt(secret, x);
+            }
+            inst.ViewBag.ViewState = ViewState(inst, filter);
         }
 
         /// <summary>
-        /// Add the serialized controller to the session.
+        /// Add the serialized controller to the session and the storage type to the ViewBag
+        /// to be posted such that StorageControllerActivator can read it.
         /// </summary>
         /// <param name="inst"></param>
-        public static void AddSession(this IStorageController inst)
+        public static void SaveSession(this IStorageController inst)
         {
+            inst.ViewBag.SessionStorage = ViewBagSessionStorage(inst, Storage.Session);
             inst.HttpContext.Session.Set(GetStorageID(inst), Bytes(inst));
+        }
+
+        /// <summary>
+        /// Store the serialized controller to the database. Reference to it is
+        /// kept in a persistent cookie.
+        /// </summary>
+        /// <param name="inst"></param>
+        public static void SaveDatabase(this IStorageController inst)
+        {
+            inst.ViewBag.SessionStorage = ViewBagSessionStorage(inst, Storage.Database);
+
+            Guid session = Guid.NewGuid();  // cannot exist in the database 
+            var newCookie = new NameValueCollection();
+            var cookie = inst.HttpContext.Request.Cookies[inst.GetStorageID()].FromCookieString();
+            if (cookie != null)
+            {
+                Guid.TryParse(cookie["session"], out session);
+            }
+            Func<byte[], byte[]> filter = null;
+            if (GetEncryptDatabaseStorage(inst.Configuration))
+            {
+                var secret = GetSecret(Convert.FromBase64String(cookie["key"]), inst.GetStorageID());
+                filter = x => Crypt.Encrypt(secret, x);
+                newCookie["key"] = Convert.ToBase64String(secret.Key);
+            }
+            using (var db = new ASP_DBEntities())
+            {
+                var savedSession = db.SaveMain(inst.Bytes(), session, filter);
+                newCookie["session"] = savedSession.ToString();
+            }
+
+            var days = inst.Configuration.GetValue<int>("DatabaseStorageExpires");
+            var options = new CookieOptions()
+            {
+                Expires = DateTime.Now.AddDays(days),
+                HttpOnly = true,
+                SameSite = SameSiteMode.Strict
+            };
+            inst.HttpContext.Response.Cookies.Append(inst.GetStorageID(), newCookie.ToCookieString(), options);
         }
     }
 }

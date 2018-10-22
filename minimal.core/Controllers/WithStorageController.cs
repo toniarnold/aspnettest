@@ -23,6 +23,15 @@ namespace minimal.Controllers
         }
 
         [HttpPost]
+        public IActionResult ChangeStorage(WithStorageViewModel model)
+        {
+            this.SessionStorage = model.Storage;
+            // Too late: the current stack will be stored in the new storage,
+            // erasing the old content of that new storage
+            return View("Index", model);
+        }
+
+        [HttpPost]
         public IActionResult Submit(WithStorageViewModel model) 
         {
             this.SessionStorage = model.Storage;

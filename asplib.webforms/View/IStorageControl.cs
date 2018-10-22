@@ -85,7 +85,7 @@ namespace asplib.View
 
         /// <summary>
         /// To be called in Page_Load():
-        /// Load the R object from the storage, propagate it to all sub-controls
+        /// Load the M object from the storage, propagate it to all sub-controls
         /// and recursively hide them all below the main control.
         /// Also sets a global reference to the main control in IIE for testing.
         /// </summary>
@@ -228,7 +228,7 @@ namespace asplib.View
             var storage = controlStorage.SessionStorage;    // Web Control property
             if (storage == null)
             {
-                storage = SessionStorage;   // static
+                storage = SessionStorage;   // static config override
             }
             if (storage == null)
             {
