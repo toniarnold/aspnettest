@@ -21,7 +21,7 @@ namespace asplib.Common
             { 
                 var namevalue = viewstate.Split(":");
 
-                output.Attributes.Clear();
+                output.Attributes.RemoveAll("viewstate");
                 output.Attributes.SetAttribute("type", "hidden");
                 output.Attributes.SetAttribute("name", namevalue[0]);
                 output.Attributes.SetAttribute("value", (namevalue[1]));

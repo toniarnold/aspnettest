@@ -17,6 +17,8 @@ using asplib.Common;
 using System.Linq;
 using System.Reflection;
 using Microsoft.Extensions.Configuration;
+using System.Data.SqlClient;
+using Microsoft.EntityFrameworkCore;
 
 
 namespace asplib.Controllers
@@ -43,17 +45,21 @@ namespace asplib.Controllers
         /// <returns></returns>
         public object Create(ControllerContext actionContext)
         {
+
             object controller;
             var controllerTypeInfo = actionContext.ActionDescriptor.ControllerTypeInfo;
             var controllerType = controllerTypeInfo.AsType();
             var storageID = StorageControllerExtension.GetStorageID(controllerTypeInfo.Name);
             var sessionStorageID = StorageControllerExtension.GetSessionStorageID(controllerTypeInfo.Name);
 
+
+            var storage = this.GetStorage(sessionStorageID);
+            this.ClearIfRequested(storage, storageID);
+
             Guid sessionOverride;
             Guid session;
             byte[] bytes;
 
-            var storage = this.GetStorage(sessionStorageID);
 
             if (this.HttpContext.Request.Method == "GET" &&
                 Guid.TryParse(this.HttpContext.Request.Query["session"], out sessionOverride))
@@ -195,6 +201,60 @@ namespace asplib.Controllers
             }
 
             return controller;
+        }
+
+
+        /// <summary>
+        /// Hook to clear the storage for that control with ?clear=true
+        /// ViewState is reset anyway on GET requests, therefore NOP in that case.
+        /// GET-arguments:
+        /// clear=[true|false]          triggers clearing the storage
+        /// storage=[Session|Database]    clears the selected storage type regardless of config
+        /// </summary>
+        /// <param name="storageID"></param>
+        internal void ClearIfRequested(Storage sessionstorage, string storageID)
+        {
+            bool clear = false;
+            if (this.HttpContext.Request.Method == "GET" &&
+                bool.TryParse(this.HttpContext.Request.Query["clear"], out clear))
+            {
+                Storage storage;
+                Enum.TryParse<Storage>(this.HttpContext.Request.Query["storage"], true, out storage);
+                if (storage == Storage.ViewState)   // no meaningful override given
+                {
+                    storage = sessionstorage;
+                }
+
+                switch (storage)
+                {
+                    case Storage.ViewState:
+                        break;
+
+                    case Storage.Session:
+                        this.HttpContext.Session.Remove(storageID);
+                        break;
+
+                    case Storage.Database:
+                        // delete from the database and expire the cookie
+                        Guid session;
+                        if (Guid.TryParse(this.HttpContext.Request.Cookies[storageID].FromCookieString()["session"], out session))
+                        { 
+                            using (var db = new ASP_DBEntities())
+                            {
+                                var sql = @"
+                                        DELETE FROM Main
+                                        WHERE session = @session
+                                    ";
+                                var parameters = new object[] { new SqlParameter("session", session) };
+                                db.Database.ExecuteSqlCommand(sql, parameters);
+                            }
+                        }
+                        break;
+
+                    default:
+                        throw new NotImplementedException(String.Format("Storage {0}", storage));
+                }
+            }
         }
 
 

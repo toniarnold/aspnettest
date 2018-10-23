@@ -15,4 +15,8 @@
     <ProjectReference Include="..\minimal.core\minimal.core.csproj" />
   </ItemGroup>
 
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="xcopy /D /F /Y $(TargetPath) $(SolutionDir)\bin" />
+  </Target>
+
 </Project>

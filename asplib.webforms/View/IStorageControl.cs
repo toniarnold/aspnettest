@@ -315,7 +315,7 @@ namespace asplib.View
         /// GET-arguments:
         /// clear=[true|false]  triggers clearing the storage
         /// endresponse=[true|false]    whether the page at the given URL
-        /// storage=[ViewState|Session|Database]    clears the selected storage type regardless off config
+        /// storage=[Session|Database]    clears the selected storage type regardless of config
         /// </summary>
         /// <typeparam name="M"></typeparam>
         /// <param name="controlStorage"></param>
