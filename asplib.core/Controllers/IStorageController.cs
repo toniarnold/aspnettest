@@ -26,6 +26,11 @@ namespace asplib.Controllers
         /// Local session storage type in the instance, overrides the global config
         /// </summary>
         Storage? SessionStorage { get; set; }
+
+        /// <summary>
+        /// ViewModel used for the current View action method
+        /// </summary>
+        object Model { get; }
     }
 
     /// <summary>

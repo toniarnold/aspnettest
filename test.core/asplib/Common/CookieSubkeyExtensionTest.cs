@@ -22,11 +22,11 @@ namespace test.asplib.Common
         }
 
         [Test]
-        public void FromCookieStringNullTest()
+        public void FromCookieStringEmptyTest()
         {
             string cookie = null;
             var dict = cookie.FromCookieString();
-            Assert.That(dict, Is.Null);
+            Assert.That(dict, Is.Empty);
         }
     }
 }

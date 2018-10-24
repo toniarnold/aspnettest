@@ -32,12 +32,11 @@ namespace asplib.Common
 
         public static NameValueCollection FromCookieString(this string cookieString)
         {
-            NameValueCollection retval = null;
+            NameValueCollection retval = new NameValueCollection(); ;
             if (!String.IsNullOrEmpty(cookieString))
             { 
                 var items = from item in cookieString.Split("&")
                             select item.Split("=");
-                retval = new NameValueCollection();
                 foreach (var item in items)
                 {
                     retval.Add(WebUtility.UrlDecode(item[0]),

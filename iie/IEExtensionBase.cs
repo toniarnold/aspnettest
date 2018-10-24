@@ -93,25 +93,75 @@ namespace iie
         }
 
 
+        public static void ClickName(string name, int index=0, bool expectPostBack = true, int expectedStatusCode = 200, int delay = 0, int pause = 0)
+        {
+            var button = GetHTMLElementByName(name, index);
+            Click(button, expectPostBack, expectedStatusCode, delay, pause);
+        }
+
         public static void ClickID(string clientId, bool expectPostBack = true, int expectedStatusCode = 200, int delay = 0, int pause = 0)
         {
-            var button = GetHTMLElement(clientId);
+            var button = GetHTMLElementById(clientId);
             Click(button, expectPostBack, expectedStatusCode, delay, pause);
         }
 
 
-        public static void WriteID(string clientId, string text)
+        public static void WriteName(string name, string text, int index = 0)
         {
-            var input = GetHTMLElement(clientId);
+            var input = GetHTMLElementByName(name, index);
             input.setAttribute("value", text);
         }
+
+        public static void WriteID(string clientId, string text)
+        {
+            var input = GetHTMLElementById(clientId);
+            input.setAttribute("value", text);
+        }
+
+
+
+        /// <summary>
+        /// Get all input elements with the given name as simple struct w/o dependency to COM
+        /// </summary>
+        /// <param name="name">name attribute of the element</param>
+        /// <returns></returns>
+        public static List<HtmlElement> GetHTMLElements(string name)
+        {
+            var elements = GetHTMLElementsByName(name);
+            var retval = new List<HtmlElement>();
+            // No "foreach (IHTMLElement element in elements)": 
+            // Could not load file or assembly 'CustomMarshalers, Version=4.0.0.0
+            for (int i = 0; i < elements.length; i++)
+            {
+                var element = (IHTMLElement) elements.item(i);
+                retval.Add(new HtmlElement()
+                {
+                    Id = element.id,
+                    Name = (string)element.getAttribute("name"),
+                    Value = (string)element.getAttribute("value")
+                });
+            }
+            return retval;
+        }
+
+        /// <summary>
+        /// Subset of IHTMLElement to pass to .NET Core without COM
+        /// </summary>
+        public struct HtmlElement
+        {
+            public string Id;
+            public string Name;
+            public string Value;
+        }
+
+
 
         /// <summary>
         /// Get the element with the given clientID
         /// </summary>
         /// <param name="clientID">ClientID resp. HTML id attribute of the element</param>
         /// <returns></returns>
-        private static IHTMLElement GetHTMLElement(string clientID)
+        private static IHTMLElement GetHTMLElementById(string clientID)
         {
             var element = Document.getElementById(clientID);
             if (element == null)
@@ -123,6 +173,47 @@ namespace iie
                 return element;
             }
         }
+
+
+        /// <summary>
+        /// Get the element with the given name at the given index
+        /// </summary>
+        /// <param name="name">name attribute of the element</param>
+        /// <param name="index">index of the element collection with that name, defaults to 0</param>
+        /// <returns></returns>
+        private static IHTMLElement GetHTMLElementByName(string name, int index = 0)
+        {
+            var elements = GetHTMLElementsByName(name);
+            if (elements.length < index)
+            {
+                throw new ArgumentException(String.Format(
+                    "HTML input element with name='{0}' at index {1} not found", name, index));
+            }
+            else
+            {
+                return (IHTMLElement)elements.item(name, index);
+            }
+        }
+
+        /// <summary>
+        /// Get all input elements with the given name
+        /// </summary>
+        /// <param name="name">name attribute of the element</param>
+        /// <returns></returns>
+        private static IHTMLElementCollection GetHTMLElementsByName(string name)
+        {
+            var elements = Document.getElementsByName(name);
+            if (elements.length == 0)
+            {
+                throw new ArgumentException(String.Format("HTML input element with name='{0}' not found", name));
+            }
+            else
+            {
+                return elements;
+            }
+        }
+
+
 
         /// <summary>
         /// Get the IHTMLDocument3 Document for accessing the DOM

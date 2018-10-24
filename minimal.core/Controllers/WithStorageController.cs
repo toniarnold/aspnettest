@@ -12,7 +12,11 @@ namespace minimal.Controllers
 {
     public class WithStorageController : SerializableController
     {
-        private List<string> ContentList = new List<string>();
+        // Any contained object to perform assertions on, the ViewModel is just
+        // the most prominent one.
+        public new WithStorageViewModel Model { get { return (WithStorageViewModel)base.Model; } }
+
+        public List<string> ContentList = new List<string>();
 
         public WithStorageController(IConfigurationRoot configuration) : base(configuration) { }
 

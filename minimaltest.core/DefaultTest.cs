@@ -49,5 +49,14 @@ namespace minimaltest
             this.ClickID("withstorage-link");
             Assert.That(this.Html(), Does.Contain("<h1>minimalist test setup with storage</h1>"));
         }
+
+        //[Test]
+        public void ClickControlThrowsTest()
+        {
+            this.Navigate("/");
+            // This actually is evocative of Goethe's "The Sorcerer's Apprentice", as each
+            // test run recursively runs the whole suite again - therefore commented out.
+            Assert.That(() => this.ClickID("testButton"), Throws.Exception.TypeOf<InvalidOperationException>());
+        }
     }
 }

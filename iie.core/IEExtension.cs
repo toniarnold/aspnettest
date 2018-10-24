@@ -70,9 +70,25 @@ namespace iie
             IEExtensionBase.NavigateURL(url, expectedStatusCode, delay, pause);
         }
 
+
         /// <summary>
-        /// Click the ASP.NET control element (usually a Button) with the given clientID and wait for the response
-        /// when expectPostBack is true.
+        /// Click the HTML element (usually a Button) with the given name and
+        /// index and wait for the response when expectPostBack is true.
+        /// </summary>
+        /// <param name="inst"></param>
+        /// <param name="path">Member name path to the control starting at the main control</param>
+        /// <param name="expectPostBack">Whether to expect a server request from the click</param>
+        /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>
+        /// <param name="delay">Optional delay time in milliseconds before clicking the element</param>
+        /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete</param>
+        public static void Click(this IIE inst, string name, int index = 0, bool expectPostBack = true, int expectedStatusCode = 200, int delay = 0, int pause = 0)
+        {
+            IEExtensionBase.ClickName(name, index, expectPostBack, expectedStatusCode, delay, pause);
+        }
+
+        /// <summary>
+        /// Click the HTML element (usually a Button) with the given clientID
+        /// and wait for the response when expectPostBack is true.
         /// </summary>
         /// <param name="clientId">HTML id attribute of the element to click on</param>
         /// <param name="expectPostBack">Whether to expect a server request from the click</param>
@@ -84,8 +100,20 @@ namespace iie
             IEExtensionBase.ClickID(clientId, expectPostBack, expectedStatusCode, delay, pause);
         }
 
+
         /// <summary>
-        /// Write into the ASP.NET control (usually a Textbox) with the given clientID
+        /// Write into the HTML element (usually a text input) with the given clientID
+        /// </summary>
+        /// <param name="inst"></param>
+        /// <param name="clientId">HTML id attribute of the element to click on</param>
+        /// <param name="text">Text to write</param>
+        public static void Write(this IIE inst, string name, string text, int index = 0)
+        {
+            IEExtensionBase.WriteName(name, text, index);
+        }
+
+        /// <summary>
+        /// Write into the HTML element (usually a text input) with the given clientID
         /// </summary>
         /// <param name="inst"></param>
         /// <param name="clientId">HTML id attribute of the element to click on</param>
@@ -93,6 +121,46 @@ namespace iie
         public static void WriteID(this IIE inst, string clientId, string text)
         {
             IEExtensionBase.WriteID(clientId, text);
+        }
+
+
+
+        /// <summary>
+        /// Select the item with the given value from the input element
+        /// collection with the given name and wait for the response when
+        /// expectPostBack is true.
+        /// </summary>
+        /// <param name="inst"></param>
+        /// <param name="name">Member name path to the control starting at the
+        /// main control</param>
+        /// <param name="value">value of the item to click on</param>
+        /// <param name="expectPostBack">Whether to expect a server request
+        /// from the click. Defaults to false</param>
+        /// <param name="expectedStatusCode">Expected StatusCode of the
+        /// response</param>
+        /// <param name="delay">Optional delay time in milliseconds before
+        /// clicking the element</param>
+        /// <param name="pause">Optional pause time in milliseconds after IE
+        /// claims DocumentComplete</param>
+        public static void Select(this IIE inst, string name, string value, bool expectPostBack = false, int expectedStatusCode = 200, int delay = 0, int pause = 0)
+        {
+            var list = IEExtensionBase.GetHTMLElements(name);
+            if (list == null)
+            {
+                throw new Exception(String.Format("No HTML input elements with name = found", name));
+            }
+            for (int idx = 0; idx <= list.Count; idx++)
+            {
+                if (idx == list.Count)
+                {
+                    throw new Exception(String.Format("HTML input element '{0}': value '{1}' not found", name, value));
+                }
+                else if (list[idx].Value == value)
+                {
+                    Click(inst, name, idx, expectPostBack, expectedStatusCode, delay, pause);
+                    break;
+                }
+            }
         }
 
         /// <summary>

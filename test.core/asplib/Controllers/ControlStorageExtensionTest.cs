@@ -18,6 +18,7 @@ namespace test.asplib.Controllers
         public HttpContext HttpContext { get { return null; } }
         public IConfigurationRoot Configuration { get { return null; } }
         public Storage? SessionStorage { get { return null; } set { } }
+        public object Model { get { return null; } }
 
         [Test]
         public void GetViewStateNameTest()

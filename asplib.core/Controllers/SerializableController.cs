@@ -24,6 +24,9 @@ namespace asplib.Controllers
         [NonSerialized]
         private IConfigurationRoot configuration;
         public Storage? SessionStorage { get; set; }
+        [NonSerialized]
+        private object model;
+        public object Model { get { return this.model; } }
 
         public SerializableController() { } // NUnit
         public SerializableController(IConfigurationRoot configuration) : base()
@@ -76,6 +79,31 @@ namespace asplib.Controllers
             }
            
             base.OnActionExecuted(context);
+        }
+
+        /// <summary>
+        /// View method assigning the model to the controller instance for later
+        /// retrieval in test assertions
+        /// </summary>
+        /// <param name="name"></param>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public override ViewResult View(string name, object model)
+        {
+            this.model = model;
+            return base.View(name, model);
+        }
+
+        /// <summary>
+        /// View method assigning the model to the controller instance for later
+        /// retrieval in test assertions
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public override ViewResult View(object model)
+        {
+            this.model = model;
+            return base.View(model);
         }
 
         /// <summary>
