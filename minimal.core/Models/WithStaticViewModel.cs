@@ -1,8 +1,7 @@
-﻿using System;
+﻿using Microsoft.AspNetCore.Mvc;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
 
 namespace minimal.Models
 {
@@ -15,6 +14,7 @@ namespace minimal.Models
 
         public string ContentTextBox { get; set; }
         public List<string> Content { get; set; }
+
         [HiddenInput]   // not used, see IActionResult Submit(WithStaticViewModel model)
         public string ContentString
         {
@@ -24,9 +24,8 @@ namespace minimal.Models
             }
             set
             {
-
                 if (value != null)  // initialization of the form
-                { 
+                {
                     this.Content = value.Split("\n", StringSplitOptions.RemoveEmptyEntries).ToList();
                 }
             }

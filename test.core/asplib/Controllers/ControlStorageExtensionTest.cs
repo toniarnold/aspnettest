@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using NUnit.Framework;
-using Microsoft.AspNetCore.Http;
-using asplib.Controllers;
+﻿using asplib.Controllers;
 using asplib.Model;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
+using NUnit.Framework;
+using System;
 
 namespace test.asplib.Controllers
 {
@@ -14,7 +12,8 @@ namespace test.asplib.Controllers
     public class ControlStorageExtensionTest : IStorageController
     {
         // IStorageController
-        public dynamic ViewBag { get ; }
+        public dynamic ViewBag { get; }
+
         public HttpContext HttpContext { get { return null; } }
         public IConfigurationRoot Configuration { get { return null; } }
         public Storage? SessionStorage { get { return null; } set { } }
@@ -33,6 +32,7 @@ namespace test.asplib.Controllers
         }
 
         private string TestProperty { get; set; }
+
         [Test]
         public void ViewStateTest()
         {

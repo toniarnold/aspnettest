@@ -7,12 +7,14 @@ namespace test.asplib.Model
     [TestFixture]
     public class CryptTest
     {
+        private const int KEY_LENGTH = 32;
+
         [Test]
         public void NewSecretTest()
         {
             var secret = Crypt.NewSecret();
             Assert.That(secret, Is.Not.Null);
-            Assert.That(secret.Key, Has.Exactly(32).Items); // default AES256
+            Assert.That(secret.Key, Has.Exactly(KEY_LENGTH).Items); // default AES256
             Assert.That(secret.IV, Has.Exactly(Crypt.IV_LENGTH).Items);
         }
 

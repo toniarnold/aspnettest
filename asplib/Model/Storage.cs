@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace asplib.Model
+﻿namespace asplib.Model
 {
     /// <summary>
     /// Storage method for the persistence of M

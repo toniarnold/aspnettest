@@ -6,30 +6,28 @@
  * two implementations wouldn't satisfy all your requirements!
  */
 
-using System;
-using System.Collections.Generic;
-using System.Text;
+using asplib.Common;
+using asplib.Model;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
-using Microsoft.AspNetCore.Http;
-using asplib.Model;
-using asplib.Common;
-using System.Linq;
-using System.Reflection;
-using Microsoft.Extensions.Configuration;
-using System.Data.SqlClient;
 using Microsoft.EntityFrameworkCore;
-
+using Microsoft.Extensions.Configuration;
+using System;
+using System.Data.SqlClient;
+using System.Reflection;
 
 namespace asplib.Controllers
 {
     public class StorageControllerActivator : IControllerActivator
     {
         private IHttpContextAccessor httpContextAccessor;
+
         private HttpContext HttpContext
         {
             get { return this.httpContextAccessor.HttpContext; }
         }
+
         private IConfigurationRoot Configuration { get; }
 
         public StorageControllerActivator(IHttpContextAccessor http, IConfigurationRoot configuration)
@@ -45,13 +43,11 @@ namespace asplib.Controllers
         /// <returns></returns>
         public object Create(ControllerContext actionContext)
         {
-
             object controller;
             var controllerTypeInfo = actionContext.ActionDescriptor.ControllerTypeInfo;
             var controllerType = controllerTypeInfo.AsType();
             var storageID = StorageControllerExtension.GetStorageID(controllerTypeInfo.Name);
             var sessionStorageID = StorageControllerExtension.GetSessionStorageID(controllerTypeInfo.Name);
-
 
             var storage = this.GetStorage(sessionStorageID);
             this.ClearIfRequested(storage, storageID);
@@ -59,7 +55,6 @@ namespace asplib.Controllers
             Guid sessionOverride;
             Guid session;
             byte[] bytes;
-
 
             if (this.HttpContext.Request.Method == "GET" &&
                 Guid.TryParse(this.HttpContext.Request.Query["session"], out sessionOverride))
@@ -168,7 +163,7 @@ namespace asplib.Controllers
         /// <param name="controllerType"></param>
         /// <param name="bytes"></param>
         /// <returns></returns>
-        internal static object DeserializeController(ControllerContext actionContext, TypeInfo controllerTypeInfo, Type controllerType, 
+        internal static object DeserializeController(ControllerContext actionContext, TypeInfo controllerTypeInfo, Type controllerType,
                                                      byte[] bytes, Func<byte[], byte[]> filter = null)
         {
             object controller;
@@ -177,7 +172,7 @@ namespace asplib.Controllers
                 // Instantiate and populate own fields with the serialized objects
                 controller = actionContext.HttpContext.RequestServices.GetService(controllerType);
                 if (bytes != null)
-                { 
+                {
                     ((SerializableController)controller).Deserialize(bytes, filter);
                 }
             }
@@ -185,7 +180,7 @@ namespace asplib.Controllers
             {
                 // POCO Controller is directly instantiated, replacing the instance created by the framework
                 if (bytes != null)
-                { 
+                {
                     controller = Serialization.Deserialize(bytes, filter);
                 }
                 else
@@ -196,13 +191,12 @@ namespace asplib.Controllers
             else
             {
                 throw new ArgumentException(String.Format(
-                    "{0} is neither a SerializableController nor a POCO controller", 
+                    "{0} is neither a SerializableController nor a POCO controller",
                     controllerType.Name));
             }
 
             return controller;
         }
-
 
         /// <summary>
         /// Hook to clear the storage for that control with ?clear=true
@@ -238,7 +232,7 @@ namespace asplib.Controllers
                         // delete from the database and expire the cookie
                         Guid session;
                         if (Guid.TryParse(this.HttpContext.Request.Cookies[storageID].FromCookieString()["session"], out session))
-                        { 
+                        {
                             using (var db = new ASP_DBEntities())
                             {
                                 var sql = @"
@@ -256,7 +250,6 @@ namespace asplib.Controllers
                 }
             }
         }
-
 
         /// <summary>
         /// Handle IDisposable Controllers

@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace iie
 {
@@ -70,7 +68,6 @@ namespace iie
             IEExtensionBase.NavigateURL(url, expectedStatusCode, delay, pause);
         }
 
-
         /// <summary>
         /// Click the HTML element (usually a Button) with the given name and
         /// index and wait for the response when expectPostBack is true.
@@ -100,7 +97,6 @@ namespace iie
             IEExtensionBase.ClickID(clientId, expectPostBack, expectedStatusCode, delay, pause);
         }
 
-
         /// <summary>
         /// Write into the HTML element (usually a text input) with the given clientID
         /// </summary>
@@ -122,8 +118,6 @@ namespace iie
         {
             IEExtensionBase.WriteID(clientId, text);
         }
-
-
 
         /// <summary>
         /// Select the item with the given value from the input element

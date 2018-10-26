@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -13,12 +11,16 @@ namespace asplib.Model
     {
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public long mainid { get; set; }
+
         [Key]
         public Guid session { get; set; }
+
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime created { get; set; }
+
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime changed { get; set; }
+
         public byte[] main { get; set; }
     }
 }

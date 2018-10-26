@@ -1,17 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using asplib.Model;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Filters;
+using Microsoft.Extensions.Configuration;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
-using asplib.Model;
-using Microsoft.AspNetCore.Mvc.Filters;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
-using System.Linq;
-
 
 [assembly: InternalsVisibleTo("test.core")]
+
 namespace asplib.Controllers
 {
     /// <summary>
@@ -21,14 +19,21 @@ namespace asplib.Controllers
     public class SerializableController : Controller, IStorageController
     {
         public IConfigurationRoot Configuration { get { return this.configuration; } }
+
         [NonSerialized]
         private IConfigurationRoot configuration;
+
         public Storage? SessionStorage { get; set; }
+
         [NonSerialized]
         private object model;
+
         public object Model { get { return this.model; } }
 
-        public SerializableController() { } // NUnit
+        public SerializableController()
+        {
+        } // NUnit
+
         public SerializableController(IConfigurationRoot configuration) : base()
         {
             this.configuration = configuration;
@@ -45,7 +50,6 @@ namespace asplib.Controllers
             return Serialization.Serialize(this.GetValues(), filter);
         }
 
-
         /// <summary>
         /// Deserialize the already instantiated controller shallowly.
         /// </summary>
@@ -59,7 +63,7 @@ namespace asplib.Controllers
 
         public override void OnActionExecuted(ActionExecutedContext context)
         {
-            switch(this.GetStorage())
+            switch (this.GetStorage())
             {
                 case Storage.ViewState:
                     this.SaveViewState();
@@ -77,7 +81,7 @@ namespace asplib.Controllers
                     throw new NotImplementedException(String.Format("Storage {0} not implemented",
                                                                     this.GetStorage()));
             }
-           
+
             base.OnActionExecuted(context);
         }
 
@@ -125,7 +129,6 @@ namespace asplib.Controllers
             }
         }
 
-
         /// <summary>
         /// Get all name:value pairs from the fields to serialize.
         /// </summary>
@@ -141,7 +144,6 @@ namespace asplib.Controllers
             }
             return values;
         }
-
 
         /// <summary>
         /// Recursively get all FieldInfo for the class.
@@ -162,7 +164,6 @@ namespace asplib.Controllers
             else
             {
                 return; // base case: don't attempt to serialize transient Mvc.Controller members
-
             }
         }
     }

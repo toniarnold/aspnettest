@@ -1,12 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using iie;
-using NUnit.Framework;
+﻿using iie;
 using minimal.Controllers;
 using minimal.Models;
+using NUnit.Framework;
 using System.Text.RegularExpressions;
-
 
 namespace minimaltest.core
 {
@@ -29,7 +25,6 @@ namespace minimaltest.core
             get { return this.Controller.Model; }
         }
 
-
         [Test]
         public void ThrowRetrieveDumpTest()
         {
@@ -38,7 +33,7 @@ namespace minimaltest.core
             this.Click("submitButton");
             this.AssertBenignLine();
             this.Write("ContentTextBox", "Except");
-            this.Click("submitButton", expectedStatusCode: 200);      // UseDeveloperExceptionPage yields no 500  
+            this.Click("submitButton", expectedStatusCode: 200);      // UseDeveloperExceptionPage yields no 500
             Assert.That(this.Html(), Does.Contain("Malicious Content Exception"));
             // The benign content in the ViewState is lost on the Error page,
             // but a link to the stored session has been smuggled into the request header.

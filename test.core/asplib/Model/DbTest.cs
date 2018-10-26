@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using NUnit.Framework;
-using asplib.Model;
-using System.Linq;
+﻿using asplib.Model;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using NUnit.Framework;
+using System;
 using System.Data;
 using System.Threading;
-using Microsoft.EntityFrameworkCore;
-
 
 namespace test.asplib.Model
 {
@@ -24,7 +20,6 @@ namespace test.asplib.Model
                 .Build();
             ASP_DBEntities.ConnectionString = config["ASP_DBEntities"];
         }
-
 
         [Test]
         public void SaveUpdateTest()
@@ -79,7 +74,6 @@ namespace test.asplib.Model
             }
         }
 
-
         [Test]
         public void ReadInexistentTest()
         {
@@ -94,7 +88,6 @@ namespace test.asplib.Model
             var read = db.LoadMain(session);
             Assert.That(read, Is.Null);
         }
-
 
         [Test]
         public void LoadSaveMainTest()
@@ -120,7 +113,6 @@ namespace test.asplib.Model
             }
         }
 
-
         [Test]
         [Category("DbContext")]
         public void InsertSQLTest()
@@ -128,7 +120,7 @@ namespace test.asplib.Model
             var bytes = new byte[] { 1, 2, 3 };
 
             using (var db = new ASP_DBEntities())
-            { 
+            {
                 var sql = db.InsertSQL(bytes);
                 Assert.That(sql, Does.Contain("INSERT INTO"));
             }
@@ -153,6 +145,18 @@ namespace test.asplib.Model
                 {
                     trans.Rollback();
                 }
+            }
+        }
+
+        [Test]
+        [Category("DbContext")]
+        public void GetInstanceMissingTest()
+        {
+            using (var db = new ASP_DBEntities())
+            using (var trans = db.Database.BeginTransaction(IsolationLevel.ReadUncommitted))
+            {
+                var none = db.LoadMain(Guid.NewGuid());
+                Assert.That(none, Is.Null);
             }
         }
     }

@@ -1,10 +1,9 @@
-﻿using System;
+﻿using MSHTML;
+using NUnit.Framework;
+using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Diagnostics;
 using System.Threading;
-using NUnit.Framework;
-using MSHTML;
 
 namespace iie
 {
@@ -26,10 +25,11 @@ namespace iie
         /// <summary>
         /// Timeout in milliseconds to wait for a HTTP response.
         /// </summary>
-        public static int RequestTimeoutMS { get;  set; }
+        public static int RequestTimeoutMS { get; set; }
 
         // Internet Explorer
         private static SHDocVw.InternetExplorer ie;
+
         private static AutoResetEvent are = new AutoResetEvent(false);
 
         public static void SetUpIE()
@@ -84,7 +84,6 @@ namespace iie
             StatusCode = statusCode;
         }
 
-
         public static string Html()
         {
             var doc = (MSHTML.IHTMLDocument2)ie.Document;
@@ -92,8 +91,7 @@ namespace iie
             return html;
         }
 
-
-        public static void ClickName(string name, int index=0, bool expectPostBack = true, int expectedStatusCode = 200, int delay = 0, int pause = 0)
+        public static void ClickName(string name, int index = 0, bool expectPostBack = true, int expectedStatusCode = 200, int delay = 0, int pause = 0)
         {
             var button = GetHTMLElementByName(name, index);
             Click(button, expectPostBack, expectedStatusCode, delay, pause);
@@ -104,7 +102,6 @@ namespace iie
             var button = GetHTMLElementById(clientId);
             Click(button, expectPostBack, expectedStatusCode, delay, pause);
         }
-
 
         public static void WriteName(string name, string text, int index = 0)
         {
@@ -118,8 +115,6 @@ namespace iie
             input.setAttribute("value", text);
         }
 
-
-
         /// <summary>
         /// Get all input elements with the given name as simple struct w/o dependency to COM
         /// </summary>
@@ -129,11 +124,11 @@ namespace iie
         {
             var elements = GetHTMLElementsByName(name);
             var retval = new List<HtmlElement>();
-            // No "foreach (IHTMLElement element in elements)": 
+            // No "foreach (IHTMLElement element in elements)":
             // Could not load file or assembly 'CustomMarshalers, Version=4.0.0.0
             for (int i = 0; i < elements.length; i++)
             {
-                var element = (IHTMLElement) elements.item(i);
+                var element = (IHTMLElement)elements.item(i);
                 retval.Add(new HtmlElement()
                 {
                     Id = element.id,
@@ -154,8 +149,6 @@ namespace iie
             public string Value;
         }
 
-
-
         /// <summary>
         /// Get the element with the given clientID
         /// </summary>
@@ -173,7 +166,6 @@ namespace iie
                 return element;
             }
         }
-
 
         /// <summary>
         /// Get the element with the given name at the given index
@@ -212,8 +204,6 @@ namespace iie
                 return elements;
             }
         }
-
-
 
         /// <summary>
         /// Get the IHTMLDocument3 Document for accessing the DOM

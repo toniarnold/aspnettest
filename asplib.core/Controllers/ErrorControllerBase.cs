@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Microsoft.AspNetCore.Mvc;
+﻿using asplib.Model;
 using Microsoft.AspNetCore.Diagnostics;
-using asplib.Model;
-using System.Net;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
+using System;
+using System.Net;
 using System.Text.RegularExpressions;
-
 
 namespace asplib.Controllers
 {
@@ -50,6 +47,7 @@ namespace asplib.Controllers
                     this.logger.LogError(String.Format("CORE_DUMP={0}", url));
                 }
             }
-            return View();        }
+            return View();
+        }
     }
 }

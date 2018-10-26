@@ -53,7 +53,6 @@ namespace asplib.Model
             }
         }
 
-
         /// <summary>
         /// Convert a password string to a 32 Bytes/256 Bit AES-Key
         /// </summary>

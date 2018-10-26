@@ -14,6 +14,8 @@
   <ItemGroup>
     <ProjectReference Include="..\asplib.core\asplib.core.csproj" />
     <ProjectReference Include="..\asplib\asplib.csproj" />
+    <ProjectReference Include="..\iie.core\iie.core.csproj" />
+    <ProjectReference Include="..\iie\iie.csproj" />
   </ItemGroup>
 
   <ItemGroup>

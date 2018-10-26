@@ -1,13 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using asplib.Controllers;
+using asplib.Model;
 using iie;
-using NUnit.Framework;
 using minimal.Controllers;
 using minimal.Models;
-using asplib.Model;
-using asplib.Controllers;
-
+using NUnit.Framework;
+using System;
 
 namespace minimaltest.core
 {
@@ -30,7 +27,6 @@ namespace minimaltest.core
             get { return this.Controller.Model; }
         }
 
-
         /// <summary>
         /// There could be a manually generated row in IE's current cookie, thus explicitly delete.
         /// </summary>
@@ -46,7 +42,6 @@ namespace minimaltest.core
             this.Navigate("/WithStorage");
             Assert.That(this.Html(), Does.Contain("<h1>minimalist test setup with storage</h1>"));
         }
-
 
         // Assert that all three storage methods behave as expected with respect to surviving certain actions:
         // ViewState: Even reload clears the storage
@@ -79,7 +74,6 @@ namespace minimaltest.core
             this.WriteContentTest(() => this.RestartIE());
         }
 
-
         // "survives()"-Method implementations with explicit storage selection,
         // as the storage type itself is not persisted.
 
@@ -107,7 +101,6 @@ namespace minimaltest.core
             this.Navigate("/WithStorage");
             this.Select("Storage", "Database", expectPostBack: true);
         }
-
 
         /// <summary>
         /// Basically the same test as WithRootTest.WriteContentTest(),
@@ -140,7 +133,6 @@ namespace minimaltest.core
             Assert.That(this.Controller.ContentList[0], Is.EqualTo("a first content line"));
             Assert.That(this.Controller.ContentList[1], Is.EqualTo("a second content line"));
         }
-
 
         /// <summary>
         /// Verify that explicitly clearing the current storage item by a specific GET request

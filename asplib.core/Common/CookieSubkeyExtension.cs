@@ -1,10 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
-using System.Text;
-using Microsoft.AspNetCore.Http;
-using System.Net;
 using System.Linq;
+using System.Net;
 
 namespace asplib.Common
 {
@@ -34,14 +32,14 @@ namespace asplib.Common
         {
             NameValueCollection retval = new NameValueCollection(); ;
             if (!String.IsNullOrEmpty(cookieString))
-            { 
+            {
                 var items = from item in cookieString.Split("&")
                             select item.Split("=");
                 foreach (var item in items)
                 {
                     retval.Add(WebUtility.UrlDecode(item[0]),
                                WebUtility.UrlDecode(item[1]));
-            }
+                }
             }
             return retval;
         }

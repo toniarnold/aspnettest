@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
+﻿using asplib.Model;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
-using asplib.Controllers;
-using minimal.Models;
-using asplib.Model;
+using System;
+using System.Collections.Generic;
 
 namespace minimal.Models
 {

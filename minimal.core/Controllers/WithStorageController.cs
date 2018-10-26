@@ -1,14 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc;
-using asplib.Controllers;
+﻿using asplib.Controllers;
 using asplib.Model;
-using minimal.Models;
-using Microsoft.Extensions.Configuration;
 using iie;
-
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using minimal.Models;
+using System;
+using System.Collections.Generic;
 
 namespace minimal.Controllers
 {
@@ -20,13 +17,15 @@ namespace minimal.Controllers
 
         public List<string> ContentList = new List<string>();
 
-        public WithStorageController(IConfigurationRoot configuration) : base(configuration) { }
+        public WithStorageController(IConfigurationRoot configuration) : base(configuration)
+        {
+        }
 
         [HttpGet]
         public IActionResult Index(WithStorageViewModel model)
         {
             // Update the model for an explicitly loaded session
-            model.Content = this.ContentList;  
+            model.Content = this.ContentList;
             if (this.SessionStorage != null)
             {
                 model.Storage = (Storage)this.SessionStorage;
@@ -43,7 +42,7 @@ namespace minimal.Controllers
         }
 
         [HttpPost]
-        public IActionResult Submit(WithStorageViewModel model) 
+        public IActionResult Submit(WithStorageViewModel model)
         {
             this.SessionStorage = model.Storage;
             if (String.Compare(model.ContentTextBox, "except", true) == 0)

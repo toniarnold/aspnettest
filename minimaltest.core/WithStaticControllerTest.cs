@@ -1,11 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using iie;
-using NUnit.Framework;
+﻿using iie;
 using minimal.Controllers;
 using minimal.Models;
-    
+using NUnit.Framework;
+
 namespace minimaltest
 {
     /// <summary>

@@ -190,6 +190,10 @@
       <Project>{776e3032-bfd5-4c20-9867-942f045a8b0f}</Project>
       <Name>asplib.webforms</Name>
     </ProjectReference>
+    <ProjectReference Include="..\asplib\asplib.csproj">
+      <Project>{2e7a40bd-0a76-41cc-88c7-cba07f73ad0f}</Project>
+      <Name>asplib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\iie.webforms\iie.webforms.csproj">
       <Project>{fbae78a0-e68c-4ed9-a1a8-5fcfd1695f39}</Project>
       <Name>iie.webforms</Name>

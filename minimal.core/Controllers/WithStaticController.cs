@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using asplib.Controllers;
 using Microsoft.AspNetCore.Mvc;
-using asplib.Controllers;
 using minimal.Models;
-using iie;
+using System;
 
 namespace minimal.Controllers
 {
@@ -13,7 +9,7 @@ namespace minimal.Controllers
     {
         // Any contained object to perform assertions on, the ViewModel is just
         // the most prominent one.
-        public WithStaticViewModel Model { get; set;  }
+        public WithStaticViewModel Model { get; set; }
 
         public WithStaticController() : base()
         {

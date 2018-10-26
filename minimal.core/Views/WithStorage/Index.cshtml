@@ -41,9 +41,9 @@
     <form asp-controller="WithStorage" asp-action="Submit" method="post">
         <h1>minimalist test setup with storage</h1>
         Session Storage:<br />
-        <input asp-for="Storage" type="radio" value="@Storage.ViewState" checked="checked" onclick="doStoragePostBack('ViewState');"/> ViewState
-        <input asp-for="Storage" type="radio" value="@Storage.Session" onclick="doStoragePostBack('Session');"/> Session
-        <input asp-for="Storage" type="radio" value="@Storage.Database" onclick="doStoragePostBack('Database');"/> Database
+        <input asp-for="Storage" type="radio" value="@Storage.ViewState" checked="checked" onclick="doStoragePostBack('ViewState');" /> ViewState
+        <input asp-for="Storage" type="radio" value="@Storage.Session" onclick="doStoragePostBack('Session');" /> Session
+        <input asp-for="Storage" type="radio" value="@Storage.Database" onclick="doStoragePostBack('Database');" /> Database
         <br />
         <input asp-for="ContentTextBox" />
         <button type="submit" id="submitButton">Submit</button>
@@ -53,7 +53,7 @@
                 <li>@item</li>
             }
         </ol>
-        <input sessionstorage="@ViewBag.SessionStorage" id="sessionstorage"/>
+        <input sessionstorage="@ViewBag.SessionStorage" id="sessionstorage" />
         <input viewstate="@ViewBag.ViewState" />
     </form>
 </body>

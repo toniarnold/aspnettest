@@ -1,6 +1,5 @@
 ﻿using iie;
 using NUnit.Framework;
-using System;
 
 namespace minimaltest
 {

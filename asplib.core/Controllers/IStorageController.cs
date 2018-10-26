@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
-using System.Text;
+﻿using asplib.Common;
 using asplib.Model;
-using asplib.Common;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using System;
+using System.Collections.Specialized;
 
 namespace asplib.Controllers
 {
@@ -17,6 +14,7 @@ namespace asplib.Controllers
     {
         // Required Controller members
         dynamic ViewBag { get; }
+
         HttpContext HttpContext { get; }
 
         // Additional DI members
@@ -46,7 +44,6 @@ namespace asplib.Controllers
         /// Encrypt the serialization byte[] when database storage is used
         /// </summary>
         public static bool? EncryptDatabaseStorage { get; set; }
-
 
         /// <summary>
         /// Get the actual storage type to use in this precedence:
@@ -112,7 +109,6 @@ namespace asplib.Controllers
             return String.Format("_CONTROLLER_{0}", typeName);
         }
 
-
         /// <summary>
         /// SessionStorageID-String unique to post/retrieve the storage type
         /// </summary>
@@ -134,7 +130,6 @@ namespace asplib.Controllers
             return String.Format("_SESSIONSTORAGE_{0}", typeName);
         }
 
-
         /// <summary>
         /// Get whether to encrypt database storage in this precedence:
         /// 1. Encryption enforced  in appsettings.json if "EncryptDatabaseStorage": "True"
@@ -149,7 +144,6 @@ namespace asplib.Controllers
             bool encryptOverride = EncryptDatabaseStorage ?? false;
             return encrypt || encryptOverride;
         }
-
 
         /// <summary>
         /// Serializes the given controller into a byte array if it is
@@ -176,7 +170,6 @@ namespace asplib.Controllers
             }
         }
 
-
         /// <summary>
         /// Get the Key/IV secret from the cookie, generate the parts that
         /// don't yet exist. In ASP.NET Core it is no more possible to modify
@@ -190,7 +183,6 @@ namespace asplib.Controllers
         {
             return GetSecret(Crypt.Key(password), storageID);
         }
-
 
         /// <summary>
         /// Get the Key/IV secret from the key byte[]
@@ -210,9 +202,8 @@ namespace asplib.Controllers
             return secret;
         }
 
-
         /// <summary>
-        /// name:value pair for the ViewStateInputTagHelper, to be used as 
+        /// name:value pair for the ViewStateInputTagHelper, to be used as
         /// <input viewstate="@ViewBag.ViewState" />
         /// </summary>
         /// <param name="inst"></param>
@@ -234,16 +225,16 @@ namespace asplib.Controllers
         {
             byte[] bytes;
             if (!TryGetBytes(inst, out bytes))
-            { 
+            {
                 throw new ArgumentException(String.Format(
-                    "{0} is neither a SerializableController nor a POCO controller", 
+                    "{0} is neither a SerializableController nor a POCO controller",
                     inst.GetType()));
             }
             return bytes;
         }
 
         /// <summary>
-        /// name:value pair for the SessionStorageInputTagHelper, to be used as 
+        /// name:value pair for the SessionStorageInputTagHelper, to be used as
         /// <input viewstate="@ViewBag.ViewState" />
         /// </summary>
         /// <param name="inst"></param>
@@ -254,7 +245,6 @@ namespace asplib.Controllers
                             GetSessionStorageID(inst),
                             sessionstorage);
         }
-
 
         /// <summary>
         /// Add the ViewState input to the ViewBag for rendering in the view
@@ -294,7 +284,7 @@ namespace asplib.Controllers
         {
             inst.ViewBag.SessionStorage = ViewBagSessionStorage(inst, Storage.Database);
 
-            Guid session = Guid.NewGuid();  // cannot exist in the database 
+            Guid session = Guid.NewGuid();  // cannot exist in the database
             var newCookie = new NameValueCollection();
             var cookie = inst.HttpContext.Request.Cookies[inst.GetStorageID()].FromCookieString();
             if (cookie != null)
