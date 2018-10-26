@@ -1,4 +1,3 @@
-# Ignore everything in this directory
+# Test dll outplacement and retrieval directory
 *
-# Except this file
 !.gitignore

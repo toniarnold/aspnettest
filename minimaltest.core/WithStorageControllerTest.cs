@@ -14,7 +14,6 @@ namespace minimaltest.core
     [TestFixture]
     public class WithStorageControllerTest : IETest
     {
-
         /// <summary>
         /// Typed accessor for the controller under thest
         /// </summary>
@@ -42,7 +41,7 @@ namespace minimaltest.core
         }
 
         [Test]
-        public void NavigateWithStorageTest()
+        public void NavigateWithStorageControllerTest()
         {
             this.Navigate("/WithStorage");
             Assert.That(this.Html(), Does.Contain("<h1>minimalist test setup with storage</h1>"));

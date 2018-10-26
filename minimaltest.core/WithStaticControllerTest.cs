@@ -24,7 +24,7 @@ namespace minimaltest
         }
 
         [Test]
-        public void NavigateWithControllerTest()
+        public void NavigateWithStaticControllerTest()
         {
             this.Navigate("/WithStatic");
             Assert.That(this.Html(), Does.Contain("<h1>minimalist test setup with static controller</h1>"));

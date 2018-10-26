@@ -43,7 +43,7 @@ namespace minimaltest
         }
 
         [Test]
-        public void ClickWithStorageTest()
+        public void ClickWithStorageControllerTest()
         {
             this.Navigate("/");
             this.ClickID("withstorage-link");
@@ -51,11 +51,12 @@ namespace minimaltest
         }
 
         //[Test]
-        public void ClickControlThrowsTest()
+        //[Ignore("eats up all resources available")]
+        public void RecursiveTestTest()
         {
             this.Navigate("/");
             // This actually is evocative of Goethe's "The Sorcerer's Apprentice", as each
-            // test run recursively runs the whole suite again - therefore commented out.
+            // test run recursively runs the whole suite again, starting IE instances on the way.
             Assert.That(() => this.ClickID("testButton"), Throws.Exception.TypeOf<InvalidOperationException>());
         }
     }

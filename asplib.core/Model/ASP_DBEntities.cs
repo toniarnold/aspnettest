@@ -33,7 +33,7 @@ namespace asplib.Model
                         where m.session == session
                         select m;
             var main = query.FirstOrDefault();
-            return (main != null) ? ((filter == null) ? main.main: filter(main.main)) : null;
+            return (main != null) ? ((filter == null) ? main.main : filter(main.main)) : null;
         }
 
         /// <summary>

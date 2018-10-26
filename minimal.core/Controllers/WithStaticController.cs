@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using asplib.Controllers;
 using minimal.Models;
+using iie;
 
 namespace minimal.Controllers
 {
@@ -32,6 +33,7 @@ namespace minimal.Controllers
             this.Model = model;
             // "Fighting the framework" by bypassing 1 pass model binding...
             model.ContentString = Request.Form["ContentString"];
+
             model.Content.Add(model.ContentTextBox);
             model.ContentTextBox = String.Empty; // never updated without RedirectToAction
             return View("Index", model);

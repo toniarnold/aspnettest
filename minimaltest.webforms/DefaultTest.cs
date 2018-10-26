@@ -50,12 +50,13 @@ namespace minimaltest
             Assert.That(this.Html(), Does.Contain("<h1>minimalist test setup with storage</h1>"));
         }
 
-        [Test]
-        public void ClickControlThrowsTest()
+        //[Test]
+        //[Ignore("System.Runtime.Remoting.RemotingException in TestEngine.GetRunner")]
+        public void RecursiveTestTest()
         {
             this.Navigate("/minimal.webforms/default.aspx");
             // If this would work here, it would be evocative of Goethe's "The Sorcerer's Apprentice"...
-            Assert.That(() => this.Click("testButton"), Throws.Exception.TypeOf<InvalidOperationException>());
+            this.ClickID("testButton");
         }
     }
 }

@@ -151,6 +151,31 @@ namespace asplib.Controllers
         }
 
 
+        /// <summary>
+        /// Serializes the given controller into a byte array if it is
+        /// instantiable by this StorageControllerExtension
+        /// </summary>
+        /// <param name="controller"></param>
+        /// <returns></returns>
+        public static bool TryGetBytes(object controller, out byte[] bytes)
+        {
+            if (controller is SerializableController)
+            {
+                bytes = ((SerializableController)controller).Serialize(); // shallow
+                return true;
+            }
+            else if (controller.GetType().IsSerializable)
+            {
+                bytes = Serialization.Serialize(controller);  // POCO Controller
+                return true;
+            }
+            else
+            {
+                bytes = null;
+                return false;
+            }
+        }
+
 
         /// <summary>
         /// Get the Key/IV secret from the cookie, generate the parts that
@@ -208,21 +233,12 @@ namespace asplib.Controllers
         private static byte[] Bytes(this IStorageController inst)
         {
             byte[] bytes;
-            if (inst is SerializableController)
-            {
-                bytes = ((SerializableController)inst).Serialize(); // shallow
-            }
-            else if (inst.GetType().IsSerializable)
-            {
-                bytes = Serialization.Serialize(inst);  // POCO Controller
-            }
-            else
-            {
+            if (!TryGetBytes(inst, out bytes))
+            { 
                 throw new ArgumentException(String.Format(
                     "{0} is neither a SerializableController nor a POCO controller", 
                     inst.GetType()));
             }
-
             return bytes;
         }
 

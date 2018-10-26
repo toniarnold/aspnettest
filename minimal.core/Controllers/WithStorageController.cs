@@ -4,8 +4,10 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using asplib.Controllers;
+using asplib.Model;
 using minimal.Models;
 using Microsoft.Extensions.Configuration;
+using iie;
 
 
 namespace minimal.Controllers
@@ -23,6 +25,12 @@ namespace minimal.Controllers
         [HttpGet]
         public IActionResult Index(WithStorageViewModel model)
         {
+            // Update the model for an explicitly loaded session
+            model.Content = this.ContentList;  
+            if (this.SessionStorage != null)
+            {
+                model.Storage = (Storage)this.SessionStorage;
+            }
             return View(model);
         }
 
@@ -38,6 +46,10 @@ namespace minimal.Controllers
         public IActionResult Submit(WithStorageViewModel model) 
         {
             this.SessionStorage = model.Storage;
+            if (String.Compare(model.ContentTextBox, "except", true) == 0)
+            {
+                throw new TestException("Malicious Content Exception");
+            }
             this.ContentList.Add(model.ContentTextBox);
             model.ContentTextBox = String.Empty; // never updated without RedirectToAction
             model.Content = this.ContentList;   // persistent object transiently assigned to the model

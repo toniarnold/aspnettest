@@ -49,15 +49,13 @@ namespace minimal
             services.AddSingleton(Configuration);
             services.AddSingleton(Environment);
             services.AddHttpContextAccessor();
+            services.AddLogging();
         }
 
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-
+            app.UseDeveloperExceptionPage();    // always for this demo
+            app.UseExceptionHandler("/Error/Error");
             app.UseMiddleware<IIEMiddleware>(); // Global.asax
             app.UseDefaultFiles();
             app.UseStaticFiles();
