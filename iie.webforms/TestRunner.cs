@@ -3,70 +3,22 @@ using NUnit.Framework;
 using System;
 using System.Collections.Generic;
 using System.Configuration;
-using System.Diagnostics.CodeAnalysis;
 using System.IO;
 using System.Web;
-using System.Xml;
 
 namespace iie
 {
     [TestOfAttribute("SHDocVw.InternetExplorer")]   // ensures that NUnit.Framework.dll gets included
-    public class TestRunner : ITestEventListener
+    public class TestRunner : TestRunnerBase, ITestEventListener
     {
-        public TestRunner(int port)
+        public TestRunner(int port) : base(port)
         {
-            IEExtension.Port = port;
+            this.Configure(String.IsNullOrWhiteSpace(
+                ConfigurationManager.AppSettings["RequestTimeout"]) ? 1 :
+                int.Parse(ConfigurationManager.AppSettings["RequestTimeout"]));
         }
 
-        private XmlNode result;
         private List<string> reports = new List<string>();
-
-        /// <summary>
-        /// Return the result as XML string
-        /// </summary>
-        [SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
-        public string ResultString
-        {
-            get
-            {
-                using (var stringwriter = new StringWriter())
-                using (var xmlwriter = new XmlTextWriter(stringwriter))
-                {
-                    this.result.WriteTo(xmlwriter);
-                    return stringwriter.ToString();
-                }
-            }
-        }
-
-        public bool Passed
-        {
-            get
-            {
-                return this.result.Attributes["result"].Value == "Passed";
-            }
-        }
-
-        public string PassedString
-        {
-            get
-            {
-                return string.Format("Passed<br/>Tests: {0}<br/>Asserts: {1}<br/>Duration: {2}",
-                    this.result.Attributes["total"].Value,
-                    this.result.Attributes["asserts"].Value,
-                    this.result.Attributes["duration"].Value
-                    );
-            }
-        }
-
-        public List<string> Reports
-        {
-            get { return this.reports; }
-        }
-
-        public void OnTestEvent(string report)
-        {
-            this.reports.Add(report);
-        }
 
         /// <summary>
         /// Run the test suite in the given project (dll and project name) with
@@ -106,7 +58,7 @@ namespace iie
                     builder.SelectWhere(where);
                     filter = builder.GetFilter();   // returns TestFilter.Empty when no TestFilterWhere is given
                 }
-                this.result = runner.Run(this, filter);
+                TestRunnerBase.Result = runner.Run(this, filter);
             }
         }
     }

@@ -1,11 +1,10 @@
-﻿using NUnit.Engine;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 
 namespace iie
 {
-    public abstract class TestRunnerBase : ITestEventListener
+    public abstract class TestRunnerBase
     {
         public TestRunnerBase(int port)
         {
@@ -19,10 +18,18 @@ namespace iie
         protected static XmlNode Result { get; set; }
 
         /// <summary>
-        /// Return the result as XML string, static for later retrieval after
-        /// the tests ran
+        /// Return the result as XML string
         /// </summary>
-        public static string ResultString
+        public string ResultString
+        {
+            get { return StaticResultString; }
+        }
+
+        /// <summary>
+        /// Return the result as XML string, static for later retrieval after
+        /// the tests ran (ASP.NET Core without internal ViewState)
+        /// </summary>
+        public static string StaticResultString
         {
             get
             {

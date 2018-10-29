@@ -49,7 +49,7 @@ namespace minimal.Controllers
         /// <returns></returns>
         public IActionResult Result()
         {
-            return Content(TestRunner.ResultString, "application/xml");
+            return Content(TestRunner.StaticResultString, "application/xml");
         }
     }
 }

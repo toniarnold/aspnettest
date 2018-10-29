@@ -1,15 +1,11 @@
 ﻿using asplib.Model;
 using asplib.View;
-using mshtml;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using System.Configuration;
 using System.Data.SqlClient;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using System.Threading;
 using System.Web.UI;
 using System.Web.UI.WebControls;
 
@@ -29,28 +25,17 @@ namespace iie
     {
         public const string EXCEPTION_LINK_ID = "exception-link";
 
-        /// <summary>
-        /// MainControl.Response.StatusCode after the last request
-        /// </summary>
-        public static int StatusCode { get; set; }
+        // Database maintenance
+        private static long max_mainid;
 
         /// <summary>
         /// Port of the web development server to send callback HTTP requests to.
         /// </summary>
-        public static int Port { get; set; }
-
-        // Configuration
-        private static int requestTimeoutMS =
-            String.IsNullOrWhiteSpace(ConfigurationManager.AppSettings["RequestTimeout"]) ? 1000 :
-            int.Parse(ConfigurationManager.AppSettings["RequestTimeout"]) * 1000;
-
-        // Internet Explorer
-        private static SHDocVw.InternetExplorer ie;
-
-        private static AutoResetEvent are = new AutoResetEvent(false);
-
-        // Database maintenance
-        private static long max_mainid;
+        public static int Port
+        {
+            get { return IEExtensionBase.Port; }
+            set { IEExtensionBase.Port = value; }
+        }
 
         /// <summary>
         /// [OneTimeSetUp]
@@ -59,25 +44,16 @@ namespace iie
         /// <param name="inst"></param>
         public static void SetUpIE(this IIE inst)
         {
-            Trace.Assert(ie == null, "Only one SHDocVw.InternetExplorer instance allowed");
-            ie = new SHDocVw.InternetExplorer();
-            ie.AddressBar = true;
-            ie.Visible = true;
-            ie.DocumentComplete += new SHDocVw.DWebBrowserEvents2_DocumentCompleteEventHandler(OnDocumentComplete);
+            IEExtensionBase.SetUpIE();
         }
 
         /// <summary>
         /// [OneTimeTearDown]
         /// Quit Internet Explorer
         /// </summary>
-        /// <param name="inst"></param>
         public static void TearDownIE(this IIE inst)
         {
-            if (ie != null)
-            {
-                ie.Quit();
-                ie = null;
-            }
+            IEExtensionBase.TearDownIE();
         }
 
         /// <summary>
@@ -123,10 +99,9 @@ namespace iie
         /// <param name="inst"></param>
         /// <param name="url"></param>
         /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>
-        public static void Navigate(this IIE inst, string path, int expectedStatusCode = 200)
+        public static void Navigate(this IIE inst, string path, int expectedStatusCode = 200, int delay = 0, int pause = 0)
         {
-            Trace.Assert(path.StartsWith("/"), "path must be absolute");
-            NavigateURL(inst, String.Format("http://127.0.0.1:{0}{1}", Port, path), expectedStatusCode);
+            IEExtensionBase.Navigate(path, expectedStatusCode, delay, pause);
         }
 
         /// <summary>
@@ -135,21 +110,9 @@ namespace iie
         /// <param name="inst"></param>
         /// <param name="url"></param>
         /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>
-        public static void NavigateURL(this IIE inst, string url, int expectedStatusCode = 200)
+        public static void NavigateURL(this IIE inst, string url, int expectedStatusCode = 200, int delay = 0, int pause = 0)
         {
-            ie.Navigate2(url);
-            are.WaitOne(requestTimeoutMS);
-            Assert.That(IEExtension.StatusCode, Is.EqualTo(expectedStatusCode));
-        }
-
-        /// <summary>
-        /// Release the lock on http requests
-        /// </summary>
-        /// <param name="pDisp"></param>
-        /// <param name="URL"></param>
-        private static void OnDocumentComplete(object pDisp, ref object URL)
-        {
-            are.Set();
+            IEExtensionBase.NavigateURL(url, expectedStatusCode, delay, pause);
         }
 
         /// <summary>
@@ -158,7 +121,7 @@ namespace iie
         /// <param name="statusCode"></param>
         public static void SetStatusCode(int statusCode)
         {
-            StatusCode = statusCode;
+            IEExtensionBase.StatusCode = statusCode;
         }
 
         /// <summary>
@@ -168,9 +131,7 @@ namespace iie
         /// <returns></returns>
         public static string Html(this IIE inst)
         {
-            var doc = (mshtml.IHTMLDocument2)ie.Document;
-            var html = doc.body.outerHTML;
-            return html;
+            return IEExtensionBase.Html();
         }
 
         /// <summary>
@@ -185,8 +146,8 @@ namespace iie
         /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete</param>
         public static void Click(this IIE inst, string path, bool expectPostBack = true, int expectedStatusCode = 200, int delay = 0, int pause = 0)
         {
-            var button = GetElement(inst, ControlRootExtension.GetRoot(), path);
-            Click(button, expectPostBack, expectedStatusCode, delay, pause);
+            var button = GetHTMLElement(inst, ControlRootExtension.GetRoot(), path);
+            IEExtensionBase.Click(button, expectPostBack, expectedStatusCode, delay, pause);
         }
 
         /// <summary>
@@ -202,7 +163,7 @@ namespace iie
         public static void Click(this IIE inst, Control control, bool expectPostBack = true, int expectedStatusCode = 200, int delay = 0, int pause = 0)
         {
             var button = GetHTMLElement(inst, control.ClientID);
-            Click(button, expectPostBack, expectedStatusCode, delay, pause);
+            IEExtensionBase.Click(button, expectPostBack, expectedStatusCode, delay, pause);
         }
 
         /// <summary>
@@ -218,7 +179,7 @@ namespace iie
         public static void ClickID(this IIE inst, string clientId, bool expectPostBack = true, int expectedStatusCode = 200, int delay = 0, int pause = 0)
         {
             var button = GetHTMLElement(inst, clientId);
-            Click(button, expectPostBack, expectedStatusCode, delay, pause);
+            IEExtensionBase.Click(button, expectPostBack, expectedStatusCode, delay, pause);
         }
 
         /// <summary>
@@ -255,26 +216,6 @@ namespace iie
         }
 
         /// <summary>
-        /// Click on the HTML element and wait for the response when expectPostBack is true.
-        /// </summary>
-        /// <param name="element">The HTML element itself</param>
-        /// <param name="expectPostBack">Whether to expect a server request from the click</param>
-        /// <param name="expectedStatusCode">Expected StatusCode of the response</param>
-        /// <param name="delay">Optional delay time in milliseconds before clicking the element</param>
-        /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete</param>
-        private static void Click(IHTMLElement element, bool expectPostBack = true, int expectedStatusCode = 200, int delay = 0, int pause = 0)
-        {
-            Thread.Sleep(delay);
-            element.click();
-            if (expectPostBack)
-            {
-                are.WaitOne(requestTimeoutMS);
-            }
-            Thread.Sleep(pause);
-            Assert.That(IEExtension.StatusCode, Is.EqualTo(expectedStatusCode));
-        }
-
-        /// <summary>
         /// Write into the ASP.NET control (usually a TextBox instance) at the given path
         /// </summary>
         /// <param name="inst"></param>
@@ -282,7 +223,7 @@ namespace iie
         /// <param name="text">Text to write</param>
         public static void Write(this IIE inst, string path, string text)
         {
-            var input = GetElement(inst, ControlRootExtension.GetRoot(), path);
+            var input = GetHTMLElement(inst, ControlRootExtension.GetRoot(), path);
             input.setAttribute("value", text);
         }
 
@@ -298,38 +239,22 @@ namespace iie
         }
 
         /// <summary>
-        /// Get the element with the given clientID
+        /// Get the element adapter with the given clientID
         /// </summary>
         /// <param name="clientID">ClientID resp. HTML id attribute of the element</param>
         /// <returns></returns>
-        public static IHTMLElement GetHTMLElement(this IIE inst, string clientID)
+        public static HTMLElement GetHTMLElement(this IIE inst, string clientID)
         {
-            var element = Document.getElementById(clientID);
-            if (element == null)
-            {
-                throw new Exception(String.Format("HTML element with ClientID='{0}' not found", clientID));
-            }
-            else
-            {
-                return element;
-            }
+            return IEExtensionBase.GetHTMLElement(clientID);
         }
 
         /// <summary>
-        /// Get the IHTMLDocument3 Document for accessing the DOM
-        /// </summary>
-        private static mshtml.IHTMLDocument3 Document
-        {
-            get { return (mshtml.IHTMLDocument3)ie.Document; }
-        }
-
-        /// <summary>
-        /// NAvigates to the element through the given path, reads
+        /// Navigates to the element through the given path, reads
         /// </summary>
         /// <param name="parentnode"></param>
         /// <param name="path">Member name path to the control starting at the main control</param>
         /// <returns></returns>
-        private static IHTMLElement GetElement(this IIE inst, Control parentnode, string path)
+        private static HTMLElement GetHTMLElement(this IIE inst, Control parentnode, string path)
         {
             if (ControlRootExtension.GetRoot() == null)
             {

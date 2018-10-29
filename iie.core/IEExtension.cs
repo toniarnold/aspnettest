@@ -149,12 +149,22 @@ namespace iie
                 {
                     throw new Exception(String.Format("HTML input element '{0}': value '{1}' not found", name, value));
                 }
-                else if (list[idx].Value == value)
+                else if (list[idx].getAttribute("value") == value)
                 {
                     Click(inst, name, idx, expectPostBack, expectedStatusCode, delay, pause);
                     break;
                 }
             }
+        }
+
+        /// <summary>
+        /// Get the element adapter with the given clientID
+        /// </summary>
+        /// <param name="clientID">ClientID resp. HTML id attribute of the element</param>
+        /// <returns></returns>
+        public static HTMLElement GetHTMLElement(this IIE inst, string clientID)
+        {
+            return IEExtensionBase.GetHTMLElement(clientID);
         }
 
         /// <summary>

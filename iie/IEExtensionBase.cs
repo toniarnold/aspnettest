@@ -1,5 +1,6 @@
 ﻿using MSHTML;
 using NUnit.Framework;
+using SHDocVw;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -8,7 +9,10 @@ using System.Threading;
 namespace iie
 {
     /// <summary>
-    /// Static base class equivalent for both IEExtension classes
+    /// Static base class equivalent for both IEExtension classes.
+    /// Exclusively handles COM IE interop for both frameworks.
+    /// Public methods are documented in their respective framework-specific
+    /// project iie.core/iie.webforms.
     /// </summary>
     public static class IEExtensionBase
     {
@@ -27,18 +31,17 @@ namespace iie
         /// </summary>
         public static int RequestTimeoutMS { get; set; }
 
-        // Internet Explorer
-        private static SHDocVw.InternetExplorer ie;
+        private static InternetExplorer ie;
 
         private static AutoResetEvent are = new AutoResetEvent(false);
 
         public static void SetUpIE()
         {
             Trace.Assert(ie == null, "Only one SHDocVw.InternetExplorer instance allowed");
-            ie = new SHDocVw.InternetExplorer();
+            ie = new InternetExplorer();
             ie.AddressBar = true;
             ie.Visible = true;
-            ie.DocumentComplete += new SHDocVw.DWebBrowserEvents2_DocumentCompleteEventHandler(OnDocumentComplete);
+            ie.DocumentComplete += new DWebBrowserEvents2_DocumentCompleteEventHandler(OnDocumentComplete);
         }
 
         public static void TearDownIE()
@@ -91,6 +94,11 @@ namespace iie
             return html;
         }
 
+        public static void Click(HTMLElement element, bool expectPostBack = true, int expectedStatusCode = 200, int delay = 0, int pause = 0)
+        {
+            Click(element.IHTMLElement, expectPostBack, expectedStatusCode, delay, pause);
+        }
+
         public static void ClickName(string name, int index = 0, bool expectPostBack = true, int expectedStatusCode = 200, int delay = 0, int pause = 0)
         {
             var button = GetHTMLElementByName(name, index);
@@ -115,38 +123,29 @@ namespace iie
             input.setAttribute("value", text);
         }
 
+        public static HTMLElement GetHTMLElement(string clientID)
+        {
+            var element = GetHTMLElementById(clientID);
+            return new HTMLElement(element);
+        }
+
         /// <summary>
         /// Get all input elements with the given name as simple struct w/o dependency to COM
         /// </summary>
         /// <param name="name">name attribute of the element</param>
         /// <returns></returns>
-        public static List<HtmlElement> GetHTMLElements(string name)
+        public static List<HTMLElement> GetHTMLElements(string name)
         {
             var elements = GetHTMLElementsByName(name);
-            var retval = new List<HtmlElement>();
+            var retval = new List<HTMLElement>();
             // No "foreach (IHTMLElement element in elements)":
             // Could not load file or assembly 'CustomMarshalers, Version=4.0.0.0
             for (int i = 0; i < elements.length; i++)
             {
                 var element = (IHTMLElement)elements.item(i);
-                retval.Add(new HtmlElement()
-                {
-                    Id = element.id,
-                    Name = (string)element.getAttribute("name"),
-                    Value = (string)element.getAttribute("value")
-                });
+                retval.Add(new HTMLElement(element));
             }
             return retval;
-        }
-
-        /// <summary>
-        /// Subset of IHTMLElement to pass to .NET Core without COM
-        /// </summary>
-        public struct HtmlElement
-        {
-            public string Id;
-            public string Name;
-            public string Value;
         }
 
         /// <summary>

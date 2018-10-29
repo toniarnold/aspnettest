@@ -6,7 +6,7 @@ using System.IO;
 
 namespace iie
 {
-    public class TestRunner : TestRunnerBase
+    public class TestRunner : TestRunnerBase, ITestEventListener
     {
         private IConfigurationRoot Configuration { get; }
         private IHostingEnvironment Environment { get; }
