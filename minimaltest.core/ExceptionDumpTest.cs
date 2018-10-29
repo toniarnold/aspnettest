@@ -4,7 +4,7 @@ using minimal.Models;
 using NUnit.Framework;
 using System.Text.RegularExpressions;
 
-namespace minimaltest.core
+namespace minimaltest
 {
     [TestFixture]
     public class ExceptionDumpTest : IETest
@@ -30,16 +30,16 @@ namespace minimaltest.core
         {
             this.Navigate("/WithStorage");
             this.Write("ContentTextBox", "a benign content line");
-            this.Click("submitButton");
+            this.Click("SubmitButton");
             this.AssertBenignLine();
             this.Write("ContentTextBox", "Except");
-            this.Click("submitButton", expectedStatusCode: 200);      // UseDeveloperExceptionPage yields no 500
+            this.Click("SubmitButton", expectedStatusCode: 200);      // UseDeveloperExceptionPage yields no 500
             Assert.That(this.Html(), Does.Contain("Malicious Content Exception"));
             // The benign content in the ViewState is lost on the Error page,
             // but a link to the stored session has been smuggled into the request header.
             // -> Navigate to the core dump of the controller.
             string coredumpPath = null;
-            var reUrl = new Regex(@"_ERROR_PAGE.*?http:\/\/[^\/]+([^<]+)<", RegexOptions.Singleline);
+            var reUrl = new Regex(@"_CORE_DUMP.*?http:\/\/[^\/]+([^<]+)<", RegexOptions.Singleline);
             var match = reUrl.Match(this.Html());
             if (match != null)
             {

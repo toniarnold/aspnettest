@@ -46,7 +46,7 @@
         <input asp-for="Storage" type="radio" value="@Storage.Database" onclick="doStoragePostBack('Database');" /> Database
         <br />
         <input asp-for="ContentTextBox" />
-        <button type="submit" id="submitButton">Submit</button>
+        <button type="submit" id="SubmitButton">Submit</button>
         <ol>
             @foreach (var item in Model.Content)
             {

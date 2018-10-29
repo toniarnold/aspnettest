@@ -11,7 +11,7 @@ namespace asplib.Controllers
     /// <summary>
     /// Base class for an error page registered as app.UseExceptionHandler("/Error/Error")
     /// Intended to be used in conjunction with app.UseDeveloperExceptionPage(),
-    /// therefore id adds an _ERROR_PAGE Request Header with an URL to a core dump
+    /// therefore id adds an _CORE_DUMP Request Header with an URL to a core dump
     /// which is displayed there.
     /// </summary>
     public class ErrorControllerBase : Controller
@@ -42,7 +42,7 @@ namespace asplib.Controllers
                     var url = String.Format(@"http://{0}/{1}{2}session={3}",
                                             host, path, (path.Contains("?") ? "&" : "?"),
                                             WebUtility.UrlEncode(session.ToString()));
-                    this.Request.Headers.Add("_ERROR_PAGE", url);
+                    this.Request.Headers.Add("_CORE_DUMP", url);
 
                     this.logger.LogError(String.Format("CORE_DUMP={0}", url));
                 }

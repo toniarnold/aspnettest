@@ -6,7 +6,7 @@ using minimal.Models;
 using NUnit.Framework;
 using System;
 
-namespace minimaltest.core
+namespace minimaltest
 {
     [TestFixture]
     public class WithStorageControllerTest : IETest
@@ -109,26 +109,26 @@ namespace minimaltest.core
         public void WriteContentTest(Action survives)
         {
             this.Write("ContentTextBox", "a first content line");
-            this.Click("submitButton");
+            this.Click("SubmitButton");
             // Unlike as in WebForms, the Is.Empty assertion lies about the generated HTML:
             Assert.That(this.Model.ContentTextBox, Is.Empty);
-            // Assertions on the ViewModel level
+            // Assertions on the ViewModel level (= View level in WebForms)
             Assert.That(this.Model.Content, Has.Exactly(1).Items);
             Assert.That(this.Model.Content[0], Is.EqualTo("a first content line"));
-            // Assertions on the Controller level
+            // Assertions on the Controller level (= Model level in WebForms)
             Assert.That(this.Controller.ContentList, Has.Exactly(1).Items);
             Assert.That(this.Controller.ContentList[0], Is.EqualTo("a first content line"));
 
             survives(); // Reload() or RestartIE()
 
             this.Write("ContentTextBox", "a second content line");
-            this.Click("submitButton");
+            this.Click("SubmitButton");
             Assert.That(this.Model.ContentTextBox, Is.Empty);
-            // Assertions on the ViewModel level
+            // Assertions on the ViewModel level (= View level in WebForms)
             Assert.That(this.Model.Content, Has.Exactly(2).Items);
             Assert.That(this.Model.Content[0], Is.EqualTo("a first content line"));
             Assert.That(this.Model.Content[1], Is.EqualTo("a second content line"));
-            // Assertions on the Controller level
+            // Assertions on the Controller level (= Model level in WebForms)
             Assert.That(this.Controller.ContentList, Has.Exactly(2).Items);
             Assert.That(this.Controller.ContentList[0], Is.EqualTo("a first content line"));
             Assert.That(this.Controller.ContentList[1], Is.EqualTo("a second content line"));
@@ -145,7 +145,7 @@ namespace minimaltest.core
             this.Navigate("/WithStorage");
             this.Select("Storage", "Database", expectPostBack: true);
             this.Write("ContentTextBox", "a stored content line");
-            this.Click("submitButton");
+            this.Click("SubmitButton");
             Assert.That(this.Model.Content, Has.Exactly(1).Items);
             Assert.That(this.Model.Content[0], Is.EqualTo("a stored content line"));
 

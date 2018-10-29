@@ -42,7 +42,6 @@ namespace iie
             package.AddSetting("ProcessModel", "InProcess");
             package.AddSetting("DomainUsage", "None");  // irrelevant in core
 
-            var x = IEExtension.Port;
             using (var engine = new TestEngine())
             using (var runner = engine.GetRunner(package))
             {
