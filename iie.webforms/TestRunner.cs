@@ -32,15 +32,11 @@ namespace iie
             {
                 throw new InvalidOperationException("IE tests must run in the w3wp.exe address space");
             }
-            // To avoid a cyclic project dependency, the dll must be read from an explicit path in the file system
+            // To avoid a cyclic project dependency, thet test DLL must be read
+            // from an explicit path in the file system, but in .NET Framework,
+            // it doesn't need to be formally referenced.
             var approot = HttpContext.Current.Server.MapPath("~");
-            var bin = Path.Combine(approot, String.Format(@"..\{0}\bin", testproject));
-#if DEBUG
-            string folder = "Debug";
-#else
-            string folder = "Release";
-#endif
-            var dll = Path.Combine(bin, folder, testproject + ".dll");
+            var dll = Path.Combine(approot, @"..\bin", testproject + ".dll");
             var package = new TestPackage(dll);
             // NUnit.EnginePackageSettings
             package.AddSetting("ProcessModel", "InProcess");

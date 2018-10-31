@@ -29,14 +29,14 @@ namespace iie
         /// <param name="testproject"></param>
         public void Run(string testproject)
         {
+            // To avoid a cyclic project dependency, the test DLL must be read
+            // from an explicit path in the file system, and in .NET Code,
+            // it additionally must be formally referenced, therefore the
+            // diff / if errorlevel 1 xcopy construct in the post build event
+            // to avoid endlessly recompiling a newer, but identical DLL
+            // in a cyclic dependency loop.
             var approot = Environment.ContentRootPath;
-            var bin = Path.Combine(approot, String.Format(@"..\{0}\bin", testproject));
-#if DEBUG
-            string folder = "Debug";
-#else
-            string folder = "Release";
-#endif
-            var dll = Path.Combine(bin, folder, "netcoreapp2.1", testproject + ".dll");
+            var dll = Path.Combine(approot, @"..\bin", testproject + ".dll");
             var package = new TestPackage(dll); // no TestEngineActivator.CreateInstance() in nunit.engine.netstandard
             // NUnit.EnginePackageSettings
             package.AddSetting("ProcessModel", "InProcess");
