@@ -1,5 +1,4 @@
-﻿using asplib.View;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 
 namespace iie
 {
@@ -9,20 +8,14 @@ namespace iie
     /// Call SetUpStorage() to configure the storage for that specific test suite.
     /// Provides accessors for IStorageControl
     [TestFixture]
-    public abstract class StorageTest<M> : IETest
-    where M : new()
+    public abstract class StorageTest<C> : IETest
     {
         /// <summary>
-        /// The central access point made persistent across requests
+        /// Typed accessor for the controller under test
         /// </summary>
-        protected M Main
+        public C Controller
         {
-            get { return this.MainControl.Main; }
-        }
-
-        protected IStorageControl<M> MainControl
-        {
-            get { return (IStorageControl<M>)ControlRootExtension.GetRoot(); }
+            get { return this.GetController<C>(); }
         }
 
         /// <summary>

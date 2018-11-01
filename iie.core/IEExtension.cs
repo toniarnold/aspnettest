@@ -1,4 +1,11 @@
 ﻿using System;
+using asplib.Model;
+using System.Data.SqlClient;
+using System.Runtime.CompilerServices;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
+
+[assembly: InternalsVisibleTo("test.core")]
 
 namespace iie
 {
@@ -14,6 +21,9 @@ namespace iie
     /// </summary>
     public static class IEExtension
     {
+        // Database maintenance
+        internal static long max_mainid = long.MaxValue;    // guard against uninitialized WHERE mainid > @max_mainid
+
         /// <summary>
         /// Port of the web development server to send callback HTTP requests to.
         /// </summary>
@@ -40,6 +50,48 @@ namespace iie
         public static void TearDownIE(this IIE inst)
         {
             IEExtensionBase.TearDownIE();
+        }
+
+
+        /// <summary>
+        /// [OneTimeSetUp]
+        /// </summary>
+        /// <param name="inst"></param>
+        public static void SetUpDatabase(this IIE inst)
+        {
+            using (var db = new ASP_DBEntities())
+            {
+                //max_mainid = db.Database.SqlQuery<long>(sql).FirstOrDefault(); in EF6
+                using (var conn = db.Database.GetDbConnection())
+                {
+                    conn.Open();
+                    using (var cmd = db.Database.GetDbConnection().CreateCommand())
+                    {
+                        cmd.CommandText = @"
+                            SELECT ISNULL(MAX(mainid), 0)
+                            FROM Main
+                            ";
+                        max_mainid = (long)cmd.ExecuteScalar();
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// [OneTimeTearDown]
+        /// </summary>
+        /// <param name="inst"></param>
+        public static void TearDownDatabase(this IIE inst)
+        {
+            using (var db = new ASP_DBEntities())
+            {
+                var sql = @"
+                    DELETE FROM Main
+                    WHERE mainid > @max_mainid
+                ";
+                var parameters = new object[] { new SqlParameter("max_mainid", max_mainid) };
+                db.Database.ExecuteSqlCommand(sql, parameters);
+            }
         }
 
         /// <summary>

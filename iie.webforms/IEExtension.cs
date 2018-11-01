@@ -26,7 +26,7 @@ namespace iie
         public const string EXCEPTION_LINK_ID = "exception-link";
 
         // Database maintenance
-        private static long max_mainid;
+        internal static long max_mainid = long.MaxValue;    // guard against uninitialized WHERE mainid > @max_mainid
 
         /// <summary>
         /// Port of the web development server to send callback HTTP requests to.

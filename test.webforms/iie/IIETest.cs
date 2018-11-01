@@ -27,5 +27,13 @@ namespace test.iie
             this.NavigateURL("about:blank", expectedStatusCode: 0);
             Assert.That(this.Html(), Is.EqualTo("<body></body>"));
         }
+
+        [Test]
+        public void SetUpTearDownDatabaseTest()
+        {
+            this.SetUpDatabase();   // local setup for max_mainid
+            Assert.That(IEExtension.max_mainid, Is.GreaterThan(0));
+            this.TearDownDatabase();
+        }
     }
 }

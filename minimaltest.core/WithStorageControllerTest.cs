@@ -9,16 +9,8 @@ using System;
 namespace minimaltest
 {
     [TestFixture]
-    public class WithStorageControllerTest : IETest
+    public class WithStorageControllerTest : StorageTest<WithStorageController>
     {
-        /// <summary>
-        /// Typed accessor for the controller under thest
-        /// </summary>
-        public WithStorageController Controller
-        {
-            get { return this.GetController<WithStorageController>(); }
-        }
-
         /// <summary>
         /// Typed accessor for the only ViewModel used in the app
         /// </summary>
