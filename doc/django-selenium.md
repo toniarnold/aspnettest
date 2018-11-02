@@ -287,7 +287,7 @@ itself, but the assertions are nevertheless performed at the model level:
 public void ClearStorageTest()
 {
     // Local setup: Store a value into the database
-    this.Navigate("/minimal/withstorage.aspx");
+    this.Navigate("/minimal.webforms/withstorage.aspx");
     this.Select("storageList", "Database", expectPostBack: true);
     this.Write("contentTextBox", "a stored content line");
     this.Click("submitButton");
@@ -410,7 +410,7 @@ required to fall back to the "explicit wait" pattern:
 public void InsertOrphaneDeleteTest()
 {
     // Initialize (eventually with a new cookie/row)
-    this.Navigate("/asp/default.aspx");
+    this.Navigate("/asp.webforms/default.aspx");
     this.rowCountBefore = this.GridView.Rows.Count;
 
     (...)

@@ -41,7 +41,7 @@ by analyzing the result HTML after a click on an element:
 [Test]
 public void ClickWithrootTest()
 {
-    this.Navigate("/minimal/default.aspx");
+    this.Navigate("/minimal.webforms/default.aspx");
     Assert.That(this.Html(), Does.Contain("<h1>minimalist test setup</h1>"));
     this.ClickID("withroot-link");
     Assert.That(this.Html(), Does.Contain("<h1>minimalist test setup with root</h1>"));
@@ -102,7 +102,7 @@ The condensed example test case:
 [Test]
 public void WriteContentTest()
 {
-    this.Navigate("/minimal/withroot.aspx");
+    this.Navigate("/minimal.webforms/withroot.aspx");
     this.Write("contentTextBox", "a first content line");
     this.Click("submitButton");
     Assert.That(((BulletedList)this.GetControl("contentList")).Items.Count, Is.EqualTo(1));
@@ -298,7 +298,7 @@ file:
 [Test]
 public void SqrtTest()
 {
-    this.Navigate("/asp/default.aspx");
+    this.Navigate("/asp.webforms/default.aspx");
     this.Click("footer.enterButton");
     Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
     this.Write("enter.operandTextBox", "49");
@@ -340,7 +340,7 @@ directly be reproduced with the link on top.
 Alternatively, the developers just need to scan the IIS logs for core dump
 session links of the form:
 ```
-CORE_DUMP=http://localhost/minimal/withstorage.aspx?session=27611b2a-b567-4935-a853-d2b4785393f7
+_CORE_DUMP=http://localhost/minimal/withstorage.aspx?session=27611b2a-b567-4935-a853-d2b4785393f7
 ```
 ...which directly point to a stored test case to be used for strictly TDD bug
 fixing, i.e. Test Driven Development: A failing test case which exposes the bug
@@ -357,7 +357,7 @@ public class ExceptionDumpTest : StorageTest<ContentStorage>
     [Test]
     public void ThrowRetrieveDumpTest()
     {
-        this.Navigate("/minimal/withstorage.aspx");
+        this.Navigate("/minimal.webforms/withstorage.aspx");
         this.Write("contentTextBox", "a benign content line");
         this.Click("submitButton");
         this.AssertBenignLine();
@@ -403,8 +403,8 @@ Above core dumps (and database storage in general) imply a huge security issue
 in itself: Regardless how sophisticated your access control mechanism on the
 web application level are, a core dump contains all the potentially sensitive
 data stored in ```Main``` and can be loaded by any user with access to the
-application itself. To prevent such problems, database encryption can be
-enforced in the ```Web.config``` with:
+application itself and knowledge of the Guid. To prevent such problems,
+database encryption can be enforced in the ```Web.config``` with:
 
 ```xml
 <add key="EncryptDatabaseStorage" value="True" />
@@ -415,11 +415,10 @@ browser and nowhere else. Therefore the page can only be opened statefully in
 that specific browser instance, therefore when the person causing the exception
 is actually logged in.
 
-But these encrypted core dumps still empower developers to send session links
-to the persons experiencing the error, visit them in person and trying to
-investigate while looking over their shoulder - a new ritual which rapidly
-curtails tedious interrogations starting with "WTF *precisely* have you done
-last week to get that alien show-stopper error we're unable to reproduce?"
+Due to problems with reliably storing new cookies (containing the user's key)
+in the response object after an exception occurred, core dumps are now disabled
+when database encryption is enforced.
+
 
 
 ## ```testie.asp.calculator.FibonacciTest```: Sharing session dumps for test case setup
@@ -491,7 +490,7 @@ class FibonacciTest : CalculatorTestBase
     public void VerifyFibonacciSums()
     {
         // Load the stored canonical test case
-        this.Navigate(string.Format("/asp/default.aspx?session={0}",
+        this.Navigate(string.Format("/asp.webforms/default.aspx?session={0}",
             ConfigurationManager.AppSettings["testie.asp.calculator.FibonacciTest"]));
         Assert.That(this.Stack.Count, Is.GreaterThan(0));   // non-empty number list
         Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));

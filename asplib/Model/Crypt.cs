@@ -1,5 +1,6 @@
 ﻿using System.Linq;
 using System.Security.Cryptography;
+using System.Text;
 
 namespace asplib.Model
 {
@@ -22,7 +23,7 @@ namespace asplib.Model
             }
         }
 
-        internal const int IV_LENGTH = 16;  // constant to avoid instantiating AesCryptoServiceProvider twice
+        public const int IV_LENGTH = 16;  // constant to avoid instantiating AesCryptoServiceProvider twice
 
         /// <summary>
         /// Generate a new Key/IV pair
@@ -49,6 +50,20 @@ namespace asplib.Model
             {
                 aes.GenerateIV();
                 return new Secret(key, aes.IV);
+            }
+        }
+
+        /// <summary>
+        /// Convert a password string to a 32 Bytes/256 Bit AES-Key
+        /// </summary>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        public static byte[] Key(string password)
+        {
+            var bytes = Encoding.UTF8.GetBytes(password);
+            using (var sha = SHA256.Create())
+            {
+                return sha.ComputeHash(bytes);
             }
         }
 

@@ -39,6 +39,10 @@ Explorer 11 in spite of Edge, as it doesn't render CSS Flexbox nicely):
 </bindings>
 ```
 
+In case something went wrong with the configuration and e.g. IIS Express
+doesn't start no more, the canonical solution seems to be to manually prune the
+whole  ```\.vs\``` directory.
+
 If not already present, Visual Studio will download and install the components
 required for Visual C++ Makefile projects, as I considered ```nmake``` as the
 simplest tool for handling SMC state machine generation - there is no C++

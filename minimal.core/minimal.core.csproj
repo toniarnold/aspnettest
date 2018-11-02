@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+    <RootNamespace>minimal</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Folder Include="Views\WithStatic\" />  
+    <Folder Include="Views\WithStorage\" />
+    <Folder Include="wwwroot\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.App" />
+    <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="15.9.0" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.5" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\asplib.core\asplib.core.csproj" />
+    <ProjectReference Include="..\asplib\asplib.csproj" />
+    <ProjectReference Include="..\iie.core\iie.core.csproj" />
+    <ProjectReference Include="..\iie\iie.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="minimaltest.core">
+      <HintPath>..\bin\minimaltest.core.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

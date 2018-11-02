@@ -45,7 +45,7 @@ Opening an URL in Internet Explorer works the same way for all depth levels of
 interaction between the various components. This is the simplified basic
 calling sequence:
 
-![iInternet Explorer Sequence](internet-explorer.png)
+![Internet Explorer Sequence](internet-explorer.png)
 
 
 
@@ -114,7 +114,7 @@ The following sequence diagram covers only this little test case without any fur
 [Test]
 public void NavigateWithRootTest()
 {
-    this.Navigate("/minimal/withroot.aspx");
+    this.Navigate("/minimal.webforms/withroot.aspx");
     Assert.That(this.Html(), Does.Contain("<h1>minimalist test setup with root</h1>"));
 }
 
@@ -137,7 +137,7 @@ identical, and the storage itself is not used at all for simplicity:
 [Test]
 public void NavigateWithStorageTest()
 {
-    this.Navigate("/minimal/withstorage.aspx");
+    this.Navigate("/minimal.webforms/withstorage.aspx");
     Assert.That(this.Html(), Does.Contain("<h1>minimalist test setup with storage</h1>"));
 }
 ```
