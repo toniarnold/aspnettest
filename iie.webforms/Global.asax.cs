@@ -19,13 +19,15 @@ namespace iie
         /// <param name="e"></param>
         protected virtual void Application_Error(object sender, EventArgs e)
         {
-            if (Server.GetLastError() is HttpException exception && ControlStorageExtension.CurrentMain != null)
+            if (Server.GetLastError() is HttpException exception && 
+                !ControlStorageExtension.GetEncryptDatabaseStorage() && 
+                ControlStorageExtension.CurrentMain != null)
             {
                 var session = Main.SaveMain(ControlStorageExtension.CurrentMain, null);
                 var requestUrl = this.Request.Url.ToString();
                 var url = requestUrl + (requestUrl.Contains("?") ? "&" : "?") +
                             String.Format("session={0}", this.Server.UrlEncode(session.ToString()));
-                this.Response.AppendToLog(String.Format("CORE_DUMP={0}", url));
+                this.Response.AppendToLog(String.Format("_CORE_DUMP={0}", url));
 
                 string ysod = exception.GetHtmlErrorMessage();
                 if (ysod != null)

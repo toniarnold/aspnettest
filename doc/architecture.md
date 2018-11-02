@@ -45,7 +45,7 @@ Opening an URL in Internet Explorer works the same way for all depth levels of
 interaction between the various components. This is the simplified basic
 calling sequence:
 
-![iInternet Explorer Sequence](internet-explorer.png)
+![Internet Explorer Sequence](internet-explorer.png)
 
 
 

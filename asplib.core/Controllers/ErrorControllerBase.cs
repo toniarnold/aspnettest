@@ -5,22 +5,25 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Net;
 using System.Text.RegularExpressions;
+using Microsoft.Extensions.Configuration;
 
 namespace asplib.Controllers
 {
     /// <summary>
     /// Base class for an error page registered as app.UseExceptionHandler("/Error/Error")
     /// Intended to be used in conjunction with app.UseDeveloperExceptionPage(),
-    /// therefore id adds an _CORE_DUMP Request Header with an URL to a core dump
+    /// therefore id adds a _CORE_DUMP Request Header with an URL to the core dump
     /// which is displayed there.
     /// </summary>
     public class ErrorControllerBase : Controller
     {
-        private ILogger logger;
+        private IConfigurationRoot Configuration { get; }
+        private ILogger Logger { get; }
 
-        public ErrorControllerBase(ILogger logger)
+        public ErrorControllerBase(IConfigurationRoot config, ILogger logger)
         {
-            this.logger = logger;
+            this.Configuration = config;
+            this.Logger = logger;
         }
 
         public virtual IActionResult Error()
@@ -30,7 +33,9 @@ namespace asplib.Controllers
             {
                 var controller = StaticControllerExtension.GetController();
                 byte[] bytes;
-                if (controller != null && StorageControllerExtension.TryGetBytes(controller, out bytes))
+                if (controller != null &&
+                    !StorageControllerExtension.GetEncryptDatabaseStorage(this.Configuration) &&
+                    StorageControllerExtension.TryGetBytes(controller, out bytes))
                 {
                     Guid session;
                     using (var db = new ASP_DBEntities())
@@ -44,7 +49,7 @@ namespace asplib.Controllers
                                             WebUtility.UrlEncode(session.ToString()));
                     this.Request.Headers.Add("_CORE_DUMP", url);
 
-                    this.logger.LogError(String.Format("CORE_DUMP={0}", url));
+                    this.Logger.LogError(String.Format("_CORE_DUMP={0}", url));
                 }
             }
             return View();

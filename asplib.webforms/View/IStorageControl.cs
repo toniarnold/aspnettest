@@ -240,7 +240,7 @@ namespace asplib.View
 
         /// <summary>
         /// Get whether to encrypt database storage in this precedence:
-        /// 1. Encryption enforced  in Web.config if key="EncryptDatabaseStorage" value="True"
+        /// 1. Encryption enforced in Web.config if key="EncryptDatabaseStorage" value="True"
         /// 2. Global Web.config override in controlStorageExtension.SessionStorage e.g. from unit tests
         /// 3. Defaults to false
         /// </summary>
@@ -250,10 +250,20 @@ namespace asplib.View
         public static bool GetEncryptDatabaseStorage<M>(this IStorageControl<M> controlStorage)
         where M : new()
         {
-            var encryptConfig = ConfigurationManager.AppSettings["EncryptDatabaseStorage"];
-            bool encrypt = String.IsNullOrWhiteSpace(encryptConfig) ? false : Boolean.Parse(encryptConfig);
+            var encryptConfig = GetEncryptDatabaseStorage();
             bool encryptOverride = EncryptDatabaseStorage ?? false;
-            return encrypt || encryptOverride;
+            return encryptConfig || encryptOverride;
+        }
+
+
+        /// <summary>
+        /// Returns true when encryption is enforced in Web.config with key="EncryptDatabaseStorage" value="True"
+        /// </summary>
+        /// <returns></returns>
+        public static bool GetEncryptDatabaseStorage()
+        {
+            var encryptConfig = ConfigurationManager.AppSettings["EncryptDatabaseStorage"];
+            return String.IsNullOrWhiteSpace(encryptConfig) ? false : Boolean.Parse(encryptConfig);
         }
 
         /// <summary>

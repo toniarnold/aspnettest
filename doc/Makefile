@@ -8,7 +8,8 @@ DIA = components.dia \
 	test-without-storage.dia \
 	test-with-storage.dia \
 	interaction-default.dia \
-	interaction-withroot.dia
+	webforms-core.dia
+
 
 
 .SUFFIXES: .dia .png
