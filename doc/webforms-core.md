@@ -6,8 +6,8 @@
    * [Session Persistence](#session-persistence)
    * [The Test Button](#the-test-button)
    * [Accessing HTML Form Elements](#accessing-html-form-elements)
-     * [ASP.NET WebForms](#asp.net-webforms)
-     * [ASP.NET Core](#asp.net-core)
+     * [WebForms](#webforms)
+     * [MVC Core](#mvc-core)
    * [Running the Tests](#running-the-tests)
 
 
@@ -159,7 +159,7 @@ public IActionResult Result()
 
 ### Accessing HTML Form Elements
 
-#### ASP.NET WebForms
+#### WebForms
 
 In ASP.NET WebForms, actually finding the Web-Control in the HTML DOM in
 Internet Explorer was the main driving force for the original aspnettest
@@ -196,7 +196,7 @@ public void SubmitTest()
 }
 ```
 
-#### ASP.NET Core
+#### MVC Core
 
 ASP.NET Core lacks an automatic unique id dispenser engine, and e.g. input
 names directly correspond to the property names on the ViewModel. Therefore
