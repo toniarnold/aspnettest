@@ -6,6 +6,9 @@
    * [Session Persistence](#session-persistence)
    * [The Test Button](#the-test-button)
    * [Accessing HTML Form Elements](#accessing-html-form-elements)
+     * [ASP.NET WebForms](#asp.net-webforms)
+     * [ASP.NET Core](#asp.net-core)
+   * [Running the Tests](#running-the-tests)
 
 
 ## Dependencies
@@ -110,7 +113,7 @@ protected void testButton_Click(object sender, ImageClickEventArgs e)
 ```
 
 In ASP.NET Core, all that functionality can't be combined into a single page as
-easily. Button and result are just html links:
+easily. Button and result are just HTML links:
 
 ```html
 <a asp-controller="Minimal" asp-action="Test" id="testButton">
@@ -119,7 +122,7 @@ easily. Button and result are just html links:
 <a class="testresult" asp-controller="Minimal" asp-action="Result">@Html.Raw(ViewBag.TestResult)</a>
 ```
 
-They invoke actions in the named controller implemented as:
+They invoke actions on the named controller implemented as:
 
 ```csharp
 /// <summary>
@@ -156,10 +159,13 @@ public IActionResult Result()
 
 ### Accessing HTML Form Elements
 
+#### ASP.NET WebForms
+
 In ASP.NET WebForms, actually finding the Web-Control in the HTML DOM in
-internet explorer was the main driving force for the original aspnettest
+Internet Explorer was the main driving force for the original aspnettest
 architecture, as it requires querying the actual control *instance* for its
-```ClientID``` within the library.
+framework-assigned ```ClientID``` (derived from the ID attribute) within the
+library:
 
 ```html
 <form id="form1" runat="server">
@@ -170,14 +176,14 @@ architecture, as it requires querying the actual control *instance* for its
  </form>
 ```
 
-Finding actual ASP.MET Control instances for assertions on the view level works
-the exactly same way by querying for the server ID attribute, see the
-abbreviated example below. The central ```Main``` object for assertions on the
-Model level is maintained by the testing infrastructure itself.
+Finding actual ASP.NET Control instances for assertions on the view level works
+the same way by querying for the server ID attribute, see the abbreviated
+example below. The central ```Main``` object for assertions on the Model level
+is maintained by the testing infrastructure itself:
 
 ```csharp
 [Test]
-public void Test()
+public void SubmitTest()
 {
     this.Navigate("/minimal.webforms/withstorage.aspx");
     this.Select("storageList", "Database", expectPostBack: true);
@@ -190,10 +196,12 @@ public void Test()
 }
 ```
 
-ASP.NET Core completely lacks an automatic unique id dispenser engine, and e.g.
-input names directly correspond to the property names on the ViewModel.
-Therefore there's neither need nor possibility for automatically obtaining
-computed ids, they are just written down literally:
+#### ASP.NET Core
+
+ASP.NET Core lacks an automatic unique id dispenser engine, and e.g. input
+names directly correspond to the property names on the ViewModel. Therefore
+there's neither need nor possibility for automatically obtaining computed ids -
+they are just written down literally:
 
 ```html
 <form asp-controller="WithStorage" asp-action="Submit" method="post">
@@ -202,14 +210,15 @@ computed ids, they are just written down literally:
 </form>
 ```
 
-In ASP.NET Core MVC, the terms "Model" and "Controller" don't exactly map to
-the terminology used above. There are no server side web controls, thus there
-are no direct assertions on the View level possible - and the terminology is
-confusing. The even "more modern" Model View ViewModel (MVVM) pattern in fact
-has absolutely no correspondence in the ASP.NET Core framework itself, it is
-basically just a naming convention evocative of the fact that the "Model" in
-"ASP.NET MVC" always *closely mirrored* the "View"¨and therefore *always* belonged to
-the View layer in the sense of an intimate, non-interchangeable dependency.
+In ASP.NET Core MVC, the terms "Model" and "Controller" don't map to the
+terminology used above. There are no server side web controls, thus there are
+no direct assertions on the View level possible - and the terminology is
+confusing: The even "more modern" Model View ViewModel (MVVM) pattern in fact
+has no correspondence in the ASP.NET Core framework itself, it is basically
+just a naming convention for a programming pattern evocative of the fact that
+the eponymous "Model" in "ASP.NET MVC" always *closely mirrored* the "View"¨and
+therefore *always* belonged to the View layer in the sense of an intimate,
+non-interchangeable dependency.
 
 In aspnettest for ASP.NET Core, the counterpart to the central ```Main```
 access point in ASP.NET WebForms is the serialized ```Controller``` maintained
@@ -228,7 +237,7 @@ public WithStorageViewModel Model
 }
 
 [Test]
-public void Test()
+public void SubmitTest()
 {
     // Local setup: Store a value into the database
     this.Navigate("/WithStorage");
@@ -248,3 +257,21 @@ name of the code-behind object" (ASP.NET WebForms), names beginning in upper
 case for "ViewModel property name" and accordingly "HTML input name" or - in
 absence of both - "HTML id attribute".
 
+
+### Running the Tests
+
+ASP.NET WebForms tests require IIS which in turn can't open Internet Explorer
+no more in current OS versions - therefore GUI tests can only be run from the
+Visual Studio Debugger. 
+
+ASP.NET Core tests on the other hand don't work in the
+Visual Studio Debugger (the page under tests returns 400), but still can be
+debugged by attaching the debugger to the dotnet.exe process started directly
+or with run.bat:
+
+
+| GUI Test Context | WebForms | Core |
+| --- | --- | --- |
+| Visual Studio Debugger | F5 (Debug) | - / HTTP 400 |
+| Production Runtime | - / no IE | ```run.bat``` |
+| Runtime Debugging | Attach to ```w3wp.exe``` | Attach to ```dotnet.exe``` |
