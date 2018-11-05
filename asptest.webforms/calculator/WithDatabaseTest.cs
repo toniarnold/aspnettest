@@ -2,19 +2,16 @@
 using iie;
 using NUnit.Framework;
 
-namespace testie.asp.calculator
+namespace asp.test.calculator
 {
-    /// <summary>
-    /// Extends CalculatorTest by using Session instead of ViewState as storage
-    /// and executes the same tests declared in the base class.
-    /// </summary>
+    [TestFixture]
     [Category("SHDocVw.InternetExplorer")]
-    public class WithSessionTest : CalculateTest
+    public class WithDatabaseTest : CalculateTest
     {
         [OneTimeSetUp]
         public void SetUpStorage()
         {
-            ControlStorageExtension.SessionStorage = Storage.Session;
+            ControlStorageExtension.SessionStorage = Storage.Database;
         }
 
         [OneTimeTearDown]
@@ -24,24 +21,26 @@ namespace testie.asp.calculator
         }
 
         /// <summary>
-        /// Session must be cleared after each single test such that the app behaves like the ViewState Test
+        /// Database must be cleared after each single test such that the app behaves like the ViewState Test
         /// </summary>
         [TearDown]
-        public void ClearSession()
+        public void ClearDatabase()
         {
             this.Navigate("/asp.webforms/default.aspx?clear=true&endresponse=true");
         }
 
         /// <summary>
-        /// Reload the page, session storage should survive
+        /// Restart Internet Explorer and navigate to the page, database storage should survive
         /// </summary>
-        private void Reload()
+        private void RestartIE()
         {
+            this.TearDownIE();
+            this.SetUpIE();
             this.Navigate("/asp.webforms/default.aspx");
         }
 
         /// <summary>
-        /// Same as AddTest(), but with page reload before each action.
+        /// Same as AddTest(), but with Internet Explorer restart before each action.
         /// </summary>
         [Test]
         public void AddSessionPersistsTest()
@@ -49,26 +48,27 @@ namespace testie.asp.calculator
             this.Navigate("/asp.webforms/default.aspx");
             this.Click("footer.enterButton");
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
-            this.Reload();
+            this.RestartIE();
             this.Write("enter.operandTextBox", "2");
             this.Click("footer.enterButton");
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
-            this.Reload();
+            this.RestartIE();
             this.Click("footer.enterButton");
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
-            this.Reload();
+            this.RestartIE();
             this.Write("enter.operandTextBox", "3");
             this.Click("footer.enterButton");
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             var before = this.Stack.Count;
-            this.Reload();
+            this.RestartIE();
             this.Click("calculate.addButton");
             this.AssertAddFinalState(before);
-            this.Reload();
+            this.RestartIE();
+            this.AssertAddFinalState(before);
         }
 
         /// <summary>
-        /// Assert twice, once after reloading
+        /// Assert twice, first time at the end, then a second time after RestartIE()
         /// </summary>
         private void AssertAddFinalState(int before)
         {

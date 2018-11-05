@@ -58,7 +58,10 @@ namespace asplib.Controllers
         public void Deserialize(byte[] bytes, Func<byte[], byte[]> filter = null)
         {
             var members = (Dictionary<string, object>)Serialization.Deserialize(bytes, filter);
-            this.SetValues(members);
+            if (members != null)
+            {
+                this.SetValues(members);
+            }
         }
 
         public override void OnActionExecuted(ActionExecutedContext context)
@@ -146,7 +149,7 @@ namespace asplib.Controllers
         }
 
         /// <summary>
-        /// Recursively get all FieldInfo for the class.
+        /// Recursively get all FieldInfo for the class to be serialized.
         /// </summary>
         /// <param name="members"></param>
         internal void GetFields(Type type, List<FieldInfo> members)
@@ -155,7 +158,9 @@ namespace asplib.Controllers
                                            BindingFlags.Instance |
                                            BindingFlags.Public |
                                            BindingFlags.NonPublic);
-            var serializalbeFields = allFields.Where(f => !f.Attributes.HasFlag(FieldAttributes.NotSerialized));
+            var serializalbeFields = allFields.Where(f =>
+                 f.FieldType.IsSerializable &&
+                 !f.Attributes.HasFlag(FieldAttributes.NotSerialized));
             members.AddRange(serializalbeFields);
             if (type != typeof(SerializableController)) // ceiling parent
             {

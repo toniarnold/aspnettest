@@ -12,6 +12,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\asp.core\asp.core.csproj" />
     <ProjectReference Include="..\asplib.core\asplib.core.csproj" />
     <ProjectReference Include="..\asplib\asplib.csproj" />
     <ProjectReference Include="..\iie.core\iie.core.csproj" />

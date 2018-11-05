@@ -2478,7 +2478,7 @@
         <dia:real val="3.6000000000000001"/>
       </dia:attribute>
       <dia:attribute name="name">
-        <dia:string>#testie...CalculatorTestBase#</dia:string>
+        <dia:string>#asptest...CalculatorTestBase#</dia:string>
       </dia:attribute>
       <dia:attribute name="stereotype">
         <dia:string>#TestFixture#</dia:string>
@@ -2653,7 +2653,7 @@
         <dia:real val="2.1999999999999997"/>
       </dia:attribute>
       <dia:attribute name="name">
-        <dia:string>#testie.asp.calculator.CalculateTest#</dia:string>
+        <dia:string>#asptest.calculator.CalculateTest#</dia:string>
       </dia:attribute>
       <dia:attribute name="stereotype">
         <dia:string>##</dia:string>

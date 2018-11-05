@@ -15,7 +15,9 @@ namespace test.asplib.Controllers
         public string String1 { get; set; }
 
         [NonSerialized]
-        private NonSerializable nonserializable = new NonSerializable();
+        private NonSerializable nonserialized = new NonSerializable();      // explicitly excluded
+
+        private NonSerializable nonserializable = new NonSerializable();    // implicitly excluded
     }
 
     public class Controller2 : Controller1
@@ -43,6 +45,7 @@ namespace test.asplib.Controllers
             var obj = new Controller3();
             var members = new List<FieldInfo>();
             obj.GetFields(obj.GetType(), members);
+            Assert.That(members.Where(m => m.Name == "nonserialized").Any(), Is.False);
             Assert.That(members.Where(m => m.Name == "nonserializable").Any(), Is.False);
         }
 
@@ -60,9 +63,9 @@ namespace test.asplib.Controllers
 
             Assert.Multiple(() =>
             {
-                Assert.That(src.String1, Is.EqualTo(dst.String1));
-                Assert.That(src.String2, Is.EqualTo(dst.String2));
-                Assert.That(src.String3, Is.EqualTo(dst.String3));
+                Assert.That(dst.String1, Is.EqualTo(src.String1));
+                Assert.That(dst.String2, Is.EqualTo(src.String2));
+                Assert.That(dst.String3, Is.EqualTo(src.String3));
             });
         }
 
@@ -71,6 +74,13 @@ namespace test.asplib.Controllers
         {
             var obj = new Controller3();
             var bytes = obj.Serialize();  // throws if [NonSerialized] is not respected
+        }
+
+        [Test]
+        public void IgnoreDeserializeErrorTest()
+        {
+            var bytes = new byte[]{ 1, 2, 3 };
+            this.Deserialize(bytes);
         }
     }
 }

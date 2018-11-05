@@ -8,7 +8,7 @@ using System.Linq;
 namespace test.asp.calculator.Control
 {
     /// <summary>
-    /// Mirror of testie.asp.calculator without IE, asserting solely on the POCO Control/Model class
+    /// Mirror of asptest.asp.calculator without IE, asserting solely on the POCO Control/Model class
     /// </summary>
     [TestFixture]
     [Category("DbContext")]

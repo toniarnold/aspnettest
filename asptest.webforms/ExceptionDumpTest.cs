@@ -2,9 +2,9 @@
 using iie;
 using NUnit.Framework;
 using System;
-using testie.asp.calculator;
+using asp.test.calculator;
 
-namespace testie.asp
+namespace asp.test
 {
     [TestFixture]
     public class ExceptionDumpTest : CalculatorTestBase

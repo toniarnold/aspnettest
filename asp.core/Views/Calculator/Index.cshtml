@@ -1,0 +1,47 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <title>Calculator</title>
+    <style>
+        h1 {
+            font-size: 1.25em;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nunitimg {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            height: 50px;
+            width: 50px;
+        }
+
+        .testresult {
+            position: absolute;
+            right: 0px;
+            top: 59px;
+            width: 140px;
+            background-color: rgba(255, 255, 255, 1);
+        }
+    </style>
+</head>
+<body>
+    <h2>Calculator</h2>
+
+    <a asp-controller="Calculator" asp-action="Test" id="testButton">
+        <img src="~/nunit.png" class="nunitimg" />
+    </a>
+    <a class="testresult" asp-controller="Calculator" asp-action="Result">@Html.Raw(ViewBag.TestResult)</a>
+</body>
+</html>

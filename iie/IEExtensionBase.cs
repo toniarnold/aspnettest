@@ -61,6 +61,10 @@ namespace iie
 
         public static void NavigateURL(string url, int expectedStatusCode = 200, int delay = 0, int pause = 0)
         {
+            if (ie == null)
+            {
+                throw new InvalidOperationException("IEExtension.SetUpIE() not called, you might want to inherit from IETest");
+            }
             Thread.Sleep(delay);
             ie.Navigate2(url);
             are.WaitOne(RequestTimeoutMS);

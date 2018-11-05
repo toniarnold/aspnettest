@@ -81,7 +81,7 @@ There is an SQL Server Management Studio 17 solution ```db.ssmssln```
 with the scripts, the database name is ```[ASP_DB]```. Execute these:
 
 1. ```Main.sql``` -- DDL that creates the table for session storage
-2. ```testie.asp.calculator.FibonacciTest.sql``` -- DML for that test case with
+2. ```asptest.calculator.FibonacciTest.sql``` -- DML for that test case with
    a sample session dump
 
 Adjust this connection string (the user iis/pass on my development machine is
@@ -104,7 +104,7 @@ no big secret):
 "A unit test talking to a database is not an unit test!" - well, then call it
 shallow integration tests or whatever, the point is that the NUnit test suite
 in the ```test``` project is intended to run within Visual Studio, while the
-two functional test suites in the ```testie``` resp. ```minimaltest``` projects
+two functional test suites in the ```asptest``` resp. ```minimaltest``` projects
 can only succeed when called from the respective web application itself.
 
 Therefore open  ```test.playlist``` within the Test Explorer, which contains
@@ -147,7 +147,7 @@ the problem:
 ## Let it rattle
 
 Once the minimalist test setup passes without break, chances are high that the
-```testie``` project (run from the ```asp``` startup project) will pass, too.
+```asptest``` project (run from the ```asp``` startup project) will pass, too.
 Expect 1-2 minutes for all tests. 
 
 Take care not to move the mouse pointer over the flashing Internet Explorer

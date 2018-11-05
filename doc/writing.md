@@ -3,10 +3,10 @@
 * [```minimaltest.DefaultTest```: A view from the outside](#minimaltestdefaulttest-a-view-from-the-outside)
 * [```minimaltest.WithRootTest```: Don't hunt for web controls](#minimaltestwithroottest-dont-hunt-for-web-controls)
 * [```minimaltest.WithStorageTest```: Flexible persistency for a model object](#minimaltestwithstoragetest-flexible-persistency-for-a-model-object)
-* [```testie.asp.calculator.CalculateTest```: Directly access the state machine](#testieaspcalculatorcalculatetest-directly-access-the-state-machine)
+* [```asptest.calculator.CalculateTest```: Directly access the state machine](#asptestaspcalculatorcalculatetest-directly-access-the-state-machine)
 * [```minimaltest.ExceptionDumpTest```: Core Dumps](#minimaltestexceptiondumptest-core-dumps)
 * [Database encryption](#database-encryption)
-* [```testie.asp.calculator.FibonacciTest```: Sharing session dumps for test case setup](#testieaspcalculatorfibonaccitest-sharing-session-dumps-for-test-case-setup)
+* [```asptest.calculator.FibonacciTest```: Sharing session dumps for test case setup](#asptestaspcalculatorfibonaccitest-sharing-session-dumps-for-test-case-setup)
 
 As stated in the motivational [README.md](../README.md), this project is all
 about "teaching the app to test itself". For demonstration purposes, the
@@ -14,7 +14,7 @@ about "teaching the app to test itself". For demonstration purposes, the
 between the test suite, the ASP.NET infrastructure and the
 ```SHDocVw.InternetExplorer``` COM component.
 
-The full ```asp```/```testie``` pair tries to showcase the full potential of
+The full ```asp```/```asptest``` pair tries to showcase the full potential of
 the presented test pattern on a not-so-trivial ASP.NET Web Application project
 using SMC, [The State Machine Compiler](http://smc.sourceforge.net), which in
 itself serves as an example for putting together a rich user control with
@@ -116,7 +116,7 @@ All assertions directly operate on the typed
 collection created by ASP.NET infrastructure and directly query their
 properties.
 
-A more sophisticated example from ```testie.asp.calculator.SessionGridViewTest``` involving a
+A more sophisticated example from ```asptest.calculator.SessionGridViewTest``` involving a
  ```GridView``` control:
 
 ```csharp
@@ -219,7 +219,7 @@ public void WriteContentTest()
 ```
 
 
-## ```testie.asp.calculator.CalculateTest```: Directly access the state machine
+## ```asptest.calculator.CalculateTest```: Directly access the state machine
 
 The ```ISmcControl<FsmContextMain, FsmClass, StateClass>``` extension interface
 specializes ```IStorageControl<M>``` interface for directly accessing the FSM
@@ -421,7 +421,7 @@ when database encryption is enforced.
 
 
 
-## ```testie.asp.calculator.FibonacciTest```: Sharing session dumps for test case setup
+## ```asptest.calculator.FibonacciTest```: Sharing session dumps for test case setup
 
 *If* you had placed this share button:
 
@@ -460,7 +460,7 @@ SELECT session FROM Main WHERE mainid = @@IDENTITY
 
 5. Execute the script. It will output the session GUID just created. To be able to
    reproduce the test data anywhere, edit the script to include the now fixed GUID
-   such that it looks like ```testie.asp.calculator.FibonacciTest.sql```:
+   such that it looks like ```asptest.calculator.FibonacciTest.sql```:
 ```sql
 INSERT INTO Main (session, main) SELECT 'DE2CAAF5-6602-456D-B1F9-874095359593', 0x0001000000FFFFFFFF01000000000000000C020000003A617370...
 SELECT session FROM Main WHERE mainid = @@IDENTITY
@@ -468,7 +468,7 @@ SELECT session FROM Main WHERE mainid = @@IDENTITY
 
 6. Configure the GUID in the Web.config of the application under test:
 ```xml
-<add key="testie.asp.calculator.FibonacciTest" value="DE2CAAF5-6602-456D-B1F9-874095359593"/>
+<add key="asptest.calculator.FibonacciTest" value="DE2CAAF5-6602-456D-B1F9-874095359593"/>
 ```
 
 7. Add the setup to your test case by sending the GUID to the application
@@ -476,10 +476,10 @@ SELECT session FROM Main WHERE mainid = @@IDENTITY
 
 
 The the direct link to the stored session you have inserted with the
-```testie.asp.calculator.FibonacciTest.sql``` during the initial setup is
+```asptest.calculator.FibonacciTest.sql``` during the initial setup is
 [http://127.0.0.1/asp/default.aspx?session=DE2CAAF5-6602-456D-B1F9-874095359593](http://127.0.0.1/asp/default.aspx?session=DE2CAAF5-6602-456D-B1F9-874095359593)
 
-This is the *complete* test fixture for the Fibonacci GUI test in ```testie.asp.calculator```:
+This is the *complete* test fixture for the Fibonacci GUI test in ```asptest.calculator```:
 
 ```csharp
 [TestFixture]
@@ -491,7 +491,7 @@ class FibonacciTest : CalculatorTestBase
     {
         // Load the stored canonical test case
         this.Navigate(string.Format("/asp.webforms/default.aspx?session={0}",
-            ConfigurationManager.AppSettings["testie.asp.calculator.FibonacciTest"]));
+            ConfigurationManager.AppSettings["asptest.calculator.FibonacciTest"]));
         Assert.That(this.Stack.Count, Is.GreaterThan(0));   // non-empty number list
         Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
 

@@ -9,8 +9,8 @@
     <ProjectGuid>{BB3B66BB-8287-4CA9-BA93-A686DF41062E}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>testie</RootNamespace>
-    <AssemblyName>testie.webforms</AssemblyName>
+    <RootNamespace>asptest</RootNamespace>
+    <AssemblyName>asptest.webforms</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
@@ -56,15 +56,15 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="asp\calculator\FibonacciTest.cs" />
-    <Compile Include="asp\calculator\SessionGridViewTest.cs" />
-    <Compile Include="asp\calculator\WithDatabaseEncryptedTest.cs" />
-    <Compile Include="asp\ExceptionDumpTest.cs" />
-    <Compile Include="asp\calculator\WithDatabaseTest.cs" />
-    <Compile Include="asp\calculator\WithSessionTest.cs" />
-    <Compile Include="asp\calculator\CalculatorTestBase.cs" />
-    <Compile Include="asp\calculator\CalculateTest.cs" />
-    <Compile Include="asp\TriptychTest.cs" />
+    <Compile Include="calculator\FibonacciTest.cs" />
+    <Compile Include="calculator\SessionGridViewTest.cs" />
+    <Compile Include="calculator\WithDatabaseEncryptedTest.cs" />
+    <Compile Include="ExceptionDumpTest.cs" />
+    <Compile Include="calculator\WithDatabaseTest.cs" />
+    <Compile Include="calculator\WithSessionTest.cs" />
+    <Compile Include="calculator\CalculatorTestBase.cs" />
+    <Compile Include="calculator\CalculateTest.cs" />
+    <Compile Include="TriptychTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -84,9 +84,9 @@
       <Project>{5bb3b5f0-35bf-4a55-ba1d-f4353eb3c6e8}</Project>
       <Name>iie</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SMC\SMC.csproj">
-      <Project>{95a23f32-99ae-4315-8319-56bee5d63b2f}</Project>
-      <Name>SMC</Name>
+    <ProjectReference Include="..\smc\smc.csproj">
+      <Project>{079cccf0-0fb4-463a-81dc-98493d097d6a}</Project>
+      <Name>smc</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

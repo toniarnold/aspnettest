@@ -24,7 +24,7 @@ namespace asp
         protected void testButton_Click(object sender, ImageClickEventArgs e)
         {
             var testRunner = new TestRunner(this.Request.Url.Port);
-            testRunner.Run("testie.webforms");
+            testRunner.Run("asptest.webforms");
             this.testResult.ResultString = testRunner.ResultString;
 
             if (testRunner.Passed)

@@ -5,7 +5,7 @@ using System;
 using System.Linq;
 using System.Web.UI.WebControls;
 
-namespace testie.asp.calculator
+namespace asp.test.calculator
 {
     /// <summary>
     /// Test the sessionDumpGridView functionality in Main.ascx

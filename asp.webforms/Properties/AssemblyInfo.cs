@@ -36,4 +36,4 @@ using System.Runtime.InteropServices;
 
 // Manually added for accessing the state types
 [assembly: InternalsVisibleTo("test.webforms")]
-[assembly: InternalsVisibleTo("testie.webforms")]
+[assembly: InternalsVisibleTo("asptest.webforms")]

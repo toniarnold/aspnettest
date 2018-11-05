@@ -26,13 +26,13 @@ Both test variants verify the same web application with its libraries,
 therefore that component appears in both boxes - but of course not at the same
 time.
  
-Note the cyclic dependency the ```testie``` assembly takes part in: The
+Note the cyclic dependency the ```asptest``` assembly takes part in: The
 requirement is that all components live in the same ASP.NET address space, thus
-```asp``` needs to start (i.e. depends on) ```testie```, but ```testie``` of
+```asp``` needs to start (i.e. depends on) ```asptest```, but ```asptest``` of
 course also depends on ```asp``` as the application under test.
 
 The cycle is broken up by providing the ```ITestRunner``` (started by
-```asp```) only with the late-bound physical path to the ```testie.dll``` file
+```asp```) only with the late-bound physical path to the ```asptest.dll``` file
 to load the test assembly ultimately with a call to ```Assembly.Load()```.
 
 ![Components](components.png)

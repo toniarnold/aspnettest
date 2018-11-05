@@ -91,12 +91,6 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\SMC\SMC.csproj">
-      <Project>{95a23f32-99ae-4315-8319-56bee5d63b2f}</Project>
-      <Name>SMC</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup>
     <None Include="App.config" />
     <EntityDeploy Include="Model\Db.edmx">
       <Generator>EntityModelCodeGenerator</Generator>
@@ -107,9 +101,14 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\smc\smc.csproj">
+      <Project>{079cccf0-0fb4-463a-81dc-98493d097d6a}</Project>
+      <Name>smc</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -1,9 +1,9 @@
 ﻿using asplib.View;
 using iie;
 using NUnit.Framework;
-using testie.asp.calculator;
+using asp.test.calculator;
 
-namespace testie.asp
+namespace asp.test
 {
     [TestFixture]
     public class TriptychTest : CalculatorTestBase    // calculator TestBase for CircumambulateStorageTypes

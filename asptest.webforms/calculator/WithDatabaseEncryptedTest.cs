@@ -1,7 +1,7 @@
 ﻿using asplib.View;
 using NUnit.Framework;
 
-namespace testie.asp.calculator
+namespace asp.test.calculator
 {
     [TestFixture]
     [Category("SHDocVw.InternetExplorer")]

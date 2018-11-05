@@ -96,9 +96,9 @@
       <Project>{5bb3b5f0-35bf-4a55-ba1d-f4353eb3c6e8}</Project>
       <Name>iie</Name>
     </ProjectReference>
-    <ProjectReference Include="..\SMC\SMC.csproj">
-      <Project>{95a23f32-99ae-4315-8319-56bee5d63b2f}</Project>
-      <Name>SMC</Name>
+    <ProjectReference Include="..\smc\smc.csproj">
+      <Project>{079cccf0-0fb4-463a-81dc-98493d097d6a}</Project>
+      <Name>smc</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

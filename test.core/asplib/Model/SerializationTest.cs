@@ -31,7 +31,7 @@ namespace test.asplib.Model
         }
 
         [Test]
-        public void DeserializeNullTest()
+        public void DeserializeErrorNullTest()
         {
             var none = Serialization.Deserialize(new byte[] { 1, 2, 3 });
             Assert.That(none, Is.Null);
