@@ -8,9 +8,9 @@ namespace iie
     /// </summary>
     [TestFixture]
     public abstract class SmcTest<M, F, S> : StorageTest<M>
-    where M : new()
-    where F : statemap.FSMContext
-    where S : statemap.State
+        where M : new()
+        where F : statemap.FSMContext
+        where S : statemap.State
     {
         protected F Fsm
         {

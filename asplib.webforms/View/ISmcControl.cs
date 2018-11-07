@@ -11,9 +11,9 @@ namespace asplib.View
     /// <typeparam name="F"></typeparam>
     /// <typeparam name="S"></typeparam>
     public interface ISmcControl<M, F, S> : IStorageControl<M>
-    where M : new()
-    where F : statemap.FSMContext
-    where S : statemap.State
+        where M : new()
+        where F : statemap.FSMContext
+        where S : statemap.State
     {
         /// <summary>
         /// The generated FSM class
@@ -44,9 +44,9 @@ namespace asplib.View
         /// <param name="controlMain"></param>
         /// <param name="storage"></param>
         public static void LoadMain<M, F, S>(this ISmcControl<M, F, S> controlMain)
-        where M : class, new()
-        where F : statemap.FSMContext
-        where S : statemap.State
+            where M : class, new()
+            where F : statemap.FSMContext
+            where S : statemap.State
         {
             ControlStorageExtension.LoadMain<M>(controlMain);
 
@@ -68,9 +68,9 @@ namespace asplib.View
         /// <param name="controlMain"></param>
         /// <param name="storage"></param>
         public static void SaveMain<M, F, S>(this ISmcControl<M, F, S> controlMain)
-        where M : class, new()
-        where F : statemap.FSMContext
-        where S : statemap.State
+            where M : class, new()
+            where F : statemap.FSMContext
+            where S : statemap.State
         {
             ControlStorageExtension.SaveMain<M>(controlMain);
         }
@@ -84,9 +84,9 @@ namespace asplib.View
         /// <param name="controlMain"></param>
         /// <param name="storage"></param>
         public static void SetStorage<M, F, S>(this ISmcControl<M, F, S> controlMain, string storage)
-        where M : new()
-        where F : statemap.FSMContext
-        where S : statemap.State
+            where M : new()
+            where F : statemap.FSMContext
+            where S : statemap.State
         {
             ControlStorageExtension.SetStorage<M>(controlMain, storage);
         }
@@ -100,9 +100,9 @@ namespace asplib.View
         /// <param name="controlMain"></param>
         /// <param name="storage"></param>
         public static void SetStorage<M, F, S>(this ISmcControl<M, F, S> controlMain, Storage storage)
-        where M : new()
-        where F : statemap.FSMContext
-        where S : statemap.State
+            where M : new()
+            where F : statemap.FSMContext
+            where S : statemap.State
         {
             ControlStorageExtension.SetStorage<M>(controlMain, storage);
         }
@@ -120,9 +120,9 @@ namespace asplib.View
         /// <param name="controlMain"></param>
         /// <returns></returns>
         public static Storage GetStorage<M, F, S>(this ISmcControl<M, F, S> controlMain)
-        where M : new()
-        where F : statemap.FSMContext
-        where S : statemap.State
+            where M : new()
+            where F : statemap.FSMContext
+            where S : statemap.State
         {
             return ControlStorageExtension.GetStorage<M>(controlMain);
         }
@@ -139,9 +139,9 @@ namespace asplib.View
         /// <param name="controlMain"></param>
         /// <returns></returns>
         public static bool GetEncryptDatabaseStorage<M, F, S>(this ISmcControl<M, F, S> controlMain)
-        where M : new()
-        where F : statemap.FSMContext
-        where S : statemap.State
+            where M : new()
+            where F : statemap.FSMContext
+            where S : statemap.State
         {
             return ControlStorageExtension.GetEncryptDatabaseStorage<M>(controlMain);
         }
@@ -152,9 +152,9 @@ namespace asplib.View
         /// </summary>
         /// <returns></returns>
         internal static Crypt.Secret GetSecret<M, F, S>(this ISmcControl<M, F, S> controlMain)
-        where M : class, new()
-        where F : statemap.FSMContext
-        where S : statemap.State
+            where M : class, new()
+            where F : statemap.FSMContext
+            where S : statemap.State
         {
             return ControlStorageExtension.GetSecret<M>(controlMain);
         }
@@ -173,9 +173,9 @@ namespace asplib.View
         /// <param name="controlMain"></param>
         /// <returns></returns>
         internal static void ClearIfRequested<M, F, S>(this ISmcControl<M, F, S> controlMain)
-        where M : new()
-        where F : statemap.FSMContext
-        where S : statemap.State
+            where M : new()
+            where F : statemap.FSMContext
+            where S : statemap.State
         {
             ControlStorageExtension.ClearIfRequested<M>(controlMain);
         }
@@ -189,9 +189,9 @@ namespace asplib.View
         /// <param name="controlMain"></param>
         /// <returns></returns>
         internal static string StorageID<M, F, S>(this ISmcControl<M, F, S> controlMain)
-        where M : new()
-        where F : statemap.FSMContext
-        where S : statemap.State
+            where M : new()
+            where F : statemap.FSMContext
+            where S : statemap.State
         {
             return ControlStorageExtension.StorageID<M>(controlMain);
         }
@@ -202,9 +202,9 @@ namespace asplib.View
         /// <typeparam name="M"></typeparam>
         /// <param name="controlMain"></param>
         internal static void PropagateMain<M, F, S>(this ISmcControl<M, F, S> controlMain, M main)
-        where M : new()
-        where F : statemap.FSMContext
-        where S : statemap.State
+            where M : new()
+            where F : statemap.FSMContext
+            where S : statemap.State
         {
             ControlStorageExtension.PropagateMain<M>(controlMain, main);
         }
@@ -216,9 +216,9 @@ namespace asplib.View
         /// <param name="controlMain"></param>
         /// <returns></returns>
         internal static IEnumerable<ISmcControl<M, F, S>> Subcontrols<M, F, S>(this ISmcControl<M, F, S> controlMain)
-        where M : new()
-        where F : statemap.FSMContext
-        where S : statemap.State
+            where M : new()
+            where F : statemap.FSMContext
+            where S : statemap.State
         {
             return from c in ControlStorageExtension.Subcontrols<M>(controlMain)
                    where c is ISmcControl<M, F, S>
@@ -231,17 +231,17 @@ namespace asplib.View
         /// </summary>
         /// <param name="control"></param>
         internal static void HideAll<M, F, S>(this ISmcControl<M, F, S> controlMain)
-        where M : new()
-        where F : statemap.FSMContext
-        where S : statemap.State
+            where M : new()
+            where F : statemap.FSMContext
+            where S : statemap.State
         {
             controlMain.HideSubcontrols();
         }
 
         internal static void HideSubcontrols<M, F, S>(this ISmcControl<M, F, S> controlMain)
-        where M : new()
-        where F : statemap.FSMContext
-        where S : statemap.State
+            where M : new()
+            where F : statemap.FSMContext
+            where S : statemap.State
         {
             foreach (ISmcControl<M, F, S> subcontrol in controlMain.Subcontrols())
             {

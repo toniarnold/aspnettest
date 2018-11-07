@@ -1,11 +1,11 @@
 ﻿using asplib.Model;
 using Microsoft.AspNetCore.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
 using System;
 using System.Net;
 using System.Text.RegularExpressions;
-using Microsoft.Extensions.Configuration;
 
 namespace asplib.Controllers
 {

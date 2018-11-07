@@ -19,8 +19,8 @@ namespace iie
         /// <param name="e"></param>
         protected virtual void Application_Error(object sender, EventArgs e)
         {
-            if (Server.GetLastError() is HttpException exception && 
-                !ControlStorageExtension.GetEncryptDatabaseStorage() && 
+            if (Server.GetLastError() is HttpException exception &&
+                !ControlStorageExtension.GetEncryptDatabaseStorage() &&
                 ControlStorageExtension.CurrentMain != null)
             {
                 var session = Main.SaveMain(ControlStorageExtension.CurrentMain, null);

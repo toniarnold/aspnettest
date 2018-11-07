@@ -83,29 +83,35 @@ namespace asp.calculator
             // This State->View visibility mapping is the central axis of the SMC pattern.
             this.title.Visible = true;
 
-            switch(this.State)
+            switch (this.State)
             {
                 case var s when s == CalculatorContext.Map1.Calculate:
                     this.calculate.Visible = true;
                     break;
+
                 case var s when s == CalculatorContext.Map1.Enter:
                     this.enter.Visible = true;
                     break;
+
                 case var s when s == CalculatorContext.Map1.ErrorNumeric:
                     this.error.Visible = true;
                     this.error.Msg = "The input was not numeric.";
                     break;
+
                 case var s when s == CalculatorContext.Map1.ErrorTuple:
                     this.error.Visible = true;
                     this.error.Msg = "Need two values on the stack to compute.";
                     break;
+
                 case var s when s == CalculatorContext.Map1.ErrorEmpty:
                     this.error.Visible = true;
                     this.error.Msg = "Need a value on the stack to compute.";
                     break;
+
                 case var s when s == CalculatorContext.Map1.Splash:
                     this.splash.Visible = true;
                     break;
+
                 default:
                     throw new NotImplementedException(String.Format("this.State {0}", this.State));
             }

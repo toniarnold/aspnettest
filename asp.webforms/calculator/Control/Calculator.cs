@@ -59,6 +59,7 @@ namespace asp.calculator.Control
             get { return this.operand; }
             set { this.operand = value; }
         }
+
         [NonSerialized]
         private string operand;
 

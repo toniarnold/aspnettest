@@ -10,7 +10,7 @@ namespace iie
     /// Provides accessors for IStorageControl
     [TestFixture]
     public abstract class StorageTest<M> : IETest
-    where M : new()
+        where M : new()
     {
         /// <summary>
         /// The central access point made persistent across requests

@@ -1,9 +1,8 @@
-﻿using asplib.Controllers;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
 
 [assembly: InternalsVisibleTo("asp.core.Views")]    // for CalculatorContext.Map1 in the Razor engine
 [assembly: InternalsVisibleTo("test.core")]
@@ -23,7 +22,9 @@ namespace asp.Controllers
             this.Construct();
         }
 
-        public Calculator(IConfigurationRoot config) : base(config) { }
+        public Calculator(IConfigurationRoot config) : base(config)
+        {
+        }
 
         /// <summary>
         /// Separate constructor method for inheriting in NUnit

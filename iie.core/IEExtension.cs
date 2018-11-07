@@ -1,9 +1,8 @@
-﻿using System;
-using asplib.Model;
+﻿using asplib.Model;
+using Microsoft.EntityFrameworkCore;
+using System;
 using System.Data.SqlClient;
 using System.Runtime.CompilerServices;
-using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Configuration;
 
 [assembly: InternalsVisibleTo("test.core")]
 
@@ -51,7 +50,6 @@ namespace iie
         {
             IEExtensionBase.TearDownIE();
         }
-
 
         /// <summary>
         /// [OneTimeSetUp]

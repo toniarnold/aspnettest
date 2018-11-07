@@ -1,7 +1,7 @@
-﻿using CalculatorController = asp.Controllers.Calculator;
-using iie;
+﻿using iie;
 using NUnit.Framework;
 using System.Collections.Generic;
+using CalculatorController = asp.Controllers.Calculator;
 
 namespace asptest.Calculator
 {

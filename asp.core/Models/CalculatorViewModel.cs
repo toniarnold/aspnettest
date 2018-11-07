@@ -1,9 +1,6 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Mvc.ModelBinding;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using asp.Controllers;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace asp.Models
 {
@@ -23,7 +20,7 @@ namespace asp.Models
         [BindNever]
         public string StackHtmlString
         {
-            get {  return (this.Stack != null) ? String.Join("<br />", this.Stack) : String.Empty; }
+            get { return (this.Stack != null) ? String.Join("<br />", this.Stack) : String.Empty; }
         }
     }
 }

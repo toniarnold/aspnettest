@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using statemap;
-using Microsoft.Extensions.Configuration;
+﻿using Microsoft.Extensions.Configuration;
+using System;
 
 namespace asplib.Controllers
 {
@@ -20,7 +17,9 @@ namespace asplib.Controllers
         where F : statemap.FSMContext
         where S : statemap.State
     {
-        public SmcController() {}   // NUnit
+        public SmcController()
+        {
+        }   // NUnit
 
         public SmcController(IConfigurationRoot configuration) : base(configuration)
         {

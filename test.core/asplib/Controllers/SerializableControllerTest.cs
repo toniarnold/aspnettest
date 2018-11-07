@@ -79,7 +79,7 @@ namespace test.asplib.Controllers
         [Test]
         public void IgnoreDeserializeErrorTest()
         {
-            var bytes = new byte[]{ 1, 2, 3 };
+            var bytes = new byte[] { 1, 2, 3 };
             this.Deserialize(bytes);
         }
     }

@@ -1,10 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+﻿using asp.Models;
 using Microsoft.AspNetCore.Mvc;
-using asp.Models;
-
 
 namespace asp.Views.Calculator.Components.Calculate
 {

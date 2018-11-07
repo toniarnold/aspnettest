@@ -30,7 +30,9 @@ namespace asplib.Controllers
 
         public object Model { get { return this.model; } }
 
-        public SerializableController() { }   // NUnit
+        public SerializableController()
+        {
+        }   // NUnit
 
         public SerializableController(IConfigurationRoot configuration) : base()
         {

@@ -16,7 +16,7 @@ namespace asplib.View
     /// Extension interface for a Control to access to the LoadStorage()/SaveStorage() methods
     /// </summary>
     public interface IStorageControl<M> : IRootControl
-    where M : new()
+        where M : new()
     {
         /// <summary>
         /// The central access point made persistent across requests
@@ -92,7 +92,7 @@ namespace asplib.View
         /// <typeparam name="M"></typeparam>
         /// <param name="controlStorage"></param>
         public static void LoadMain<M>(this IStorageControl<M> controlStorage)
-        where M : class, new()
+            where M : class, new()
         {
             controlStorage.ClearIfRequested();
 
@@ -193,7 +193,7 @@ namespace asplib.View
         /// <param name="controlStorage"></param>
         /// <param name="storage"></param>
         public static void SetStorage<M>(this IStorageControl<M> controlStorage, string storage)
-        where M : new()
+            where M : new()
         {
             controlStorage.SessionStorage = (Storage)Enum.Parse(typeof(Storage), storage, true);
         }
@@ -223,7 +223,7 @@ namespace asplib.View
         /// <param name="controlStorage"></param>
         /// <returns></returns>
         public static Storage GetStorage<M>(this IStorageControl<M> controlStorage)
-        where M : new()
+            where M : new()
         {
             var storage = controlStorage.SessionStorage;    // Web Control property
             if (storage == null)
@@ -248,13 +248,12 @@ namespace asplib.View
         /// <param name="controlStorage"></param>
         /// <returns></returns>
         public static bool GetEncryptDatabaseStorage<M>(this IStorageControl<M> controlStorage)
-        where M : new()
+            where M : new()
         {
             var encryptConfig = GetEncryptDatabaseStorage();
             bool encryptOverride = EncryptDatabaseStorage ?? false;
             return encryptConfig || encryptOverride;
         }
-
 
         /// <summary>
         /// Returns true when encryption is enforced in Web.config with key="EncryptDatabaseStorage" value="True"
@@ -277,7 +276,7 @@ namespace asplib.View
         /// <param name="sender"></param>
         /// <param name="e"></param>
         public static void shareButton_Click<M>(this IStorageControl<M> controlStorage, object sender, EventArgs e)
-        where M : class, new()
+            where M : class, new()
         {
             var mainRow = new Main();
             mainRow.SetInstance(controlStorage.Main); // serialize without filter
@@ -293,7 +292,7 @@ namespace asplib.View
         /// </summary>
         /// <returns></returns>
         internal static Crypt.Secret GetSecret<M>(this IStorageControl<M> controlStorage)
-        where M : class, new()
+            where M : class, new()
         {
             Crypt.Secret secret;
             string keyString;
@@ -331,7 +330,7 @@ namespace asplib.View
         /// <param name="controlStorage"></param>
         /// <returns></returns>
         internal static void ClearIfRequested<M>(this IStorageControl<M> controlStorage)
-        where M : new()
+            where M : new()
         {
             if (!controlStorage.IsPostBack)
             {
@@ -398,7 +397,7 @@ namespace asplib.View
         /// <param name="controlStorage"></param>
         /// <returns></returns>
         internal static string StorageID<M>(this IStorageControl<M> controlStorage)
-        where M : new()
+            where M : new()
         {
             return controlStorage.ClientID + "_Main";
         }
@@ -409,7 +408,7 @@ namespace asplib.View
         /// <typeparam name="M"></typeparam>
         /// <param name="controlStorage"></param>
         internal static void PropagateMain<M>(this IStorageControl<M> controlStorage, M main)
-        where M : new()
+            where M : new()
         {
             controlStorage.Main = main;
             foreach (IStorageControl<M> subcontrol in controlStorage.Subcontrols())
@@ -425,7 +424,7 @@ namespace asplib.View
         /// <param name="controlStorage"></param>
         /// <returns></returns>
         internal static IEnumerable<IStorageControl<M>> Subcontrols<M>(this IStorageControl<M> controlStorage)
-        where M : new()
+            where M : new()
         {
             return
                 from FieldInfo c in controlStorage.GetType().GetFields(BindingFlags.Instance | BindingFlags.NonPublic)
