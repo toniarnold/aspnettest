@@ -2,8 +2,12 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
 
+[assembly: InternalsVisibleTo("asp.core.Views")]    // for CalculatorContext.Map1 in the Razor engine
 [assembly: InternalsVisibleTo("test.core")]
+[assembly: InternalsVisibleTo("asptest.core")]
 
 namespace asp.Controllers
 {
@@ -12,45 +16,27 @@ namespace asp.Controllers
     /// </summary>
     public partial class Calculator
     {
-        protected CalculatorContext _fsm;
-        protected Stack<string> _stack;
+        protected Stack<string> stack;
 
         public Calculator()
         {
             this.Construct();
         }
 
+        public Calculator(IConfigurationRoot config) : base(config) { }
+
         /// <summary>
         /// Separate constructor method for inheriting in NUnit
         /// </summary>
-        protected void Construct()
+        protected override void Construct()
         {
-            this._fsm = new CalculatorContext(this);
-            this._stack = new Stack<string>();
-        }
-
-        public CalculatorContext Fsm
-        {
-            get { return this._fsm; }
-        }
-
-        public CalculatorContext.CalculatorState State
-        {
-            get { return this._fsm.State; }
-            set { this._fsm.State = value; }
+            base.Construct();
+            this.stack = new Stack<string>();
         }
 
         public Stack<string> Stack
         {
-            get { return this._stack; }
-        }
-
-        /// <summary>
-        /// String represenation of the stack for HTML presentation
-        /// </summary>
-        public string StackHtmlString
-        {
-            get { return String.Join("<br />", this.Stack); }
+            get { return this.stack; }
         }
 
         /// <summary>
@@ -68,68 +54,78 @@ namespace asp.Controllers
         // Context methods
         public void Push(string value)
         {
-            this._stack.Push(value);
+            this.stack.Push(value);
         }
 
+        // Action method implementations triggered by the respective acton method in the CalculatorController.cs file
+        [NonAction]
         public void Enter(string value)
         {
             this.Push(value);
         }
 
+        [NonAction]
         public void Add()
         {
-            var y = Double.Parse(this._stack.Pop());
-            var x = Double.Parse(this._stack.Pop());
+            var y = Double.Parse(this.stack.Pop());
+            var x = Double.Parse(this.stack.Pop());
             var r = x + y;
             this.Push(r.ToString());
         }
 
+        [NonAction]
         public void Sub()
         {
-            var y = Double.Parse(this._stack.Pop());
-            var x = Double.Parse(this._stack.Pop());
+            var y = Double.Parse(this.stack.Pop());
+            var x = Double.Parse(this.stack.Pop());
             var r = x - y;
             this.Push(r.ToString());
         }
 
+        [NonAction]
         public void Mul()
         {
-            var y = Double.Parse(this._stack.Pop());
-            var x = Double.Parse(this._stack.Pop());
+            var y = Double.Parse(this.stack.Pop());
+            var x = Double.Parse(this.stack.Pop());
             var r = x * y;
             this.Push(r.ToString());
         }
 
+        [NonAction]
         public void Div()
         {
-            var y = Double.Parse(this._stack.Pop());
-            var x = Double.Parse(this._stack.Pop());
+            var y = Double.Parse(this.stack.Pop());
+            var x = Double.Parse(this.stack.Pop());
             var r = x / y;
             this.Push(r.ToString());
         }
 
+        [NonAction]
         public void Pow()
         {
-            var x = Double.Parse(this._stack.Pop());
+            var x = Double.Parse(this.stack.Pop());
             var r = Math.Pow(x, 2);
             this.Push(r.ToString());
         }
 
+        [NonAction]
         public void Sqrt()
         {
-            var x = Double.Parse(this._stack.Pop());
+            var x = Double.Parse(this.stack.Pop());
             var r = Math.Sqrt(x);
             this.Push(r.ToString());
         }
 
+        [NonAction]
         public void Clr()
         {
-            this._stack.Pop();
+            this.stack.Pop();
         }
 
+        [NonAction]
         public void ClrAll()
         {
-            this._stack = new Stack<string>();
+            this.stack = new Stack<string>();
         }
     }
 }

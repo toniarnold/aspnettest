@@ -7,7 +7,7 @@ namespace iie
     /// Minimal base class for IE tests with a [OneTimeSetUp] / [OneTimeTearDown] pair
     /// for starting/stopping Internet Explorer.
     /// </summary>
-    public abstract class IETest : IIE
+    public abstract class IETest<C> : IIE
     {
         /// <summary>
         /// Start Internet Explorer
@@ -28,12 +28,11 @@ namespace iie
         }
 
         /// <summary>
-        /// Get the global reference to the root control of an application under test within tests
+        /// Typed accessor for the controller under test
         /// </summary>
-        /// <returns></returns>
-        protected T GetController<T>()
+        protected C Controller
         {
-            return (T)StaticControllerExtension.GetController();
+            get { return (C)StaticControllerExtension.GetController(); }
         }
     }
 }

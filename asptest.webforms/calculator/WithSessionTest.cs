@@ -2,7 +2,7 @@
 using iie;
 using NUnit.Framework;
 
-namespace asp.test.calculator
+namespace asptest.calculator
 {
     /// <summary>
     /// Extends CalculatorTest by using Session instead of ViewState as storage

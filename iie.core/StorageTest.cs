@@ -8,16 +8,8 @@ namespace iie
     /// Call SetUpStorage() to configure the storage for that specific test suite.
     /// Provides accessors for IStorageControl
     [TestFixture]
-    public abstract class StorageTest<C> : IETest
+    public abstract class StorageTest<C> : IETest<C>
     {
-        /// <summary>
-        /// Typed accessor for the controller under test
-        /// </summary>
-        public C Controller
-        {
-            get { return this.GetController<C>(); }
-        }
-
         /// <summary>
         /// Remember the last row in [Main] before the tests started
         /// </summary>

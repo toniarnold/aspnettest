@@ -11,6 +11,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\asplib\asplib.csproj" />
+    <ProjectReference Include="..\smc\smc.csproj" />
   </ItemGroup>
 
 </Project>

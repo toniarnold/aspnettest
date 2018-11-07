@@ -30,9 +30,7 @@ namespace asplib.Controllers
 
         public object Model { get { return this.model; } }
 
-        public SerializableController()
-        {
-        } // NUnit
+        public SerializableController() { }   // NUnit
 
         public SerializableController(IConfigurationRoot configuration) : base()
         {
@@ -55,7 +53,7 @@ namespace asplib.Controllers
         /// </summary>
         /// <param name="bytes"></param>
         /// <param name="filter"></param>
-        public void Deserialize(byte[] bytes, Func<byte[], byte[]> filter = null)
+        public virtual void Deserialize(byte[] bytes, Func<byte[], byte[]> filter = null)
         {
             var members = (Dictionary<string, object>)Serialization.Deserialize(bytes, filter);
             if (members != null)

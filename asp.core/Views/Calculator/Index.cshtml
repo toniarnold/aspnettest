@@ -1,22 +1,8 @@
-﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="utf-8" />
-    <title>Calculator</title>
+﻿@model CalculatorViewModel
+@section header {
     <style>
-        h1 {
-            font-size: 1.25em;
-        }
-
         a {
             text-decoration: none;
-        }
-
-        ul {
-            list-style-type: none;
-            margin: 0;
-            padding: 0;
         }
 
         .nunitimg {
@@ -35,13 +21,64 @@
             background-color: rgba(255, 255, 255, 1);
         }
     </style>
-</head>
-<body>
-    <h2>Calculator</h2>
+}
 
+<div>
     <a asp-controller="Calculator" asp-action="Test" id="testButton">
         <img src="~/nunit.png" class="nunitimg" />
     </a>
     <a class="testresult" asp-controller="Calculator" asp-action="Result">@Html.Raw(ViewBag.TestResult)</a>
-</body>
-</html>
+</div>
+
+@{
+    // This State->View visibility mapping is the central axis of the SMC pattern.
+    IHtmlContent title = null;
+    IHtmlContent splash = null;
+    IHtmlContent calculate = null;
+    IHtmlContent error = null;
+    IHtmlContent enter = null;
+    IHtmlContent footer = null;
+
+    title = await Component.InvokeAsync("Title", @Model);
+
+    switch(Model.State)
+    {
+        case var s when s == CalculatorContext.Map1.Calculate:
+            calculate = await Component.InvokeAsync("Calculate", @Model);
+            break;
+        case var s when s == CalculatorContext.Map1.Enter:
+            enter = await Component.InvokeAsync("Enter");
+            break;
+        case var s when s == CalculatorContext.Map1.ErrorNumeric:
+            ViewBag.Msg = "The input was not numeric.";
+            error = await Component.InvokeAsync("Error");
+            break;
+        case var s when s == CalculatorContext.Map1.ErrorTuple:
+            ViewBag.Msg = "Need two values on the stack to compute.";
+            error = await Component.InvokeAsync("Error");
+            break;
+        case var s when s == CalculatorContext.Map1.ErrorEmpty:
+            ViewBag.Msg = "Need a value on the stack to compute.";
+            error = await Component.InvokeAsync("Error");
+            break;
+        case var s when s == CalculatorContext.Map1.Splash:
+            splash = await Component.InvokeAsync("Splash");
+            break;
+        default:
+            throw new NotImplementedException(String.Format("this.State {0}", Model.State));
+    }
+
+    footer = await Component.InvokeAsync("Footer");
+    }
+
+<form asp-controller="Calculator" method="post">
+    <input viewstate="@ViewBag.ViewState" />
+    @title
+    <hr />
+    @splash
+    @enter
+    @calculate
+    @error
+    <hr />
+    @footer
+</form>

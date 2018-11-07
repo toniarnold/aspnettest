@@ -1,7 +1,7 @@
 ﻿using iie;
 using NUnit.Framework;
 
-namespace asp.test.calculator
+namespace asptest.calculator
 {
     [TestFixture]
     public class CalculateTest : CalculatorTestBase

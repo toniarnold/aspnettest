@@ -10,6 +10,7 @@ Calculator_sm.dot: Calculator.sm
 
 Calculator_sm.png: Calculator_sm.dot
 	dot -T png -o Calculator_sm.png Calculator_sm.dot
+	xcopy /D /F /Y Calculator_sm.png ..\wwwroot
 
 clean:
 	-del Calculator_sm.cs

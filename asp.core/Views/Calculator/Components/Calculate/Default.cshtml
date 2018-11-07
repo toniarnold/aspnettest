@@ -1,0 +1,21 @@
+﻿@model CalculatorViewModel
+<style>
+    .button {
+        height: 30px;
+        width: 35px;
+    }
+</style>
+<p>
+    <button asp-action="Add" id="AddButton" class="button"> + </button>
+    <button asp-action="Sub" id="SubButton" class="button"> - </button>
+    <button asp-action="Mul" id="MulButton" class="button"> / </button>
+    <button asp-action="Div" id="DivButton" class="button"> * </button>
+    <button asp-action="Pow" id="PowButton" class="button">x<sup>2</sup></button>
+    <button asp-action="Sqrt" id="SqrtButton" class="button">&radic;<span style='text-decoration: overline'>x</span></button>
+    <button asp-action="Clr" id="ClrButton" class="button"> C </button>
+    <button asp-action="ClrAll" id="ClrAllButton" class="button">CA</button>
+</p>
+
+<p>
+    @Html.Raw(@Model.StackHtmlString)
+</p>

@@ -7,10 +7,11 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using asp.Models;
 
 namespace asp.Controllers
 {
-    public partial class Calculator : SerializableController
+    public partial class Calculator : SmcController<CalculatorContext, CalculatorContext.CalculatorState>
     {
         private IHostingEnvironment Environment { get; }
 
@@ -20,16 +21,23 @@ namespace asp.Controllers
             Environment = env;
         }
 
-        public ActionResult Index()
+        /// <summary>
+        /// Main.ascx in WebForms
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public ActionResult Index(CalculatorViewModel model)
         {
-            return View();
+            model.State = this.State;
+            model.Stack = this.Stack;
+            return View(model);
         }
 
         /// <summary>
         /// Run the test suite
         /// </summary>
         /// <returns></returns>
-        public IActionResult Test()
+        public IActionResult Test(CalculatorViewModel model)
         {
             var testRunner = new TestRunner(Configuration, Environment, (int)this.Request.Host.Port);
             testRunner.Run("asptest.core");
@@ -43,7 +51,9 @@ namespace asp.Controllers
                 return this.Result();
             }
 
-            return View("index");
+            model.State = this.State;
+            model.Stack = this.Stack;
+            return View("Index", model);
         }
 
         /// <summary>
@@ -53,6 +63,91 @@ namespace asp.Controllers
         public IActionResult Result()
         {
             return Content(TestRunner.StaticResultString, "application/xml");
+        }
+
+        /// <summary>
+        /// Footer.ascx.cs enterButton_Click
+        /// </summary>
+        /// <param name="model"></param>
+        /// <returns></returns>
+        public ActionResult Enter(CalculatorViewModel model)
+        {
+            this.Fsm.Enter(model.Operand);
+            model.State = this.State;
+            model.Stack = this.Stack;
+            return View("Index", model);    // server side single page model
+        }
+
+        // Calculate.ascx.cs addButton_Click
+        public ActionResult Add(CalculatorViewModel model)
+        {
+            this.Fsm.Add(this.Stack);
+            model.State = this.State;
+            model.Stack = this.Stack;
+            return View("Index", model);
+        }
+
+        // Calculate.ascx.cs subButton_Click
+        public ActionResult Sub(CalculatorViewModel model)
+        {
+            this.Fsm.Sub(this.Stack);
+            model.State = this.State;
+            model.Stack = this.Stack;
+            return View("Index", model);
+        }
+
+        // Calculate.ascx.cs mulButton_Click
+        public ActionResult Mul(CalculatorViewModel model)
+        {
+            this.Fsm.Mul(this.Stack);
+            model.State = this.State;
+            model.Stack = this.Stack;
+            return View("Index", model);
+        }
+
+        // Calculate.ascx.cs divButton_Click
+        public ActionResult Div(CalculatorViewModel model)
+        {
+            this.Fsm.Div(this.Stack);
+            model.State = this.State;
+            model.Stack = this.Stack;
+            return View("Index", model);
+        }
+
+        // Calculate.ascx.cs powButton_Click
+        public ActionResult Pow(CalculatorViewModel model)
+        {
+            this.Fsm.Pow(this.Stack);
+            model.State = this.State;
+            model.Stack = this.Stack;
+            return View("Index", model);
+        }
+
+        // Calculate.ascx.cs sqrtButton_Click
+        public ActionResult Sqrt(CalculatorViewModel model)
+        {
+            this.Fsm.Sqrt(this.Stack);
+            model.State = this.State;
+            model.Stack = this.Stack;
+            return View("Index", model);
+        }
+
+        // Calculate.ascx.cs clrButton_Click
+        public ActionResult Clr(CalculatorViewModel model)
+        {
+            this.Fsm.Clr(this.Stack);
+            model.State = this.State;
+            model.Stack = this.Stack;
+            return View("Index", model);
+        }
+
+        // Calculate.ascx.cs clrAllButton_Click
+        public ActionResult ClrAll(CalculatorViewModel model)
+        {
+            this.Fsm.ClrAll(this.Stack);
+            model.State = this.State;
+            model.Stack = this.Stack;
+            return View("Index", model);
         }
     }
 }

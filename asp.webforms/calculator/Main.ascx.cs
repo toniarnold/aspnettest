@@ -80,38 +80,34 @@ namespace asp.calculator
 
         protected override void OnPreRender(EventArgs e)
         {
+            // This State->View visibility mapping is the central axis of the SMC pattern.
             this.title.Visible = true;
 
-            if (this.State == CalculatorContext.Map1.Calculate)
+            switch(this.State)
             {
-                this.calculate.Visible = true;
-            }
-            else if (this.State == CalculatorContext.Map1.Enter)
-            {
-                this.enter.Visible = true;
-            }
-            else if (this.State == CalculatorContext.Map1.ErrorNumeric)
-            {
-                this.error.Visible = true;
-                this.error.Msg = "The input was not numeric.";
-            }
-            else if (this.State == CalculatorContext.Map1.ErrorTuple)
-            {
-                this.error.Visible = true;
-                this.error.Msg = "Need two values on the stack to compute.";
-            }
-            else if (this.State == CalculatorContext.Map1.ErrorEmpty)
-            {
-                this.error.Visible = true;
-                this.error.Msg = "Need a value on the stack to compute.";
-            }
-            else if (this.State == CalculatorContext.Map1.Splash)
-            {
-                this.splash.Visible = true;
-            }
-            else
-            {
-                throw new NotImplementedException(String.Format("this.State {0}", this.State));
+                case var s when s == CalculatorContext.Map1.Calculate:
+                    this.calculate.Visible = true;
+                    break;
+                case var s when s == CalculatorContext.Map1.Enter:
+                    this.enter.Visible = true;
+                    break;
+                case var s when s == CalculatorContext.Map1.ErrorNumeric:
+                    this.error.Visible = true;
+                    this.error.Msg = "The input was not numeric.";
+                    break;
+                case var s when s == CalculatorContext.Map1.ErrorTuple:
+                    this.error.Visible = true;
+                    this.error.Msg = "Need two values on the stack to compute.";
+                    break;
+                case var s when s == CalculatorContext.Map1.ErrorEmpty:
+                    this.error.Visible = true;
+                    this.error.Msg = "Need a value on the stack to compute.";
+                    break;
+                case var s when s == CalculatorContext.Map1.Splash:
+                    this.splash.Visible = true;
+                    break;
+                default:
+                    throw new NotImplementedException(String.Format("this.State {0}", this.State));
             }
 
             this.footer.Visible = true;

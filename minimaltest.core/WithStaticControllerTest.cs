@@ -10,14 +10,14 @@ namespace minimaltest
     /// to be able to navigate through the control hierarchy.
     /// </summary>
     [TestFixture]
-    public class WithStaticControllerTest : IETest
+    public class WithStaticControllerTest : IETest<WithStaticController>
     {
         /// <summary>
         /// Typed accessor to the only ViewModel for the app
         /// </summary>
         public WithStaticViewModel Model
         {
-            get { return this.GetController<WithStaticController>().Model; }
+            get { return this.Controller.Model; }
         }
 
         [Test]

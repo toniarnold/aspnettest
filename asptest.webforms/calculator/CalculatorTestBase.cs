@@ -3,7 +3,7 @@ using iie;
 using NUnit.Framework;
 using System.Collections.Generic;
 
-namespace asp.test.calculator
+namespace asptest.calculator
 {
     /// <summary>
     /// Concrete base class for the Calculator with additional specific accessors

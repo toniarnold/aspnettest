@@ -2,7 +2,7 @@
 using iie;
 using NUnit.Framework;
 
-namespace asp.test.calculator
+namespace asptest.calculator
 {
     [TestFixture]
     [Category("SHDocVw.InternetExplorer")]

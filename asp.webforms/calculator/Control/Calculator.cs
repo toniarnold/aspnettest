@@ -44,7 +44,7 @@ namespace asp.calculator.Control
         }
 
         /// <summary>
-        /// String represenation of the stack for HTML presentation
+        /// String representation of the stack for HTML presentation
         /// </summary>
         public string StackHtmlString
         {
@@ -52,14 +52,13 @@ namespace asp.calculator.Control
         }
 
         /// <summary>
-        /// R is the access point for fhe equivalent of global variables in PHP (volatile between requests)
+        /// IMain is the access point for fhe equivalent of global variables in PHP (volatile between requests)
         /// </summary>
         public string Operand
         {
             get { return this.operand; }
             set { this.operand = value; }
         }
-
         [NonSerialized]
         private string operand;
 

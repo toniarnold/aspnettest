@@ -7,16 +7,8 @@ using System.Text.RegularExpressions;
 namespace minimaltest
 {
     [TestFixture]
-    public class ExceptionDumpTest : IETest
+    public class ExceptionDumpTest : IETest<WithStorageController>
     {
-        /// <summary>
-        /// Typed accessor for the controller under thest
-        /// </summary>
-        public WithStorageController Controller
-        {
-            get { return this.GetController<WithStorageController>(); }
-        }
-
         /// <summary>
         /// Typed accessor for the only ViewModel used in the app
         /// </summary>

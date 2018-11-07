@@ -3,7 +3,7 @@ using NUnit.Framework;
 using System.Configuration;
 using System.Linq;
 
-namespace asp.test.calculator
+namespace asptest.calculator
 {
     [TestFixture]
     [Category("SHDocVw.InternetExplorer")]
@@ -14,7 +14,7 @@ namespace asp.test.calculator
         {
             // Load the stored canonical test case
             this.Navigate(string.Format("/asp.webforms/default.aspx?session={0}",
-                ConfigurationManager.AppSettings["asp.test.calculator.FibonacciTest"]));
+                ConfigurationManager.AppSettings["asptest.calculator.FibonacciTest"]));
             Assert.That(this.Stack.Count, Is.GreaterThanOrEqualTo(3));  // non-empty sequence
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
 

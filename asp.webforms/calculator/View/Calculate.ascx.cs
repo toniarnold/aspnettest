@@ -42,7 +42,7 @@ namespace asp.calculator.View
             this.Fsm.Sqrt(this.Main.Stack);
         }
 
-        protected void clrBUtton_Click(object sender, EventArgs e)
+        protected void clrButton_Click(object sender, EventArgs e)
         {
             this.Fsm.Clr(this.Main.Stack);
         }

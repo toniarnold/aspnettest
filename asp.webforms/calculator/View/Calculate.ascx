@@ -23,7 +23,7 @@
         type="button">
         &radic;<span style='text-decoration: overline'>x</span>
     </button>
-    <asp:Button ID="clrButton" runat="server" Text=" C " OnClick="clrBUtton_Click" CssClass="button" />
+    <asp:Button ID="clrButton" runat="server" Text=" C " OnClick="clrButton_Click" CssClass="button" />
     <asp:Button ID="clrAllButton" runat="server" Text="CA" OnClick="clrAllButton_Click" CssClass="button" />
 </p>
 
