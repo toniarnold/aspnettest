@@ -3,6 +3,7 @@
 * [Dependencies](#Dependencies)
    * [Identical Namespaces](#identical-namespaces)
 * [Functional Equivalences](#functional-equivalences)
+   * [Common Model Control View Structure](#common-model-control-view-structure)
    * [Session Persistence](#session-persistence)
    * [State Machine Compiler Coalescence](#state-machine-compiler-coalescence)
      * [PHP UI Parts Composition](#php-ui-parts-composition)
@@ -55,7 +56,7 @@ The ```withstorage.aspx``` WebForms page respective the
 ```./Views/WithStorage/Index.cshtml``` pair constitute an equivalent
 application within their respective paradigm.
 
-The traditional Model/Control/View pattern used here might at a first glance
+The traditional Model Control View pattern used here might at a first glance
 seem more "natural" in ASP.NET Core MVC and somewhat superimposed on ASP.NET
 Framework/WebForms - but the actual *implementation* in ASP.NET Core appears
 somewhat "enforced", as that quote from [Andrew
@@ -65,6 +66,29 @@ Lock](https://andrewlock.net/controller-activation-and-dependency-injection-in-a
 > If you need to do something esoteric, you can always implement
 > ```IControllerActivator``` yourself, but I can't think of any reason that
 > these two implementations wouldn't satisfy all your requirements!
+
+
+
+### Common Model Control View Structure
+
+The project structure of both ASP.NET WebForms and ASP.NET Core is very
+similar: Both provide a central ```./calculator/Control``` resp.
+```./Controllers``` folder with the session-persisted SMC finite state
+automaton, in ASP.NET Core even collapsed into one single MVC Controller class
+(the "something esoteric" above).
+
+If the application were complex (i.e. requiring an elaborated object model
+tree), there would also be a ```./Model``` folder in the WebForms project (as in
+the ```asplib.webforms``` base project).
+
+The ```./calculator/View``` resp. ```./Views/Calculator/Components``` subfolder
+contain the partial views displayed according to the global application state
+the SMC finite state automaton currently is in. The main view referencing these
+UI components is ```./calculator/Main.ascx``` resp.
+```./Views/Calculator/Index.cshtml```:
+
+![WebForms folder structure](img/structure-webforms.png)
+![MVC Core folder structure](img/structure-mvc-core.png)
 
 
 
