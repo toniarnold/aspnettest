@@ -41,7 +41,7 @@
 
     title = await Component.InvokeAsync("Title", @Model);
 
-    switch(Model.State)
+    switch (Model.State)
     {
         case var s when s == CalculatorContext.Map1.Calculate:
             calculate = await Component.InvokeAsync("Calculate", @Model);
@@ -69,7 +69,7 @@
     }
 
     footer = await Component.InvokeAsync("Footer");
-    }
+}
 
 <form asp-controller="Calculator" method="post">
     <input viewstate="@ViewBag.ViewState" />

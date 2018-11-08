@@ -4,11 +4,16 @@
    * [Identical Namespaces](#identical-namespaces)
 * [Functional Equivalences](#functional-equivalences)
    * [Session Persistence](#session-persistence)
+   * [State Machine Compiler Coalescence](#state-machine-compiler-coalescence)
+     * [PHP UI Parts Composition](#php-ui-parts-composition)
+     * [WebForms UI Parts Composition](#webforms-ui-parts-composition)
+     * [MVC Core UI Parts Composition](#mvc-core-ui-parts-composition)
    * [The Test Button](#the-test-button)
    * [Accessing HTML Form Elements](#accessing-html-form-elements)
-     * [WebForms](#webforms)
-     * [MVC Core](#mvc-core)
+     * [WebForms Controls](#webforms-controls)
+     * [MVC Core Input Elements](#mvc-core-input-elements)
    * [Running the Tests](#running-the-tests)
+
 
 
 ## Dependencies
@@ -27,6 +32,7 @@ isolate only the respectively required components:
 ![WebForms and Core components](webforms-core.png)
 
 
+
 ### Identical Namespaces
 
 A minimal web application in the original ASP.NET WebForms project only had two
@@ -39,6 +45,7 @@ As these suffixes have absolutely no contentual meaning within dependent
 projects (as they are completely determined by the type of project), they have
 been elided from the namespace (but not from the assembly name, as they must
 reside side-by-side).
+
 
 
 ## Functional Equivalences
@@ -79,6 +86,226 @@ constructs to maintain fragmented state information across requests.
 | Session Cookie: Save the new state | Explicit ```SaveMain()``` in the ```OnPreRender``` event handler | Implicitly by the ```IStorageController``` extension |
 | Database Cookie: Load the stored state |  Explicit ```LoadMain()``` in the ```Page_Load``` event handler | Implicitly by ```StorageControllerActivator``` |
 | Database Cookie: Save the new state | Explicit ```SaveMain()``` in the ```OnPreRender``` event handler | Implicitly by the ```IStorageController``` extension |
+
+
+
+### State Machine Compiler Coalescence
+
+[The State Machine Compiler (SMC)](http://smc.sourceforge.net]) provides a
+specialized high level programming language for implementing the state pattern. 
+In Charles W. Rapp's own words:
+ 
+>Your application lives in a world of asynchronous, unordered events: mouse clicks, timeouts, messages, and OS signals.
+>(...)
+>
+>But there's a hitch. Your detailed state diagrams are only pictures. How are
+>you going to translate your drawings into code? A transition matrix is cryptic
+>while switch statements means your state machine logic is scattered all over
+>your code. 
+>(...)
+>
+>Enter SMC - The State Machine Compiler. Now you put your state
+>diagram in one file using an easy-to-understand language. SMC generates the
+>state pattern classes for you.
+
+The RPN calculator example in fact is *the same program* I've used as an
+example for the PHP code generator for SMC - not particularly optimized for
+usability as an everyday calculator, but as a blueprint for a bigger
+wizard-like web application. This is its auto-generated state diagram (with
+inline C# for the transition guards):
+
+![Calculator_sm](./img/Calculator_sm.png)
+
+Pivotal is the mapping from central application state (the rectangles with
+rounded corners in the diagram) to the visibility of parts in the "Composition
+UI" pattern, which differs the most according to the framework used:
+
+
+
+#### PHP UI Parts Composition
+
+The ```switch``` statement operates on the state name and includes the
+required UI parts:
+
+```index.php```
+
+```php
+// Include the parts the web application is composed of.
+include 'title.php';
+echo "<hr>";
+
+// Conditionally display the page belonging to a (now read-only) state.
+switch($calculator->getStateName()) {
+    // separate includes per state
+    case 'Map1.Splash':
+        include "Splash.php";
+        break;
+    case 'Map1.Enter':
+        include "Enter.php";
+        break;
+    case 'Map1.Calculate':
+        include "Calculate.php";
+        break;
+    // one error page for all error states,
+    // parametrized with $errormsg
+    case 'Map1.ErrorNumeric':
+        $errormsg = "The input was not numeric.";
+        include "Error.php";
+        break;
+    case 'Map1.ErrorTuple':
+        $errormsg = "Need two values on the stack to compute.";
+        include "Error.php";
+        break;
+    case 'Map1.ErrorEmpty':
+        $errormsg = "Need two values on the stack to compute.";
+        include "Error.php";
+        break;
+    default:
+        throw new Exception(
+            "Cannot display state {$calculator->getStateName()}");
+}
+
+echo "<hr>";
+include 'footer.php';    // contains btn_Enter for the onload event
+```
+
+
+
+#### WebForms UI Parts Composition
+
+
+The ```switch``` statement in the code-behind operates on the state symbols
+validated at compile-time (using C# 7.0 "Pattern Matching with the Switch
+Statement") and makes the required UI User Controls declared in the .ascx
+visible:
+
+```./calculator/Main.ascx```
+
+```html
+<uc:Title ID="title" runat="server" />
+<hr />
+<uc:Splash ID="splash" runat="server" />
+<uc:Enter ID="enter" runat="server" />
+<uc:Calculate ID="calculate" runat="server" />
+<uc:Error ID="error" runat="server" />
+<hr />
+<uc:Footer ID="footer" runat="server" />
+```
+
+```./calculator/Main.ascx.cs```
+
+```csharp
+protected override void OnPreRender(EventArgs e)
+{
+    // This State->View visibility mapping is the central axis of the SMC pattern.
+    this.title.Visible = true;
+
+    switch (this.State)
+    {
+        case var s when s == CalculatorContext.Map1.Calculate:
+            this.calculate.Visible = true;
+            break;
+
+        case var s when s == CalculatorContext.Map1.Enter:
+            this.enter.Visible = true;
+            break;
+
+        case var s when s == CalculatorContext.Map1.ErrorNumeric:
+            this.error.Visible = true;
+            this.error.Msg = "The input was not numeric.";
+            break;
+
+        case var s when s == CalculatorContext.Map1.ErrorTuple:
+            this.error.Visible = true;
+            this.error.Msg = "Need two values on the stack to compute.";
+            break;
+
+        case var s when s == CalculatorContext.Map1.ErrorEmpty:
+            this.error.Visible = true;
+            this.error.Msg = "Need a value on the stack to compute.";
+            break;
+
+        case var s when s == CalculatorContext.Map1.Splash:
+            this.splash.Visible = true;
+            break;
+
+        default:
+            throw new NotImplementedException(String.Format("this.State {0}", this.State));
+    }
+
+    this.footer.Visible = true;
+
+    this.SaveMain();
+    this.sessionDumpGridView.DataBind();    // reflect saved changes
+
+    base.OnPreRender(e);
+}
+```
+
+
+
+#### MVC Core UI Parts Composition
+
+The ```switch``` statement is basically the same as in WebForms, but assigns the required View Components to variables used in the
+rendering part:
+
+```./Calculator/Index.cshtml```
+
+```csharp
+@{
+    // This State->View visibility mapping is the central axis of the SMC pattern.
+    IHtmlContent title = null;
+    IHtmlContent splash = null;
+    IHtmlContent calculate = null;
+    IHtmlContent error = null;
+    IHtmlContent enter = null;
+    IHtmlContent footer = null;
+
+    title = await Component.InvokeAsync("Title", @Model);
+
+    switch(Model.State)
+    {
+        case var s when s == CalculatorContext.Map1.Calculate:
+            calculate = await Component.InvokeAsync("Calculate", @Model);
+            break;
+        case var s when s == CalculatorContext.Map1.Enter:
+            enter = await Component.InvokeAsync("Enter");
+            break;
+        case var s when s == CalculatorContext.Map1.ErrorNumeric:
+            ViewBag.Msg = "The input was not numeric.";
+            error = await Component.InvokeAsync("Error");
+            break;
+        case var s when s == CalculatorContext.Map1.ErrorTuple:
+            ViewBag.Msg = "Need two values on the stack to compute.";
+            error = await Component.InvokeAsync("Error");
+            break;
+        case var s when s == CalculatorContext.Map1.ErrorEmpty:
+            ViewBag.Msg = "Need a value on the stack to compute.";
+            error = await Component.InvokeAsync("Error");
+            break;
+        case var s when s == CalculatorContext.Map1.Splash:
+            splash = await Component.InvokeAsync("Splash");
+            break;
+        default:
+            throw new NotImplementedException(String.Format("this.State {0}", Model.State));
+    }
+
+    footer = await Component.InvokeAsync("Footer");
+}
+
+<form asp-controller="Calculator" method="post">
+    <input viewstate="@ViewBag.ViewState" />
+    @title
+    <hr />
+    @splash
+    @enter
+    @calculate
+    @error
+    <hr />
+    @footer
+</form>
+```
+
 
 
 ### The Test Button
@@ -159,7 +386,7 @@ public IActionResult Result()
 
 ### Accessing HTML Form Elements
 
-#### WebForms
+#### WebForms Controls
 
 In ASP.NET WebForms, actually finding the Web-Control in the HTML DOM in
 Internet Explorer was the main driving force for the original aspnettest
@@ -196,7 +423,9 @@ public void SubmitTest()
 }
 ```
 
-#### MVC Core
+
+
+#### MVC Core Input Elements
 
 ASP.NET Core lacks an automatic unique id dispenser engine, and e.g. input
 names directly correspond to the property names on the ViewModel. Therefore
@@ -256,6 +485,7 @@ names beginning in lower case is just an informal convention for "field member
 name of the code-behind object" (ASP.NET WebForms), names beginning in upper
 case for "ViewModel property name" and accordingly "HTML input name" or - in
 absence of both - "HTML id attribute".
+
 
 
 ### Running the Tests
