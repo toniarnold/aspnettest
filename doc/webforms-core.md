@@ -115,7 +115,7 @@ constructs to maintain fragmented state information across requests.
 
 ### State Machine Compiler Coalescence
 
-[The State Machine Compiler (SMC)](http://smc.sourceforge.net]) provides a
+[The State Machine Compiler (SMC)](http://smc.sourceforge.net) provides a
 specialized high level programming language for implementing the state pattern. 
 In Charles W. Rapp's own words:
  
