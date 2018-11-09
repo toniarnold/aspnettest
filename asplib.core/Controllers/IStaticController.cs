@@ -1,7 +1,7 @@
 ﻿namespace asplib.Controllers
 {
     /// <summary>
-    /// Extension interface for a Control to access the SetRoot() method
+    /// Extension interface for a Controller to access the SetController() method
     /// </summary>
     public interface IStaticController
     {

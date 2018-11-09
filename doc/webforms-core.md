@@ -101,6 +101,21 @@ no more, what a ViewState actually is and almost unwittingly end up with a
 handcrafted zoo of ```<input asp-for="SomeStateValue" type="hidden"/>```
 constructs to maintain fragmented state information across requests.
 
+This is usually applied in tandem with the notorious Post/Redirect/Get (PRG)
+pattern which by itself involves the use of session variables to maintain
+(explicitly) data and (usually hidden) state between the Redirect and the Get
+(where the ViewState gets lost). Later on the application work flow (i.e. some
+Redirect targets) might need to be changed, which requires careful inquiries
+with regard to the now scattered session variables -  and
+state/data-inconsistency is almost guaranteed along the way. 
+
+For that reason, the pattern presented here centralizes state *and* data into
+one atomic object - which guarantees consistency. Whether to use ViewState
+(allows consistent back/forward-button navigation), short-time session
+("Session Cookie") or long-time session surviving server reboots ("Database
+Cookie") is now simply a *design choice*:
+
+
 | Function | WebForms | Core |
 | --- | --- | --- |
 | Objects persisted | Dedicated serializable ```Main``` | All serializable fields of the MVC Controller class inheriting from ```SerializableController``` | 
