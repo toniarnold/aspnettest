@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using System;
 
 namespace asp.Controllers
 {
@@ -69,6 +70,14 @@ namespace asp.Controllers
         /// <returns></returns>
         public ActionResult Enter(CalculatorViewModel model)
         {
+            // Corresponds to asp.calculator.View.Enter (but not possible in
+            // the view itself in MVC Core): 
+            // Locally throw a TestException for malicious input
+            if (String.Compare(model.Operand, "except", true) == 0)
+            {
+                throw new TestException("Deliberate Exception");
+            }
+
             this.Fsm.Enter(model.Operand);
             model.State = this.State;
             model.Stack = this.Stack;

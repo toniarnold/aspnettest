@@ -6,7 +6,8 @@ namespace asp.calculator.View
     public partial class Enter : CalculatorControl
     {
         /// <summary>
-        /// Always store the operand into the "global variable" this.R.Operand
+        /// Always store the operand into the "global variable" this.Main.Operand
+        /// Locally throw a TestException for malicious input
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>

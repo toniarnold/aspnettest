@@ -47,7 +47,7 @@
             calculate = await Component.InvokeAsync("Calculate", @Model);
             break;
         case var s when s == CalculatorContext.Map1.Enter:
-            enter = await Component.InvokeAsync("Enter");
+            enter = await Component.InvokeAsync("Enter", @Model);
             break;
         case var s when s == CalculatorContext.Map1.ErrorNumeric:
             ViewBag.Msg = "The input was not numeric.";
