@@ -48,7 +48,7 @@ namespace test.asplib.Controllers
         public void ViewStateEncryptedTest()
         {
             this.TestProperty = "test value";
-            var secret = StorageControllerExtension.GetSecret("Key", "id");
+            var secret = StorageControllerExtension.GetSecret("Key");
             Func<byte[], byte[]> filter = x => Crypt.Encrypt(secret, x);
             var viewstate = this.ViewState(filter);
             var fields = viewstate.Split(":");

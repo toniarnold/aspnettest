@@ -52,7 +52,6 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Control\IMain.cs" />
-    <Compile Include="Model\Crypt.cs" />
     <Compile Include="Model\Db.Context.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
@@ -105,6 +104,10 @@
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\asplib\asplib.csproj">
+      <Project>{2e7a40bd-0a76-41cc-88c7-cba07f73ad0f}</Project>
+      <Name>asplib</Name>
+    </ProjectReference>
     <ProjectReference Include="..\smc\smc.csproj">
       <Project>{079cccf0-0fb4-463a-81dc-98493d097d6a}</Project>
       <Name>smc</Name>

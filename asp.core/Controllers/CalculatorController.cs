@@ -71,7 +71,7 @@ namespace asp.Controllers
         public ActionResult Enter(CalculatorViewModel model)
         {
             // Corresponds to asp.calculator.View.Enter (but not possible in
-            // the view itself in MVC Core): 
+            // the view itself in MVC Core):
             // Locally throw a TestException for malicious input
             if (String.Compare(model.Operand, "except", true) == 0)
             {

@@ -1,8 +1,9 @@
-﻿using asplib.View;
+﻿using asplib.Controllers;
+using asplib.Model;
 using iie;
 using NUnit.Framework;
 
-namespace asptest.calculator
+namespace asptest.Calculator
 {
     [TestFixture]
     [Category("SHDocVw.InternetExplorer")]
@@ -11,13 +12,13 @@ namespace asptest.calculator
         [OneTimeSetUp]
         public void SetUpStorage()
         {
-            ControlStorageExtension.SessionStorage = Storage.Database;
+            StorageControllerExtension.SessionStorage = Storage.Database;
         }
 
         [OneTimeTearDown]
         public void TearDownStorage()
         {
-            ControlStorageExtension.SessionStorage = null;
+            StorageControllerExtension.SessionStorage = null;
         }
 
         /// <summary>
@@ -26,7 +27,7 @@ namespace asptest.calculator
         [TearDown]
         public void ClearDatabase()
         {
-            this.Navigate("/asp.webforms/default.aspx?clear=true&endresponse=true");
+            this.Navigate("/?clear=true");
         }
 
         /// <summary>
@@ -36,7 +37,7 @@ namespace asptest.calculator
         {
             this.TearDownIE();
             this.SetUpIE();
-            this.Navigate("/asp.webforms/default.aspx");
+            this.Navigate("/");
         }
 
         /// <summary>
@@ -45,23 +46,23 @@ namespace asptest.calculator
         [Test]
         public void AddSessionPersistsTest()
         {
-            this.Navigate("/asp.webforms/default.aspx");
-            this.Click("footer.enterButton");
+            this.Navigate("/");
+            this.Click("EnterButton");
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
             this.RestartIE();
-            this.Write("enter.operandTextBox", "2");
-            this.Click("footer.enterButton");
+            this.Write("Operand", "2");
+            this.Click("EnterButton");
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             this.RestartIE();
-            this.Click("footer.enterButton");
+            this.Click("EnterButton");
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
             this.RestartIE();
-            this.Write("enter.operandTextBox", "3");
-            this.Click("footer.enterButton");
+            this.Write("Operand", "3");
+            this.Click("EnterButton");
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             var before = this.Stack.Count;
             this.RestartIE();
-            this.Click("calculate.addButton");
+            this.Click("AddButton");
             this.AssertAddFinalState(before);
             this.RestartIE();
             this.AssertAddFinalState(before);

@@ -23,15 +23,14 @@ namespace asplib.Model
         /// Factory for fetching a  byte array from the database
         /// </summary>
         /// <param name="session"></param>
-        /// <param name="filter"></param>
         /// <returns></returns>
-        public byte[] LoadMain(Guid session, Func<byte[], byte[]> filter = null)
+        public byte[] LoadMain(Guid session)
         {
             var query = from m in this.Main
                         where m.session == session
                         select m;
             var main = query.FirstOrDefault();
-            return (main != null) ? ((filter == null) ? main.main : filter(main.main)) : null;
+            return (main != null) ? main.main : null;
         }
 
         /// <summary>
@@ -40,9 +39,8 @@ namespace asplib.Model
         /// </summary>
         /// <param name="bytes"></param>
         /// <param name="session"></param>
-        /// <param name="filter"></param>
         /// <returns></returns>
-        public Guid SaveMain(byte[] bytes, Guid? session, Func<byte[], byte[]> filter = null)
+        public Guid SaveMain(byte[] bytes, Guid? session)
         {
             var query = from m in this.Main
                         where m.session == session
@@ -51,10 +49,9 @@ namespace asplib.Model
             if (main == null)
             {
                 main = new Main();
-                main.main = (filter == null) ? bytes : filter(bytes);
-                this.Main.Add(main);      // INSERT
+                this.Main.Add(main);    // INSERT
             }
-            main.main = (filter == null) ? bytes : filter(bytes);
+            main.main = bytes;
             this.SaveChanges();
             return main.session;  // get the new session guid set by the db on insert
         }

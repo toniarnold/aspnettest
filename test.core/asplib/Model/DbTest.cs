@@ -100,7 +100,7 @@ namespace test.asplib.Model
                 try
                 {
                     // Local SetUp
-                    var session = db.SaveMain(bytes, null, null);
+                    var session = db.SaveMain(bytes, null);
 
                     // Method under test
                     var copy = db.LoadMain(session);
@@ -113,8 +113,10 @@ namespace test.asplib.Model
             }
         }
 
+        // Unlike the WebForms variant, there is no LoadSaveMainFilteredTest(),
+        // as the class is only responsible for raw data.
+
         [Test]
-        [Category("DbContext")]
         public void InsertSQLTest()
         {
             var bytes = new byte[] { 1, 2, 3 };
@@ -149,7 +151,6 @@ namespace test.asplib.Model
         }
 
         [Test]
-        [Category("DbContext")]
         public void GetInstanceMissingTest()
         {
             using (var db = new ASP_DBEntities())

@@ -1,4 +1,4 @@
-﻿using asplib.Common;
+using asplib.Common;
 using asplib.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
@@ -151,16 +151,16 @@ namespace asplib.Controllers
         /// </summary>
         /// <param name="controller"></param>
         /// <returns></returns>
-        public static bool TryGetBytes(object controller, out byte[] bytes)
+        public static bool TryGetBytes(object controller, out byte[] bytes, Func<byte[], byte[]> filter = null)
         {
             if (controller is SerializableController)
             {
-                bytes = ((SerializableController)controller).Serialize(); // shallow
+                bytes = ((SerializableController)controller).Serialize(filter); // shallow
                 return true;
             }
             else if (controller.GetType().IsSerializable)
             {
-                bytes = Serialization.Serialize(controller);  // POCO Controller
+                bytes = Serialization.Serialize(controller, filter);  // POCO Controller
                 return true;
             }
             else
@@ -177,18 +177,17 @@ namespace asplib.Controllers
         /// encrypt.
         /// </summary>
         /// <param name="password"></param>
-        /// <param name="storageID"></param>
         /// <returns></returns>
-        internal static Crypt.Secret GetSecret(string password, string storageID)
+        internal static Crypt.Secret GetSecret(string password)
         {
-            return GetSecret(Crypt.Key(password), storageID);
+            return GetSecret(Crypt.Key(password));
         }
 
         /// <summary>
         /// Get the Key/IV secret from the key byte[]
         /// </summary>
         /// <returns></returns>
-        internal static Crypt.Secret GetSecret(byte[] key, string storageID)
+        internal static Crypt.Secret GetSecret(byte[] key)
         {
             Crypt.Secret secret;
             if (key != null)
@@ -221,10 +220,10 @@ namespace asplib.Controllers
         /// </summary>
         /// <param name="inst"></param>
         /// <returns></returns>
-        private static byte[] Bytes(this IStorageController inst)
+        private static byte[] Bytes(this IStorageController inst, Func<byte[], byte[]> filter = null)
         {
             byte[] bytes;
-            if (!TryGetBytes(inst, out bytes))
+            if (!TryGetBytes(inst, out bytes, filter))
             {
                 throw new ArgumentException(String.Format(
                     "{0} is neither a SerializableController nor a POCO controller",
@@ -258,7 +257,7 @@ namespace asplib.Controllers
             var key = inst.Configuration.GetValue<string>("EncryptViewStateKey");
             if (!String.IsNullOrEmpty(key))
             {
-                var secret = GetSecret(key, inst.GetStorageID());
+                var secret = GetSecret(key);
                 filter = x => Crypt.Encrypt(secret, x);
             }
             inst.ViewBag.ViewState = ViewState(inst, filter);
@@ -294,13 +293,14 @@ namespace asplib.Controllers
             Func<byte[], byte[]> filter = null;
             if (GetEncryptDatabaseStorage(inst.Configuration))
             {
-                var secret = GetSecret(Convert.FromBase64String(cookie["key"]), inst.GetStorageID());
+                var key = (cookie["key"] != null) ? Convert.FromBase64String(cookie["key"]) : null;
+                var secret = GetSecret(key);
                 filter = x => Crypt.Encrypt(secret, x);
                 newCookie["key"] = Convert.ToBase64String(secret.Key);
             }
             using (var db = new ASP_DBEntities())
             {
-                var savedSession = db.SaveMain(inst.Bytes(), session, filter);
+                var savedSession = db.SaveMain(inst.Bytes(filter), session);
                 newCookie["session"] = savedSession.ToString();
             }
 

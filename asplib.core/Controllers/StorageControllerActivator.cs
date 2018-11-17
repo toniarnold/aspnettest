@@ -1,4 +1,4 @@
-﻿/*
+/*
  * From
  * https://andrewlock.net/controller-activation-and-dependency-injection-in-asp-net-core-mvc/:
  * If you need to do something esoteric, you can always implement
@@ -80,7 +80,7 @@ namespace asplib.Controllers
                         var key = this.Configuration.GetValue<string>("EncryptViewStateKey");
                         if (!String.IsNullOrEmpty(key))
                         {
-                            var secret = StorageControllerExtension.GetSecret(key, storageID);
+                            var secret = StorageControllerExtension.GetSecret(key);
                             filter = x => Crypt.Decrypt(secret, x);
                         }
                         bytes = Convert.FromBase64String(controllerString);
@@ -106,13 +106,14 @@ namespace asplib.Controllers
                     Func<byte[], byte[]> filter = null;
                     if (StorageControllerExtension.GetEncryptDatabaseStorage(Configuration))
                     {
-                        var secret = StorageControllerExtension.GetSecret(
-                            Convert.FromBase64String(this.HttpContext.Request.Cookies[storageID].FromCookieString()["key"]), storageID);
+                        var keyString = this.HttpContext.Request.Cookies[storageID].FromCookieString()["key"];
+                        var key = (keyString != null) ? Convert.FromBase64String(keyString) : null;
+                        var secret = StorageControllerExtension.GetSecret(key);
                         filter = x => Crypt.Decrypt(secret, x);
                     }
                     using (var db = new ASP_DBEntities())
                     {
-                        bytes = db.LoadMain(session, filter);
+                        bytes = db.LoadMain(session);
                     }
                     controller = DeserializeController(actionContext, controllerTypeInfo, controllerType, bytes, filter);
                 }

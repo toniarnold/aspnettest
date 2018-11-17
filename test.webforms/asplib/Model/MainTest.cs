@@ -11,35 +11,6 @@ namespace test.asplib.Model
     public class MainTest : Main
     {
         [Test]
-        public void SerializeDeserializeTest()
-        {
-            var obj = new List<string> { "Hello", "World" };
-            var bytes = this.Serialize(obj);
-            var copy = this.Deserialize(bytes);
-            Assert.That(copy, Is.EquivalentTo(obj));
-        }
-
-        [Test]
-        public void SerializeDeserializeFilteredTest()
-        {
-            Func<byte[], byte[]> filter = x => { var y = (byte[])x.Clone(); Array.Reverse(y); return y; };
-            var obj = new List<string> { "Hello", "World" };
-            var bytes = this.Serialize(obj, filter);
-            var copy = this.Deserialize(bytes, filter);
-            Assert.That(copy, Is.EquivalentTo(obj));
-
-            var failure = this.Deserialize(bytes);
-            Assert.That(failure, Is.Null);
-        }
-
-        [Test]
-        public void DeserializeNullTest()
-        {
-            var none = this.Deserialize(new byte[] { 1, 2, 3 });
-            Assert.That(none, Is.Null);
-        }
-
-        [Test]
         public void SetGetInstanceTest()
         {
             var obj = new List<string> { "Hello", "World" };
@@ -66,6 +37,32 @@ namespace test.asplib.Model
 
                     // Method under test
                     var copy = LoadMain<List<string>>(db, session);
+                    Assert.That(copy, Is.EquivalentTo(obj));
+                }
+                finally
+                {
+                    trans.Rollback();
+                }
+            }
+        }
+
+        [Test]
+        [Category("DbContext")]
+        public void LoadSaveMainFilteredTest()
+        {
+            Func<byte[], byte[]> filter = x => (from b in x select (byte)~b).ToArray();
+
+            using (var db = new ASP_DBEntities())
+            using (var trans = db.Database.BeginTransaction(IsolationLevel.ReadUncommitted))
+            {
+                try
+                {
+                    // Local SetUp
+                    var obj = new List<string> { "Hello", "World" };
+                    var session = SaveMain(db, obj, null, filter);
+
+                    // Method under test
+                    var copy = LoadMain<List<string>>(db, session, filter);
                     Assert.That(copy, Is.EquivalentTo(obj));
                 }
                 finally

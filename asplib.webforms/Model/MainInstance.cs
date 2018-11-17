@@ -3,10 +3,7 @@ using System.Collections.Generic;
 using System.Data;
 using System.Data.SqlClient;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
-using System.IO;
 using System.Linq;
-using System.Runtime.Serialization.Formatters.Binary;
 
 namespace asplib.Model
 {
@@ -53,7 +50,8 @@ namespace asplib.Model
         }
 
         /// <summary>
-        /// Factory for fetching an M instance from the database
+        /// Factory for fetching an M instance from the database.
+        /// Applies the crypto filter if given.
         /// </summary>
         /// <typeparam name="M"></typeparam>
         /// <param name="session"></param>
@@ -85,7 +83,8 @@ namespace asplib.Model
 
         /// <summary>
         /// Inserts or updates (when a row with the session exists) the M instance
-        /// and returns the new session Guid if none is given or the row was not found
+        /// and returns the new session Guid if none is given or the row was not found.
+        /// Applies the crypto filter if given.
         /// </summary>
         /// <typeparam name="M"></typeparam>
         /// <param name="main"></param>
@@ -131,7 +130,7 @@ namespace asplib.Model
         public M GetInstance<M>(Func<byte[], byte[]> filter = null)
             where M : class
         {
-            var obj = this.Deserialize(this.main, filter);
+            var obj = Serialization.Deserialize(this.main, filter);
             this.mainInstance = (obj != null && obj.GetType() == typeof(M)) ? (M)obj : null;
             return (M)this.mainInstance;
         }
@@ -145,7 +144,7 @@ namespace asplib.Model
             where M : class
         {
             this.mainInstance = obj;
-            this.main = this.Serialize(obj, filter);
+            this.main = Serialization.Serialize(obj, filter);
         }
 
         /// <summary>
@@ -169,45 +168,6 @@ namespace asplib.Model
             return String.Format("INSERT INTO Main (main) SELECT {0}\n" +
                                  "SELECT session FROM Main WHERE mainid = @@IDENTITY\n",
                                  hex);
-        }
-
-        /// <summary>
-        /// Serializes any object into a byte array and apply the crypto filter if given
-        /// </summary>
-        /// <param name="obj"></param>
-        /// <returns></returns>
-        internal byte[] Serialize(object obj, Func<byte[], byte[]> filter = null)
-        {
-            using (var stream = new MemoryStream())
-            {
-                var formattter = new BinaryFormatter();
-                formattter.Serialize(stream, obj);
-                return (filter == null) ? stream.ToArray() : filter(stream.ToArray());
-            }
-        }
-
-        /// <summary>
-        /// Deserializes a byte array into an object and apply the crypto filter if given
-        /// Returns null if the deserialization fails for whatever reason (wrong key, old version...)
-        /// </summary>
-        /// <param name="bytes"></param>
-        /// <returns></returns>
-        [SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
-        internal object Deserialize(byte[] bytes, Func<byte[], byte[]> filter = null)
-        {
-            using (var stream = new MemoryStream((filter == null) ? bytes : filter(bytes)))
-            using (var writer = new BinaryWriter(stream))
-            {
-                var formattter = new BinaryFormatter();
-                try
-                {
-                    return formattter.Deserialize(stream);
-                }
-                catch
-                {
-                    return null;
-                }
-            }
         }
     }
 }
