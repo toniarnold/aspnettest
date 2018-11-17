@@ -14,6 +14,7 @@
      * [WebForms Controls](#webforms-controls)
      * [MVC Core Input Elements](#mvc-core-input-elements)
    * [Running the Tests](#running-the-tests)
+     * [Test Performance](#test-performance) 
 
 
 
@@ -544,3 +545,18 @@ or with run.bat:
 | Visual Studio Debugger | F5 (Debug) | - / HTTP 400 |
 | Production Runtime | - / no IE | ```run.bat``` |
 | Runtime Debugging | Attach to ```w3wp.exe``` | Attach to ```dotnet.exe``` |
+
+
+
+#### Test Performance
+
+ASP.NET Core is said to perform *much* better than ASP.NET WebForms. For a single
+thread running the respective ```minimaltest.webforms``` or
+```minimaltest.core``` test suite, the numbers are not that striking: After
+some warm up, the Core tests run about one third quicker then the original
+WebForms tests:
+
+
+| ASP.NET WebForms | ASP.NET Core |
+| --- | --- |
+| ![Duration minimal.webforms](img/duration-minimal.webforms.png) | ![Duration minimal.core](img/duration-minimal.core.png)
