@@ -32,6 +32,17 @@ namespace asp.Controllers
         }
 
         /// <summary>
+        /// Download the SQL INSERT script for the serialization of the current
+        /// Controller
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult Share()
+        {
+            var sql = this.InsertSQL();
+            return this.Content(sql, "application/sql");
+        }
+
+        /// <summary>
         /// Run the test suite
         /// </summary>
         /// <returns></returns>

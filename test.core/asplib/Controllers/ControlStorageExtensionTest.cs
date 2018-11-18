@@ -19,6 +19,15 @@ namespace test.asplib.Controllers
         public Storage? SessionStorage { get { return null; } set { } }
         public object Model { get { return null; } }
 
+        [OneTimeSetUp]
+        public void SetUpConnectionString()
+        {
+            var config = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .Build();
+            ASP_DBEntities.ConnectionString = config["ASP_DBEntities"];
+        }
+
         [Test]
         public void GetViewStateNameTest()
         {
@@ -57,6 +66,14 @@ namespace test.asplib.Controllers
             var copy = (ControlStorageExtensionTest)Serialization.Deserialize(bytes);
             Serialization.Deserialize(bytes);
             Assert.That(copy.TestProperty, Is.EqualTo("test value"));
+        }
+
+        [Test]
+        [Category("DbContext")]
+        public void InsertSQLTest()
+        {
+            var retval = this.InsertSQL();
+            Assert.That(retval, Does.Contain("INSERT INTO"));
         }
     }
 }

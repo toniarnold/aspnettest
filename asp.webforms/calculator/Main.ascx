@@ -8,7 +8,7 @@
 <%@ Register TagPrefix="uc" TagName="Splash" Src="~/calculator/View/Splash.ascx" %>
 <%@ Register TagPrefix="uc" TagName="Title" Src="~/calculator/View/Title.ascx" %>
 <style>
-    .hamburger-container {
+    .header-container {
         display: inline-grid;
         grid-template-columns: auto auto auto;
         width: 100%;
@@ -36,7 +36,7 @@
     }
 </style>
 
-<div class="hamburger-container">
+<div class="header-container">
     <asplib:ShareButton ID="shareButton" runat="server"
         OnServerClick="shareButton_Click" />
     <a href="<%= this.StorageLinkUrl %>" id="<%= this.StorageLinkClientID %>" class="hamburger-box">Session Storage: <%= this.Storage %> <%= this.Encrypted %>

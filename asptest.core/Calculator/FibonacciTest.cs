@@ -1,20 +1,30 @@
 ﻿using iie;
+using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
-using System.Configuration;
+using System;
 using System.Linq;
 
-namespace asptest.calculator
+namespace asptest.Calculator
 {
     [TestFixture]
     [Category("SHDocVw.InternetExplorer")]
     public class FibonacciTest : CalculatorTestBase
     {
+        private IConfigurationRoot config;
+
+        [OneTimeSetUp]
+        public void SetUpConfig()
+        {
+            this.Navigate("/"); // Get a static reference to the Controller
+            this.config = this.Controller.Configuration;
+        }
+
         [Test]
         public void VerifyFibonacciSums()
         {
             // Load the stored canonical test case
-            this.Navigate(string.Format("/asp.webforms/default.aspx?session={0}",
-                ConfigurationManager.AppSettings["asptest.calculator.FibonacciTest"]));
+            this.Navigate(string.Format("/?session={0}",
+                    this.config.GetValue<Guid>("asptest.Calculator.FibonacciTest")));
             Assert.That(this.Stack.Count, Is.GreaterThanOrEqualTo(3));  // non-empty sequence
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
 
@@ -33,21 +43,21 @@ namespace asptest.calculator
                 // Check the correctness of the Fibonacci sequence  in the calculator GUI
 
                 // Delete the current sum and recalculate it from the sequence
-                this.Click("calculate.clrButton");
-                this.Click("calculate.addButton");
+                this.Click("ClrButton");
+                this.Click("AddButton");
                 Assert.That(this.Stack.ElementAt(0), Is.EqualTo(sum));
 
                 // Delete the calculated check sum
-                this.Click("calculate.clrButton");
+                this.Click("ClrButton");
 
                 // Put the original summands onto the stack again
-                this.Click("footer.enterButton");
-                this.Write("enter.operandTextBox", summand2);
-                this.Click("footer.enterButton");
+                this.Click("EnterButton");
+                this.Write("Operand", summand2);
+                this.Click("EnterButton");
 
-                this.Click("footer.enterButton");
-                this.Write("enter.operandTextBox", summand1);
-                this.Click("footer.enterButton");
+                this.Click("EnterButton");
+                this.Write("Operand", summand1);
+                this.Click("EnterButton");
 
                 // Check that the loop will terminate by continuing with N-1 elements
                 Assert.That(this.Stack.Count, Is.EqualTo(initialStackCount - 1));

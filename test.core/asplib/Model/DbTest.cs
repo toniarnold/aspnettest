@@ -129,7 +129,6 @@ namespace test.asplib.Model
         }
 
         [Test]
-        [Category("DbContext")]
         public void InsertSQLExecutabilityTest()
         {
             var bytes = new byte[] { 1, 2, 3 };

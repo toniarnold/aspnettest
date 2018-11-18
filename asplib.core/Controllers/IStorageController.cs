@@ -146,6 +146,75 @@ namespace asplib.Controllers
         }
 
         /// <summary>
+        /// Add the ViewState input to the ViewBag for rendering in the view
+        /// </summary>
+        /// <param name="inst"></param>
+        public static void SaveViewState(this IStorageController inst)
+        {
+            inst.ViewBag.SessionStorage = ViewBagSessionStorage(inst, Storage.ViewState);
+
+            Func<byte[], byte[]> filter = null;
+            var key = inst.Configuration.GetValue<string>("EncryptViewStateKey");
+            if (!String.IsNullOrEmpty(key))
+            {
+                var secret = GetSecret(key);
+                filter = x => Crypt.Encrypt(secret, x);
+            }
+            inst.ViewBag.ViewState = ViewState(inst, filter);
+        }
+
+        /// <summary>
+        /// Add the serialized controller to the session and the storage type to the ViewBag
+        /// to be posted such that StorageControllerActivator can read it.
+        /// </summary>
+        /// <param name="inst"></param>
+        public static void SaveSession(this IStorageController inst)
+        {
+            inst.ViewBag.SessionStorage = ViewBagSessionStorage(inst, Storage.Session);
+            inst.HttpContext.Session.Set(GetStorageID(inst), Bytes(inst));
+        }
+
+        /// <summary>
+        /// Store the serialized controller to the database. Reference to it is
+        /// kept in a persistent cookie.
+        /// </summary>
+        /// <param name="inst"></param>
+        public static void SaveDatabase(this IStorageController inst)
+        {
+            inst.ViewBag.SessionStorage = ViewBagSessionStorage(inst, Storage.Database);
+
+            Guid session = Guid.NewGuid();  // cannot exist in the database
+            var newCookie = new NameValueCollection();
+            var cookie = inst.HttpContext.Request.Cookies[inst.GetStorageID()].FromCookieString();
+            if (cookie != null)
+            {
+                Guid.TryParse(cookie["session"], out session);
+            }
+            Func<byte[], byte[]> filter = null;
+            if (GetEncryptDatabaseStorage(inst.Configuration))
+            {
+                var key = (cookie["key"] != null) ? Convert.FromBase64String(cookie["key"]) : null;
+                var secret = GetSecret(key);
+                filter = x => Crypt.Encrypt(secret, x);
+                newCookie["key"] = Convert.ToBase64String(secret.Key);
+            }
+            using (var db = new ASP_DBEntities())
+            {
+                var savedSession = db.SaveMain(inst.Bytes(filter), session);
+                newCookie["session"] = savedSession.ToString();
+            }
+
+            var days = inst.Configuration.GetValue<int>("DatabaseStorageExpires");
+            var options = new CookieOptions()
+            {
+                Expires = DateTime.Now.AddDays(days),
+                HttpOnly = true,
+                SameSite = SameSiteMode.Strict
+            };
+            inst.HttpContext.Response.Cookies.Append(inst.GetStorageID(), newCookie.ToCookieString(), options);
+        }
+
+        /// <summary>
         /// Serializes the given controller into a byte array if it is
         /// instantiable by this StorageControllerExtension
         /// </summary>
@@ -168,6 +237,26 @@ namespace asplib.Controllers
                 bytes = null;
                 return false;
             }
+        }
+
+        /// <summary>
+        /// Render the SQL INSERT script for the serialization of the current
+        /// Controller
+        /// </summary>
+        /// <param name="inst"></param>
+        /// <returns></returns>
+        public static string InsertSQL(this object inst)
+        {
+            var sql = String.Empty;
+            byte[] bytes;
+            if (TryGetBytes(inst, out bytes)) // serialize without filter
+            {
+                using (var db = new ASP_DBEntities())
+                {
+                    sql = db.InsertSQL(bytes);
+                }
+            }
+            return sql;
         }
 
         /// <summary>
@@ -243,75 +332,6 @@ namespace asplib.Controllers
             return string.Format("{0}:{1}",
                             GetSessionStorageID(inst),
                             sessionstorage);
-        }
-
-        /// <summary>
-        /// Add the ViewState input to the ViewBag for rendering in the view
-        /// </summary>
-        /// <param name="inst"></param>
-        public static void SaveViewState(this IStorageController inst)
-        {
-            inst.ViewBag.SessionStorage = ViewBagSessionStorage(inst, Storage.ViewState);
-
-            Func<byte[], byte[]> filter = null;
-            var key = inst.Configuration.GetValue<string>("EncryptViewStateKey");
-            if (!String.IsNullOrEmpty(key))
-            {
-                var secret = GetSecret(key);
-                filter = x => Crypt.Encrypt(secret, x);
-            }
-            inst.ViewBag.ViewState = ViewState(inst, filter);
-        }
-
-        /// <summary>
-        /// Add the serialized controller to the session and the storage type to the ViewBag
-        /// to be posted such that StorageControllerActivator can read it.
-        /// </summary>
-        /// <param name="inst"></param>
-        public static void SaveSession(this IStorageController inst)
-        {
-            inst.ViewBag.SessionStorage = ViewBagSessionStorage(inst, Storage.Session);
-            inst.HttpContext.Session.Set(GetStorageID(inst), Bytes(inst));
-        }
-
-        /// <summary>
-        /// Store the serialized controller to the database. Reference to it is
-        /// kept in a persistent cookie.
-        /// </summary>
-        /// <param name="inst"></param>
-        public static void SaveDatabase(this IStorageController inst)
-        {
-            inst.ViewBag.SessionStorage = ViewBagSessionStorage(inst, Storage.Database);
-
-            Guid session = Guid.NewGuid();  // cannot exist in the database
-            var newCookie = new NameValueCollection();
-            var cookie = inst.HttpContext.Request.Cookies[inst.GetStorageID()].FromCookieString();
-            if (cookie != null)
-            {
-                Guid.TryParse(cookie["session"], out session);
-            }
-            Func<byte[], byte[]> filter = null;
-            if (GetEncryptDatabaseStorage(inst.Configuration))
-            {
-                var key = (cookie["key"] != null) ? Convert.FromBase64String(cookie["key"]) : null;
-                var secret = GetSecret(key);
-                filter = x => Crypt.Encrypt(secret, x);
-                newCookie["key"] = Convert.ToBase64String(secret.Key);
-            }
-            using (var db = new ASP_DBEntities())
-            {
-                var savedSession = db.SaveMain(inst.Bytes(filter), session);
-                newCookie["session"] = savedSession.ToString();
-            }
-
-            var days = inst.Configuration.GetValue<int>("DatabaseStorageExpires");
-            var options = new CookieOptions()
-            {
-                Expires = DateTime.Now.AddDays(days),
-                HttpOnly = true,
-                SameSite = SameSiteMode.Strict
-            };
-            inst.HttpContext.Response.Cookies.Append(inst.GetStorageID(), newCookie.ToCookieString(), options);
         }
     }
 }

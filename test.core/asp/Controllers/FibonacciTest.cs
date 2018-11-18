@@ -12,7 +12,6 @@ namespace test.asp.Controllers
     /// </summary>
     [TestFixture]
     [Category("DbContext")]
-    [Ignore("GUI NYI, no test data available")]
     public class FibonacciTest
     {
         private IConfigurationRoot config;
