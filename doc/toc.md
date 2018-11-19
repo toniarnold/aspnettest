@@ -1,6 +1,6 @@
 # Technical Documentation
 
-* [ASP.NET WebForms and ASP.NET Core](webforms-core.md)
+* [ASP.NET WebForms and MVC Core](webforms-core.md)
 * [Initial Setup](setup.md)
 * [Writing GUI Tests](writing.md)
 * [Architecture](architecture.md)

@@ -1,4 +1,4 @@
-# ASP.NET WebForms and ASP.NET Core
+# ASP.NET WebForms and MVC Core
 
 * [Dependencies](#Dependencies)
    * [Identical Namespaces](#identical-namespaces)
