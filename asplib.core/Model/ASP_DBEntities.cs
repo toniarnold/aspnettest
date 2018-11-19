@@ -37,10 +37,11 @@ namespace asplib.Model
         /// Inserts or updates (when a row with the session exists) the byte array
         /// and returns the new session Guid if none is given or the row was not found
         /// </summary>
+        /// <param name="type"></param>
         /// <param name="bytes"></param>
         /// <param name="session"></param>
         /// <returns></returns>
-        public Guid SaveMain(byte[] bytes, Guid? session)
+        public Guid SaveMain(Type type, byte[] bytes, Guid? session)
         {
             var query = from m in this.Main
                         where m.session == session
@@ -51,6 +52,7 @@ namespace asplib.Model
                 main = new Main();
                 this.Main.Add(main);    // INSERT
             }
+            main.clsid = Clsid.Id(type);
             main.main = bytes;
             this.SaveChanges();
             return main.session;  // get the new session guid set by the db on insert
@@ -60,9 +62,12 @@ namespace asplib.Model
         /// Returns the (unencrypted!) literal INSERT string of the loaded object
         /// for manually exporting session dumps.
         /// </summary>
+        /// <param name="type"></param>
+        /// <param name="bytes"></param>
         /// <returns>SQL INSERT string</returns>
-        public string InsertSQL(byte[] bytes)
+        public string InsertSQL(Type type, byte[] bytes)
         {
+            var clsid = Clsid.Id(type);
             // Let the future consumer SQL Server encode the string
             // representation of the byte[] Unlike EF6 use ADO.NET Core, as the
             // connection string is usable for both contexts.
@@ -76,9 +81,9 @@ namespace asplib.Model
                 hex = (string)cmd.ExecuteScalar();
             }
             // Format according to get copy-pasted into Management Studio
-            return String.Format("INSERT INTO Main (main) SELECT {0}\n" +
+            return String.Format("INSERT INTO Main (clsid, main) SELECT '{0}', {1}\n" +
                                  "SELECT session FROM Main WHERE mainid = @@IDENTITY\n",
-                                 hex);
+                                 clsid, hex);
         }
     }
 }

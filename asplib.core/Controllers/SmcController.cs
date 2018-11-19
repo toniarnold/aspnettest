@@ -12,7 +12,8 @@ namespace asplib.Controllers
     /// <summary>
     /// Specialization of SerializableController with State
     /// </summary>
-    /// <typeparam name="C"></typeparam>
+    /// <typeparam name="F"></typeparam>
+    /// <typeparam name="S"></typeparam>
     public class SmcController<F, S> : SerializableController
         where F : statemap.FSMContext
         where S : statemap.State

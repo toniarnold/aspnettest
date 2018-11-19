@@ -21,6 +21,8 @@ namespace asplib.Model
         [DatabaseGenerated(DatabaseGeneratedOption.Computed)]
         public DateTime changed { get; set; }
 
+        public Guid clsid { get; set; }
+
         public byte[] main { get; set; }
     }
 }

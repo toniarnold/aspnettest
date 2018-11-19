@@ -200,7 +200,7 @@ namespace asplib.Controllers
             }
             using (var db = new ASP_DBEntities())
             {
-                var savedSession = db.SaveMain(inst.Bytes(filter), session);
+                var savedSession = db.SaveMain(inst.GetType(), inst.Bytes(filter), session);
                 newCookie["session"] = savedSession.ToString();
             }
 
@@ -253,7 +253,7 @@ namespace asplib.Controllers
             {
                 using (var db = new ASP_DBEntities())
                 {
-                    sql = db.InsertSQL(bytes);
+                    sql = db.InsertSQL(inst.GetType(), bytes);
                 }
             }
             return sql;

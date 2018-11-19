@@ -40,7 +40,8 @@ namespace asplib.Controllers
                     Guid session;
                     using (var db = new ASP_DBEntities())
                     {
-                        session = db.SaveMain(bytes, Guid.NewGuid()); // enforce new session, store unencrypted
+                        // enforce new session, store unencrypted:
+                        session = db.SaveMain(controller.GetType(), bytes, Guid.NewGuid());
                     }
                     var host = this.Request.Host.ToString();
                     var path = Regex.Replace(controller.GetType().Name, "Controller$", String.Empty);

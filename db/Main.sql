@@ -14,6 +14,7 @@ CREATE TABLE [dbo].[Main](
 	[session] [uniqueidentifier] DEFAULT NEWID() NOT NULL,
 	[created] [datetime] DEFAULT GETDATE() NOT NULL,
 	[changed] [datetime] DEFAULT GETDATE() NOT NULL,
+	[clsid] [uniqueidentifier] NOT NULL,
 	[main] [varbinary](max) NOT NULL,
  CONSTRAINT [PK_Main] PRIMARY KEY NONCLUSTERED 
 (
@@ -26,6 +27,13 @@ CREATE UNIQUE CLUSTERED INDEX [CIX_Main_mainid] ON [dbo].[Main]
 (
 	[mainid] ASC
 )WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, IGNORE_DUP_KEY = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
+GO
+
+-- Will usually be very little selective, as it only distincts the serialized classes:
+CREATE NONCLUSTERED INDEX [IX_Main_clsid] ON [dbo].[Main]
+(
+	[clsid] ASC
+)WITH (PAD_INDEX = OFF, STATISTICS_NORECOMPUTE = OFF, SORT_IN_TEMPDB = OFF, DROP_EXISTING = OFF, ONLINE = OFF, ALLOW_ROW_LOCKS = ON, ALLOW_PAGE_LOCKS = ON) ON [PRIMARY]
 GO
 
 CREATE TRIGGER TRG_Main_changed ON [dbo].[Main] FOR UPDATE AS

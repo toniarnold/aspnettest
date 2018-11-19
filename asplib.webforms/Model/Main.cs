@@ -18,6 +18,7 @@ namespace asplib.Model
         public System.Guid session { get; set; }
         public System.DateTime created { get; set; }
         public System.DateTime changed { get; set; }
+        public System.Guid clsid { get; set; }
         public byte[] main { get; set; }
     }
 }

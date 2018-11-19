@@ -13,6 +13,7 @@
           <Property Name="session" Type="uniqueidentifier" Nullable="false" StoreGeneratedPattern="Identity" />
           <Property Name="created" Type="datetime" Nullable="false" StoreGeneratedPattern="Computed" />
           <Property Name="changed" Type="datetime" Nullable="false" StoreGeneratedPattern="Computed" />
+          <Property Name="clsid" Type="uniqueidentifier" Nullable="false" />
           <Property Name="main" Type="varbinary(max)" Nullable="false" />
         </EntityType>
         <EntityContainer Name="ASP_DBModelStoreContainer">
@@ -30,6 +31,7 @@
           <Property Name="session" Type="Guid" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
           <Property Name="created" Type="DateTime" Nullable="false" Precision="3" annotation:StoreGeneratedPattern="Computed" />
           <Property Name="changed" Type="DateTime" Nullable="false" Precision="3" annotation:StoreGeneratedPattern="Computed" />
+          <Property Name="clsid" Type="Guid" Nullable="false" />
           <Property Name="main" Type="Binary" MaxLength="Max" FixedLength="false" Nullable="false" />
         </EntityType>
         <EntityContainer Name="ASP_DBEntities" annotation:LazyLoadingEnabled="true">
@@ -48,6 +50,7 @@
                 <ScalarProperty Name="session" ColumnName="session" />
                 <ScalarProperty Name="created" ColumnName="created" />
                 <ScalarProperty Name="changed" ColumnName="changed" />
+                <ScalarProperty Name="clsid" ColumnName="clsid" />
                 <ScalarProperty Name="main" ColumnName="main" />
               </MappingFragment>
             </EntityTypeMapping>

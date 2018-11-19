@@ -1,5 +1,6 @@
 ﻿using asp.Models;
 using asplib.Controllers;
+using asplib.Model;
 using iie;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -9,6 +10,7 @@ using System;
 
 namespace asp.Controllers
 {
+    [Clsid("A4A6AD10-6435-4E86-B047-9BC3DCCF5982")]
     public partial class Calculator : SmcController<CalculatorContext, CalculatorContext.CalculatorState>
     {
         private IHostingEnvironment Environment { get; }

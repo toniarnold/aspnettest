@@ -454,15 +454,15 @@ Perform these steps to create a stored test case:
 
 4. Open the file in Management Studio. The file SQL should look like this:
 ```sql
-INSERT INTO Main (main) SELECT 0x0001000000FFFFFFFF01000000000000000C020000003A617370...
+INSERT INTO Main (clsid, main) SELECT 'eea41ded-a899-406f-a293-b06917dd48e6', 0x0001000000FFFFFFFF01000000000000000C020000003A617370...
 SELECT session FROM Main WHERE mainid = @@IDENTITY
 ```
 
 5. Execute the script. It will output the session GUID just created. To be able to
    reproduce the test data anywhere, edit the script to include the now fixed GUID
-   such that it looks like ```asptest.calculator.FibonacciTest.sql```:
+   such that it looks like in ```FibonacciTest.sql```:
 ```sql
-INSERT INTO Main (session, main) SELECT 'DE2CAAF5-6602-456D-B1F9-874095359593', 0x0001000000FFFFFFFF01000000000000000C020000003A617370...
+INSERT INTO Main (session, clsid, main) SELECT 'DE2CAAF5-6602-456D-B1F9-874095359593', 'EEA41DED-A899-406F-A293-B06917DD48E6', 0x0001000000FFFFFFFF01000000000000000C020000003A617370...
 SELECT session FROM Main WHERE mainid = @@IDENTITY
 ```
 

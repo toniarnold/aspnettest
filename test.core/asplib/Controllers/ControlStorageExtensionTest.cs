@@ -9,6 +9,7 @@ namespace test.asplib.Controllers
 {
     [TestFixture]
     [Serializable]
+    [Clsid("00000000-0000-0000-0000-000000000000")]
     public class ControlStorageExtensionTest : IStorageController
     {
         // IStorageController

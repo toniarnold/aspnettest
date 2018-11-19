@@ -20,6 +20,7 @@ namespace asplib.Model
         /// Returns all Database rows with a matching M instance which is already lazy loaded
         /// </summary>
         /// <typeparam name="M"></typeparam>
+        /// <param name="filter">encrypt filter</param>
         /// <returns></returns>
         public static IEnumerable<Main> AllMainRows<M>(Func<byte[], byte[]> filter = null)
             where M : class
@@ -34,18 +35,17 @@ namespace asplib.Model
         /// Testable AllMainRows
         /// </summary>
         /// <typeparam name="M"></typeparam>
+        /// <param name="db">The database.</param>
+        /// <param name="filter">encrypt filter</param>
         /// <returns></returns>
         public static IEnumerable<Main> AllMainRows<M>(ASP_DBEntities db, Func<byte[], byte[]> filter = null)
             where M : class
         {
-            // Fetching all rows from the database and then restricting the result to the correct
-            // types is of course inefficient for big tables and many types - an optimization would
-            // be to explicitly store the type name in a [Type] table and reference them in [Main]
-            // to be able to restrict the SELECT directly.
             var all = from m in db.Main
                       select m;
             return from m in all.AsEnumerable()
-                   where m.GetInstance<M>(filter) != null
+                   where m.clsid == Clsid.Id(typeof(M)) &&
+                         m.GetInstance<M>(filter) != null   // could be encrypted
                    select m;
         }
 
@@ -54,7 +54,8 @@ namespace asplib.Model
         /// Applies the crypto filter if given.
         /// </summary>
         /// <typeparam name="M"></typeparam>
-        /// <param name="session"></param>
+        /// <param name="session">The session.</param>
+        /// <param name="filter">encrypt filter</param>
         /// <returns></returns>
         public static M LoadMain<M>(Guid session, Func<byte[], byte[]> filter = null)
             where M : class
@@ -68,8 +69,10 @@ namespace asplib.Model
         /// <summary>
         /// Testable LoadMain
         /// </summary>
-        /// <param name="db"></param>
-        /// <param name="session"></param>
+        /// <typeparam name="M"></typeparam>
+        /// <param name="db">The database.</param>
+        /// <param name="session">The session.</param>
+        /// <param name="filter">encrypt filter</param>
         /// <returns></returns>
         internal static M LoadMain<M>(ASP_DBEntities db, Guid session, Func<byte[], byte[]> filter = null)
             where M : class
@@ -87,7 +90,9 @@ namespace asplib.Model
         /// Applies the crypto filter if given.
         /// </summary>
         /// <typeparam name="M"></typeparam>
-        /// <param name="main"></param>
+        /// <param name="main">The main.</param>
+        /// <param name="session">The session.</param>
+        /// <param name="filter">encrypt filter</param>
         /// <returns></returns>
         public static Guid SaveMain<M>(M main, Guid? session, Func<byte[], byte[]> filter = null)
             where M : class
@@ -102,7 +107,10 @@ namespace asplib.Model
         /// Testable SaveMain
         /// </summary>
         /// <typeparam name="M"></typeparam>
-        /// <param name="main"></param>
+        /// <param name="db">The database.</param>
+        /// <param name="instance">The instance.</param>
+        /// <param name="session">The session.</param>
+        /// <param name="filter">encrypt filter</param>
         /// <returns></returns>
         public static Guid SaveMain<M>(ASP_DBEntities db, M instance, Guid? session, Func<byte[], byte[]> filter = null)
             where M : class
@@ -114,6 +122,7 @@ namespace asplib.Model
             if (main == null)
             {
                 main = new Main();
+                main.clsid = Clsid.Id(instance);
                 db.Main.Add(main);      // INSERT
             }
             main.SetInstance(instance, filter);
@@ -126,6 +135,7 @@ namespace asplib.Model
         /// [Main] table column byte[] main member or null if it is not of the generic type
         /// </summary>
         /// <typeparam name="M"></typeparam>
+        /// <param name="filter">encrypt filter</param>
         /// <returns></returns>
         public M GetInstance<M>(Func<byte[], byte[]> filter = null)
             where M : class
@@ -139,7 +149,8 @@ namespace asplib.Model
         /// Serializes the object instance to the [Main] table column byte[] main member
         /// </summary>
         /// <typeparam name="M"></typeparam>
-        /// <param name="obj"></param>
+        /// <param name="obj">The object.</param>
+        /// <param name="filter">encrypt filter</param>
         public void SetInstance<M>(M obj, Func<byte[], byte[]> filter = null)
             where M : class
         {
@@ -151,10 +162,13 @@ namespace asplib.Model
         /// Returns the (unencrypted!) literal INSERT string of the loaded object
         /// for manually exporting session dumps.
         /// </summary>
-        /// <returns>SQL INSERT string</returns>
+        /// <returns>
+        /// SQL INSERT string
+        /// </returns>
         public string InsertSQL()
         {
             Trace.Assert(this.main != null, "Explicit serialization with SetInstance(controlStorage.Main) required beforehand");
+            var clsid = Clsid.Id(this.mainInstance);    // throws if no Clsid attribute present
 
             // Let the future consumer SQL Server encode the string representation of the byte[]
             string hex = String.Empty;
@@ -165,9 +179,9 @@ namespace asplib.Model
                 hex = db.Database.SqlQuery<String>(query, param).FirstOrDefault();
             }
             // Format according to get copy-pasted into Management Studio
-            return String.Format("INSERT INTO Main (main) SELECT {0}\n" +
+            return String.Format("INSERT INTO Main (clsid, main) SELECT '{0}', {1}\n" +
                                  "SELECT session FROM Main WHERE mainid = @@IDENTITY\n",
-                                 hex);
+                                 clsid, hex);
         }
     }
 }

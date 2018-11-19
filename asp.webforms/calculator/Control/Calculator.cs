@@ -1,4 +1,5 @@
 ﻿using asplib.Control;
+using asplib.Model;
 using System;
 using System.Collections.Generic;
 
@@ -8,6 +9,7 @@ namespace asp.calculator.Control
     /// Context class for Calculator.sm/Calculator_sm.cs
     /// </summary>
     [Serializable]
+    [Clsid("EEA41DED-A899-406F-A293-B06917DD48E6")]
     public class Calculator : IMain<CalculatorContext, CalculatorContext.CalculatorState>
     {
         protected CalculatorContext _fsm;

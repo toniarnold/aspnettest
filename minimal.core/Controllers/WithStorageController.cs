@@ -9,6 +9,7 @@ using System.Collections.Generic;
 
 namespace minimal.Controllers
 {
+    [Clsid("680AF248-D809-4724-8B23-047BFD0BE336")]
     public class WithStorageController : SerializableController
     {
         // Any contained object to perform assertions on, the ViewModel is just

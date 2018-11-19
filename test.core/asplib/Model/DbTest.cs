@@ -12,6 +12,9 @@ namespace test.asplib.Model
     [Category("DbContext")]
     public class DbTest
     {
+        [Clsid("00000000-0000-0000-0000-000000000000")]
+        private class TestClass { }
+
         [OneTimeSetUp]
         public void SetUpConnectionString()
         {
@@ -33,6 +36,7 @@ namespace test.asplib.Model
                 {
                     var main = new Main();
                     db.Main.Add(main);  // add incomplete object, possible unlike with Strongly Typed Datasets
+                    main.clsid = new Guid();
                     main.main = new byte[3] { 1, 2, 3 };
 
                     // INSERT: read back inserted and computed values
@@ -100,7 +104,7 @@ namespace test.asplib.Model
                 try
                 {
                     // Local SetUp
-                    var session = db.SaveMain(bytes, null);
+                    var session = db.SaveMain(typeof(TestClass), bytes, null);
 
                     // Method under test
                     var copy = db.LoadMain(session);
@@ -123,7 +127,7 @@ namespace test.asplib.Model
 
             using (var db = new ASP_DBEntities())
             {
-                var sql = db.InsertSQL(bytes);
+                var sql = db.InsertSQL(typeof(TestClass), bytes);
                 Assert.That(sql, Does.Contain("INSERT INTO"));
             }
         }
@@ -138,7 +142,7 @@ namespace test.asplib.Model
             {
                 try
                 {
-                    var sql = db.InsertSQL(bytes);
+                    var sql = db.InsertSQL(typeof(TestClass), bytes);
                     db.Database.ExecuteSqlCommand(sql);
                     // really just executability without exception
                 }
