@@ -1,11 +1,25 @@
-<Project Sdk="Microsoft.NET.Sdk">
+﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
     <TargetFramework>netcoreapp2.1</TargetFramework>
     <RootNamespace>asplib</RootNamespace>
+    <Authors>Toni Arnold, Charles W. Rapp (SMC)</Authors>
+    <Version>0.1.1</Version>
+    <PackageId>aspnetsmc.core</PackageId>
+    <Product>aspnettest</Product>
+    <Description>Base for an ASP.NET Model Control View design pattern, optionally with SMC, the State Machine Compiler.
+</Description>
+    <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
+    <Copyright>Copyright © 2018</Copyright>
+    <PackageProjectUrl>https://github.com/toniarnold/aspnettest/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/toniarnold/aspnettest.git</RepositoryUrl>
+    <PackageReleaseNotes>alpha</PackageReleaseNotes>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <Company>Toni Arnold, Charles W. Rapp (SMC)</Company>
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="EntityFramework" Version="6.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.5" />
   </ItemGroup>
 

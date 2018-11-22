@@ -2,9 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Data.SqlClient;
-using System.Runtime.CompilerServices;
-
-[assembly: InternalsVisibleTo("test.core")]
 
 namespace iie
 {

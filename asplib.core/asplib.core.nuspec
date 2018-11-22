@@ -1,0 +1,20 @@
+<?xml version="1.0"?>
+<package >
+  <metadata>
+    <id>aspnetsmc.core</id>
+    <version>0.1.1</version>
+    <title>aspnetsmc.core</title>
+    <authors>Toni Arnold, Charles W. Rapp (SMC)</authors>
+    <owners>Toni Arnold, Charles W. Rapp (SMC)</owners>
+    <licenseUrl>https://www.gnu.org/licenses/gpl-3.0.en.html</licenseUrl>
+    <projectUrl>https://github.com/toniarnold/aspnettest/</projectUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <description>Base for an ASP.NET Model Control View design pattern, optionally with SMC, the State Machine Compiler.</description>
+    <releaseNotes>alpha</releaseNotes>
+    <copyright>Copyright 2018</copyright>
+    <tags></tags>
+    <dependencies>
+      <dependency id="EntityFramework" version="6.2.0" />
+    </dependencies>
+  </metadata>
+</package>

@@ -95,6 +95,7 @@
       <Generator>EntityModelCodeGenerator</Generator>
       <LastGenOutput>Db.Designer.cs</LastGenOutput>
     </EntityDeploy>
+    <None Include="asplib.webforms.nuspec" />
     <None Include="Model\Db.edmx.diagram">
       <DependentUpon>Db.edmx</DependentUpon>
     </None>

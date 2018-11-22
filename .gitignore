@@ -334,3 +334,9 @@ ASALocalRun/
 # GNU Dia
 *.autosave
 
+# Local nuget build folder
+!nuget/**
+
+# dlls fetched by nuget
+minimal.webforms/*.dll
+minimaltest.webforms/*.dll

@@ -2,11 +2,6 @@
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Generic;
-using System.Runtime.CompilerServices;
-
-[assembly: InternalsVisibleTo("asp.core.Views")]    // for CalculatorContext.Map1 in the Razor engine
-[assembly: InternalsVisibleTo("test.core")]
-[assembly: InternalsVisibleTo("asptest.core")]
 
 namespace asp.Controllers
 {

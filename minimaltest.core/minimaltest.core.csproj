@@ -12,6 +12,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\asplib.core\asplib.core.csproj" />
+    <ProjectReference Include="..\asplib\asplib.csproj" />
     <ProjectReference Include="..\iie.core\iie.core.csproj" />
     <ProjectReference Include="..\minimal.core\minimal.core.csproj" />
   </ItemGroup>
