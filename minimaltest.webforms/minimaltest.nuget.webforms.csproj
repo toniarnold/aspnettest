@@ -35,10 +35,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="asplib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\aspnetsmc.webforms.0.1.1\lib\net461\asplib.dll</HintPath>
+      <HintPath>..\packages\aspnetsmc.webforms.0.1.2\lib\net461\asplib.dll</HintPath>
     </Reference>
-    <Reference Include="asplib.webforms, Version=0.1.1.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\aspnetsmc.webforms.0.1.1\lib\net461\asplib.webforms.dll</HintPath>
+    <Reference Include="asplib.webforms, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\aspnetsmc.webforms.0.1.2\lib\net461\asplib.webforms.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.dll</HintPath>
@@ -47,10 +47,10 @@
       <HintPath>..\packages\EntityFramework.6.2.0\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="iie, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\aspnettest.webforms.0.1.1\lib\net461\iie.dll</HintPath>
+      <HintPath>..\packages\aspnettest.webforms.0.1.2\lib\net461\iie.dll</HintPath>
     </Reference>
-    <Reference Include="iie.webforms, Version=0.1.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\aspnettest.webforms.0.1.1\lib\net461\iie.webforms.dll</HintPath>
+    <Reference Include="iie.webforms, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\packages\aspnettest.webforms.0.1.2\lib\net461\iie.webforms.dll</HintPath>
     </Reference>
     <Reference Include="Mono.Cecil, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnit.Engine.3.7.0\lib\Mono.Cecil.dll</HintPath>
@@ -75,7 +75,7 @@
       <HintPath>..\packages\NUnit.3.11.0\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="smc, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\aspnettest.webforms.0.1.1\lib\net461\smc.dll</HintPath>
+      <HintPath>..\packages\aspnettest.webforms.0.1.2\lib\net461\smc.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />
@@ -105,7 +105,7 @@
     <Compile Include="WithStorageTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\minimal.webforms\minimal.webforms.csproj">
+    <ProjectReference Include="..\minimal.webforms\minimal.nuget.webforms.csproj">
       <Project>{d276ffa5-0e92-4ed0-82d9-d5fe08ac69a8}</Project>
       <Name>minimal.webforms</Name>
     </ProjectReference>
@@ -141,7 +141,7 @@
       <ErrorText>Dieses Projekt verweist auf mindestens ein NuGet-Paket, das auf diesem Computer fehlt. Verwenden Sie die Wiederherstellung von NuGet-Paketen, um die fehlenden Dateien herunterzuladen. Weitere Informationen finden Sie unter "http://go.microsoft.com/fwlink/?LinkID=322105". Die fehlende Datei ist "{0}".</ErrorText>
     </PropertyGroup>
     <Error Condition="!Exists('..\packages\NUnit.3.11.0\build\NUnit.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NUnit.3.11.0\build\NUnit.props'))" />
-    <Error Condition="!Exists('..\packages\NUnit3TestAdapter.3.10.0\build\net35\NUnit3TestAdapter.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NUnit3TestAdapter.3.10.0\build\net35\NUnit3TestAdapter.props'))" />
+    <Error Condition="!Exists('..\packages\NUnit3TestAdapter.3.11.2\build\net35\NUnit3TestAdapter.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NUnit3TestAdapter.3.10.0\build\net35\NUnit3TestAdapter.props'))" />
   </Target>
   <PropertyGroup>
     <PostBuildEvent>diff --binary $(TargetPath) $(SolutionDir)\bin

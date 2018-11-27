@@ -7,7 +7,7 @@ namespace iie
     /// Base class for IE tests with accessors for ISmcControl
     /// </summary>
     [TestFixture]
-    public abstract class SmcTest<C, F, S> : IETest<C>
+    public abstract class SmcTest<C, F, S> : StorageTest<C>
         where C : SmcController<F, S>
         where F : statemap.FSMContext
         where S : statemap.State

@@ -5,6 +5,7 @@ The Visual Studio solution requires some initial tweaking to get it up and runni
 * [Clone and tweak the solution](#clone-and-tweak-the-solution)
 * [Optional rebuild dependencies](#optional-rebuild-dependencies)
 * [NuGet package restore](#nuget-package-restore)
+  * [NuGet-only binary distribution](#nuget-only-binary-distribution)
 * [SQL database creation](#sql-database-creation)
 * [Running the unit tests](#running-the-unit-tests)
 * [Running the web application self tests](#running-the-web-application-self-tests)
@@ -18,10 +19,10 @@ The Visual Studio solution requires some initial tweaking to get it up and runni
 Open ```aspnettest.sln``` (the full solution) with Visual Studio 2017. This
 step will create the hidden ```\.vs\config``` directory within the
 ```aspnettest``` root folder containing the ```applicationhost.config```
-configuration file where the virtual directories for the two web site projects
-are auto-configured with their respective ports. Open it with a text editor and
-find for the relevant ```<bindings>``` by searching for ```:localhost```, as
-this is exactly the culprit:
+configuration file where the virtual directories for the two ASP.NET WebForms
+web site projects are auto-configured with their respective ports. Open it with
+a text editor and find for the relevant ```<bindings>``` by searching for
+```:localhost```, as this is exactly the culprit:
 
 ```xml
 <bindings>
@@ -73,6 +74,60 @@ so you'll need to perform a NuGet Package Restore.
 
 Now you should be able to build the solution with the Any CPU Debug
 configuration.
+
+
+### NuGet-only binary distribution
+
+There are four rather experimental binary packages available on NuGet, one web
+application base / test base project for each Framework:
+
+* [aspnetsmc.webforms](https://www.nuget.org/packages/aspnetsmc.webforms/)
+* [aspnettest.webforms](https://www.nuget.org/packages/aspnettest.webforms/)
+* [aspnetsmc.core](https://www.nuget.org/packages/aspnetsmc.core/)
+* [aspnettest.core](https://www.nuget.org/packages/aspnettest.core/)
+
+If these are installed into the source solutions, there will be DLL hell. But
+all four projects make little sense outside of a complete web application,
+therefore there are two solutions with the minimal application (without SMC)
+for each framework referencing none of the source packages:
+
+* ```minimal.nuget.webforms.sln```
+* ```minimal.nuget.core.sln```
+
+To use these, clone the ```aspnettest``` source tree into a separate folder and
+never open and compile one of the source solutions there such that the NuGet
+packages retain their monopoly to provide the respective DLLs. These two
+minimal solutions contain only the web application and the test DLLs, but no
+library projects:
+
+![Minimal WebForms NuGet Solution](img/minimal.nuget.webforms.png)
+![Minimal MVC Core NuGet Solution](img/minimal.nuget.core.png)
+
+
+#### COM Dependencies
+
+As COM dependencies of NuGet packages are not transitively inherited by the
+target projects, they have been added manually to the respective projects (for
+.NET Core, there is not even VS GUI support to create new COM dependencies).
+But for the WebForms project, these DLLs additionally need to be copied
+manually to the ```.\minimal.webforms\bin``` directory - e.g. from *another*
+checkout built from source:
+
+```bash
+cp Interop.MSHTML.dll .\minimal.webforms\bin
+cp Interop.SHDocVw.dll .\minimal.webforms\bin
+```
+
+
+#### Missing EF6 sources
+You can directly copy the missing EF6 sources for the concrete tables from the root directory
+without modifications into the ```minimaltest.webforms``` project:
+
+```bash
+cp .\asplib.webforms\Model\Db.cs  .\minimaltest.webforms\Model\
+cp .\asplib.webforms\Model\Db.Context.cs .\minimaltest.webforms\Model\
+```
+
 
 
 ## SQL database creation

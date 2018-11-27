@@ -14,7 +14,7 @@ namespace test.asplib.Model
         [Test]
         public void SaveUpdateTest()
         {
-            const int DB_ROUNDTRIP_MILLISECONDS = 200;
+            const int DB_ROUNDTRIP_MILLISECONDS = 500;
 
             using (var db = new ASP_DBEntities())
             using (var trans = db.Database.BeginTransaction(IsolationLevel.ReadUncommitted))

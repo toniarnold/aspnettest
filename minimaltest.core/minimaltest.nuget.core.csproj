@@ -7,36 +7,17 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="aspnetsmc.core" Version="0.1.1" />
-    <PackageReference Include="aspnettest.core" Version="0.1.1" />
+    <PackageReference Include="aspnetsmc.core" Version="0.1.2" />
+    <PackageReference Include="aspnettest.core" Version="0.1.2" />
+    <PackageReference Include="EntityFramework" Version="6.2.0" />
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="15.9.0" />
     <PackageReference Include="NUnit" Version="3.11.0" />
-    <PackageReference Include="NUnit3TestAdapter" Version="3.10.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.11.2" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\minimal.core\minimal.nuget.core.csproj" />
-  </ItemGroup>
-
-  <!-- Added manually (c&p from iie Standard), required as a direct dependency for nuget -->
-  <ItemGroup>
-    <COMReference Include="SHDocVw.dll">
-      <Guid>eab22ac0-30c1-11cf-a7eb-0000c05bae0b</Guid>
-      <VersionMajor>1</VersionMajor>
-      <VersionMinor>1</VersionMinor>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Lcid>0</Lcid>
-      <Isolated>false</Isolated>
-    </COMReference>
-    <COMReference Include="MSHTML.dll">
-      <Guid>3050f1c5-98b5-11cf-bb82-00aa00bdce0b</Guid>
-      <VersionMajor>4</VersionMajor>
-      <VersionMinor>0</VersionMinor>
-      <WrapperTool>tlbimp</WrapperTool>
-      <Lcid>0</Lcid>
-      <Isolated>false</Isolated>
-    </COMReference>
-  </ItemGroup>   
+  </ItemGroup> 
   
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="diff --binary $(TargetPath) $(SolutionDir)\bin&#xD;&#xA;if errorlevel 1 xcopy /d /f /y $(TargetDir)\$(TargetName).* $(SolutionDir)\bin" />

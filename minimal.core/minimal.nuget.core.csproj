@@ -13,8 +13,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="aspnetsmc.core" Version="0.1.1" />
-    <PackageReference Include="aspnettest.core" Version="0.1.1" />
+    <PackageReference Include="aspnetsmc.core" Version="0.1.2" />
+    <PackageReference Include="aspnettest.core" Version="0.1.2" />
+    <PackageReference Include="EntityFramework" Version="6.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.5" />
     <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="15.9.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.5" />
