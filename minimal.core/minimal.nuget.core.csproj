@@ -16,9 +16,9 @@
     <PackageReference Include="aspnetsmc.core" Version="0.1.2" />
     <PackageReference Include="aspnettest.core" Version="0.1.2" />
     <PackageReference Include="EntityFramework" Version="6.2.0" />
-    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.5" />
+    <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.6" />
     <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="15.9.0" />
-    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.5" />
+    <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.6" />
     <PackageReference Include="NUnit" Version="3.11.0" />
     <PackageReference Include="nunit.engine.netstandard" Version="3.8.0" />
   </ItemGroup>
