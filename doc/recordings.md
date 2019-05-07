@@ -1,6 +1,6 @@
 # Screen Recordings
 
-**_[Bug #3](/../../../issues/3): Due to (probably) Win10 update 1809, Internet Explorer visibility is disabled in `SetUpIE()`,
+**_[Bug #3](/../../issues/3): Due to (probably) Win10 update 1809, Internet Explorer visibility is disabled in `SetUpIE()`,
 as it cannot run no more in the foreground._**
 
 * [Synopsis in the README](#synopsis-in-the-readme)
