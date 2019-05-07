@@ -35,12 +35,12 @@ namespace iie
 
         private static AutoResetEvent are = new AutoResetEvent(false);
 
-        public static void SetUpIE()
+        public static void SetUpIE(bool visible)
         {
             Trace.Assert(ie == null, "Only one SHDocVw.InternetExplorer instance allowed");
             ie = new InternetExplorer();
+            ie.Visible = visible;   // Bug #3 - The window must never have focus -> cannot show it reliably no more
             ie.AddressBar = true;
-            ie.Visible = true;
             ie.DocumentComplete += new DWebBrowserEvents2_DocumentCompleteEventHandler(OnDocumentComplete);
         }
 
@@ -49,7 +49,7 @@ namespace iie
             if (ie != null)
             {
                 ie.Quit();
-                ie = null;
+                ie = null;  // COM side effect? Only this seems to close IE, not Quit()
             }
         }
 
@@ -67,6 +67,7 @@ namespace iie
             }
             Thread.Sleep(delay);
             ie.Navigate2(url);
+            //Debug.WriteLine("---IIE--- NavigateURL.WaitOne(); ie.Busy=" + ie.Busy);
             are.WaitOne(RequestTimeoutMS);
             Thread.Sleep(pause);
             Assert.That(StatusCode, Is.EqualTo(expectedStatusCode));
@@ -80,6 +81,7 @@ namespace iie
         private static void OnDocumentComplete(object pDisp, ref object URL)
         {
             are.Set();
+            //Debug.WriteLine("---IIE--- OnDocumentComplete.Set(); ie.Busy=" + ie.Busy);
         }
 
         /// <summary>
@@ -230,6 +232,7 @@ namespace iie
             element.click();
             if (expectPostBack)
             {
+                //Debug.WriteLine("---IIE--- Click.WaitOne(); ie.Busy=" + ie.Busy);
                 are.WaitOne(RequestTimeoutMS);
             }
             Thread.Sleep(pause);

@@ -39,7 +39,7 @@ namespace iie
             var dll = Path.Combine(approot, @"..\bin", testproject + ".dll");
             var package = new TestPackage(dll); // no TestEngineActivator.CreateInstance() in nunit.engine.netstandard
             // NUnit.EnginePackageSettings
-            package.AddSetting("ProcessModel", "InProcess");
+            package.AddSetting("ProcessModel", "Single");
             package.AddSetting("DomainUsage", "None");  // irrelevant in core
 
             using (var engine = new TestEngine())

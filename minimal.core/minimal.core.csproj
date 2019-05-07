@@ -13,7 +13,7 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.App" Version="2.1.6" />
-    <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="15.9.0" />
+    <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="16.0.1" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="2.1.6" />
   </ItemGroup>
 
