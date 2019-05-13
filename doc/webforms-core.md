@@ -370,7 +370,7 @@ protected void testButton_Click(object sender, ImageClickEventArgs e)
 
     if (testRunner.Passed)
     {
-        this.testResult.Text = testRunner.PassedString;
+        this.testResult.Text = testRunner.SummaryHtml;
     }
     else
     {
@@ -403,7 +403,7 @@ public IActionResult Test()
 
     if (testRunner.Passed)
     {
-        ViewBag.TestResult = testRunner.PassedString;
+        ViewBag.TestResult = testRunner.SummaryHtml;
     }
     else
     {

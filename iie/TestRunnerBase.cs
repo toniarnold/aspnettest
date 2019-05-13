@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 
@@ -54,19 +55,38 @@ namespace iie
         }
 
         /// <summary>
-        /// Summary to display instead of the result xml file.
+        /// Summary to display instead of the result XML file as list of lines
         /// </summary>
-        public string PassedString
+        public List<string> Summary
         {
             get
             {
-                return string.Format("Passed<br/>Tests: {0}<br/>Asserts: {1}<br/>Duration: {2}",
-                    Result.Attributes["total"].Value,
-                    Result.Attributes["asserts"].Value,
-                    Result.Attributes["duration"].Value
-                    );
+                var retwal = new List<string>();
+                retwal.Add("Passed");
+                retwal.Add(string.Format("Tests: {0}", Result.Attributes["total"].Value));
+                retwal.Add(string.Format("Asserts: {0}", Result.Attributes["asserts"].Value));
+                retwal.Add(string.Format("Duration: {0}", Result.Attributes["duration"].Value));
+                return retwal;
             }
         }
+
+        /// <summary>
+        /// Summary to display instead of the result XML file as HTML snippet
+        /// </summary>
+        public string SummaryHtml
+        {
+            get
+            {
+                return string.Join("<br />", this.Summary);
+            }
+        }
+
+        [Obsolete("Replaced with SummaryHtml", true)]
+        public string PassedString
+        {
+            get { return this.SummaryHtml; }
+        }
+
 
         public void OnTestEvent(string report)
         {

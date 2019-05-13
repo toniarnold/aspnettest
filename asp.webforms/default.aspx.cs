@@ -29,7 +29,7 @@ namespace asp
 
             if (testRunner.Passed)
             {
-                this.testResult.Text = testRunner.PassedString;
+                this.testResult.Text = testRunner.SummaryHtml;
             }
             else
             {

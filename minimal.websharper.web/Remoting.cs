@@ -29,7 +29,7 @@ namespace minimal.websharper.web
         {
             var testRunner = new TestRunner(Configuration, Environment, (int)HttpContext.Request.Host.Port);
             await Task.Run(() => testRunner.Run("minimaltest.websharper.web"));
-            return testRunner.PassedString;
+            return testRunner.SummaryHtml;
         }
     }
 }

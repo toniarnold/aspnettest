@@ -40,7 +40,7 @@ namespace minimal.websharper.web
                 new Template.Main()
                     .Title(title)
                     .Test(async (el, ev) => {
-                        // Blocked by dotnet-websharper/ui#191
+                        // Blocked by https://github.com/dotnet-websharper/ui/issues/191
                         testResult.Value = await Remoting.Test();
                     })
                     .TestResult(testResult.View)

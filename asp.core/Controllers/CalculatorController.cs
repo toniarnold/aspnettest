@@ -55,7 +55,7 @@ namespace asp.Controllers
 
             if (testRunner.Passed)
             {
-                ViewBag.TestResult = testRunner.PassedString;
+                ViewBag.TestResult = testRunner.SummaryHtml;
             }
             else
             {

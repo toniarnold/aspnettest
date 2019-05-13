@@ -30,8 +30,7 @@ namespace minimal.websharper.spa
         public class TestResult
         {
             public bool Passed;
-            public string PassedString;
-            public string ResultString;
+            public List<string> ResultSummary;
         }
 
         [Remote]
@@ -42,8 +41,7 @@ namespace minimal.websharper.spa
             await Task.Run(() => testRunner.Run("minimaltest.websharper.spa"));
             var result = new TestResult();
             result.Passed = testRunner.Passed;
-            result.PassedString = testRunner.PassedString;
-            result.ResultString = testRunner.ResultString;
+            result.ResultSummary = testRunner.Summary;
             return result;
         }
     }

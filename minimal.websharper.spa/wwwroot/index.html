@@ -47,7 +47,11 @@
     <h1>minimalist test setup spa</h1>
     <div id="main" ws-children-template="Main">
         <a ws-onclick="Test"><img src="nunit.png" class="nunitimg" /></a>
-        <a href="/testresult" class="testresult">${TestResult}</a>
+        <a href="/testresult" class="testresult">
+            <ul ws-hole="TestSummaryContainer">
+                <li ws-template="TestSummaryItem">${Line}</li>
+            </ul>
+        </a>
     </div>
     <script type="text/javascript" src="Content/minimal.websharper.spa.min.js"></script>
 </body>
