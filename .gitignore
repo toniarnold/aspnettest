@@ -340,3 +340,10 @@ ASALocalRun/
 # dlls fetched by nuget
 minimal.webforms/*.dll
 minimaltest.webforms/*.dll
+
+# websharper
+minimal.websharper.spa/wwwroot/Content/*
+minimal.websharper.spa/WebSharper.UI.Templates/*
+
+minimal.websharper.web/WebSharper.UI.Templates/*
+minimal.websharper.web/wwwroot/Scripts/WebSharper/*

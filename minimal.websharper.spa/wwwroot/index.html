@@ -1,0 +1,54 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>minimal.websharper.spa</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="Content/minimal.websharper.spa.css" />
+    <style>
+        /* Don't show the not-yet-loaded templates */
+        [ws-template], [ws-children-template] {
+            display: none;
+        }
+
+        h1 {
+            font-size: 1.25em;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nunitimg {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            height: 50px;
+            width: 50px;
+        }
+
+        .testresult {
+            position: absolute;
+            right: 0px;
+            top: 59px;
+            width: 140px;
+            background-color: rgba(255, 255, 255, 1);
+        }
+    </style>
+    <script type="text/javascript" src="Content/minimal.websharper.spa.head.js"></script>
+</head>
+<body>
+    <h1>minimalist test setup spa</h1>
+    <div id="main" ws-children-template="Main">
+        <a ws-onclick="Test"><img src="nunit.png" class="nunitimg" /></a>
+        <a href="/testresult" class="testresult">${TestResult}</a>
+    </div>
+    <script type="text/javascript" src="Content/minimal.websharper.spa.min.js"></script>
+</body>
+</html>
