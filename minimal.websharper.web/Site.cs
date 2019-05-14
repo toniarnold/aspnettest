@@ -7,7 +7,7 @@ using WebSharper;
 using WebSharper.Sitelets;
 using WebSharper.UI;
 using static WebSharper.UI.Html;
-using asplib.websharper;
+using asplib;
 using WebSharper.JavaScript;
 
 namespace minimal.websharper.web

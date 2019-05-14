@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http;
 using WebSharper.Sitelets;
 using asplib.Controllers;
 
-namespace asplib.websharper
+namespace asplib
 {
     public static class EndpointFactory
     {

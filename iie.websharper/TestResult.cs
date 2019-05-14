@@ -5,14 +5,16 @@ using WebSharper.UI;
 using static WebSharper.UI.Html;
 using WebSharper.JavaScript;
 
-namespace iie.websharper
+namespace iie
 {
     public class TestResult
     {
+        public static string Path = "/testresult";  // used in JS.Window.Location.Assign
+
         [Website]
         public static Sitelet<object> Main =>
             new SiteletBuilder()
-                .With("/testresult", ctx =>
+                .With(Path, ctx =>
                     Content.Custom(
                         Status: Http.Status.Ok,
                         Headers: new[] { Http.Header.Custom("Content-Type", "application/xml") },

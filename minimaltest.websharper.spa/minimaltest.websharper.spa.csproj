@@ -12,7 +12,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\asplib.core\asplib.core.csproj" />
-    <ProjectReference Include="..\asptest.core\asptest.core.csproj" />
     <ProjectReference Include="..\iie.core\iie.core.csproj" />
     <ProjectReference Include="..\minimal.websharper.spa\minimal.websharper.spa.csproj" />
   </ItemGroup>

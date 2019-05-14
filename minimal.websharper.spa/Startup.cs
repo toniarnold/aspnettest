@@ -1,7 +1,6 @@
-﻿using asplib.Controllers;
+﻿using asplib;
 using asplib.Model;
 using iie;
-using iie.websharper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,13 +31,8 @@ namespace minimal.websharper.spa
                 .AddEnvironmentVariables()
                 .Build();
             Configuration = dom;
-          
-
+            RemotingContext.Set(Environment, Configuration);
             ASP_DBEntities.ConnectionString = Configuration["ASP_DBEntities"];  // globally
-
-            // Inject static references into the Remoting component
-            Remoting.Configuration = Configuration;
-            Remoting.Environment = Environment;
         }
 
         public void ConfigureServices(IServiceCollection services)

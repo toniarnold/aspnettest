@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using iie;
+using System.Threading.Tasks;
 using WebSharper;
 using WebSharper.JavaScript;
 using WebSharper.UI;
@@ -18,14 +19,11 @@ namespace minimal.websharper.spa
             new Template.Index.Main()
                 .Test(async (el, ev) =>
                 {
-                    var result = await Remoting.Test();
-                    foreach (var line in result.ResultSummary)
-                    {
-                        summary.Add(line);
-                    }
+                    var result = await TestServer.Test("minimaltest.websharper.spa");
+                    summary.AppendMany(result.Summary);
                     if (!result.Passed)
                     {
-                        JS.Window.Location.Assign("/testresult");
+                        JS.Window.Location.Assign(TestResult.Path);
                     }
                 })
                 .TestSummaryContainer(
