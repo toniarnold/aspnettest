@@ -26,10 +26,6 @@ namespace asplib
 
         public static IConfigurationRoot Configuration { get; private set;  }
         public static IHostingEnvironment Environment { get; private set; }
-        public static int Port
-        {
-            get { return (int)RemotingContext.HttpContext.Request.Host.Port; }
-        }
         public static DefaultHttpContext HttpContext
         {
             get
@@ -37,6 +33,10 @@ namespace asplib
                 var ctx = WebSharper.Web.Remoting.GetContext();
                 return (DefaultHttpContext)ctx.Environment["WebSharper.AspNetCore.HttpContext"];
             }
+        }
+        public static int Port
+        {
+            get { return (int)RemotingContext.HttpContext.Request.Host.Port; }
         }
     }
 }

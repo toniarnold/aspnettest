@@ -1,4 +1,5 @@
 ﻿using iie;
+using System.Diagnostics;
 using System.Threading.Tasks;
 using WebSharper;
 using WebSharper.JavaScript;
@@ -14,25 +15,68 @@ namespace minimal.websharper.spa
         [SPAEntryPoint]
         public static void ClientMain()
         {
-            var summary = new ListModel<string, string>(s => s);
+            IndexDoc().RunById("content");
+        }
 
-            new Template.Index.Main()
+ 
+        public static WebSharper.UI.Doc IndexDoc()
+        {
+            var testSummary = new ListModel<string, string>(s => s);
+
+            return new Template.Index.Main()
+
+                // Links to sub-pages
+                .WithStatic((el, ev) =>
+                {
+                    WithStaticDoc().RunById("content");
+                })
+                .WithStorage((el, ev) =>
+                {
+                    WithStorageDoc().RunById("content");
+                })
+
+                // --- Begin test button ---
                 .Test(async (el, ev) =>
                 {
                     var result = await TestServer.Test("minimaltest.websharper.spa");
-                    summary.AppendMany(result.Summary);
+                    testSummary.Clear();
+                    testSummary.AppendMany(result.Summary);
                     if (!result.Passed)
                     {
                         JS.Window.Location.Assign(TestResult.Path);
                     }
                 })
                 .TestSummaryContainer(
-                    summary.View.DocSeqCached((string x) =>
+                    testSummary.View.DocSeqCached((string x) =>
                         new Template.Index.TestSummaryItem().Line(x).Doc()
                     )
                 )
-                .Doc()
-                .RunById("main");
+                // --- End test button ---
+
+                .Doc();
+        }
+
+
+
+        public static WebSharper.UI.Doc WithStaticDoc()
+        {
+            return new Template.Withstatic()
+                .Back((el, ev) =>
+                {
+                    IndexDoc().RunById("content");
+                })
+                .Doc();
+        }
+
+
+        public static WebSharper.UI.Doc WithStorageDoc()
+        {
+            return new Template.Withstorage()
+                .Back((el, ev) =>
+                {
+                    IndexDoc().RunById("content");
+                })
+                .Doc();
         }
     }
 }

@@ -26,5 +26,22 @@ namespace minimaltest.websharper.spa
             this.Navigate("/");
             Assert.That(this.Html(), Does.Contain("<h1>minimalist test setup spa</h1>"));
         }
+
+        [Test]
+        public void ClickWithStaticRemoteTest()
+        {
+            this.Navigate("/");
+            Assert.That(this.Html(), Does.Contain("<h1>minimalist test setup spa</h1>"));
+            this.ClickID("withstatic-link");
+            Assert.That(this.Html(), Does.Contain("<h1>minimalist test setup with static remote</h1>"));
+        }
+
+        [Test]
+        public void ClickWithStorageRemoteTest()
+        {
+            this.Navigate("/");
+            this.ClickID("withstorage-link");
+            Assert.That(this.Html(), Does.Contain("<h1>minimalist test setup with remote storage</h1>"));
+        }
     }
 }

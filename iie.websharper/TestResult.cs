@@ -9,7 +9,7 @@ namespace iie
 {
     public class TestResult
     {
-        public static string Path = "/testresult";  // used in JS.Window.Location.Assign
+        public const string Path = "/testresult";  // used in JS.Window.Location.Assign
 
         [Website]
         public static Sitelet<object> Main =>
