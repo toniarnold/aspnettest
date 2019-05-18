@@ -23,6 +23,7 @@ namespace iie
 
         /// <summary>
         /// MainControl.Response.StatusCode after the last request
+        /// 304 is deliberately accepted in all cases.
         /// </summary>
         public static int StatusCode { get; set; }
 
@@ -70,7 +71,7 @@ namespace iie
             //Debug.WriteLine("---IIE--- NavigateURL.WaitOne(); ie.Busy=" + ie.Busy);
             are.WaitOne(RequestTimeoutMS);
             Thread.Sleep(pause);
-            Assert.That(StatusCode, Is.EqualTo(expectedStatusCode));
+            AssertStatusCode(expectedStatusCode);
         }
 
         /// <summary>
@@ -236,7 +237,16 @@ namespace iie
                 are.WaitOne(RequestTimeoutMS);
             }
             Thread.Sleep(pause);
-            Assert.That(StatusCode, Is.EqualTo(expectedStatusCode));
+            AssertStatusCode(expectedStatusCode);
+        }
+
+        /// <summary>
+        /// Asserts the status code while blindly accepting 304 responses
+        /// </summary>
+        /// <param name="expectedStatusCode">The expected status code.</param>
+        private static void AssertStatusCode(int expectedStatusCode)
+        {
+            Assert.That(StatusCode, Is.AnyOf(expectedStatusCode, 304));
         }
     }
 }

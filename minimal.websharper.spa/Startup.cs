@@ -9,6 +9,7 @@ using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Net.Http.Headers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using WebSharper.AspNetCore;
@@ -53,6 +54,14 @@ namespace minimal.websharper.spa
             app.UseDeveloperExceptionPage()
                 .UseSession()
                 .UseMiddleware<IIEMiddleware>()
+                // Even this does not stop IE from sending 304 responses:
+                .Use(async (httpContext, next) =>
+                {
+                    httpContext.Response.Headers[HeaderNames.CacheControl] = "no-cache";
+                    httpContext.Response.Headers[HeaderNames.Pragma] = "no-cache";
+                    httpContext.Response.Headers[HeaderNames.Expires] = "-1";
+                    await next();
+                })
                 // From WebSharper:
                 .UseDefaultFiles()
                 .UseStaticFiles()
