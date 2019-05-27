@@ -5,6 +5,8 @@
     <WebSharperProject>Bundle</WebSharperProject>
     <WebSharperBundleOutputDir>wwwroot/Content</WebSharperBundleOutputDir>
     <WebProjectOutputDir>$(MSBuildThisFileDirectory)/wwwroot</WebProjectOutputDir>
+    <RootNamespace>minimal.websharper.spa</RootNamespace>
+    <AssemblyName>minimal.websharper.spa</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>

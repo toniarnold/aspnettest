@@ -1,5 +1,13 @@
 <!-- ClientLoad = Inline
      ServerLoad = WhenChanged -->
-<a ws-onclick="Back">Back</a>
+<a ws-onclick="Back">&lt; Back</a>
 <h1>minimalist test setup with remote storage</h1>
 Session Storage:<br />
+<div ws-onclick="ChangeStorage" ws-hole="StorageRadio"></div>
+<br />
+<input ws-var="ContentTextBox" id="contentTextBox" />
+<button ws-onclick="Submit" id="SubmitButton">Submit</button>
+<ol ws-hole="ListContainer">
+    <li ws-template="ListItem">${Item}</li>
+</ol>
+<input type="hidden" ws-var="ViewState" />

@@ -32,19 +32,10 @@ namespace asplib.Controllers
     }
 
     /// <summary>
-    /// Extension implementation with storage dependency
+    /// Storage Extension implementation with ASP.NET MVC Controller dependency
     /// </summary>
     public static class StorageControllerExtension
     {
-        /// <summary>
-        /// </summary>
-        public static Storage? SessionStorage { get; set; }
-
-        /// <summary>
-        /// Encrypt the serialization byte[] when database storage is used
-        /// </summary>
-        public static bool? EncryptDatabaseStorage { get; set; }
-
         /// <summary>
         /// Get the actual storage type to use in this precedence:
         /// 1. Local session storage if set by SetStorage
@@ -59,7 +50,7 @@ namespace asplib.Controllers
             var storage = inst.SessionStorage;  // Controller instance property override
             if (storage == null)
             {
-                storage = SessionStorage;       // static and global override
+                storage = StorageImplementation.SessionStorage;       // static and global override
             }
             if (storage == null)                // configuration or default
             {
@@ -96,17 +87,7 @@ namespace asplib.Controllers
         /// <returns></returns>
         public static string GetStorageID(this IStorageController inst)
         {
-            return GetStorageID(inst.GetType().Name);
-        }
-
-        /// <summary>
-        /// StorageID-String unique to store/retrieve/clear the Controller instance
-        /// </summary>
-        /// <param name="typeName"></param>
-        /// <returns></returns>
-        public static string GetStorageID(string typeName)
-        {
-            return String.Format("_CONTROLLER_{0}", typeName);
+            return StorageImplementation.GetStorageID(inst.GetType().Name);
         }
 
         /// <summary>
@@ -116,34 +97,9 @@ namespace asplib.Controllers
         /// <returns></returns>
         public static string GetSessionStorageID(this IStorageController inst)
         {
-            return GetSessionStorageID(inst.GetType().Name);
+            return StorageImplementation.GetSessionStorageID(inst.GetType().Name);
         }
 
-        /// <summary>
-        /// SessionStorageID-String unique to store/retrieve/ar the storage type
-        /// </summary>
-        /// </summary>
-        /// <param name="typeName"></param>
-        /// <returns></returns>
-        public static string GetSessionStorageID(string typeName)
-        {
-            return String.Format("_SESSIONSTORAGE_{0}", typeName);
-        }
-
-        /// <summary>
-        /// Get whether to encrypt database storage in this precedence:
-        /// 1. Encryption enforced  in appsettings.json if "EncryptDatabaseStorage": "True"
-        /// 2. Global appsettings.json override in ControlStorageExtension.SessionStorage e.g. from unit tests
-        /// 3. Defaults to false
-        /// </summary>
-        /// <param name="configuration"></param>
-        /// <returns></returns>
-        public static bool GetEncryptDatabaseStorage(IConfigurationRoot configuration)
-        {
-            var encrypt = configuration.GetValue<bool>("EncryptDatabaseStorage");   // untyped
-            bool encryptOverride = EncryptDatabaseStorage ?? false;
-            return encrypt || encryptOverride;
-        }
 
         /// <summary>
         /// Add the ViewState input to the ViewBag for rendering in the view
@@ -157,7 +113,7 @@ namespace asplib.Controllers
             var key = inst.Configuration.GetValue<string>("EncryptViewStateKey");
             if (!String.IsNullOrEmpty(key))
             {
-                var secret = GetSecret(key);
+                var secret = StorageImplementation.GetSecret(key);
                 filter = x => Crypt.Encrypt(secret, x);
             }
             inst.ViewBag.ViewState = ViewState(inst, filter);
@@ -171,7 +127,7 @@ namespace asplib.Controllers
         public static void SaveSession(this IStorageController inst)
         {
             inst.ViewBag.SessionStorage = ViewBagSessionStorage(inst, Storage.Session);
-            inst.HttpContext.Session.Set(GetStorageID(inst), Bytes(inst));
+            inst.HttpContext.Session.Set(GetStorageID(inst), StorageImplementation.Bytes(inst));
         }
 
         /// <summary>
@@ -191,16 +147,16 @@ namespace asplib.Controllers
                 Guid.TryParse(cookie["session"], out session);
             }
             Func<byte[], byte[]> filter = null;
-            if (GetEncryptDatabaseStorage(inst.Configuration))
+            if (StorageImplementation.GetEncryptDatabaseStorage(inst.Configuration))
             {
                 var key = (cookie["key"] != null) ? Convert.FromBase64String(cookie["key"]) : null;
-                var secret = GetSecret(key);
+                var secret = StorageImplementation.GetSecret(key);
                 filter = x => Crypt.Encrypt(secret, x);
                 newCookie["key"] = Convert.ToBase64String(secret.Key);
             }
             using (var db = new ASP_DBEntities())
             {
-                var savedSession = db.SaveMain(inst.GetType(), inst.Bytes(filter), session);
+                var savedSession = db.SaveMain(inst.GetType(), StorageImplementation.Bytes(inst, filter), session);
                 newCookie["session"] = savedSession.ToString();
             }
 
@@ -215,82 +171,6 @@ namespace asplib.Controllers
         }
 
         /// <summary>
-        /// Serializes the given controller into a byte array if it is
-        /// instantiable by this StorageControllerExtension
-        /// </summary>
-        /// <param name="controller"></param>
-        /// <returns></returns>
-        public static bool TryGetBytes(object controller, out byte[] bytes, Func<byte[], byte[]> filter = null)
-        {
-            if (controller is SerializableController)
-            {
-                bytes = ((SerializableController)controller).Serialize(filter); // shallow
-                return true;
-            }
-            else if (controller.GetType().IsSerializable)
-            {
-                bytes = Serialization.Serialize(controller, filter);  // POCO Controller
-                return true;
-            }
-            else
-            {
-                bytes = null;
-                return false;
-            }
-        }
-
-        /// <summary>
-        /// Render the SQL INSERT script for the serialization of the current
-        /// Controller
-        /// </summary>
-        /// <param name="inst"></param>
-        /// <returns></returns>
-        public static string InsertSQL(this object inst)
-        {
-            var sql = String.Empty;
-            byte[] bytes;
-            if (TryGetBytes(inst, out bytes)) // serialize without filter
-            {
-                using (var db = new ASP_DBEntities())
-                {
-                    sql = db.InsertSQL(inst.GetType(), bytes);
-                }
-            }
-            return sql;
-        }
-
-        /// <summary>
-        /// Get the Key/IV secret from the cookie, generate the parts that
-        /// don't yet exist. In ASP.NET Core it is no more possible to modify
-        /// the cookie no more, thus GetSecret is called twice for decrypt and
-        /// encrypt.
-        /// </summary>
-        /// <param name="password"></param>
-        /// <returns></returns>
-        internal static Crypt.Secret GetSecret(string password)
-        {
-            return GetSecret(Crypt.Key(password));
-        }
-
-        /// <summary>
-        /// Get the Key/IV secret from the key byte[]
-        /// </summary>
-        /// <returns></returns>
-        internal static Crypt.Secret GetSecret(byte[] key)
-        {
-            Crypt.Secret secret;
-            if (key != null)
-            {
-                secret = Crypt.NewSecret(key);
-            }
-            else
-            {
-                secret = Crypt.NewSecret();
-            }
-            return secret;
-        }
-
-        /// <summary>
         /// name:value pair for the ViewStateInputTagHelper, to be used as
         /// <input viewstate="@ViewBag.ViewState" />
         /// </summary>
@@ -298,27 +178,9 @@ namespace asplib.Controllers
         /// <returns></returns>
         internal static string ViewState(this IStorageController inst, Func<byte[], byte[]> filter = null)
         {
-            byte[] bytes = inst.Bytes();
             return string.Format("{0}:{1}",
                             GetStorageID(inst),
-                            Convert.ToBase64String((filter == null) ? bytes : filter(bytes)));
-        }
-
-        /// <summary>
-        /// Returns a byte array as a serialization of the controller
-        /// </summary>
-        /// <param name="inst"></param>
-        /// <returns></returns>
-        private static byte[] Bytes(this IStorageController inst, Func<byte[], byte[]> filter = null)
-        {
-            byte[] bytes;
-            if (!TryGetBytes(inst, out bytes, filter))
-            {
-                throw new ArgumentException(String.Format(
-                    "{0} is neither a SerializableController nor a POCO controller",
-                    inst.GetType()));
-            }
-            return bytes;
+                            StorageImplementation.ViewState(inst, filter));
         }
 
         /// <summary>

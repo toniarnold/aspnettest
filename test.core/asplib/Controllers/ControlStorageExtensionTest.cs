@@ -32,13 +32,13 @@ namespace test.asplib.Controllers
         [Test]
         public void GetViewStateNameTest()
         {
-            Assert.That(this.GetStorageID(), Is.EqualTo("_CONTROLLER_ControlStorageExtensionTest"));
+            Assert.That(this.GetStorageID(), Is.EqualTo("_STORAGEID_ControlStorageExtensionTest"));
         }
 
         [Test]
         public void GetSessionStorageNameTest()
         {
-            Assert.That(this.GetSessionStorageID(), Is.EqualTo("_SESSIONSTORAGE_ControlStorageExtensionTest"));
+            Assert.That(this.GetSessionStorageID(), Is.EqualTo("_SESSIONSTORAGEID_ControlStorageExtensionTest"));
         }
 
         private string TestProperty { get; set; }
@@ -58,7 +58,7 @@ namespace test.asplib.Controllers
         public void ViewStateEncryptedTest()
         {
             this.TestProperty = "test value";
-            var secret = StorageControllerExtension.GetSecret("Key");
+            var secret = StorageImplementation.GetSecret("Key");
             Func<byte[], byte[]> filter = x => Crypt.Encrypt(secret, x);
             var viewstate = this.ViewState(filter);
             var fields = viewstate.Split(":");
@@ -67,14 +67,6 @@ namespace test.asplib.Controllers
             var copy = (ControlStorageExtensionTest)Serialization.Deserialize(bytes);
             Serialization.Deserialize(bytes);
             Assert.That(copy.TestProperty, Is.EqualTo("test value"));
-        }
-
-        [Test]
-        [Category("DbContext")]
-        public void InsertSQLTest()
-        {
-            var retval = this.InsertSQL();
-            Assert.That(retval, Does.Contain("INSERT INTO"));
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using asplib.Controllers;
+using asplib.Model;
 using NUnit.Framework;
 
 namespace asptest.Calculator
@@ -10,13 +11,13 @@ namespace asptest.Calculator
         [OneTimeSetUp]
         public void EnableEncryption()
         {
-            StorageControllerExtension.EncryptDatabaseStorage = true;
+            StorageImplementation.EncryptDatabaseStorage = true;
         }
 
         [OneTimeTearDown]
         public void ResetEncryption()
         {
-            StorageControllerExtension.EncryptDatabaseStorage = null;
+            StorageImplementation.EncryptDatabaseStorage = null;
         }
     }
 }

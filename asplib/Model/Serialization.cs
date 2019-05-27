@@ -23,8 +23,9 @@ namespace asplib.Model
         }
 
         /// <summary>
-        /// Deserializes a byte array into an object and apply the crypto filter if given
-        /// Returns null if the deserialization fails for whatever reason (wrong key, old version...)
+        /// Deserializes a byte array into an object and apply the crypto
+        /// filter if given Silently returns null if the deserialization fails
+        /// for whatever reason (wrong key, old version...)
         /// </summary>
         /// <param name="bytes"></param>
         /// <returns></returns>
@@ -39,7 +40,7 @@ namespace asplib.Model
                 {
                     return formattter.Deserialize(stream);
                 }
-                catch
+                catch (Exception e)
                 {
                     return null;
                 }

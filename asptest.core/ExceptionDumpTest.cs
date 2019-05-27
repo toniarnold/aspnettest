@@ -14,13 +14,13 @@ namespace asptest
         [OneTimeSetUp]
         public void SetUpStorage()
         {
-            StorageControllerExtension.SessionStorage = Storage.ViewState;
+            StorageImplementation.SessionStorage = Storage.ViewState;
         }
 
         [OneTimeTearDown]
         public void TearDownStorage()
         {
-            StorageControllerExtension.SessionStorage = null;
+            StorageImplementation.SessionStorage = null;
         }
 
         [Test]
@@ -55,7 +55,7 @@ namespace asptest
             Assert.Multiple(() =>
             {
                 // The non-initial State and the random number must come from the database with Storage.ViewState
-                Assert.That(StorageControllerExtension.SessionStorage, Is.EqualTo(Storage.ViewState));
+                Assert.That(StorageImplementation.SessionStorage, Is.EqualTo(Storage.ViewState));
                 Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
                 Assert.That(this.Stack, Does.Contain(unique));
             });

@@ -15,6 +15,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Data.SqlClient;
+using System.Net;
 using System.Reflection;
 
 namespace asplib.Controllers
@@ -46,44 +47,38 @@ namespace asplib.Controllers
             object controller;
             var controllerTypeInfo = actionContext.ActionDescriptor.ControllerTypeInfo;
             var controllerType = controllerTypeInfo.AsType();
-            var storageID = StorageControllerExtension.GetStorageID(controllerTypeInfo.Name);
-            var sessionStorageID = StorageControllerExtension.GetSessionStorageID(controllerTypeInfo.Name);
+            var storageID = StorageImplementation.GetStorageID(controllerTypeInfo.Name);
+            var sessionStorageID = StorageImplementation.GetSessionStorageID(controllerTypeInfo.Name);
 
-            var storage = this.GetStorage(sessionStorageID);
-            this.ClearIfRequested(storage, storageID);
+            var storage = StorageImplementation.GetStorage(this.Configuration, this.HttpContext, sessionStorageID);
+            StorageImplementation.ClearIfRequested(this.HttpContext, storage, storageID);
 
             Guid sessionOverride;
             Guid session;
             byte[] bytes;
+            Func<byte[], byte[]> filter = null;
 
-            if (this.HttpContext.Request.Method == "GET" &&
+            if (this.HttpContext.Request.Method == WebRequestMethods.Http.Get &&
                 Guid.TryParse(this.HttpContext.Request.Query["session"], out sessionOverride))
             {
                 using (var db = new ASP_DBEntities())
                 {
-                    bytes = db.LoadMain(sessionOverride);
-                    controller = DeserializeController(actionContext, controllerTypeInfo, controllerType, bytes);
+                    (bytes, filter) = StorageImplementation.DatabaseBytes(Configuration, HttpContext, storageID, sessionOverride);
+                    controller = DeserializeController(actionContext, controllerTypeInfo, controllerType, bytes, filter);
                 }
             }
             else
             {
                 // ---------- Load ViewState ----------
                 if (storage == Storage.ViewState &&
-                    this.HttpContext.Request.Method == "POST" &&
+                    this.HttpContext.Request.Method == WebRequestMethods.Http.Post &&
                     this.HttpContext.Request.Form.ContainsKey(storageID))
                 {
                     // input type=hidden from <input viewstate="@ViewBag.ViewState" />
                     var controllerString = this.HttpContext.Request.Form[storageID];
                     if (!String.IsNullOrEmpty(controllerString))
                     {
-                        Func<byte[], byte[]> filter = null;
-                        var key = this.Configuration.GetValue<string>("EncryptViewStateKey");
-                        if (!String.IsNullOrEmpty(key))
-                        {
-                            var secret = StorageControllerExtension.GetSecret(key);
-                            filter = x => Crypt.Decrypt(secret, x);
-                        }
-                        bytes = Convert.FromBase64String(controllerString);
+                        (bytes, filter) = StorageImplementation.ViewStateBytes(this.Configuration, controllerString);
                         controller = DeserializeController(actionContext, controllerTypeInfo, controllerType, bytes, filter);
                     }
                     else // Empty ViewState form
@@ -103,18 +98,7 @@ namespace asplib.Controllers
                 else if (storage == Storage.Database &&
                          Guid.TryParse(this.HttpContext.Request.Cookies[storageID].FromCookieString()["session"], out session))
                 {
-                    Func<byte[], byte[]> filter = null;
-                    if (StorageControllerExtension.GetEncryptDatabaseStorage(Configuration))
-                    {
-                        var keyString = this.HttpContext.Request.Cookies[storageID].FromCookieString()["key"];
-                        var key = (keyString != null) ? Convert.FromBase64String(keyString) : null;
-                        var secret = StorageControllerExtension.GetSecret(key);
-                        filter = x => Crypt.Decrypt(secret, x);
-                    }
-                    using (var db = new ASP_DBEntities())
-                    {
-                        bytes = db.LoadMain(session);
-                    }
+                    (bytes, filter) = StorageImplementation.DatabaseBytes(Configuration, HttpContext, storageID, session);
                     controller = DeserializeController(actionContext, controllerTypeInfo, controllerType, bytes, filter);
                 }
                 else
@@ -127,33 +111,7 @@ namespace asplib.Controllers
             return controller;
         }
 
-        /// <summary>
-        /// Counterpart to IStorageController.GetStorage() without controller instance
-        /// </summary>
-        /// <returns></returns>
-        internal Storage GetStorage(string sessionStorageID)
-        {
-            Storage? storage = null;
-            if (this.HttpContext.Request.Method == "POST" &&
-                this.HttpContext.Request.Form.ContainsKey(sessionStorageID))
-            {
-                Storage postedStorage;
-                if (Enum.TryParse((string)this.HttpContext.Request.Form[sessionStorageID], out postedStorage))
-                {
-                    storage = postedStorage;                        // Controller instance property override
-                }
-            }
-            if (storage == null)
-            {
-                storage = StorageControllerExtension.SessionStorage;   // static and global override
-            }
-            if (storage == null)                                    // configuration or default
-            {
-                var configStorage = this.Configuration.GetValue<string>("SessionStorage");
-                storage = String.IsNullOrWhiteSpace(configStorage) ? Storage.ViewState : (Storage)Enum.Parse(typeof(Storage), configStorage);
-            }
-            return (Storage)storage;
-        }
+
 
         /// <summary>
         /// Controller deserialization, either shallow (SerializableController) or deep (POCO controller)
@@ -186,7 +144,7 @@ namespace asplib.Controllers
                 }
                 else
                 {
-                    controller = Activator.CreateInstance(controllerTypeInfo.GetType());
+                    controller = Activator.CreateInstance(controllerType);
                 }
             }
             else
@@ -199,58 +157,7 @@ namespace asplib.Controllers
             return controller;
         }
 
-        /// <summary>
-        /// Hook to clear the storage for that control with ?clear=true
-        /// ViewState is reset anyway on GET requests, therefore NOP in that case.
-        /// GET-arguments:
-        /// clear=[true|false]          triggers clearing the storage
-        /// storage=[Session|Database]    clears the selected storage type regardless of config
-        /// </summary>
-        /// <param name="storageID"></param>
-        internal void ClearIfRequested(Storage sessionstorage, string storageID)
-        {
-            bool clear = false;
-            if (this.HttpContext.Request.Method == "GET" &&
-                bool.TryParse(this.HttpContext.Request.Query["clear"], out clear))
-            {
-                Storage storage;
-                Enum.TryParse<Storage>(this.HttpContext.Request.Query["storage"], true, out storage);
-                if (storage == Storage.ViewState)   // no meaningful override given
-                {
-                    storage = sessionstorage;
-                }
 
-                switch (storage)
-                {
-                    case Storage.ViewState:
-                        break;
-
-                    case Storage.Session:
-                        this.HttpContext.Session.Remove(storageID);
-                        break;
-
-                    case Storage.Database:
-                        // delete from the database and expire the cookie
-                        Guid session;
-                        if (Guid.TryParse(this.HttpContext.Request.Cookies[storageID].FromCookieString()["session"], out session))
-                        {
-                            using (var db = new ASP_DBEntities())
-                            {
-                                var sql = @"
-                                        DELETE FROM Main
-                                        WHERE session = @session
-                                    ";
-                                var parameters = new object[] { new SqlParameter("session", session) };
-                                db.Database.ExecuteSqlCommand(sql, parameters);
-                            }
-                        }
-                        break;
-
-                    default:
-                        throw new NotImplementedException(String.Format("Storage {0}", storage));
-                }
-            }
-        }
 
         /// <summary>
         /// Handle IDisposable Controllers

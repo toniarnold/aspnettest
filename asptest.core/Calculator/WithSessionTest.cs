@@ -15,13 +15,13 @@ namespace asptest.Calculator
         [OneTimeSetUp]
         public void SetUpStorage()
         {
-            StorageControllerExtension.SessionStorage = Storage.Session;
+            StorageImplementation.SessionStorage = Storage.Session;
         }
 
         [OneTimeTearDown]
         public void TearDownStorage()
         {
-            StorageControllerExtension.SessionStorage = null;
+            StorageImplementation.SessionStorage = null;
         }
 
         /// <summary>

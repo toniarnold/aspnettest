@@ -34,8 +34,8 @@ namespace asplib.Controllers
                 var controller = StaticControllerExtension.GetController();
                 byte[] bytes;
                 if (controller != null &&
-                    !StorageControllerExtension.GetEncryptDatabaseStorage(this.Configuration) &&
-                    StorageControllerExtension.TryGetBytes(controller, out bytes))
+                    !StorageImplementation.GetEncryptDatabaseStorage(this.Configuration) &&
+                    StorageImplementation.TryGetBytes(controller, out bytes))
                 {
                     Guid session;
                     using (var db = new ASP_DBEntities())

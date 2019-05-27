@@ -44,11 +44,11 @@
     <script type="text/javascript" src="Content/minimal.websharper.spa.head.js"></script>
 </head>
 <body>
-    <div id="content" ws-children-template="Main">
+    <div id="page" ws-children-template="Main">
         <h1>minimalist test setup spa</h1>
         <ul>
-            <li><a ws-onclick="WithStatic" id="withstatic-link">with static accessor</a></li>
-            <li><a ws-onclick="WithStorage" id="withstorage-link">with storage</a></li>
+            <li><a ws-onclick="WithStatic" id="withstatic-link">with static remote</a></li>
+            <li><a ws-onclick="WithStorage" id="withstorage-link">with remote storage</a></li>
         </ul>
 
         <a ws-onclick="Test"><img src="nunit.png" class="nunitimg" /></a>
