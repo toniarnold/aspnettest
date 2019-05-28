@@ -107,14 +107,7 @@ namespace asplib.Controllers
         public static void SaveViewState(this IStorageController inst)
         {
             inst.ViewBag.SessionStorage = ViewBagSessionStorage(inst, Storage.ViewState);
-
-            Func<byte[], byte[]> filter = null;
-            var key = inst.Configuration.GetValue<string>("EncryptViewStateKey");
-            if (!String.IsNullOrEmpty(key))
-            {
-                var secret = StorageImplementation.GetSecret(key);
-                filter = x => Crypt.Encrypt(secret, x);
-            }
+            var filter = StorageImplementation.EncryptViewState(inst.Configuration);
             inst.ViewBag.ViewState = ViewState(inst, filter);
         }
 
@@ -137,36 +130,7 @@ namespace asplib.Controllers
         public static void SaveDatabase(this IStorageController inst)
         {
             inst.ViewBag.SessionStorage = ViewBagSessionStorage(inst, Storage.Database);
-
-            Guid session = Guid.NewGuid();  // cannot exist in the database
-            var newCookie = new NameValueCollection();
-            var cookie = inst.HttpContext.Request.Cookies[inst.GetStorageID()].FromCookieString();
-            if (cookie != null)
-            {
-                Guid.TryParse(cookie["session"], out session);
-            }
-            Func<byte[], byte[]> filter = null;
-            if (StorageImplementation.GetEncryptDatabaseStorage(inst.Configuration))
-            {
-                var key = (cookie["key"] != null) ? Convert.FromBase64String(cookie["key"]) : null;
-                var secret = StorageImplementation.GetSecret(key);
-                filter = x => Crypt.Encrypt(secret, x);
-                newCookie["key"] = Convert.ToBase64String(secret.Key);
-            }
-            using (var db = new ASP_DBEntities())
-            {
-                var savedSession = db.SaveMain(inst.GetType(), StorageImplementation.Bytes(inst, filter), session);
-                newCookie["session"] = savedSession.ToString();
-            }
-
-            var days = inst.Configuration.GetValue<int>("DatabaseStorageExpires");
-            var options = new CookieOptions()
-            {
-                Expires = DateTime.Now.AddDays(days),
-                HttpOnly = true,
-                SameSite = SameSiteMode.Strict
-            };
-            inst.HttpContext.Response.Cookies.Append(inst.GetStorageID(), newCookie.ToCookieString(), options);
+            StorageImplementation.SaveDatabase(inst.Configuration, inst.HttpContext, inst);
         }
 
         /// <summary>

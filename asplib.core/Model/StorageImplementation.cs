@@ -209,8 +209,11 @@ namespace asplib.Model
         }
 
         /// <summary>
-        /// Counterpart to IStorageController.GetStorage() without controller
-        /// instance
+        /// Get the actual storage type to use in this precedence:
+        /// 1. Local session storage if set by SetStorage
+        /// 2. Global config override in controlStorageExtension.SessionStorage e.g. from unit tests
+        /// 3. Configured storage in key="SessionStorage" value="Database"
+        /// 4. Defaults to ViewState
         /// </summary>
         /// <param name="configuration"></param>
         /// <param name="httpContext"></param>
