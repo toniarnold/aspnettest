@@ -87,7 +87,6 @@ namespace iie
             get { return this.SummaryHtml; }
         }
 
-
         public void OnTestEvent(string report)
         {
             Reports.Add(report);

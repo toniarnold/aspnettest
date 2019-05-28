@@ -1,22 +1,18 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq.Expressions;
-using System.Threading.Tasks;
-using System.Web;
+﻿using System.Threading.Tasks;
 using WebSharper;
 using WebSharper.Sitelets;
 using WebSharper.UI;
 using static WebSharper.UI.Html;
-using asplib;
-using WebSharper.JavaScript;
 
 namespace minimal.websharper.web
 {
     public class Site
     {
         [EndPoint("/")]
-        public class Home {
+        public class Home
+        {
             public override bool Equals(object obj) => obj is Home;
+
             public override int GetHashCode() => 0;
         }
 
@@ -24,6 +20,7 @@ namespace minimal.websharper.web
         public class WithStatic
         {
             public override bool Equals(object obj) => obj is WithStatic;
+
             public override int GetHashCode() => 1;
         }
 
@@ -33,13 +30,14 @@ namespace minimal.websharper.web
             await Remoting.Test();
         }
 
-        static Var<string> testResult = Var.Create("");
+        private static Var<string> testResult = Var.Create("");
 
         public static Task<Content> Page(Context<object> ctx, object endpoint, string title, Doc body) =>
             Content.Page(
                 new Template.Main()
                     .Title(title)
-                    .Test(async (el, ev) => {
+                    .Test(async (el, ev) =>
+                    {
                         // Blocked by https://github.com/dotnet-websharper/ui/issues/191
                         testResult.Value = await Remoting.Test();
                     })

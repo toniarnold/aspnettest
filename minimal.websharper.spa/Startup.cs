@@ -1,17 +1,14 @@
 ﻿using asplib;
 using asplib.Model;
 using iie;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Net.Http.Headers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Net.Http.Headers;
+using System;
 using WebSharper.AspNetCore;
 
 namespace minimal.websharper.spa
@@ -24,7 +21,6 @@ namespace minimal.websharper.spa
 
         public Startup(IHostingEnvironment env)
         {
-
             Environment = env;
             var dom = new ConfigurationBuilder()
                 .SetBasePath(env.ContentRootPath)
@@ -66,7 +62,8 @@ namespace minimal.websharper.spa
                 .UseDefaultFiles()
                 .UseStaticFiles()
                 .UseWebSharper()    //.UseWebSharper(builder => builder.UseSitelets(false))
-                .Run(context => {
+                .Run(context =>
+                {
                     HttpContext = context;
                     context.Response.StatusCode = 404;
                     return context.Response.WriteAsync("Page not found");

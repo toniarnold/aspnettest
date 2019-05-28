@@ -100,7 +100,6 @@ namespace asplib.Controllers
             return StorageImplementation.GetSessionStorageID(inst.GetType().Name);
         }
 
-
         /// <summary>
         /// Add the ViewState input to the ViewBag for rendering in the view
         /// </summary>

@@ -1,9 +1,4 @@
-﻿using System.Web;
-using WebSharper;
-using WebSharper.Sitelets;
-using WebSharper.UI;
-using static WebSharper.UI.Html;
-using WebSharper.JavaScript;
+﻿using WebSharper.Sitelets;
 
 namespace iie
 {

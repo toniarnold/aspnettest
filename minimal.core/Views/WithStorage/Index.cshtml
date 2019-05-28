@@ -47,12 +47,12 @@
         <br />
         <input asp-for="ContentTextBox" />
         <button type="submit" id="SubmitButton">Submit</button>
-        <ol>
+        <ul>
             @foreach (var item in Model.Content)
             {
                 <li>@item</li>
             }
-        </ol>
+        </ul>
         <input sessionstorage="@ViewBag.SessionStorage" id="sessionstorage" />
         <input viewstate="@ViewBag.ViewState" />
     </form>

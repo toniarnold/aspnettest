@@ -1,15 +1,12 @@
 ﻿using asplib.Common;
 using asplib.Model;
-using WebSharper;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using System;
-using System.Collections.Generic;
-using System.Collections.Specialized;
 using System.Diagnostics;
 using System.Net;
 using System.Threading.Tasks;
-using System.Text;
+using WebSharper;
 
 namespace asplib
 {
@@ -19,7 +16,7 @@ namespace asplib
         {
             get { return RemotingContext.Configuration; }
         }
-        
+
         private static HttpContext HttpContext
         {
             get { return RemotingContext.HttpContext; }
@@ -72,7 +69,7 @@ namespace asplib
             {
                 // ---------- Load ViewState ----------
                 if (storage == Storage.ViewState)
-                { 
+                {
                     retval = new S();
                     filter = StorageImplementation.DecryptViewState(Configuration);
                     retval.ViewState = viewState;
@@ -100,7 +97,6 @@ namespace asplib
                     // No persisted object available yet -> return a new one
                     retval = new S();
                     retval.Main = new M();
-
                 }
             }
             // An instantiated Main is now guaranteed -> make its members
@@ -131,17 +127,19 @@ namespace asplib
                     var filter = StorageImplementation.EncryptViewState(Configuration);
                     stored.SerializeMain(filter); // save locally into the object
                     return stored.ViewState;
+
                 case Storage.Session:
                     StorageImplementation.SaveSession(Configuration, HttpContext, stored.Main);
-                    return null; 
+                    return null;
+
                 case Storage.Database:
                     StorageImplementation.SaveDatabase(Configuration, HttpContext, stored.Main);
-                    return null; 
+                    return null;
+
                 default:
                     throw new NotImplementedException(String.Format("Storage {0} not implemented", storage));
             }
         }
-
 
         /// <summary>
         /// Saves the stored object discretely a second time to store

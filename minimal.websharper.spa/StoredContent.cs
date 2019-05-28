@@ -1,7 +1,6 @@
 using asplib.Model;
 using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace minimal.websharper.spa
 {
@@ -12,8 +11,13 @@ namespace minimal.websharper.spa
     [Clsid("F532E3FB-057C-4849-99B6-F288C20B788C")]
     public class Content : List<string>
     {
-        public Content() : base() { }
-        public Content(IEnumerable<string> content) : base(content) { }
+        public Content() : base()
+        {
+        }
+
+        public Content(IEnumerable<string> content) : base(content)
+        {
+        }
     }
 
     /// <summary>

@@ -1,13 +1,5 @@
 using asplib;
-using asplib.Model;
-using iie;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.Configuration;
 using WebSharper;
 
 namespace minimal.websharper.spa
@@ -23,7 +15,7 @@ namespace minimal.websharper.spa
         /// </summary>
         /// <param name="viewState">Optional ViewState string if the object has
         /// already been stored</param>
-        /// <param name="item">Item string to add to the content</param>/// 
+        /// <param name="item">Item string to add to the content</param>///
         /// <returns></returns>
         [Remote]
         public static Task<StoredContent> Add(string viewState, string item)
@@ -35,7 +27,6 @@ namespace minimal.websharper.spa
             stored.ViewState = StorageServer.Save<Content>(stored);
             return Task.FromResult(stored);
         }
-
 
         /// <summary>
         /// Reloads the content after a storage mechanism change - the same

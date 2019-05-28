@@ -16,7 +16,7 @@ namespace iie
         }
 
         public async Task Invoke(HttpContext context)
-            {
+        {
             // Application_BeginRequest
 
             await _next(context);

@@ -1,14 +1,12 @@
 ﻿using asplib.Common;
 using asplib.Controllers;
+using Microsoft.AspNetCore.Http;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using System;
-using System.Collections.Generic;
 using System.Collections.Specialized;
 using System.Data.SqlClient;
 using System.Net;
-using Microsoft.AspNetCore.Http;
-using Microsoft.EntityFrameworkCore;
-using System.Text;
-using Microsoft.Extensions.Configuration;
 
 namespace asplib.Model
 {
@@ -91,13 +89,12 @@ namespace asplib.Model
             httpContext.Response.Cookies.Append(storageID, newCookie.ToCookieString(), options);
         }
 
-
         /// <summary>
         /// Return the filter to encrypt the ViewState  with if configured so.
         /// </summary>
         /// <param name="configuration">The configuration.</param>
         /// <returns></returns>
-        public static Func<byte[], byte[]> EncryptViewState (IConfigurationRoot configuration)
+        public static Func<byte[], byte[]> EncryptViewState(IConfigurationRoot configuration)
         {
             Func<byte[], byte[]> filter = null;
             var key = configuration.GetValue<string>("EncryptViewStateKey");
@@ -109,13 +106,12 @@ namespace asplib.Model
             return filter;
         }
 
-
         /// <summary>
         /// Return the filter to decrypt the ViewState  with if configured so.
         /// </summary>
         /// <param name="configuration">The configuration.</param>
         /// <returns></returns>
-        public static Func<byte[], byte[]> DecryptViewState (IConfigurationRoot configuration)
+        public static Func<byte[], byte[]> DecryptViewState(IConfigurationRoot configuration)
         {
             Func<byte[], byte[]> filter = null;
             var key = configuration.GetValue<string>("EncryptViewStateKey");
@@ -140,7 +136,6 @@ namespace asplib.Model
             return (bytes, filter);
         }
 
-
         public static (byte[] bytes, Func<byte[], byte[]> filter) DatabaseBytes(
             IConfigurationRoot configuration, HttpContext httpContext, string storageID, Guid session)
         {
@@ -159,7 +154,6 @@ namespace asplib.Model
             }
             return (bytes, filter);
         }
-
 
         /// <summary>
         /// Hook to clear the storage for that control with ?clear=true
@@ -214,7 +208,6 @@ namespace asplib.Model
             }
         }
 
-
         /// <summary>
         /// Counterpart to IStorageController.GetStorage() without controller
         /// instance
@@ -249,7 +242,6 @@ namespace asplib.Model
             return (Storage)storage;
         }
 
-
         /// <summary>
         /// Get whether to encrypt database storage in this precedence:
         /// 1. Encryption enforced  in appsettings.json if "EncryptDatabaseStorage": "True"
@@ -265,7 +257,6 @@ namespace asplib.Model
             return encrypt || encryptOverride;
         }
 
-
         /// <summary>
         /// StorageID-String unique to store/retrieve/clear the stored
         /// object's class (the Controller in case of MVC)
@@ -277,7 +268,6 @@ namespace asplib.Model
             return String.Format("_STORAGEID_{0}", typeName);
         }
 
-
         /// <summary>
         /// SessionStorageID-String unique to store/retrieve/clear the storage type
         /// </summary>
@@ -288,7 +278,6 @@ namespace asplib.Model
         {
             return String.Format("_SESSIONSTORAGEID_{0}", typeName);
         }
-
 
         /// <summary>
         /// Render the SQL INSERT script for the serialization of the current
@@ -310,7 +299,6 @@ namespace asplib.Model
             return sql;
         }
 
-
         /// <summary>
         /// Base64 encoded serialization of the main object, to be used in
         /// ViewState HTML input fields
@@ -322,7 +310,6 @@ namespace asplib.Model
             byte[] bytes = Bytes(main);
             return Convert.ToBase64String((filter == null) ? bytes : filter(bytes));
         }
-
 
         /// <summary>
         /// Loads from viewstate.
@@ -341,7 +328,6 @@ namespace asplib.Model
             return (T)Serialization.Deserialize(bytes, filter);
         }
 
-
         internal static T LoadFromBytes<T>(Func<T> construct, byte[] bytes, Func<byte[], byte[]> filter = null)
         {
             if (bytes == null)  // Initialization: return a new object
@@ -350,7 +336,6 @@ namespace asplib.Model
             }
             return (T)Serialization.Deserialize(bytes, filter);
         }
-
 
         /// <summary>
         /// Returns a byte array as a serialization of the controller
@@ -368,7 +353,6 @@ namespace asplib.Model
             }
             return bytes;
         }
-
 
         /// <summary>
         /// Serializes the given controller into a byte array if it is
@@ -394,7 +378,6 @@ namespace asplib.Model
                 return false;
             }
         }
-
 
         /// <summary>
         /// Get the Key/IV secret from the cookie, generate the parts that

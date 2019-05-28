@@ -7,10 +7,10 @@ namespace test.asplib.Model
     [TestFixture]
     public class StoredTest
     {
-        const string TESTVALUE = "<some-string>";
+        private const string TESTVALUE = "<some-string>";
 
         [Serializable]
-        class TestObj
+        private class TestObj
         {
             public TestObj()
             {
@@ -21,7 +21,7 @@ namespace test.asplib.Model
             public string Embedded { get; set; }
         }
 
-        class StoredObj : Stored<TestObj>
+        private class StoredObj : Stored<TestObj>
         {
             public string Exposed;
 

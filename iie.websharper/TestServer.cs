@@ -2,10 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using WebSharper;
-using WebSharper.JavaScript;
-using WebSharper.UI;
-using WebSharper.UI.Client;
-using static WebSharper.UI.Client.Html;
 
 namespace iie
 {

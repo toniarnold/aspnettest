@@ -11,10 +11,8 @@ using asplib.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Controllers;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
-using System.Data.SqlClient;
 using System.Net;
 using System.Reflection;
 
@@ -111,8 +109,6 @@ namespace asplib.Controllers
             return controller;
         }
 
-
-
         /// <summary>
         /// Controller deserialization, either shallow (SerializableController) or deep (POCO controller)
         /// Robustly return a fresh/new instance if bytes are null.
@@ -156,8 +152,6 @@ namespace asplib.Controllers
 
             return controller;
         }
-
-
 
         /// <summary>
         /// Handle IDisposable Controllers

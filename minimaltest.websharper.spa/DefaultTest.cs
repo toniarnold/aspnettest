@@ -1,8 +1,5 @@
-﻿using System;
-using System.Diagnostics;
-using iie;
+﻿using iie;
 using NUnit.Framework;
-using System;
 
 namespace minimaltest.websharper.spa
 {

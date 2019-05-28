@@ -1,8 +1,7 @@
 ﻿using asplib.Model;
-using NUnit.Framework;
 using Microsoft.Extensions.Configuration;
+using NUnit.Framework;
 using System;
-using System.Collections.Generic;
 
 namespace test.asplib.Model
 {
@@ -23,14 +22,14 @@ namespace test.asplib.Model
         [Test]
         public void GetViewStateNameTest()
         {
-            Assert.That(StorageImplementation.GetStorageID(this.GetType().Name), 
+            Assert.That(StorageImplementation.GetStorageID(this.GetType().Name),
                 Is.EqualTo("_STORAGEID_StorageImplementationTest"));
         }
 
         [Test]
         public void GetSessionStorageNameTest()
         {
-            Assert.That(StorageImplementation.GetSessionStorageID(this.GetType().Name), 
+            Assert.That(StorageImplementation.GetSessionStorageID(this.GetType().Name),
                 Is.EqualTo("_SESSIONSTORAGEID_StorageImplementationTest"));
         }
 

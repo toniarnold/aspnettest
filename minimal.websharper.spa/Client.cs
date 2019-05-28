@@ -1,9 +1,5 @@
 ﻿using asplib;
-using asplib.Model;
 using iie;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Threading.Tasks;
 using WebSharper;
 using WebSharper.JavaScript;
 using WebSharper.UI;
@@ -21,7 +17,6 @@ namespace minimal.websharper.spa
             IndexDoc().RunById("page");
         }
 
- 
         public static WebSharper.UI.Doc IndexDoc()
         {
             var testSummary = new ListModel<string, string>(s => s);
@@ -59,8 +54,6 @@ namespace minimal.websharper.spa
                 .Doc();
         }
 
-
-
         public static WebSharper.UI.Doc WithStaticDoc()
         {
             var contentModel = new ListModel<string, string>(s => s);
@@ -86,7 +79,6 @@ namespace minimal.websharper.spa
                 })
                 .Doc();
         }
-
 
         public static WebSharper.UI.Doc WithStorageDoc()
         {
