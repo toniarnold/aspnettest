@@ -13,7 +13,7 @@ namespace minimaltest.websharper.spa
         /// </summary>
         public List<string> Content
         {
-            get { return StaticRemoting.Content; }
+            get { return StaticRemoting.refContent; }
         }
 
         // The main objective of an SPA is to withdraw control from the user,
@@ -23,7 +23,7 @@ namespace minimaltest.websharper.spa
         {
             this.Navigate("/");
             this.ClickID("withstatic-link");
-            Assert.That(this.Html(), Does.Contain("<h1>minimalist test setup with static controller</h1>"));
+            Assert.That(this.Html(), Does.Contain("<h1>minimalist test setup with static remote</h1>"));
         }
 
         [Test]
@@ -32,19 +32,19 @@ namespace minimaltest.websharper.spa
             this.Navigate("/");
             this.ClickID("withstatic-link");
             this.WriteID("contentTextBox", "a first content line");
-            this.ClickID("SubmitButton");
+            this.ClickID("submitButton", expectPostBack: false, pause: 500);
 
             Assert.That(this.Content.Count, Is.EqualTo(1));
             var firstString = this.Content[0];
             Assert.That(firstString, Is.EqualTo("a first content line"));
 
             this.WriteID("contentTextBox", "a second content line");
-            this.ClickID("SubmitButton");
+            this.ClickID("submitButton");
             Assert.That(this.Content.Count, Is.EqualTo(2));
             var firstString2 = this.Content[0];
             Assert.That(firstString2, Is.EqualTo("a first content line"));
-            var secondString = this.Content[0];
-            Assert.That(secondString, Is.EqualTo("a first content line"));
+            var secondString = this.Content[1];
+            Assert.That(secondString, Is.EqualTo("a second content line"));
         }
     }
 }

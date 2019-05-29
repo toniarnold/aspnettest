@@ -4,6 +4,7 @@ using SHDocVw;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Net;
 using System.Threading;
 
 namespace iie
@@ -54,13 +55,13 @@ namespace iie
             }
         }
 
-        public static void Navigate(string path, int expectedStatusCode = 200, int delay = 0, int pause = 0)
+        public static void Navigate(string path, int expectedStatusCode = (int)HttpStatusCode.OK, int delay = 0, int pause = 0)
         {
             Trace.Assert(path.StartsWith("/"), "path must be absolute");
             NavigateURL(String.Format("http://127.0.0.1:{0}{1}", Port, path), expectedStatusCode, delay, pause);
         }
 
-        public static void NavigateURL(string url, int expectedStatusCode = 200, int delay = 0, int pause = 0)
+        public static void NavigateURL(string url, int expectedStatusCode = (int)HttpStatusCode.OK, int delay = 0, int pause = 0)
         {
             if (ie == null)
             {
@@ -101,18 +102,18 @@ namespace iie
             return html;
         }
 
-        public static void Click(HTMLElement element, bool expectPostBack = true, int expectedStatusCode = 200, int delay = 0, int pause = 0)
+        public static void Click(HTMLElement element, bool expectPostBack = true, int expectedStatusCode = (int)HttpStatusCode.OK, int delay = 0, int pause = 0)
         {
             Click(element.IHTMLElement, expectPostBack, expectedStatusCode, delay, pause);
         }
 
-        public static void ClickName(string name, int index = 0, bool expectPostBack = true, int expectedStatusCode = 200, int delay = 0, int pause = 0)
+        public static void ClickName(string name, int index = 0, bool expectPostBack = true, int expectedStatusCode = (int)HttpStatusCode.OK, int delay = 0, int pause = 0)
         {
             var button = GetHTMLElementByName(name, index);
             Click(button, expectPostBack, expectedStatusCode, delay, pause);
         }
 
-        public static void ClickID(string clientId, bool expectPostBack = true, int expectedStatusCode = 200, int delay = 0, int pause = 0)
+        public static void ClickID(string clientId, bool expectPostBack = true, int expectedStatusCode = (int)HttpStatusCode.OK, int delay = 0, int pause = 0)
         {
             var button = GetHTMLElementById(clientId);
             Click(button, expectPostBack, expectedStatusCode, delay, pause);
@@ -227,7 +228,7 @@ namespace iie
         /// <param name="expectedStatusCode">Expected StatusCode of the response</param>
         /// <param name="delay">Optional delay time in milliseconds before clicking the element</param>
         /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete</param>
-        private static void Click(IHTMLElement element, bool expectPostBack = true, int expectedStatusCode = 200, int delay = 0, int pause = 0)
+        private static void Click(IHTMLElement element, bool expectPostBack = true, int expectedStatusCode = (int)HttpStatusCode.OK, int delay = 0, int pause = 0)
         {
             Thread.Sleep(delay);
             element.click();
@@ -241,12 +242,13 @@ namespace iie
         }
 
         /// <summary>
-        /// Asserts the status code while blindly accepting 304 responses
+        /// Asserts the status code while blindly accepting responses in the
+        /// AnyOf list, currently 304 ("Not Modified")
         /// </summary>
         /// <param name="expectedStatusCode">The expected status code.</param>
         private static void AssertStatusCode(int expectedStatusCode)
         {
-            Assert.That(StatusCode, Is.AnyOf(expectedStatusCode, 304));
+            Assert.That(StatusCode, Is.AnyOf(expectedStatusCode, (int)HttpStatusCode.NotModified));
         }
     }
 }

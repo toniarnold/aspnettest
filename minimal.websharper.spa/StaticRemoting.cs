@@ -6,19 +6,19 @@ namespace minimal.websharper.spa
 {
     public static class StaticRemoting
     {
-        // Static Model initially empty
-        public static List<string> Content = new List<string>();
+        // Static reference to the Data
+        public static List<string> refContent;
 
         /// <summary>
-        /// Adds the specified content to the static model
+        /// Makes the deserialized JSON content visible to NUnit
         /// </summary>
-        /// <param name="content">The content.</param>
+        /// <param name="content"></param>
         /// <returns></returns>
         [Remote]
-        public static Task<List<string>> Add(string content)
+        public static Task Put(List<string> content)
         {
-            Content.Add(content);
-            return Task.FromResult(Content);
+            refContent = content;
+            return Task.FromResult(true);
         }
     }
 }

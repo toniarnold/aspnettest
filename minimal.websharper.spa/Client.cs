@@ -1,5 +1,6 @@
 ﻿using asplib;
 using iie;
+using System.Collections.Generic;
 using WebSharper;
 using WebSharper.JavaScript;
 using WebSharper.UI;
@@ -17,6 +18,10 @@ namespace minimal.websharper.spa
             IndexDoc().RunById("page");
         }
 
+        /// <summary>
+        /// Main page as template.
+        /// </summary>
+        /// <returns></returns>
         public static WebSharper.UI.Doc IndexDoc()
         {
             var testSummary = new ListModel<string, string>(s => s);
@@ -54,6 +59,11 @@ namespace minimal.websharper.spa
                 .Doc();
         }
 
+        /// <summary>
+        /// Subpage: The content is built up entirely on the client and sent to
+        /// the server in a JSON-Compatible data type.
+        /// </summary>
+        /// <returns></returns>
         public static WebSharper.UI.Doc WithStaticDoc()
         {
             var contentModel = new ListModel<string, string>(s => s);
@@ -72,14 +82,20 @@ namespace minimal.websharper.spa
                 )
                 .Submit(async (el, ev) =>
                 {
-                    // NYI
-                    var newContent = await StaticRemoting.Add(contentTextBox.Value);
-                    contentModel.Set(newContent);
+                    contentModel.Add(contentTextBox.Value);
                     contentTextBox.Set("");
+                    var json = new List<string>(contentModel.Value);
+                    await StaticRemoting.Put(json);
                 })
                 .Doc();
         }
 
+        /// <summary>
+        /// Subpage: The content is built up on the server side, session
+        /// persistence is handled either on the client (ViewState) or on the
+        /// server (Session/Database)
+        /// </summary>
+        /// <returns></returns>
         public static WebSharper.UI.Doc WithStorageDoc()
         {
             var varStorage = Var.Create(asplib.Model.Storage.ViewState);

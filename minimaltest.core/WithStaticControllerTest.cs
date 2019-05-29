@@ -48,8 +48,8 @@ namespace minimaltest
             Assert.That(this.Model.Content.Count, Is.EqualTo(2));
             var firstString2 = this.Model.Content[0];
             Assert.That(firstString2, Is.EqualTo("a first content line"));
-            var secondString = this.Model.Content[0];
-            Assert.That(secondString, Is.EqualTo("a first content line"));
+            var secondString = this.Model.Content[1];
+            Assert.That(secondString, Is.EqualTo("a second content line"));
         }
     }
 }
