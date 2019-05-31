@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 
-namespace asplib
+namespace asplib.Remoting
 {
     /// <summary>
     /// IoC replacement to access services in a static Remoting class

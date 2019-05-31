@@ -13,7 +13,7 @@ namespace minimaltest.websharper.spa
         /// </summary>
         public List<string> Content
         {
-            get { return StaticRemoting.refContent; }
+            get { return StaticRemoting.Content; }
         }
 
         // The main objective of an SPA is to withdraw control from the user,

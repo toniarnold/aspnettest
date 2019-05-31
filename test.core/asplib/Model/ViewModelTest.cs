@@ -5,12 +5,12 @@ using System;
 namespace test.asplib.Model
 {
     [TestFixture]
-    public class StoredTest
+    public class ViewModelTest
     {
         private const string TESTVALUE = "<some-string>";
 
         [Serializable]
-        private class TestObj
+        private class TestObj : IStored<TestObj>
         {
             public TestObj()
             {
@@ -19,9 +19,23 @@ namespace test.asplib.Model
 
             // Properties/Members of the concrete class Main:
             public string Embedded { get; set; }
+
+            // IStored members not relevant here
+            [NonSerialized] // not possible on auto property
+            private ViewModel<TestObj> viewModel;
+
+            public ViewModel<TestObj> ViewModel
+            {
+                get { return this.viewModel; }
+                set { this.viewModel = value; }
+            }
+
+            public void Dispose()
+            {
+            }
         }
 
-        private class StoredObj : Stored<TestObj>
+        private class StoredObj : ViewModel<TestObj>
         {
             public string Exposed;
 

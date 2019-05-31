@@ -8,7 +8,7 @@ using System.Net;
 using System.Threading.Tasks;
 using WebSharper;
 
-namespace asplib
+namespace asplib.Remoting
 {
     public static class StorageServer
     {
@@ -44,11 +44,11 @@ namespace asplib
         /// <returns></returns>
         // [Remote] -> Yields "Remote methods must not be generic" from WebSharper:
         // https://github.com/dotnet-websharper/core/issues/1048
-        public static S Load<S, M>(string viewState, ref M accessor)
-            where S : Stored<M>, new()
-            where M : class, new()
+        public static M Load<M, V>(string viewState, ref M accessor)
+            where M : class, IStored<M>, new()
+            where V : ViewModel<M>, new()
         {
-            S retval;
+            V viewModel;
             Guid sessionOverride;
             Guid session;
             byte[] bytes;
@@ -62,26 +62,25 @@ namespace asplib
                 Guid.TryParse(HttpContext.Request.Query["session"], out sessionOverride))
             {
                 (bytes, filter) = StorageImplementation.DatabaseBytes(Configuration, HttpContext, storageID, sessionOverride);
-                retval = new S();
-                retval.Main = (M)StorageImplementation.LoadFromBytes(() => new M(), bytes, filter);
+                return (M)StorageImplementation.LoadFromBytes(() => new M(), bytes, filter);
             }
             else
             {
                 // ---------- Load ViewState ----------
                 if (storage == Storage.ViewState)
                 {
-                    retval = new S();
+                    viewModel = new V();
                     filter = StorageImplementation.DecryptViewState(Configuration);
-                    retval.ViewState = viewState;
-                    retval.DeserializeMain(filter);   // creates a new Main if viewState is null
+                    viewModel.ViewState = viewState;
+                    viewModel.DeserializeMain(filter);   // creates a new Main if viewState is null
                 }
 
                 // ---------- Load Session ----------
                 else if (storage == Storage.Session &&
                         HttpContext.Session.TryGetValue(storageID, out bytes))
                 {
-                    retval = new S();
-                    retval.Main = StorageImplementation.LoadFromBytes(() => new M(), bytes);
+                    viewModel = new V();
+                    viewModel.Main = StorageImplementation.LoadFromBytes(() => new M(), bytes);
                 }
 
                 // ---------- Load Database ----------
@@ -89,21 +88,24 @@ namespace asplib
                         Guid.TryParse(HttpContext.Request.Cookies[storageID].FromCookieString()["session"], out session))
                 {
                     (bytes, filter) = StorageImplementation.DatabaseBytes(Configuration, HttpContext, storageID, session);
-                    retval = new S();
-                    retval.Main = StorageImplementation.LoadFromBytes(() => new M(), bytes, filter);
+                    viewModel = new V();
+                    viewModel.Main = StorageImplementation.LoadFromBytes(() => new M(), bytes, filter);
                 }
                 else
                 {
                     // No persisted object available yet -> return a new one
-                    retval = new S();
-                    retval.Main = new M();
+                    viewModel = new V();
+                    viewModel.Main = new M();
                 }
             }
             // An instantiated Main is now guaranteed -> make its members
             // visible to WebSharper:
-            retval.LoadMembers();
+            viewModel.LoadMembers();
 
-            return retval;
+            // Include the ViewModel instance as member of the returned Main
+            viewModel.Main.ViewModel = viewModel;
+
+            return viewModel.Main;
         }
 
         /// <summary>
@@ -113,10 +115,10 @@ namespace asplib
         /// </summary>
         /// <typeparam name="M"></typeparam>
         /// <param name="stored">The stored.</param>
-        /// <returns></returns>
+        /// <returns>The VIewState string</returns>
         /// <exception cref="NotImplementedException"></exception>
-        public static string Save<M>(Stored<M> stored)
-            where M : class, new()
+        public static string Save<M>(ViewModel<M> stored)
+            where M : class, IStored<M>, new()
         {
             stored.LoadMembers();
 
@@ -150,8 +152,8 @@ namespace asplib
         /// <param name="stored">The stored object.</param>
         /// <returns></returns>
         /// <exception cref="NotImplementedException"></exception>
-        public static string SaveDiscretely<M>(Stored<M> stored)
-            where M : class, new()
+        public static string SaveDiscretely<M>(ViewModel<M> stored)
+            where M : class, IStored<M>, new()
         {
             Trace.Assert(stored != null, "Object main to save must not be null");
 

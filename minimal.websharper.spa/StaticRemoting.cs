@@ -7,7 +7,7 @@ namespace minimal.websharper.spa
     public static class StaticRemoting
     {
         // Static reference to the Data
-        public static List<string> refContent;
+        public static List<string> Content;
 
         /// <summary>
         /// Makes the deserialized JSON content visible to NUnit
@@ -17,7 +17,7 @@ namespace minimal.websharper.spa
         [Remote]
         public static Task Put(List<string> content)
         {
-            refContent = content;
+            Content = content;
             return Task.FromResult(true);
         }
     }

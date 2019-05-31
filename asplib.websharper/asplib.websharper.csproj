@@ -7,11 +7,11 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FSharp.Core" Version="4.2.3" />
-    <PackageReference Include="WebSharper" Version="4.5.11.334" />
-    <PackageReference Include="WebSharper.CSharp" Version="4.5.11.334" />
-    <PackageReference Include="WebSharper.UI" Version="4.5.10.166" />
-    <PackageReference Include="WebSharper.UI.CSharp" Version="4.5.10.166" />
+    <PackageReference Include="FSharp.Core" Version="4.6.2" />
+    <PackageReference Include="WebSharper" Version="4.5.14.339" />
+    <PackageReference Include="WebSharper.CSharp" Version="4.5.14.339" />
+    <PackageReference Include="WebSharper.UI" Version="4.5.11.174" />
+    <PackageReference Include="WebSharper.UI.CSharp" Version="4.5.11.174" />
   </ItemGroup>
 
   <ItemGroup>

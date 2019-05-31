@@ -3,10 +3,12 @@
 namespace asplib.Model
 {
     /// <summary>
-    /// JS Value class to be used with the storage mechanism
+    /// ViewModel for the type M. Encapsulates the ViewState visible to the
+    /// WebSharper client.
     /// </summary>
-    public abstract class Stored<M>
-        where M : class, new()
+    /// <typeparam name="M"></typeparam>
+    public abstract class ViewModel<M>
+        where M : class, IStored<M>, new()
     {
         /// <summary>
         /// The serialized Main model object to be stored on the client,

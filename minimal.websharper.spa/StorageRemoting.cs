@@ -1,4 +1,5 @@
-using asplib;
+using asplib.Model;
+using asplib.Remoting;
 using System.Threading.Tasks;
 using WebSharper;
 
@@ -7,7 +8,7 @@ namespace minimal.websharper.spa
     public static class StorageRemoting
     {
         // Static reference to the Model
-        public static Content refContent;
+        public static Content Content;
 
         /// <summary>
         /// Adds the specified content to the stored model and returns it to
@@ -18,14 +19,13 @@ namespace minimal.websharper.spa
         /// <param name="item">Item string to add to the content</param>///
         /// <returns></returns>
         [Remote]
-        public static Task<StoredContent> Add(string viewState, string item)
+        public static Task<ContentViewModel> Add(string viewState, string item)
         {
-            var stored = StorageServer.Load<StoredContent, Content>(viewState, ref refContent);
-            stored.Main.Add(item);
-            // Immediately safe after the state transition and make the new
-            // state visible to WebSharper in the ViewState.
-            stored.ViewState = StorageServer.Save<Content>(stored);
-            return Task.FromResult(stored);
+            using (var content = StorageServer.Load<Content, ContentViewModel>(viewState, ref Content))
+            {
+                content.Add(item);
+                return content.ViewModelTask<Content, ContentViewModel>();
+            }
         }
 
         /// <summary>
@@ -35,11 +35,12 @@ namespace minimal.websharper.spa
         /// <param name="viewState">State of the view.</param>
         /// <returns></returns>
         [Remote]
-        public static Task<StoredContent> Reload(string viewState)
+        public static Task<ContentViewModel> Reload(string viewState)
         {
-            var stored = StorageServer.Load<StoredContent, Content>(viewState, ref refContent);
-            stored.ViewState = StorageServer.Save<Content>(stored);
-            return Task.FromResult(stored);
+            using (var content = StorageServer.Load<Content, ContentViewModel>(viewState, ref Content))
+            {
+                return content.ViewModelTask<Content, ContentViewModel>();
+            }
         }
 
         /// <summary>
@@ -50,7 +51,7 @@ namespace minimal.websharper.spa
         /// <param name="stored">The stored content object.</param>
         /// <returns></returns>
         [Remote]
-        public static Task<string> Save(StoredContent stored)
+        public static Task<string> Save(ContentViewModel stored)
         {
             StorageServer.SaveDiscretely<Content>(stored);
             return Task.FromResult(stored.ViewState);
