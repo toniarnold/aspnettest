@@ -1,0 +1,26 @@
+﻿<!-- ClientLoad = Inline
+     ServerLoad = WhenChanged -->
+<div ws-children-template="Main">
+    <style>
+        .button {
+            height: 30px;
+            width: 35px;
+        }
+    </style>
+    <p>
+        <button ws-onclick="Add" id="AddButton" class="button"> + </button>
+        <button ws-onclick="Sub" id="SubButton" class="button"> - </button>
+        <button ws-onclick="Mul" id="MulButton" class="button"> * </button>
+        <button ws-onclick="Div" id="DivButton" class="button"> / </button>
+        <button ws-onclick="Pow" id="PowButton" class="button">x<sup>2</sup></button>
+        <button ws-onclick="Sqrt" id="SqrtButton" class="button">&radic;<span style='text-decoration: overline'>x</span></button>
+        <button ws-onclick="Clr" id="ClrButton" class="button"> C </button>
+        <button ws-onclick="ClrAll" id="ClrAllButton" class="button">CA</button>
+    </p>
+
+    <p>
+        <ul ws-hole="StackContainer">
+            <li ws-template="StackItem">${Line}</li>
+        </ul>
+    </p>
+</div>

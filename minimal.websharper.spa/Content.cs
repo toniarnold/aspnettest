@@ -12,6 +12,8 @@ namespace minimal.websharper.spa
     [Clsid("F532E3FB-057C-4849-99B6-F288C20B788C")]
     public sealed class Content : List<string>, IStored<Content>
     {
+        #region IStored<M>
+
         [NonSerialized] // not possible on auto property
         private ViewModel<Content> viewModel;
 
@@ -21,17 +23,19 @@ namespace minimal.websharper.spa
             set { this.viewModel = value; }
         }
 
+        public void Dispose()   // minimal impl. for sealed class
+        {
+            this.Save();
+        }
+
+        #endregion IStored<M>
+
         public Content() : base()
         {
         }
 
         public Content(IEnumerable<string> content) : base(content)
         {
-        }
-
-        public void Dispose()
-        {
-            this.DisposeSave();
         }
     }
 }

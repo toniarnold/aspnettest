@@ -1,10 +1,11 @@
 ﻿using System;
+using WebSharper;
 
 namespace asplib.Model
 {
     /// <summary>
-    /// ViewModel for the type M. Encapsulates the ViewState visible to the
-    /// WebSharper client.
+    /// ViewModel for the type M. Encapsulates the ViewState to make it visible
+    /// to the WebSharper client.
     /// </summary>
     /// <typeparam name="M"></typeparam>
     public abstract class ViewModel<M>
@@ -24,16 +25,25 @@ namespace asplib.Model
         /// </summary>
         public string ViewState;
 
+        [JavaScript]
+        public ViewModel()
+        {
+        }
+
         /// <summary>
         /// Copies fields and properties of Main() into serializable fields
         /// visible to WebSharper
         /// </summary>
-        public abstract void LoadMembers();
+        public virtual void LoadMembers()
+        {
+        }
 
         /// <summary>
         /// Capture the members potentially modified on the client side.
         /// </summary>
-        public abstract void SaveMembers();
+        public virtual void SaveMembers()
+        {
+        }
 
         /// <summary>
         /// Internally serializes the Main object into the ViewState.
@@ -49,7 +59,7 @@ namespace asplib.Model
         /// used on the client side with the overridden ExposeMembers().
         /// </summary>
         /// <param name="filter">The filter.</param>
-        public void DeserializeMain(Func<byte[], byte[]> filter = null)
+        public virtual void DeserializeMain(Func<byte[], byte[]> filter = null)
         {
             this.Main = StorageImplementation.LoadFromViewstate(() => new M(), this.ViewState, filter);
         }

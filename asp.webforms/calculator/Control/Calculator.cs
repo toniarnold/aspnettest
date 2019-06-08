@@ -6,7 +6,7 @@ using System.Collections.Generic;
 namespace asp.calculator.Control
 {
     /// <summary>
-    /// Context class for Calculator.sm/Calculator_sm.cs
+    /// Task class for Calculator.sm/Calculator_sm.cs
     /// </summary>
     [Serializable]
     [Clsid("EEA41DED-A899-406F-A293-B06917DD48E6")]
@@ -65,18 +65,19 @@ namespace asp.calculator.Control
         [NonSerialized]
         private string operand;
 
-        // Context methods
-        public void Push(string value)
+        //  Context method implementations, called indirectly by the FSM
+        //  context class.
+        internal void Push(string value)
         {
             this._stack.Push(value);
         }
 
-        public void Enter(string value)
+        internal void Enter(string value)
         {
             this.Push(value);
         }
 
-        public void Add()
+        internal void Add()
         {
             var y = Double.Parse(this._stack.Pop());
             var x = Double.Parse(this._stack.Pop());
@@ -84,7 +85,7 @@ namespace asp.calculator.Control
             this.Push(r.ToString());
         }
 
-        public void Sub()
+        internal void Sub()
         {
             var y = Double.Parse(this._stack.Pop());
             var x = Double.Parse(this._stack.Pop());
@@ -92,7 +93,7 @@ namespace asp.calculator.Control
             this.Push(r.ToString());
         }
 
-        public void Mul()
+        internal void Mul()
         {
             var y = Double.Parse(this._stack.Pop());
             var x = Double.Parse(this._stack.Pop());
@@ -100,7 +101,7 @@ namespace asp.calculator.Control
             this.Push(r.ToString());
         }
 
-        public void Div()
+        internal void Div()
         {
             var y = Double.Parse(this._stack.Pop());
             var x = Double.Parse(this._stack.Pop());
@@ -108,26 +109,26 @@ namespace asp.calculator.Control
             this.Push(r.ToString());
         }
 
-        public void Pow()
+        internal void Pow()
         {
             var x = Double.Parse(this._stack.Pop());
             var r = Math.Pow(x, 2);
             this.Push(r.ToString());
         }
 
-        public void Sqrt()
+        internal void Sqrt()
         {
             var x = Double.Parse(this._stack.Pop());
             var r = Math.Sqrt(x);
             this.Push(r.ToString());
         }
 
-        public void Clr()
+        internal void Clr()
         {
             this._stack.Pop();
         }
 
-        public void ClrAll()
+        internal void ClrAll()
         {
             this._stack = new Stack<string>();
         }

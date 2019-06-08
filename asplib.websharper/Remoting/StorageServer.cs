@@ -10,6 +10,10 @@ using WebSharper;
 
 namespace asplib.Remoting
 {
+    /// <summary>
+    /// Implements the Load/Save methods to be used within concrete remote
+    /// methods to instantiate the model object Main.
+    /// </summary>
     public static class StorageServer
     {
         private static IConfigurationRoot Configuration
@@ -23,8 +27,8 @@ namespace asplib.Remoting
         }
 
         /// <summary>
-        /// Globally sets the storage, overriding SessionStorage from the
-        /// configuration.
+        /// Remote method: Globally sets the storage, overriding SessionStorage
+        /// from the configuration.
         /// </summary>
         /// <param name="storage">The storage.</param>
         /// <returns></returns>
@@ -44,7 +48,7 @@ namespace asplib.Remoting
         /// <returns></returns>
         // [Remote] -> Yields "Remote methods must not be generic" from WebSharper:
         // https://github.com/dotnet-websharper/core/issues/1048
-        public static M Load<M, V>(string viewState, ref M accessor)
+        public static M Load<M, V>(string viewState, out M accessor)
             where M : class, IStored<M>, new()
             where V : ViewModel<M>, new()
         {
@@ -61,8 +65,9 @@ namespace asplib.Remoting
             if (HttpContext.Request.Method == WebRequestMethods.Http.Get &&
                 Guid.TryParse(HttpContext.Request.Query["session"], out sessionOverride))
             {
+                viewModel = new V();
                 (bytes, filter) = StorageImplementation.DatabaseBytes(Configuration, HttpContext, storageID, sessionOverride);
-                return (M)StorageImplementation.LoadFromBytes(() => new M(), bytes, filter);
+                viewModel.Main = (M)StorageImplementation.LoadFromBytes(() => new M(), bytes, filter);
             }
             else
             {
@@ -104,6 +109,9 @@ namespace asplib.Remoting
 
             // Include the ViewModel instance as member of the returned Main
             viewModel.Main.ViewModel = viewModel;
+
+            // Set a reference to the Model
+            accessor = viewModel.Main;
 
             return viewModel.Main;
         }

@@ -1,9 +1,12 @@
-﻿using asp.Controllers;
+﻿extern alias core;
+
 using asplib.Model;
+using core::asp.Controllers;
 using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
 using System;
 using System.Linq;
+using CalculatorContext = core::CalculatorContext;
 
 namespace test.asp.Controllers
 {

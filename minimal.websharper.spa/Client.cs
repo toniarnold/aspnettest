@@ -38,7 +38,7 @@ namespace minimal.websharper.spa
                     WithStorageDoc().RunById("page");
                 })
 
-                // --- Begin test button ---
+                // Test button with result summary
                 .Test(async (el, ev) =>
                 {
                     var result = await TestServer.Test("minimaltest.websharper.spa");
@@ -54,7 +54,6 @@ namespace minimal.websharper.spa
                         new Template.Index.TestSummaryItem().Line(x).Doc()
                     )
                 )
-                // --- End test button ---
 
                 .Doc();
         }
@@ -66,7 +65,7 @@ namespace minimal.websharper.spa
         /// <returns></returns>
         public static WebSharper.UI.Doc WithStaticDoc()
         {
-            var contentModel = new ListModel<string, string>(s => s);
+            var contentList = new ListModel<string, string>(s => s);
             var contentTextBox = Var.Create("");
 
             return new Template.Withstatic()
@@ -76,15 +75,15 @@ namespace minimal.websharper.spa
                     IndexDoc().RunById("page");
                 })
                 .ListContainer(
-                    contentModel.View.DocSeqCached((string x) =>
+                    contentList.View.DocSeqCached((string x) =>
                         new Template.Withstatic.ListItem().Item(x).Doc()
                     )
                 )
                 .Submit(async (el, ev) =>
                 {
-                    contentModel.Add(contentTextBox.Value);
+                    contentList.Add(contentTextBox.Value);
                     contentTextBox.Set("");
-                    var json = new List<string>(contentModel.Value);
+                    var json = new List<string>(contentList.Value);
                     await StaticRemoting.Put(json);
                 })
                 .Doc();
@@ -93,80 +92,92 @@ namespace minimal.websharper.spa
         /// <summary>
         /// Subpage: The content is built up on the server side, session
         /// persistence is handled either on the client (ViewState) or on the
-        /// server (Session/Database)
+        /// server (Session/Database).
         /// </summary>
         /// <returns></returns>
         public static WebSharper.UI.Doc WithStorageDoc()
         {
-            var varStorage = Var.Create(asplib.Model.Storage.ViewState);
-            var varViewState = Var.Create("");
-            var contentModel = new ListModel<string, string>(s => s);
+            var storage = Var.Create(asplib.Model.Storage.ViewState);
+            var contentList = new ListModel<string, string>(s => s);
             var contentTextBox = Var.Create("");
 
-            return new Template.Withstorage()
-                .ViewState(varViewState)
-                .ContentTextBox(contentTextBox)
+            // Setup the reactive ViewState storage.
+            var viewState = Var.Create("");
+            return WebSharper.UI.Doc.ConcatMixed(
+                input(viewState, attr.type("hidden"))
+                ,
+                new Template.Withstorage()
+                    .ContentTextBox(contentTextBox)
 
-                .Back((el, ev) =>
-                {
-                    IndexDoc().RunById("page");
-                })
+                    .Back((el, ev) =>
+                    {
+                        IndexDoc().RunById("page");
+                    })
 
-                // <input ws-var="Storage" value="${ViewState}" type="radio" /> ViewState
-                // yields:
-                // Using ws-var on a <input type="radio"> node is not supported yet
-                // Thus programmatically:
-                .StorageRadio(
-                    label(
-                        radio(varStorage, asplib.Model.Storage.ViewState),
-                        "ViewState"
-                     ),
-                    label(
-                        radio(varStorage, asplib.Model.Storage.Session),
-                        "Session"
-                     ),
-                    label(
-                        radio(varStorage, asplib.Model.Storage.Database),
-                        "Database"
-                     )
-                )
-                .ListContainer(
-                    contentModel.View.DocSeqCached((string x) =>
-                        new Template.Withstatic.ListItem().Item(x).Doc()
+                    // <input ws-var="Storage" value="${ViewState}" type="radio" /> ViewState
+                    // in the template yields:
+                    // Using ws-var on a <input type="radio"> node is not supported yet
+                    // Thus programmatically:
+                    .StorageRadio(
+                        label(
+                            radio(storage, asplib.Model.Storage.ViewState),
+                            "ViewState"
+                         ),
+                        label(
+                            radio(storage, asplib.Model.Storage.Session),
+                            "Session"
+                         ),
+                        label(
+                            radio(storage, asplib.Model.Storage.Database),
+                            "Database"
+                         )
                     )
-                )
+                    .ListContainer(
+                        contentList.View.DocSeqCached((string x) =>
+                            new Template.Withstatic.ListItem().Item(x).Doc()
+                        )
+                    )
 
-                .ChangeStorage(async (el, ev) =>
-                {
-                    // Set the static storage override globally for the
-                    // instance, as the concept of SessionStorage makes little
-                    // sense, when it's required to carry it's value along with
-                    // the single stored Storage object itself.
-                    await StorageServer.SetStorage(varStorage.Value);
+                    .ChangeStorage(async (el, ev) =>
+                    {
+                        // Set the static storage override globally for the
+                        // instance, as the concept of SessionStorage makes little
+                        // sense when it's required to carry it's value along with
+                        // the single stored Storage object itself.
+                        await StorageServer.SetStorage(storage.Value);
 
-                    // Reload the object from the other storage.
-                    var newContent = await StorageRemoting.Reload(varViewState.Value);
-                    varViewState.Value = newContent.ViewState;
-                    contentModel.Set(newContent.Content);
-                })
-                .Submit(async (el, ev) =>
-                {
-                    // Retrieve the old stateful object, perform the transition
-                    // on it with all new input data passed as method arguments
-                    // in one single step, and immediately save the object in
-                    // its new state, thus making it effectively immutable from
-                    // here on.
-                    var newContent = await StorageRemoting.Add(varViewState.Value, contentTextBox.Value);
-                    varViewState.Value = newContent.ViewState;
+                        // Reload the object from the other storage.
+                        var newContent = await StorageRemoting.Reload(viewState.Value);
 
-                    // Update the view according to the model.
-                    contentModel.Set(newContent.Content);
+                        // Write back the changed model object state
+                        // to the reactive variable.
+                        viewState.Value = newContent.ViewState;
 
-                    // Clear entirely on the client side.
-                    contentTextBox.Set("");
-                })
+                        // Update the view according to the model.
+                        contentList.Set(newContent.Content);
+                    })
+                    .Submit(async (el, ev) =>
+                    {
+                        // Retrieve the old stateful object, perform the transition
+                        // on it with all new input data passed as method arguments
+                        // in one single step, and immediately save the object in
+                        // its new state, thus making it effectively immutable from
+                        // here on.
+                        var newContent = await StorageRemoting.Add(viewState.Value, contentTextBox.Value);
 
-                .Doc();
+                        // Write back the changed model object state
+                        // to the reactive variable.
+                        viewState.Value = newContent.ViewState;
+
+                        // Update the view according to the model.
+                        contentList.Set(newContent.Content);
+
+                        // Clear entirely on the client side.
+                        contentTextBox.Set("");
+                    })
+
+                    .Doc()
+            );
         }
     }
 }

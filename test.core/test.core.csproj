@@ -12,7 +12,12 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\asp.core\asp.core.csproj" />
+    <ProjectReference Include="..\asp.core\asp.core.csproj">
+      <Aliases>core</Aliases>
+    </ProjectReference>
+    <ProjectReference Include="..\asp.websharper.spa\asp.websharper.spa.csproj">
+      <Aliases>websharper_spa</Aliases>
+    </ProjectReference>
     <ProjectReference Include="..\asplib.core\asplib.core.csproj" />
     <ProjectReference Include="..\asplib.websharper\asplib.websharper.csproj" />
     <ProjectReference Include="..\asplib\asplib.csproj" />

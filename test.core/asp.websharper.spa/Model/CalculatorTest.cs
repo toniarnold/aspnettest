@@ -1,10 +1,10 @@
-﻿extern alias core;
+﻿extern alias websharper_spa;
 
-using core::asp.Controllers;
 using NUnit.Framework;
-using CalculatorContext = core::CalculatorContext;
+using websharper_spa::asp.websharper.spa.Model;
+using CalculatorContext = websharper_spa::CalculatorContext;
 
-namespace test.asp.Controllers
+namespace test.asp.websharper.spa.Model
 {
     [TestFixture]
     public class CalculatorTest : Calculator

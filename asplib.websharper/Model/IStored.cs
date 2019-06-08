@@ -28,7 +28,7 @@ namespace asplib.Model
         /// </summary>
         /// <typeparam name="M"></typeparam>
         /// <param name="inst">The inst.</param>
-        public static void DisposeSave<M>(this IStored<M> inst)
+        public static void Save<M>(this IStored<M> inst)
             where M : class, IStored<M>, new()
         {
             inst.ViewModel.ViewState = StorageServer.Save<M>(inst.ViewModel);

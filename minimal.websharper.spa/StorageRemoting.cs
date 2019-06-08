@@ -21,7 +21,7 @@ namespace minimal.websharper.spa
         [Remote]
         public static Task<ContentViewModel> Add(string viewState, string item)
         {
-            using (var content = StorageServer.Load<Content, ContentViewModel>(viewState, ref Content))
+            using (var content = StorageServer.Load<Content, ContentViewModel>(viewState, out Content))
             {
                 content.Add(item);
                 return content.ViewModelTask<Content, ContentViewModel>();
@@ -37,7 +37,7 @@ namespace minimal.websharper.spa
         [Remote]
         public static Task<ContentViewModel> Reload(string viewState)
         {
-            using (var content = StorageServer.Load<Content, ContentViewModel>(viewState, ref Content))
+            using (var content = StorageServer.Load<Content, ContentViewModel>(viewState, out Content))
             {
                 return content.ViewModelTask<Content, ContentViewModel>();
             }

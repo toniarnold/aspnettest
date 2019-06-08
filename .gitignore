@@ -341,9 +341,13 @@ ASALocalRun/
 minimal.webforms/*.dll
 minimaltest.webforms/*.dll
 
-# websharper
+# websharper generated files
 minimal.websharper.spa/wwwroot/Content/*
 minimal.websharper.spa/WebSharper.UI.Templates/*
 
 minimal.websharper.web/WebSharper.UI.Templates/*
 minimal.websharper.web/wwwroot/Scripts/WebSharper/*
+
+asp.websharper.spa/wwwroot/Content/*
+asp.websharper.spa/WebSharper.UI.Templates/*
+

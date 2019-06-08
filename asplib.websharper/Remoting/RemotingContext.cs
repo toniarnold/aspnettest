@@ -5,10 +5,10 @@ using Microsoft.Extensions.Configuration;
 namespace asplib.Remoting
 {
     /// <summary>
-    /// IoC replacement to access services in a static Remoting class
+    /// IoC replacement to access services in a static Remoting class.
     /// In MVC core, these services are injected into the controller instances,
     /// whereas in WebSharper, there are no such instances (no .NET Core
-    /// DependencyInjection available without constructor).
+    /// Dependency Injection is available without constructor).
     /// </summary>
     public static class RemotingContext
     {

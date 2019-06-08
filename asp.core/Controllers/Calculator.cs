@@ -6,7 +6,7 @@ using System.Collections.Generic;
 namespace asp.Controllers
 {
     /// <summary>
-    /// Context class for Calculator.sm/Calculator_sm.cs
+    /// Task class for Calculator.sm/Calculator_sm.cs
     /// </summary>
     public partial class Calculator
     {
@@ -47,21 +47,23 @@ namespace asp.Controllers
         [NonSerialized]
         private string operand;
 
-        // Context methods
-        public void Push(string value)
+        //  Context method implementations, called indirectly by the FSM
+        //  context class.
+        internal void Push(string value)
         {
             this.stack.Push(value);
         }
 
-        // Action method implementations triggered by the respective acton method in the CalculatorController.cs file
+        // Action method implementations triggered by the respective action
+        // method in the CalculatorController.cs file
         [NonAction]
-        public void Enter(string value)
+        internal void Enter(string value)
         {
             this.Push(value);
         }
 
         [NonAction]
-        public void Add()
+        internal void Add()
         {
             var y = Double.Parse(this.stack.Pop());
             var x = Double.Parse(this.stack.Pop());
@@ -70,7 +72,7 @@ namespace asp.Controllers
         }
 
         [NonAction]
-        public void Sub()
+        internal void Sub()
         {
             var y = Double.Parse(this.stack.Pop());
             var x = Double.Parse(this.stack.Pop());
@@ -79,7 +81,7 @@ namespace asp.Controllers
         }
 
         [NonAction]
-        public void Mul()
+        internal void Mul()
         {
             var y = Double.Parse(this.stack.Pop());
             var x = Double.Parse(this.stack.Pop());
@@ -88,7 +90,7 @@ namespace asp.Controllers
         }
 
         [NonAction]
-        public void Div()
+        internal void Div()
         {
             var y = Double.Parse(this.stack.Pop());
             var x = Double.Parse(this.stack.Pop());
@@ -97,7 +99,7 @@ namespace asp.Controllers
         }
 
         [NonAction]
-        public void Pow()
+        internal void Pow()
         {
             var x = Double.Parse(this.stack.Pop());
             var r = Math.Pow(x, 2);
@@ -105,7 +107,7 @@ namespace asp.Controllers
         }
 
         [NonAction]
-        public void Sqrt()
+        internal void Sqrt()
         {
             var x = Double.Parse(this.stack.Pop());
             var r = Math.Sqrt(x);
@@ -113,13 +115,13 @@ namespace asp.Controllers
         }
 
         [NonAction]
-        public void Clr()
+        internal void Clr()
         {
             this.stack.Pop();
         }
 
         [NonAction]
-        public void ClrAll()
+        internal void ClrAll()
         {
             this.stack = new Stack<string>();
         }
