@@ -14,10 +14,5 @@ namespace minimal.websharper.spa
         {
             this.Content = new List<string>(this.Main);
         }
-
-        public override void SaveMembers()
-        {
-            this.Main = new Content(this.Content);
-        }
     }
 }
