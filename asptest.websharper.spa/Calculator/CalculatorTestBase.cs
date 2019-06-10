@@ -1,5 +1,7 @@
-﻿using iie;
+﻿using asp.websharper.spa.Remoting;
+using iie;
 using NUnit.Framework;
+using System.Collections.Generic;
 
 namespace asptest.websharper.spa.Calculator
 {
@@ -8,18 +10,21 @@ namespace asptest.websharper.spa.Calculator
     /// </summary>
     [TestFixture]
     [Category("SHDocVw.InternetExplorer")]
-    public abstract class CalculatorTestBase : IIE
+    public abstract class CalculatorTestBase : IETest
     {
-        [OneTimeSetUp]
-        public void OneTimeSetUpIE()
+        protected CalculatorContext Fsm
         {
-            this.SetUpIE();
+            get { return CalculatorServer.Calculator.Fsm; }
         }
 
-        [OneTimeTearDown]
-        public void OneTimeTearDownIE()
+        protected CalculatorContext.CalculatorState State
         {
-            this.TearDownIE();
+            get { return CalculatorServer.Calculator.State; }
+        }
+
+        protected Stack<string> Stack
+        {
+            get { return CalculatorServer.Calculator.Stack; }
         }
     }
 }

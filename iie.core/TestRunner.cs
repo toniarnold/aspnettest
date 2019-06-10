@@ -16,7 +16,8 @@ namespace iie
             Configuration = config;
             Environment = env;
 
-            this.Configure(Configuration.GetValue<int>("RequestTimeout"));
+            this.Configure(Configuration.GetValue<int>("RequestTimeout"),
+                           Configuration.GetValue<bool>("IEVisible"));
         }
 
         /// <summary>

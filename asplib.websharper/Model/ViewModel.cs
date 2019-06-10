@@ -39,7 +39,8 @@ namespace asplib.Model
         }
 
         /// <summary>
-        /// Capture the members potentially modified on the client side.
+        /// Captures members potentially modified on the client side after the
+        /// initial state transition.
         /// </summary>
         public virtual void SaveMembers()
         {

@@ -33,15 +33,22 @@ namespace iie
         /// </summary>
         public static int RequestTimeoutMS { get; set; }
 
+        /// <summary>
+        /// Bug #3 - The Internet Explorer window must never have focus when
+        /// the tests are running -> don't show it per default no more.
+        /// </summary>
+        /// <value>InternetExplorer.visible</value>
+        public static bool IEVisible { get; set; }
+
         private static InternetExplorer ie;
 
         private static AutoResetEvent are = new AutoResetEvent(false);
 
-        public static void SetUpIE(bool visible)
+        public static void SetUpIE()
         {
             Trace.Assert(ie == null, "Only one SHDocVw.InternetExplorer instance allowed");
             ie = new InternetExplorer();
-            ie.Visible = visible;   // Bug #3 - The window must never have focus -> cannot show it reliably no more
+            ie.Visible = IEVisible;   // Bug #3 - The window must never have focus -> cannot show it reliably no more
             ie.AddressBar = true;
             ie.DocumentComplete += new DWebBrowserEvents2_DocumentCompleteEventHandler(OnDocumentComplete);
         }

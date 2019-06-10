@@ -12,13 +12,6 @@ using static WebSharper.UI.Client.Html;
 namespace asp.websharper.spa.Client
 {
     [JavaScript]
-    public class Person
-    {
-        public string FirstName;
-        public string LastName;
-    }
-
-    [JavaScript]
     public class Index
     {
         [SPAEntryPoint]
@@ -32,7 +25,7 @@ namespace asp.websharper.spa.Client
                 if (c == null)
                 {
                     // Get a new instance from the server
-                    return CalculatorRemoting.New();
+                    return CalculatorServer.Load();
                 }
                 else
                 {

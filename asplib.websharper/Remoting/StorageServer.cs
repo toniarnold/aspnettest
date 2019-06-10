@@ -3,7 +3,6 @@ using asplib.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using System;
-using System.Diagnostics;
 using System.Net;
 using System.Threading.Tasks;
 using WebSharper;
@@ -124,11 +123,11 @@ namespace asplib.Remoting
         /// <typeparam name="M"></typeparam>
         /// <param name="stored">The stored.</param>
         /// <returns>The VIewState string</returns>
-        /// <exception cref="NotImplementedException"></exception>
         public static string Save<M>(ViewModel<M> stored)
             where M : class, IStored<M>, new()
         {
-            stored.LoadMembers();
+            stored.SaveMembers();   // Captures members directly mutable on the client side.
+            stored.LoadMembers();   // Mirrors side effects of methods on M in the ViewModel.
 
             var storage = StorageImplementation.GetStorage(Configuration, HttpContext);
             switch (storage)
@@ -149,28 +148,6 @@ namespace asplib.Remoting
                 default:
                     throw new NotImplementedException(String.Format("Storage {0} not implemented", storage));
             }
-        }
-
-        /// <summary>
-        /// Saves the stored object discretely a second time to store
-        /// potentially client-side modified members after the initial
-        /// transition.
-        /// </summary>
-        /// <typeparam name="M"></typeparam>
-        /// <param name="stored">The stored object.</param>
-        /// <returns></returns>
-        /// <exception cref="NotImplementedException"></exception>
-        public static string SaveDiscretely<M>(ViewModel<M> stored)
-            where M : class, IStored<M>, new()
-        {
-            Trace.Assert(stored != null, "Object main to save must not be null");
-
-            // M must explicitly be recreated without LoadMembers() to capture
-            // potentially modified WebSharper members:
-            stored.DeserializeMain();
-            stored.SaveMembers();
-
-            return Save(stored);
         }
     }
 }

@@ -42,19 +42,5 @@ namespace minimal.websharper.spa
                 return content.ViewModelTask<Content, ContentViewModel>();
             }
         }
-
-        /// <summary>
-        /// Saves the specified main. In case of ViewState, the Base64-encoded string
-        /// of the object serialization is returned.
-        /// Not yet used in this minimal project.
-        /// </summary>
-        /// <param name="stored">The stored content object.</param>
-        /// <returns></returns>
-        [Remote]
-        public static Task<string> Save(ContentViewModel stored)
-        {
-            StorageServer.SaveDiscretely<Content>(stored);
-            return Task.FromResult(stored.ViewState);
-        }
     }
 }

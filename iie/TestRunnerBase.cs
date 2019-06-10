@@ -96,9 +96,10 @@ namespace iie
         /// Directly configure the test engine without dependency on a specific
         /// configuration framework.
         /// </summary>
-        protected void Configure(int requestTimeout)
+        protected void Configure(int requestTimeout, bool ieVisible)
         {
             IEExtensionBase.RequestTimeoutMS = requestTimeout * 1000;
+            IEExtensionBase.IEVisible = ieVisible;
         }
     }
 }

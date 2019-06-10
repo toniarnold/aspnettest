@@ -12,7 +12,7 @@ namespace iie
         /// Start Internet Explorer
         /// </summary>
         [OneTimeSetUp]
-        public void OneTimeSetUpIE()
+        public virtual void OneTimeSetUpIE()
         {
             this.SetUpIE();
         }

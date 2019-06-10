@@ -13,9 +13,13 @@ namespace iie
     {
         public TestRunner(int port) : base(port)
         {
-            this.Configure(String.IsNullOrWhiteSpace(
-                ConfigurationManager.AppSettings["RequestTimeout"]) ? 1 :
-                int.Parse(ConfigurationManager.AppSettings["RequestTimeout"]));
+            this.Configure(
+                String.IsNullOrWhiteSpace(
+                    ConfigurationManager.AppSettings["RequestTimeout"]) ? 1 :
+                    int.Parse(ConfigurationManager.AppSettings["RequestTimeout"]),
+                String.IsNullOrWhiteSpace(
+                    ConfigurationManager.AppSettings["IEVisible"]) ? false :
+                    bool.Parse(ConfigurationManager.AppSettings["IEVisible"]));
         }
 
         private List<string> reports = new List<string>();

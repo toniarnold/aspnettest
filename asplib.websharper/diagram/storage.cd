@@ -1,22 +1,57 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Class Name="asplib.StorageServer">
-    <Position X="0.75" Y="0.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAgIAAAAAAAAAAAAAAAAAAAAAAAAAEoAAAACAAAAA=</HashCode>
-      <FileName>StorageServer.cs</FileName>
-    </TypeIdentifier>
-  </Class>
-  <Class Name="asplib.Model.Stored&lt;M&gt;">
-    <Position X="5" Y="0.5" Width="1.5" />
-    <TypeIdentifier>
-      <HashCode>AAAAAAAAAAABAAAQEAAAAAACAAAAAAAAAAAABQAAAAA=</HashCode>
-      <FileName>Model\Stored.cs</FileName>
-    </TypeIdentifier>
-  </Class>
   <Class Name="asplib.Model.StorageImplementation">
-    <Position X="2.5" Y="0.5" Width="1.5" />
+    <Position X="2.25" Y="0.5" Width="1.5" />
     <TypeIdentifier />
   </Class>
+  <Class Name="asplib.Remoting.StorageServer">
+    <Position X="0.5" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAgIAAAAAAAAAAAAAAAACAAAAAAAAAoAAAACAAAAA=</HashCode>
+      <FileName>Remoting\StorageServer.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="asplib.Model.ViewModel&lt;M&gt;">
+    <Position X="7.75" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABAAAQEAAAAAACAAAAAAAAAAAABQAAAAA=</HashCode>
+      <FileName>Model\ViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="asplib.Model.SmcViewModel&lt;M, F, S&gt;">
+    <Position X="7.75" Y="3.25" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAABAAAABAAAAAAAAAAAAAAAAAQABQAAAAA=</HashCode>
+      <FileName>Model\SmcViewModel.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="asplib.Model.SmcTaskExtension">
+    <Position X="6" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAABEAIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\ISmcTask.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Class Name="asplib.Model.StoredExtension">
+    <Position X="6" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAIAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\IStored.cs</FileName>
+    </TypeIdentifier>
+  </Class>
+  <Interface Name="asplib.Model.ISmcTask&lt;M, F, S&gt;">
+    <Position X="4.25" Y="2" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAAAAAgAAAAAAABAAAAAA=</HashCode>
+      <FileName>Model\ISmcTask.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
+  <Interface Name="asplib.Model.IStored&lt;M&gt;">
+    <Position X="4.25" Y="0.5" Width="1.5" />
+    <TypeIdentifier>
+      <HashCode>AAAAAAAAAAAAAAAAAAAAAAAAEAAAAAAAAAAAAAAAAAA=</HashCode>
+      <FileName>Model\IStored.cs</FileName>
+    </TypeIdentifier>
+  </Interface>
   <Font Name="Segoe UI" Size="9" />
 </ClassDiagram>

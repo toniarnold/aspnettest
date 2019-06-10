@@ -6,13 +6,14 @@ namespace iie
     /// <summary>
     /// Minimal base class for IE tests with a [OneTimeSetUp]/[OneTimeTearDown]
     /// pair for starting/stopping Internet Explorer
+    /// </summary>
     public abstract class IETest : IIE
     {
         /// <summary>
         /// Start Internet Explorer
         /// </summary>
         [OneTimeSetUp]
-        public void OneTimeSetUpIE()
+        public virtual void OneTimeSetUpIE()
         {
             this.SetUpIE();
         }

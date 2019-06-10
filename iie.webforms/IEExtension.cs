@@ -42,10 +42,9 @@ namespace iie
         /// Start Internet Explorer and set up events
         /// </summary>
         /// <param name="inst"></param>
-        /// <param name="visible">IE being visible triggers Bug #3: blocking DocumentComplete events</param>
-        public static void SetUpIE(this IIE inst, bool visible = false)
+        public static void SetUpIE(this IIE inst)
         {
-            IEExtensionBase.SetUpIE(visible);
+            IEExtensionBase.SetUpIE();
         }
 
         /// <summary>

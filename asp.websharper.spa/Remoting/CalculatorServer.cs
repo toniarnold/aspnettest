@@ -6,17 +6,28 @@ using WebSharper;
 
 namespace asp.websharper.spa.Remoting
 {
-    public static class CalculatorRemoting
+    /// <summary>
+    /// Remoting server for the FSM task class.
+    /// All public FSM state transitions with their arguments are mirrored as
+    /// remote methods. Additionally provides a parameterless Load()
+    /// constructor for creating an initial persistent instance in the
+    /// SPAEntryPoint via StorageServer.Load() in absence of a ViewState.
+    /// The "using { }" block guarantees that the changed object state always
+    /// gets saved.
+    /// </summary>
+    public static class CalculatorServer
     {
-        // Static reference to the Model
+        /// <summary>
+        /// Static reference to the Model fur NUnit test assertions
+        /// </summary>
         public static Calculator Calculator;
 
         /// <summary>
         /// Initializes a new Calculator by loading it from the null viewState
         /// </summary>
-        /// <returns></returns>
+        /// <returns>New FSM instance</returns>
         [Remote]
-        public static Task<CalculatorViewModel> New()
+        public static Task<CalculatorViewModel> Load()
         {
             using (var calculator = StorageServer.Load<Calculator, CalculatorViewModel>(null, out Calculator))
             {
