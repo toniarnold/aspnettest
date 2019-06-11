@@ -32,7 +32,7 @@ namespace minimaltest.websharper.spa
             this.Navigate("/");
             this.ClickID("withstatic-link");
             this.WriteID("contentTextBox", "a first content line");
-            this.ClickID("submitButton", expectPostBack: false, pause: 500);
+            this.ClickID("submitButton");
 
             Assert.That(this.Content.Count, Is.EqualTo(1));
             var firstString = this.Content[0];

@@ -12,9 +12,38 @@ namespace asptest.websharper.spa.Calculator
             this.Navigate("/");
             Assert.Multiple(() =>
             {
-                Assert.That(this.Html(), Does.Contain("RPN calculator"));
-                Assert.That(this.Html(), Does.Contain("Map1.Splash"));          // even later than "late binding"
                 Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Splash)); // "early binding"
+                Assert.That(this.Html(), Does.Contain("RPN calculator SPA"));
+                Assert.That(this.Html(), Does.Contain("Map1.Splash"));          // even later than "late binding"
+            });
+        }
+
+        [Test]
+        public void InitEnterTest()
+        {
+            this.Navigate("/");
+            this.ClickID("enterButton");
+            Assert.Multiple(() =>
+            {
+                Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
+                Assert.That(this.Html(), Does.Contain("Map1.Enter"));
+            });
+        }
+
+        [Test]
+        public void EnterTest()
+        {
+            this.Navigate("/");
+            this.ClickID("enterButton");
+            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
+            this.WriteID("operandTextBox", "1");
+            this.ClickID("enterButton");
+            Assert.Multiple(() =>
+            {
+                Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
+                Assert.That(this.Stack.Peek(), Is.EqualTo("1"));
+                Assert.That(this.Stack.Count, Is.EqualTo(1));
+                Assert.That(this.Html(), Does.Contain(" 1\n"));
             });
         }
     }

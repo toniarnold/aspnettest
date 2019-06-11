@@ -48,7 +48,6 @@ namespace asp.websharper.spa
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             app.UseDeveloperExceptionPage()
-                .UseSession()
                 .UseMiddleware<IIEMiddleware>()
                 // Even this does not stop IE from sending 304 responses:
                 .Use(async (httpContext, next) =>
@@ -62,6 +61,7 @@ namespace asp.websharper.spa
                 .UseDefaultFiles()
                 .UseStaticFiles()
                 .UseWebSharper()    //.UseWebSharper(builder => builder.UseSitelets(false))
+                .UseSession()       // at the end to avoid "System.Security.Cryptography.CryptographicException: The payload was invalid."
                 .Run(context =>
                 {
                     HttpContext = context;

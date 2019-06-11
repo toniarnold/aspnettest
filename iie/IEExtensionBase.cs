@@ -76,7 +76,7 @@ namespace iie
             }
             Thread.Sleep(delay);
             ie.Navigate2(url);
-            //Debug.WriteLine("---IIE--- NavigateURL.WaitOne(); ie.Busy=" + ie.Busy);
+            Debug.WriteLine("---IIE--- NavigateURL.WaitOne(); ie.Busy=" + ie.Busy);
             are.WaitOne(RequestTimeoutMS);
             Thread.Sleep(pause);
             AssertStatusCode(expectedStatusCode);
@@ -90,7 +90,7 @@ namespace iie
         private static void OnDocumentComplete(object pDisp, ref object URL)
         {
             are.Set();
-            //Debug.WriteLine("---IIE--- OnDocumentComplete.Set(); ie.Busy=" + ie.Busy);
+            Debug.WriteLine("---IIE--- OnDocumentComplete.Set(); ie.Busy=" + ie.Busy);
         }
 
         /// <summary>
@@ -241,7 +241,7 @@ namespace iie
             element.click();
             if (expectPostBack)
             {
-                //Debug.WriteLine("---IIE--- Click.WaitOne(); ie.Busy=" + ie.Busy);
+                Debug.WriteLine("---IIE--- Click.WaitOne(); ie.Busy=" + ie.Busy);
                 are.WaitOne(RequestTimeoutMS);
             }
             Thread.Sleep(pause);

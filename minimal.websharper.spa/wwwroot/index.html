@@ -47,11 +47,11 @@
     <div id="page" ws-children-template="Main">
         <h1>minimalist test setup spa</h1>
         <ul>
-            <li><a ws-onclick="WithStatic" id="withstatic-link">with static remote</a></li>
-            <li><a ws-onclick="WithStorage" id="withstorage-link">with remote storage</a></li>
+            <li><a href="#" ws-onclick="WithStatic" id="withstatic-link">with static remote</a></li>
+            <li><a href="#" ws-onclick="WithStorage" id="withstorage-link">with remote storage</a></li>
         </ul>
 
-        <a ws-onclick="Test"><img src="nunit.png" class="nunitimg" /></a>
+        <a href="#" ws-onclick="Test"><img src="nunit.png" class="nunitimg" /></a>
         <a href="/testresult" class="testresult">
             <ul ws-hole="TestSummaryContainer">
                 <li ws-template="TestSummaryItem">${Line}</li>
