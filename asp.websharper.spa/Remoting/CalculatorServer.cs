@@ -35,6 +35,23 @@ namespace asp.websharper.spa.Remoting
             }
         }
 
+        /// <summary>
+        /// Initializes a new Calculator with a specific session storage.
+        /// Separate method as an optional parameter produces
+        /// "System.Exception: RPC parameter not received a single element
+        /// array" on startup.
+        /// </summary>
+        /// <param name="sessionStorage">The session storage.</param>
+        /// <returns></returns>
+        [Remote]
+        public static Task<CalculatorViewModel> Load(Storage sessionStorage)
+        {
+            using (var calculator = StorageServer.Load<Calculator, CalculatorViewModel>(null, out Calculator, sessionStorage))
+            {
+                return calculator.ViewModelTask<Calculator, CalculatorViewModel>();
+            }
+        }
+
         [Remote]
         public static Task<CalculatorViewModel> Enter(string viewState, string value)
         {

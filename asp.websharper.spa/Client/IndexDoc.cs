@@ -1,18 +1,19 @@
 ﻿using asp.websharper.spa.Model;
 using asp.websharper.spa.Remoting;
 using iie;
+using System;
 using System.Threading.Tasks;
 using WebSharper;
 using WebSharper.JavaScript;
 using WebSharper.UI;
 using WebSharper.UI.Client;
-using static asp.websharper.spa.Client.Components;
 using static WebSharper.UI.Client.Html;
+using static WebSharper.UI.V;
 
 namespace asp.websharper.spa.Client
 {
     [JavaScript]
-    public class Index
+    public class IndexDoc
     {
         [SPAEntryPoint]
         public static void ClientMain()
@@ -23,24 +24,21 @@ namespace asp.websharper.spa.Client
             {
                 // Explicit null-check required by WebSharper anyway:
                 if (c == null)
-                {
                     // Get a new instance from the server
                     return CalculatorServer.Load();
-                }
                 else
-                {
                     // Return the existing instance
                     return Task.FromResult(c);
-                }
             });
 
-            IndexDoc(viewCalculator, varCalculator).RunById("main");
+            MainDoc(viewCalculator, varCalculator).RunById("main");
         }
 
-        public static WebSharper.UI.Doc IndexDoc(View<CalculatorViewModel> viewCalculator,
-                                                 Var<CalculatorViewModel> varCalculator)
+        public static WebSharper.UI.Doc MainDoc(View<CalculatorViewModel> viewCalculator,
+                                              Var<CalculatorViewModel> varCalculator)
         {
-            var varOperand = Var.Create("");
+            // Page visibility without state machine
+            var page = Var.Create(Single);
 
             // Setup the reactive ViewState storage and the test button.
             var viewState = Var.Create("");
@@ -69,14 +67,33 @@ namespace asp.websharper.spa.Client
                     .Doc()
                 ,
 
-                // The state-dependent parts which shape the application page
-                TitleDoc(viewCalculator),
-                SplashDoc(viewCalculator),
-                EnterDoc(viewCalculator, varOperand),
-                CalculateDoc(viewCalculator, varCalculator),
-                ErrorDoc(viewCalculator),
-                FooterDoc(viewCalculator, varCalculator, varOperand)
+                Page(page, viewCalculator, varCalculator)
                 );
         }
+
+        // Sub-Pages as string, the JS compiler complains with an enum in conditionals
+        public const string Single = "Single";
+
+        public const string Triptych = "Triptych";
+
+        public static object Page(Var<string> page,
+                                View<CalculatorViewModel> viewCalculator,
+                                Var<CalculatorViewModel> varCalculator) =>
+        V(page.V).Map(showPage =>
+        {
+            switch (showPage)
+            {
+                case Single:
+                    varCalculator.Set(null);    // enforce reload after storage change
+                    return CalculatorDoc.MainDoc(viewCalculator, varCalculator, page);
+
+                case Triptych:
+                    return TriptychDoc.MainDoc(page);
+
+                default:
+                    throw new Exception(string.Format(  // JS: no NotImplementedException
+                        "Page {0}", showPage));
+            }
+        });
     }
 }

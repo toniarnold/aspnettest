@@ -1,0 +1,29 @@
+﻿<!-- ClientLoad = Inline
+     ServerLoad = WhenChanged -->
+<div ws-children-template="Main">
+    <style>
+        .calc-container {
+            /* ie */
+            column-count: 3;
+            column-gap: 10px;
+            /* rest of the world */
+            display: inline-grid;
+            grid-template-columns: auto auto auto;
+            grid-gap: 10px;
+        }
+
+        .calc-box {
+            border: 1px solid black;
+            border-radius: 10px;
+            padding: 30px;
+        }
+    </style>
+    <div class="calc-container">
+        <div ws-hole="ViewState" class="calc-box">
+        </div>
+        <div ws-hole="Session" class="calc-box">
+        </div>
+        <div ws-hole="Database" class="calc-box">
+        </div>
+    </div>
+</div>

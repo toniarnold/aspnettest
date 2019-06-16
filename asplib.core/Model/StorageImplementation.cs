@@ -203,7 +203,8 @@ namespace asplib.Model
                         break;
 
                     default:
-                        throw new NotImplementedException(String.Format("Storage {0}", storage));
+                        throw new NotImplementedException(String.Format(
+                            "Storage {0}", storage));
                 }
             }
         }

@@ -19,7 +19,8 @@ namespace asplib.Controllers
         IConfigurationRoot Configuration { get; }
 
         /// <summary>
-        /// Local session storage type in the instance, overrides the global config
+        /// Local session storage type in the instance, overrides the global
+        /// config if not null
         /// </summary>
         Storage? SessionStorage { get; set; }
 

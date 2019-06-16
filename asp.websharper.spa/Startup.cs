@@ -49,7 +49,8 @@ namespace asp.websharper.spa
         {
             app.UseDeveloperExceptionPage()
                 .UseMiddleware<IIEMiddleware>()
-                // Even this does not stop IE from sending 304 responses:
+                // https://support.microsoft.com/en-us/help/234067/how-to-prevent-caching-in-internet-explorer
+                // But even this does not stop IE from sending 304 responses:
                 .Use(async (httpContext, next) =>
                 {
                     httpContext.Response.Headers[HeaderNames.CacheControl] = "no-cache";
@@ -60,8 +61,11 @@ namespace asp.websharper.spa
                 // From WebSharper:
                 .UseDefaultFiles()
                 .UseStaticFiles()
+                // Ordering unclear, can cause "System.Security.Cryptography.CryptographicException: The payload was invalid."
+                // https://docs.microsoft.com/en-us/aspnet/core/fundamentals/middleware/index?view=aspnetcore-2.2#order
+                // suggests something like "as late as possible", there immediately before .UseMvc();
+                .UseSession()
                 .UseWebSharper()    //.UseWebSharper(builder => builder.UseSitelets(false))
-                .UseSession()       // at the end to avoid "System.Security.Cryptography.CryptographicException: The payload was invalid."
                 .Run(context =>
                 {
                     HttpContext = context;

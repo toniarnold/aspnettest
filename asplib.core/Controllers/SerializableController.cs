@@ -78,8 +78,8 @@ namespace asplib.Controllers
                     break;
 
                 default:
-                    throw new NotImplementedException(String.Format("Storage {0} not implemented",
-                                                                    this.GetStorage()));
+                    throw new NotImplementedException(String.Format(
+                        "Storage {0}", this.GetStorage()));
             }
 
             base.OnActionExecuted(context);

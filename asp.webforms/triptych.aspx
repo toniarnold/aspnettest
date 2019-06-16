@@ -22,7 +22,7 @@
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <div class="calc-container">
-        <div class="calc-box ">
+        <div class="calc-box">
             <asp:UpdatePanel ID="UpdatePanel1" runat="server"
                 UpdateMode="Always">
                 <ContentTemplate>
@@ -33,7 +33,7 @@
                 </ContentTemplate>
             </asp:UpdatePanel>
         </div>
-        <div class="calc-box ">
+        <div class="calc-box">
             <asp:UpdatePanel ID="UpdatePanel2" runat="server"
                 UpdateMode="Always">
                 <ContentTemplate>
@@ -44,7 +44,7 @@
                 </ContentTemplate>
             </asp:UpdatePanel>
         </div>
-        <div class="calc-box ">
+        <div class="calc-box">
             <asp:UpdatePanel ID="UpdatePanel3" runat="server"
                 UpdateMode="Always">
                 <ContentTemplate>

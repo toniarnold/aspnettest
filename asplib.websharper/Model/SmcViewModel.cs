@@ -33,6 +33,17 @@ namespace asplib.Model
         }
 
         /// <summary>
+        /// Calls SetOwner() after assigning main
+        /// </summary>
+        /// <param name="main">The main.</param>
+        public override void SetMain(M main)
+        {
+            base.SetMain(main);
+            var smcMain = (ISmcTask<M, F, S>)this.Main;
+            smcMain.SetOwner();
+        }
+
+        /// <summary>
         /// Recreates the Main object from the ViewState and copies members
         /// used on the client side with the overridden ExposeMembers()
         /// Calls the SetOwner on the contained ISmcTask.
@@ -41,8 +52,8 @@ namespace asplib.Model
         private void DeserializeSmcTask(Func<byte[], byte[]> filter = null)
         {
             base.DeserializeMain(filter);
-            var main = (ISmcTask<M, F, S>)this.Main;
-            main.SetOwner();
+            var smcMain = (ISmcTask<M, F, S>)this.Main;
+            smcMain.SetOwner();
         }
 
         /// <summary>

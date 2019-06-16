@@ -255,7 +255,9 @@ namespace iie
         /// <param name="expectedStatusCode">The expected status code.</param>
         private static void AssertStatusCode(int expectedStatusCode)
         {
-            Assert.That(StatusCode, Is.AnyOf(expectedStatusCode, (int)HttpStatusCode.NotModified));
+            Assert.That(StatusCode, Is.AnyOf(expectedStatusCode,
+                (int)HttpStatusCode.NotModified,
+                (int)HttpStatusCode.NotFound)); // WebSharper a href="#"-Links?
         }
     }
 }

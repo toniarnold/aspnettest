@@ -24,7 +24,8 @@ namespace asplib.View
         M Main { get; set; }
 
         /// <summary>
-        /// Local session storage type in the instance, overrides the global config
+        /// Local session storage type in the instance, overrides the global
+        /// config if not null
         /// </summary>
         Storage? SessionStorage { get; set; }
 
@@ -379,7 +380,8 @@ namespace asplib.View
                             break;
 
                         default:
-                            throw new NotImplementedException(String.Format("Storage {0}", storage));
+                            throw new NotImplementedException(String.Format(
+                                "Storage {0}", storage));
                     }
                     if (endresponse)
                     {

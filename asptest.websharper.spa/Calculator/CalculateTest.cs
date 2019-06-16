@@ -1,5 +1,7 @@
-﻿using iie;
+﻿using asp.websharper.spa.Client;
+using iie;
 using NUnit.Framework;
+using static asplib.View.TagHelper;
 
 namespace asptest.websharper.spa.Calculator
 {
@@ -22,7 +24,7 @@ namespace asptest.websharper.spa.Calculator
         public void InitEnterTest()
         {
             this.Navigate("/");
-            this.ClickID("enterButton");
+            this.ClickID(CalculatorDoc.EnterButton);
             Assert.Multiple(() =>
             {
                 Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
@@ -34,10 +36,10 @@ namespace asptest.websharper.spa.Calculator
         public void EnterTest()
         {
             this.Navigate("/");
-            this.ClickID("enterButton");
+            this.ClickID(Id(CalculatorDoc.EnterButton));
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
-            this.WriteID("operandTextBox", "1");
-            this.ClickID("enterButton");
+            this.WriteID(Id(CalculatorDoc.OperandTextbox), "1");
+            this.ClickID(Id(CalculatorDoc.EnterButton));
             Assert.Multiple(() =>
             {
                 Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));

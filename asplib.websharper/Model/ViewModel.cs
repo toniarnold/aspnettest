@@ -20,6 +20,21 @@ namespace asplib.Model
         public M Main;
 
         /// <summary>
+        /// Local session storage type in the instance, overrides the global
+        /// config if written to by the Load() method and the result held for
+        /// the Save() method called by the parameterless Dispose().
+        /// </summary>
+        [JavaScript]
+        public Storage SessionStorage { get; set; }
+
+        /// <summary>
+        /// Storage string View for the Client, result of combining
+        /// SessionStorage override with the global configuration.
+        /// </summary>
+        [JavaScript]
+        public string VSessionStorage { get; set; }
+
+        /// <summary>
         /// The Base64-encoded serialization of Main to be transferred between
         /// client and server.
         /// </summary>
@@ -63,6 +78,16 @@ namespace asplib.Model
         public virtual void DeserializeMain(Func<byte[], byte[]> filter = null)
         {
             this.Main = StorageImplementation.LoadFromViewstate(() => new M(), this.ViewState, filter);
+        }
+
+        /// <summary>
+        /// Hook for additional setup after setting a new main.
+        /// </summary>
+        /// <typeparam name="M"></typeparam>
+        /// <param name="main">The main.</param>
+        public virtual void SetMain(M main)
+        {
+            this.Main = main;
         }
     }
 }

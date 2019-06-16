@@ -47,7 +47,7 @@ namespace asplib.Remoting
         /// <returns></returns>
         // [Remote] -> Yields "Remote methods must not be generic" from WebSharper:
         // https://github.com/dotnet-websharper/core/issues/1048
-        public static M Load<M, V>(string viewState, out M accessor)
+        public static M Load<M, V>(string viewState, out M accessor, Storage? sessionStorage = null)
             where M : class, IStored<M>, new()
             where V : ViewModel<M>, new()
         {
@@ -57,7 +57,7 @@ namespace asplib.Remoting
             byte[] bytes;
             Func<byte[], byte[]> filter;
 
-            var storage = StorageImplementation.GetStorage(Configuration, HttpContext);
+            var storage = sessionStorage ?? StorageImplementation.GetStorage(Configuration, HttpContext);
             var storageID = StorageImplementation.GetStorageID(typeof(M).Name);
             StorageImplementation.ClearIfRequested(HttpContext, storage, storageID);
 
@@ -84,7 +84,7 @@ namespace asplib.Remoting
                         HttpContext.Session.TryGetValue(storageID, out bytes))
                 {
                     viewModel = new V();
-                    viewModel.Main = StorageImplementation.LoadFromBytes(() => new M(), bytes);
+                    viewModel.SetMain(StorageImplementation.LoadFromBytes(() => new M(), bytes));
                 }
 
                 // ---------- Load Database ----------
@@ -93,15 +93,20 @@ namespace asplib.Remoting
                 {
                     (bytes, filter) = StorageImplementation.DatabaseBytes(Configuration, HttpContext, storageID, session);
                     viewModel = new V();
-                    viewModel.Main = StorageImplementation.LoadFromBytes(() => new M(), bytes, filter);
+                    viewModel.SetMain(StorageImplementation.LoadFromBytes(() => new M(), bytes, filter));
                 }
                 else
                 {
                     // No persisted object available yet -> return a new one
                     viewModel = new V();
-                    viewModel.Main = new M();
+                    viewModel.SetMain(new M());
                 }
             }
+
+            // Now that an instance is guaranteed remember the storage type for Save() and the client.
+            viewModel.SessionStorage = storage;
+            viewModel.VSessionStorage = storage.ToString();
+
             // An instantiated Main is now guaranteed -> make its members
             // visible to WebSharper:
             viewModel.LoadMembers();
@@ -129,8 +134,7 @@ namespace asplib.Remoting
             stored.SaveMembers();   // Captures members directly mutable on the client side.
             stored.LoadMembers();   // Mirrors side effects of methods on M in the ViewModel.
 
-            var storage = StorageImplementation.GetStorage(Configuration, HttpContext);
-            switch (storage)
+            switch (stored.SessionStorage)  // guaranteed here, whether overridden or not
             {
                 case Storage.ViewState:
                     var filter = StorageImplementation.EncryptViewState(Configuration);
@@ -146,7 +150,8 @@ namespace asplib.Remoting
                     return null;
 
                 default:
-                    throw new NotImplementedException(String.Format("Storage {0} not implemented", storage));
+                    throw new NotImplementedException(String.Format(
+                        "Storage {0}", stored.SessionStorage));
             }
         }
     }
