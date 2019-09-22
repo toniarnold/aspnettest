@@ -12,6 +12,11 @@ using System.Net.Http;
 
 namespace apitest.apicaller.core.Services
 {
+    /// <summary>
+    /// ServiceClient calls /authenticate/-methods on the apiservice.core
+    /// server, therefore the TestServer is created with the startup from the
+    /// apiservice.core project.
+    /// </summary>
     [TestFixture]
     public class ServiceClientTest : ServiceClient, IDeleteNewRows
     {
@@ -19,17 +24,17 @@ namespace apitest.apicaller.core.Services
 
         private TestServer _server;
 
-        public List<(string, string, object)> MaxIds { get; set; } = new List<(string, string, object)>();
+        /// <summary>
+        /// IDeleteNewRows
+        /// </summary>
+        public List<(string, string, object)> MaxIds { get; set; }
 
         /// <summary>
-        /// "Foreign" connection string from the  service receiving API calls
+        /// "Foreign" connection string from the  service receiving the API calls
         /// </summary>
         private string ConnectionString
         {
-            get
-            {
-                return _configuration.GetConnectionString("ApiserviceDb");
-            }
+            get { return _configuration.GetConnectionString("ApiserviceDb"); }
         }
 
         internal override Uri ServiceHost
@@ -37,36 +42,17 @@ namespace apitest.apicaller.core.Services
             get { return _server.BaseAddress; }
         }
 
-        internal override HttpClient HttpClient
+        internal override HttpClient CreateHttpClient()
         {
-            get { return _server.CreateClient(); }
+            return _server.CreateClient();
         }
 
         [OneTimeSetUp]
         public void ConfigureServices()
         {
             _configuration = ServiceProvider.Configuration;
-        }
+            _server = CreateApiserviceServer();
 
-        [OneTimeSetUp]
-        public void ConfigureTestServer()
-        {
-            var builder = new WebHostBuilder()
-                .UseEnvironment("Development")
-                .UseConfiguration(_configuration)
-                .UseStartup<Startup>();
-            _server = new TestServer(builder);
-        }
-
-        [OneTimeTearDown]
-        public void DisposeTestServer()
-        {
-            _server.Dispose();
-        }
-
-        [SetUp]
-        public void GetAllMaxIds()
-        {
             this.SelectMaxIds(ConnectionString, "Main", "mainid");
             this.SelectMaxIds(ConnectionString, "Accesscode", "accesscodeid");
         }
@@ -75,6 +61,21 @@ namespace apitest.apicaller.core.Services
         public void DeleteNewRows()
         {
             this.DeleteMaxIdRows(ConnectionString);
+        }
+
+        public TestServer CreateApiserviceServer()
+        {
+            var builder = new WebHostBuilder()
+                .UseEnvironment("Development")
+                .UseConfiguration(_configuration)
+                .UseStartup<Startup>();
+            return new TestServer(builder);
+        }
+
+        [OneTimeTearDown]
+        public void DisposeTestServer()
+        {
+            _server.Dispose();
         }
 
         #endregion scaffolding
@@ -91,7 +92,7 @@ namespace apitest.apicaller.core.Services
         public void HeloTest()
         {
             var response = this.Helo().Result;
-            Assert.That(response, Is.EqualTo("ehlo"));
+            Assert.That(response, Is.EqualTo("\"ehlo\""));  // quoted due to "application/json" header
         }
     }
 }

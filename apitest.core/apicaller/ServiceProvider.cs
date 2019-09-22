@@ -1,10 +1,15 @@
 ﻿using apicaller;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 
 namespace apitest.apicaller
 {
+    /// <summary>
+    /// apicaller
+    /// </summary>
     public static class ServiceProvider
     {
         private static IConfiguration _configuration;
@@ -14,20 +19,30 @@ namespace apitest.apicaller
         {
             get
             {
-                CreateProviderSingleton();
+                CreateMembers();
                 return _configuration;
             }
         }
 
         public static T Get<T>()
         {
-            CreateProviderSingleton();
+            CreateMembers();
             return (T)_provider.GetService(typeof(T));
+        }
+
+        public static TestServer CreateTestServer()
+        {
+            CreateMembers();
+            var builder = new WebHostBuilder()
+                .UseEnvironment("Development")
+                .UseConfiguration(_configuration)
+                .UseStartup<Startup>();
+            return new TestServer(builder);
         }
 
         private static readonly object lo = new object();
 
-        private static void CreateProviderSingleton()
+        private static void CreateMembers()
         {
             lock (lo)
             {

@@ -24,6 +24,11 @@ namespace asplib.Model.Db
             if (!IsWord(tablename)) throw new ArgumentException($"invalid: [{tablename}]", "tablename");
             if (!IsWord(columnname)) throw new ArgumentException($"invalid: [{columnname}]", "columnname");
 
+            if (inst.MaxIds == null)
+            {
+                inst.MaxIds = new List<(string tablename, string columnname, object maxid)>();
+            }
+
             var sql = $"SELECT MAX([{columnname}]) FROM [{tablename}]";
             using (var conn = new SqlConnection(connecctionString))
             using (var cmd = new SqlCommand(sql, conn))

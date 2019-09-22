@@ -3,6 +3,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Net.Http.Headers;
 using System;
 using System.Net.Http;
+using System.Net.Http.Headers;
 using System.Threading.Tasks;
 
 namespace apicaller.Services
@@ -11,16 +12,17 @@ namespace apicaller.Services
     {
         internal IConfiguration _configuration;
         internal IHttpClientFactory _clientFactory;
-        internal HttpClient _httpClient;
 
         internal virtual Uri ServiceHost
         {
             get { return new Uri(_configuration.GetValue<string>("apiserviceHost")); }
         }
 
-        internal virtual HttpClient HttpClient
+        internal HttpClient GetHttpClient()
         {
-            get { return _clientFactory.CreateClient(); }
+            var client = CreateHttpClient();
+            AddDefaultHeaders(client);
+            return client;
         }
 
         public ServiceClient()
@@ -32,29 +34,38 @@ namespace apicaller.Services
             IHttpClientFactory clientFactory
             )
         {
+            _configuration = configuration;
             _clientFactory = clientFactory;
-            _httpClient.DefaultRequestHeaders.Add(HeaderNames.UserAgent, ".NET apicaller");
         }
 
         public async Task<string> Helo()
         {
-            return await HttpClient.GetStringAsync(this.ResouceUri("helo"));
+            using (var client = GetHttpClient())
+            {
+                return await client.GetStringAsync(this.ResouceUri("helo"));
+            }
         }
 
         public async Task<ActionResult<string>> Authenticate(string phonenumber)
         {
-            var uri = ResouceUri("authenticatePath");
-            var content = new StringContent(phonenumber);
-            await _httpClient.PostAsync(uri, content);
-            return "OK";
+            using (var client = GetHttpClient())
+            {
+                var uri = ResouceUri("authenticatePath");
+                var content = new StringContent(phonenumber);
+                await client.PostAsync(uri, content);
+                return "OK";
+            }
         }
 
         public async Task<ActionResult<string>> Verify(string accesscode)
         {
-            var uri = ResouceUri("verifyPath");
-            var content = new StringContent(accesscode);
-            await _httpClient.PostAsync(uri, content);
-            return "OK";
+            using (var client = GetHttpClient())
+            {
+                var uri = ResouceUri("verifyPath");
+                var content = new StringContent(accesscode);
+                await client.PostAsync(uri, content);
+                return "OK";
+            }
         }
 
         internal Uri ResouceUri(string command)
@@ -64,6 +75,18 @@ namespace apicaller.Services
             builder.Path = _configuration.GetValue<string>("authenticatePath");
             Uri.TryCreate(builder.Uri, command, out retval);
             return retval;
+        }
+
+        internal virtual HttpClient CreateHttpClient()
+        {
+            return _clientFactory.CreateClient();
+        }
+
+        internal void AddDefaultHeaders(HttpClient client)
+        {
+            client.DefaultRequestHeaders.Accept.Add(
+                new MediaTypeWithQualityHeaderValue("application/json"));
+            client.DefaultRequestHeaders.Add(HeaderNames.UserAgent, ".NET HttpClient");
         }
     }
 }
