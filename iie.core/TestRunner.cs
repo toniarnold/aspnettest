@@ -9,9 +9,9 @@ namespace iie
     public class TestRunner : TestRunnerBase, ITestEventListener
     {
         private IConfigurationRoot Configuration { get; }
-        private IHostingEnvironment Environment { get; }
+        private IWebHostEnvironment Environment { get; }
 
-        public TestRunner(IConfigurationRoot config, IHostingEnvironment env, int port) : base(port)
+        public TestRunner(IConfigurationRoot config, IWebHostEnvironment env, int port) : base(port)
         {
             Configuration = config;
             Environment = env;

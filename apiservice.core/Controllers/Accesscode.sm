@@ -1,0 +1,37 @@
+// SM for the AccesscodeController
+
+%import apiservice.Controllers
+
+%start AuthMap::Idle
+%class AccesscodeController
+
+%map AuthMap
+%%
+// State		Transition								End State			Action(s)
+//					Transition Guard
+
+Idle
+{
+				Authenticate(phonenumber: string)		Unverified			{ SMSAccesscode(phonenumber); }
+}
+
+Unverified
+{
+				Verify(accesscode: string)				
+					[ ctxt.IsValid(accesscode) ]		Verified			{ SaveAccesscode(); }	
+
+				Verify(accesscode: string)
+					[ ctxt.HaveMoreAttempts() ]			Unverified			{ IncrementAttempts(); }
+
+				Verify(accesscode: string)				Denied				{}
+}
+
+Verified
+{
+}
+
+Denied
+{
+}
+
+%%

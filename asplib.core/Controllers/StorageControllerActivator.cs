@@ -27,9 +27,9 @@ namespace asplib.Controllers
             get { return this.httpContextAccessor.HttpContext; }
         }
 
-        private IConfigurationRoot Configuration { get; }
+        private IConfiguration Configuration { get; }
 
-        public StorageControllerActivator(IHttpContextAccessor http, IConfigurationRoot configuration)
+        public StorageControllerActivator(IHttpContextAccessor http, IConfiguration configuration)
         {
             this.httpContextAccessor = http;
             this.Configuration = configuration;
@@ -56,6 +56,7 @@ namespace asplib.Controllers
             byte[] bytes;
             Func<byte[], byte[]> filter = null;
 
+            // ---------- Direct GET request ?session= from the Database ----------
             if (this.HttpContext.Request.Method == WebRequestMethods.Http.Get &&
                 Guid.TryParse(this.HttpContext.Request.Query["session"], out sessionOverride))
             {
@@ -98,6 +99,7 @@ namespace asplib.Controllers
                 {
                     (bytes, filter) = StorageImplementation.DatabaseBytes(Configuration, HttpContext, storageID, session);
                     controller = DeserializeController(actionContext, controllerTypeInfo, controllerType, bytes, filter);
+                    ((IStorageController)controller).Session = session;
                 }
                 else
                 {

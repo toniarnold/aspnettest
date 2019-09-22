@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Sources">
+      <UniqueIdentifier>{5abd8184-8079-45af-942d-fa8008485ff9}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Targets">
+      <UniqueIdentifier>{b3b23796-d2b4-4752-8239-17be58afcc75}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Accesscode.sm">
+      <Filter>Sources</Filter>
+    </None>
+    <None Include="Makefile" />
+    <None Include="Accesscode_sm.cs">
+      <Filter>Targets</Filter>
+    </None>
+    <None Include="Accesscode_sm.dot">
+      <Filter>Targets</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="Accesscode_sm.png">
+      <Filter>Targets</Filter>
+    </Image>
+  </ItemGroup>
+</Project>

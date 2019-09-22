@@ -15,10 +15,10 @@ namespace asplib.Controllers
     /// </summary>
     public class SerializableController : Controller, IStorageController
     {
-        public IConfigurationRoot Configuration { get { return this.configuration; } }
+        public IConfiguration Configuration { get { return this.configuration; } }
 
         [NonSerialized]
-        private IConfigurationRoot configuration;
+        private IConfiguration configuration;
 
         public Storage? SessionStorage { get; set; }
 
@@ -27,11 +27,13 @@ namespace asplib.Controllers
 
         public object Model { get { return this.model; } }
 
+        public Guid? Session { get; set; }
+
         public SerializableController()
         {
         }   // NUnit
 
-        public SerializableController(IConfigurationRoot configuration) : base()
+        public SerializableController(IConfiguration configuration) : base()
         {
             this.configuration = configuration;
             this.SetController();
@@ -42,6 +44,7 @@ namespace asplib.Controllers
         /// </summary>
         /// <param name="filter"></param>
         /// <returns></returns>
+        [NonAction]
         public byte[] Serialize(Func<byte[], byte[]> filter = null)
         {
             return Serialization.Serialize(this.GetValues(), filter);
@@ -52,6 +55,7 @@ namespace asplib.Controllers
         /// </summary>
         /// <param name="bytes"></param>
         /// <param name="filter"></param>
+        [NonAction]
         public virtual void Deserialize(byte[] bytes, Func<byte[], byte[]> filter = null)
         {
             var members = (Dictionary<string, object>)Serialization.Deserialize(bytes, filter);

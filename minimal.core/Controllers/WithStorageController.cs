@@ -18,7 +18,7 @@ namespace minimal.Controllers
 
         public List<string> ContentList = new List<string>();
 
-        public WithStorageController(IConfigurationRoot configuration) : base(configuration)
+        public WithStorageController(IConfiguration configuration) : base(configuration)
         {
         }
 

@@ -15,10 +15,10 @@ namespace minimal
     public class Startup
     {
         public IConfigurationRoot Configuration { get; }
-        public IHostingEnvironment Environment { get; }
+        public IWebHostEnvironment Environment { get; }
         public IHttpContextAccessor HttpContext { get; }
 
-        public Startup(IHostingEnvironment env)
+        public Startup(IWebHostEnvironment env)
         {
             Environment = env;
             var dom = new ConfigurationBuilder()
@@ -39,7 +39,10 @@ namespace minimal
                 options.IdleTimeout = TimeSpan.FromMinutes(30);
                 options.Cookie.HttpOnly = true;
             });
-            services.AddMvc()
+            services.AddMvc(options =>
+            { 
+                options.EnableEndpointRouting = false;  
+            })
                     .AddControllersAsServices();
             services.Replace(ServiceDescriptor.Transient<IControllerActivator, StorageControllerActivator>());
             services.AddOptions();
@@ -49,7 +52,7 @@ namespace minimal
             services.AddLogging();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseDeveloperExceptionPage();    // always for this demo
             app.UseExceptionHandler("/Error/Error");

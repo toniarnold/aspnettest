@@ -16,7 +16,7 @@ namespace asplib.Controllers
         HttpContext HttpContext { get; }
 
         // Additional DI members
-        IConfigurationRoot Configuration { get; }
+        IConfiguration Configuration { get; }
 
         /// <summary>
         /// Local session storage type in the instance, overrides the global
@@ -28,6 +28,11 @@ namespace asplib.Controllers
         /// ViewModel used for the current View action method
         /// </summary>
         object Model { get; }
+
+        /// <summary>
+        /// dbo.Main.session when loaded from the Database
+        /// </summary>
+        Guid? Session { get; set; }
     }
 
     /// <summary>

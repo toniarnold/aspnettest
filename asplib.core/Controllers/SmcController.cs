@@ -22,7 +22,7 @@ namespace asplib.Controllers
         {
         }   // NUnit
 
-        public SmcController(IConfigurationRoot configuration) : base(configuration)
+        public SmcController(IConfiguration configuration) : base(configuration)
         {
             this.Construct();
         }

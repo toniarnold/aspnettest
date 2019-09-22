@@ -9,9 +9,9 @@ namespace minimal.Controllers
     public class MinimalController : Controller
     {
         private IConfigurationRoot Configuration { get; }
-        private IHostingEnvironment Environment { get; }
+        private IWebHostEnvironment Environment { get; }
 
-        public MinimalController(IConfigurationRoot config, IHostingEnvironment env, IHttpContextAccessor http)
+        public MinimalController(IConfigurationRoot config, IWebHostEnvironment env, IHttpContextAccessor http)
         {
             Configuration = config;
             Environment = env;

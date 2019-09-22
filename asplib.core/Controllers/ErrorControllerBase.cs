@@ -17,10 +17,10 @@ namespace asplib.Controllers
     /// </summary>
     public class ErrorControllerBase : Controller
     {
-        private IConfigurationRoot Configuration { get; }
+        private IConfiguration Configuration { get; }
         private ILogger Logger { get; }
 
-        public ErrorControllerBase(IConfigurationRoot config, ILogger logger)
+        public ErrorControllerBase(IConfiguration config, ILogger<ErrorControllerBase> logger)
         {
             this.Configuration = config;
             this.Logger = logger;

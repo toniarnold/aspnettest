@@ -1,0 +1,49 @@
+digraph Accesscode {
+
+    node
+        [shape=Mrecord width=1.5];
+
+    subgraph cluster_AuthMap {
+
+        label="AuthMap";
+
+        //
+        // States (Nodes)
+        //
+
+        "AuthMap::Idle"
+            [label="{Idle}"];
+
+        "AuthMap::Unverified"
+            [label="{Unverified}"];
+
+        "AuthMap::Verified"
+            [label="{Verified}"];
+
+        "AuthMap::Denied"
+            [label="{Denied}"];
+
+        "%start"
+            [label="" shape=circle style=filled fillcolor=black width=0.25];
+
+    }
+
+    //
+    // Transitions (Edges)
+    //
+
+    "AuthMap::Idle" -> "AuthMap::Unverified"
+        [label="Authenticate/\lSMSAccesscode;\l"];
+
+    "AuthMap::Unverified" -> "AuthMap::Verified"
+        [label="Verify\l\[ ctxt.IsValid(accesscode) \]/\lSaveAccesscode;\l"];
+
+    "AuthMap::Unverified" -> "AuthMap::Unverified"
+        [label="Verify\l\[ ctxt.HaveMoreAttempts() \]/\lIncrementAttempts;\l"];
+
+    "AuthMap::Unverified" -> "AuthMap::Denied"
+        [label="Verify/\l"];
+
+    "%start" -> "AuthMap::Idle"
+
+}

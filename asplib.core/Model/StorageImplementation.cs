@@ -43,7 +43,7 @@ namespace asplib.Model
         /// <param name="configuration">The configuration.</param>
         /// <param name="httpContext">The HTTP context.</param>
         /// <param name="main">The main.</param>
-        public static void SaveSession(IConfigurationRoot configuration, HttpContext httpContext, object main)
+        public static void SaveSession(IConfiguration configuration, HttpContext httpContext, object main)
         {
             var storageID = GetStorageID(main.GetType().Name);
             httpContext.Session.Set(storageID, StorageImplementation.Bytes(main));
@@ -55,7 +55,7 @@ namespace asplib.Model
         /// <param name="configuration">The configuration.</param>
         /// <param name="httpContext">The HTTP context.</param>
         /// <param name="main">The main.</param>
-        public static void SaveDatabase(IConfigurationRoot configuration, HttpContext httpContext, object main)
+        public static void SaveDatabase(IConfiguration configuration, HttpContext httpContext, object main)
         {
             var storageID = GetStorageID(main.GetType().Name);
             Guid session = Guid.NewGuid();  // cannot exist in the database
@@ -94,7 +94,7 @@ namespace asplib.Model
         /// </summary>
         /// <param name="configuration">The configuration.</param>
         /// <returns></returns>
-        public static Func<byte[], byte[]> EncryptViewState(IConfigurationRoot configuration)
+        public static Func<byte[], byte[]> EncryptViewState(IConfiguration configuration)
         {
             Func<byte[], byte[]> filter = null;
             var key = configuration.GetValue<string>("EncryptViewStateKey");
@@ -111,7 +111,7 @@ namespace asplib.Model
         /// </summary>
         /// <param name="configuration">The configuration.</param>
         /// <returns></returns>
-        public static Func<byte[], byte[]> DecryptViewState(IConfigurationRoot configuration)
+        public static Func<byte[], byte[]> DecryptViewState(IConfiguration configuration)
         {
             Func<byte[], byte[]> filter = null;
             var key = configuration.GetValue<string>("EncryptViewStateKey");
@@ -129,7 +129,7 @@ namespace asplib.Model
         /// <param name="viewstate">The Basee64-encoded ViewState string.</param>
         /// <returns></returns>
         public static (byte[] bytes, Func<byte[], byte[]> filter) ViewStateBytes(
-            IConfigurationRoot configuration, string viewstate)
+            IConfiguration configuration, string viewstate)
         {
             var filter = DecryptViewState(configuration);
             var bytes = Convert.FromBase64String(viewstate);
@@ -137,7 +137,7 @@ namespace asplib.Model
         }
 
         public static (byte[] bytes, Func<byte[], byte[]> filter) DatabaseBytes(
-            IConfigurationRoot configuration, HttpContext httpContext, string storageID, Guid session)
+            IConfiguration configuration, HttpContext httpContext, string storageID, Guid session)
         {
             byte[] bytes;
             Func<byte[], byte[]> filter = null;
@@ -221,7 +221,7 @@ namespace asplib.Model
         /// <param name="sessionStorageID">Optional session-local storage field
         /// for POST requests (not applicable for WebSharper SPA)</param>
         /// <returns></returns>
-        internal static Storage GetStorage(IConfigurationRoot configuration, HttpContext httpContext, string sessionStorageID = null)
+        internal static Storage GetStorage(IConfiguration configuration, HttpContext httpContext, string sessionStorageID = null)
         {
             Storage? storage = null;
             if (httpContext.Request.Method == WebRequestMethods.Http.Post &&
@@ -254,7 +254,7 @@ namespace asplib.Model
         /// </summary>
         /// <param name="configuration"></param>
         /// <returns></returns>
-        public static bool GetEncryptDatabaseStorage(IConfigurationRoot configuration)
+        public static bool GetEncryptDatabaseStorage(IConfiguration configuration)
         {
             var encrypt = configuration.GetValue<bool>("EncryptDatabaseStorage");   // untyped
             bool encryptOverride = EncryptDatabaseStorage ?? false;

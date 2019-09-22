@@ -19,23 +19,35 @@
     </LogicalFolder>
     <LogicalFolder Name="Abfragen" Type="0" Sorted="true">
       <Items>
-        <FileNode Name="clean.sql">
+        <FileNode Name="APISERVICE_DB.create-tables.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:HP:True</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>HP</AssociatedConnSrvName>
           <AssociatedConnUserName />
-          <FullPath>clean.sql</FullPath>
+          <FullPath>APISERVICE_DB.create-tables.sql</FullPath>
         </FileNode>
-        <FileNode Name="FibonacciTest.sql">
+        <FileNode Name="APISERVICE_DB.populate-tables.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:HP:True</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>HP</AssociatedConnSrvName>
           <AssociatedConnUserName />
-          <FullPath>FibonacciTest.sql</FullPath>
+          <FullPath>APISERVICE_DB.populate-tables.sql</FullPath>
         </FileNode>
-        <FileNode Name="Main.sql">
+        <FileNode Name="ASP_DB.clean.sql">
           <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:HP:True</AssociatedConnectionMoniker>
           <AssociatedConnSrvName>HP</AssociatedConnSrvName>
           <AssociatedConnUserName />
-          <FullPath>Main.sql</FullPath>
+          <FullPath>ASP_DB.clean.sql</FullPath>
+        </FileNode>
+        <FileNode Name="ASP_DB.FibonacciTest.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:HP:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>HP</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>ASP_DB.FibonacciTest.sql</FullPath>
+        </FileNode>
+        <FileNode Name="ASP_DB.Main.sql">
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:HP:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>HP</AssociatedConnSrvName>
+          <AssociatedConnUserName />
+          <FullPath>ASP_DB.Main.sql</FullPath>
         </FileNode>
       </Items>
     </LogicalFolder>
