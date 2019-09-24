@@ -15,7 +15,7 @@ namespace apiservice.Controllers
         }
 
         [HttpPost("authenticate")]
-        public async Task<ActionResult<AuthenticateResponse>> Authenticate(AuthenticateQuery query)
+        public async Task<ActionResult<AuthenticateResponse>> Authenticate([FromBody] AuthenticateQuery query)
         {
             await Task.Run(() => this.Fsm.Authenticate(query.Phonenumber));
             var response = new AuthenticateResponse(this.State)
@@ -26,7 +26,7 @@ namespace apiservice.Controllers
         }
 
         [HttpPost("verify")]
-        public async Task<ActionResult<VerifyResponse>> Verify(VerifyQuery query)
+        public async Task<ActionResult<VerifyResponse>> Verify([FromBody] VerifyQuery query)
         {
             await Task.Run(() => this.Fsm.Verify(query.Accesscode));
             var response = new VerifyResponse(this.State)

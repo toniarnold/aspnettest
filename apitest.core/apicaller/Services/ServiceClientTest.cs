@@ -53,14 +53,14 @@ namespace apitest.apicaller.core.Services
             _configuration = ServiceProvider.Configuration;
             _server = CreateApiserviceServer();
 
-            this.SelectMaxIds(ConnectionString, "Main", "mainid");
-            this.SelectMaxIds(ConnectionString, "Accesscode", "accesscodeid");
+            this.SelectMaxId(ConnectionString, "Accesscode", "accesscodeid");
+            this.SelectMaxId(ConnectionString, "Main", "mainid");
         }
 
         [TearDown]
         public void DeleteNewRows()
         {
-            this.DeleteMaxIdRows(ConnectionString);
+            this.DeleteNewRows(ConnectionString);
         }
 
         public TestServer CreateApiserviceServer()

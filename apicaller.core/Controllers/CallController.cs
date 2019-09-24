@@ -25,13 +25,13 @@ namespace apicaller.Controllers
         }
 
         [HttpPost("authenticate")]
-        public async Task<ActionResult<string>> Authenticate(string phonenumber)
+        public async Task<ActionResult<string>> Authenticate([FromBody] string phonenumber)
         {
             return await _serviceClient.Authenticate(phonenumber);
         }
 
         [HttpPost("verify")]
-        public async Task<ActionResult<string>> Verify(string accesscode)
+        public async Task<ActionResult<string>> Verify([FromBody] string accesscode)
         {
             return await _serviceClient.Verify(accesscode);
         }

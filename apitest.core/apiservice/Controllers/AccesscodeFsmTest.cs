@@ -7,6 +7,7 @@ using NUnit.Framework;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using static AccesscodeContext.AuthMap;
 
 namespace apitest.apiservice.Controllers
 {
@@ -52,49 +53,47 @@ namespace apitest.apiservice.Controllers
         {
             Assert.That(this.Fsm, Is.Not.Null);
             Assert.That(this.State.Name, Is.EqualTo("AuthMap.Idle"));
-            Assert.That(this.State, Is.EqualTo(AccesscodeContext.AuthMap.Idle));
+            Assert.That(this.State, Is.EqualTo(Idle));
         }
 
         [Test]
         public void AuthenticateTest()
         {
             const string PHONE = "555012345";
-            Assert.That(this.State, Is.EqualTo(AccesscodeContext.AuthMap.Idle));
+            Assert.That(this.State, Is.EqualTo(Idle));
             this.Fsm.Authenticate(PHONE);
-            Assert.That(this.State, Is.EqualTo(AccesscodeContext.AuthMap.Unverified));
+            Assert.That(this.State, Is.EqualTo(Unverified));
             Assert.That(_pnonenumber, Is.EqualTo(PHONE));
         }
 
         [Test]
         public void AuthenticateVerifyTest()
         {
-            const string PHONE = "555012345";
-            Assert.That(this.State, Is.EqualTo(AccesscodeContext.AuthMap.Idle));
-            this.Fsm.Authenticate(PHONE);
-            Assert.That(this.State, Is.EqualTo(AccesscodeContext.AuthMap.Unverified));
-            Assert.That(_pnonenumber, Is.EqualTo(PHONE));
-            this.Fsm.Verify("0");   // wrong code
-            Assert.That(this.State, Is.EqualTo(AccesscodeContext.AuthMap.Unverified));
+            Assert.That(this.State, Is.EqualTo(Idle));
+            this.Fsm.Authenticate(DbTestData.PHONENUMBER);
+            Assert.That(this.State, Is.EqualTo(Unverified));
+            Assert.That(_pnonenumber, Is.EqualTo(DbTestData.PHONENUMBER));
+            this.Fsm.Verify("wrong code");
+            Assert.That(this.State, Is.EqualTo(Unverified));
             this.Fsm.Verify(_accesscode);   // correct code
-            Assert.That(this.State, Is.EqualTo(AccesscodeContext.AuthMap.Verified));
+            Assert.That(this.State, Is.EqualTo(Verified));
         }
 
         [Test]
         public void AuthenticateVerifyDeniedTest()
         {
-            const string PHONE = "555012345";
-            Assert.That(this.State, Is.EqualTo(AccesscodeContext.AuthMap.Idle));
-            this.Fsm.Authenticate(PHONE);
-            Assert.That(this.State, Is.EqualTo(AccesscodeContext.AuthMap.Unverified));
-            Assert.That(_pnonenumber, Is.EqualTo(PHONE));
+            Assert.That(this.State, Is.EqualTo(Idle));
+            this.Fsm.Authenticate(DbTestData.PHONENUMBER);
+            Assert.That(this.State, Is.EqualTo(Unverified));
+            Assert.That(_pnonenumber, Is.EqualTo(DbTestData.PHONENUMBER));
             this.Fsm.Verify("1");   // wrong code
-            Assert.That(this.State, Is.EqualTo(AccesscodeContext.AuthMap.Unverified));
+            Assert.That(this.State, Is.EqualTo(Unverified));
             this.Fsm.Verify("2");   // wrong code
-            Assert.That(this.State, Is.EqualTo(AccesscodeContext.AuthMap.Unverified));
+            Assert.That(this.State, Is.EqualTo(Unverified));
             this.Fsm.Verify("3");   // wrong code
-            Assert.That(this.State, Is.EqualTo(AccesscodeContext.AuthMap.Unverified));
+            Assert.That(this.State, Is.EqualTo(Unverified));
             this.Fsm.Verify("4");   // wrong code
-            Assert.That(this.State, Is.EqualTo(AccesscodeContext.AuthMap.Denied));
+            Assert.That(this.State, Is.EqualTo(Denied));
         }
 
         [Test]

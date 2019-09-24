@@ -7,6 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using System.Collections.Generic;
 using System.Data;
+using static AccesscodeContext.AuthMap;
 
 namespace apitest.apiservice.Controllers
 {
@@ -81,7 +82,7 @@ namespace apitest.apiservice.Controllers
         {
             _accesscode = ACCESSCODE;
             _pnonenumber = DbTestData.PHONENUMBER;
-            this.State = AccesscodeContext.AuthMap.Unverified;
+            this.State = Unverified;
 
             var query = new VerifyQuery()
             {
@@ -99,7 +100,7 @@ namespace apitest.apiservice.Controllers
         {
             _accesscode = ACCESSCODE;
             _pnonenumber = DbTestData.PHONENUMBER;
-            this.State = AccesscodeContext.AuthMap.Unverified;
+            this.State = Unverified;
 
             var query = new VerifyQuery()
             {
@@ -117,7 +118,7 @@ namespace apitest.apiservice.Controllers
         {
             _accesscode = ACCESSCODE;
             _pnonenumber = DbTestData.PHONENUMBER;
-            this.State = AccesscodeContext.AuthMap.Unverified;
+            this.State = Unverified;
 
             var query = new VerifyQuery()
             {

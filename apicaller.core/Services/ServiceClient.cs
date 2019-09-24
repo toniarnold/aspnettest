@@ -1,10 +1,12 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Net.Http.Headers;
 using System;
+using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
+using static Microsoft.Net.Http.Headers.HeaderNames;
+using static System.Net.Mime.MediaTypeNames;
 
 namespace apicaller.Services
 {
@@ -12,6 +14,7 @@ namespace apicaller.Services
     {
         internal IConfiguration _configuration;
         internal IHttpClientFactory _clientFactory;
+        internal string[] _cookies;
 
         internal virtual Uri ServiceHost
         {
@@ -52,8 +55,9 @@ namespace apicaller.Services
             {
                 var uri = ResouceUri("authenticatePath");
                 var content = new StringContent(phonenumber);
-                await client.PostAsync(uri, content);
-                return "OK";
+                var response = await client.PostAsync(uri, content);
+                _cookies = response.Headers.GetValues(SetCookie).ToArray();
+                return new OkResult();
             }
         }
 
@@ -64,7 +68,7 @@ namespace apicaller.Services
                 var uri = ResouceUri("verifyPath");
                 var content = new StringContent(accesscode);
                 await client.PostAsync(uri, content);
-                return "OK";
+                return new OkResult();
             }
         }
 
@@ -85,8 +89,12 @@ namespace apicaller.Services
         internal void AddDefaultHeaders(HttpClient client)
         {
             client.DefaultRequestHeaders.Accept.Add(
-                new MediaTypeWithQualityHeaderValue("application/json"));
-            client.DefaultRequestHeaders.Add(HeaderNames.UserAgent, ".NET HttpClient");
+                new MediaTypeWithQualityHeaderValue(Application.Json));
+            client.DefaultRequestHeaders.Add(UserAgent, ".NET HttpClient");
+            foreach (var cookie in _cookies ?? Enumerable.Empty<string>())
+            {
+                client.DefaultRequestHeaders.Add(Cookie, cookie);
+            }
         }
     }
 }

@@ -19,7 +19,7 @@ namespace asplib.Model.Db
     public static class DeleteNeNewRowsExtension
     {
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Security", "CA2100:Review SQL queries for security vulnerabilities", Justification = "arguments filtered")]
-        public static void SelectMaxIds(this IDeleteNewRows inst, string connecctionString, string tablename, string columnname)
+        public static void SelectMaxId(this IDeleteNewRows inst, string connecctionString, string tablename, string columnname)
         {
             if (!IsWord(tablename)) throw new ArgumentException($"invalid: [{tablename}]", "tablename");
             if (!IsWord(columnname)) throw new ArgumentException($"invalid: [{columnname}]", "columnname");
@@ -39,14 +39,17 @@ namespace asplib.Model.Db
             }
         }
 
-        [System.Diagnostics.CodeAnalysis.SuppressMessage("Security", "CA2100:Review SQL queries for security vulnerabilities", Justification = "valuess from inst.MaxIds")]
-        public static void DeleteMaxIdRows(this IDeleteNewRows inst, string connecctionString)
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Security", "CA2100:Review SQL queries for security vulnerabilities", Justification = "values from inst.MaxIds also filtered")]
+        public static void DeleteNewRows(this IDeleteNewRows inst, string connecctionString)
         {
             using (var conn = new SqlConnection(connecctionString))
             {
                 conn.Open();
                 foreach ((string tablename, string columnname, object maxid) in inst.MaxIds)
                 {
+                    if (!IsWord(tablename)) throw new ArgumentException($"invalid: [{tablename}]", "tablename");
+                    if (!IsWord(columnname)) throw new ArgumentException($"invalid: [{columnname}]", "columnname");
+
                     var sql = $"DELETE FROM [{tablename}] WHERE [{columnname}] > @maxid";
                     using (var cmd = new SqlCommand(sql, conn))
                     {
