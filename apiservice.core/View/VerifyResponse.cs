@@ -3,7 +3,7 @@ using static AccesscodeContext.AuthMap;
 
 namespace apiservice.View
 {
-    public class VerifyResponse
+    public class VerifyResponse : IMessageResponse
     {
         private readonly AccesscodeContext.AccesscodeControllerState _state;
 
@@ -20,7 +20,7 @@ namespace apiservice.View
                         return $"The phone number {Phonenumber} is now verified";
 
                     case var s when s == Unverified:
-                        return "The access code was wrong, retry";
+                        return "Wrong access code, retry";
 
                     case var s when s == Denied:
                         return "Access denied";

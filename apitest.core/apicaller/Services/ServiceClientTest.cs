@@ -1,6 +1,9 @@
 ﻿using apicaller.Services;
 using apiservice;
+using apiservice.Controllers;
+using asplib.Controllers;
 using asplib.Model.Db;
+using asplib.Services;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
@@ -8,7 +11,8 @@ using Microsoft.Extensions.Hosting;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
-using System.Net.Http;
+using static AccesscodeContext.AuthMap;
+using ApiserviceServiceProvider = apitest.apiservice.ServiceProvider;
 
 namespace apitest.apicaller.core.Services
 {
@@ -42,16 +46,19 @@ namespace apitest.apicaller.core.Services
             get { return _server.BaseAddress; }
         }
 
-        internal override HttpClient CreateHttpClient()
+        // IStaticController of the server for the client
+        private AccesscodeController ServiceController
         {
-            return _server.CreateClient();
+            get { return (AccesscodeController)StaticControllerExtension.GetController(); }
         }
 
         [OneTimeSetUp]
         public void ConfigureServices()
         {
             _configuration = ServiceProvider.Configuration;
-            _server = CreateApiserviceServer();
+            // Use not our own (apicaller) configuration, but the one from the apiservice server:
+            _server = CreateApiserviceServer(ApiserviceServiceProvider.Configuration);
+            _clientFactory = new TestServerClientFactory(_server);
 
             this.SelectMaxId(ConnectionString, "Accesscode", "accesscodeid");
             this.SelectMaxId(ConnectionString, "Main", "mainid");
@@ -63,19 +70,29 @@ namespace apitest.apicaller.core.Services
             this.DeleteNewRows(ConnectionString);
         }
 
-        public TestServer CreateApiserviceServer()
+        [TearDown]
+        public void DeleteSession()
         {
-            var builder = new WebHostBuilder()
-                .UseEnvironment("Development")
-                .UseConfiguration(_configuration)
-                .UseStartup<Startup>();
-            return new TestServer(builder);
+            Cookies = null;
         }
 
         [OneTimeTearDown]
         public void DisposeTestServer()
         {
             _server.Dispose();
+        }
+
+        /// <summary>
+        /// "Foreign" TestServer for the client
+        /// </summary>
+        /// <returns></returns>
+        private TestServer CreateApiserviceServer(IConfiguration configuration)
+        {
+            var builder = new WebHostBuilder()
+                .UseEnvironment("Development")
+                .UseConfiguration(configuration)
+                .UseStartup<Startup>();
+            return new TestServer(builder);
         }
 
         #endregion scaffolding
@@ -93,6 +110,68 @@ namespace apitest.apicaller.core.Services
         {
             var response = this.Helo().Result;
             Assert.That(response, Is.EqualTo("\"ehlo\""));  // quoted due to "application/json" header
+        }
+
+        [Test]
+        public void AuthenticateTest()
+        {
+            using (var client = GetHttpClient())
+            {
+                var response = this.Authenticate(DbTestData.PHONENUMBER).Result;
+                Assert.That(response.Value, Does.StartWith("Sent an SMS"));
+                Assert.That(response.Value, Does.Contain(DbTestData.PHONENUMBER));
+                Assert.That(Cookies, Is.Not.Null); // created as session
+                Assert.That(Cookies, Has.Exactly(1).Items);
+                // Assertions on IStaticController
+                Assert.That(ServiceController.State, Is.EqualTo(Unverified));
+                Assert.That(ServiceController._pnonenumber, Is.EqualTo(DbTestData.PHONENUMBER));
+            }
+        }
+
+        [Test]
+        public void AuthenticateVerifyTest()
+        {
+            using (var client = GetHttpClient())
+            {
+                var responseAuth = this.Authenticate(DbTestData.PHONENUMBER).Result;
+                Assert.That(responseAuth.Value, Does.StartWith("Sent an SMS"));
+                Assert.That(responseAuth.Value, Does.Contain(DbTestData.PHONENUMBER));
+                Assert.That(ServiceController.State, Is.EqualTo(Unverified));
+                var accesscodeOk = ServiceController._accesscode;
+
+                var responseWrong = this.Verify("wrong code").Result;
+                Assert.That(responseWrong.Value, Does.StartWith("Wrong access code"));
+                Assert.That(ServiceController.State, Is.EqualTo(Unverified));
+
+                var responseOk = this.Verify(accesscodeOk).Result;
+                Assert.That(responseOk.Value, Does.StartWith("The phone number"));
+                Assert.That(responseAuth.Value, Does.Contain(DbTestData.PHONENUMBER));
+                Assert.That(ServiceController.State, Is.EqualTo(Verified));
+            }
+        }
+
+        [Test]
+        public void AuthenticateVerifyDeniedTest()
+        {
+            using (var client = GetHttpClient())
+            {
+                var responseAuth = this.Authenticate(DbTestData.PHONENUMBER).Result;
+                Assert.That(responseAuth.Value, Does.StartWith("Sent an SMS"));
+                Assert.That(responseAuth.Value, Does.Contain(DbTestData.PHONENUMBER));
+                Assert.That(ServiceController.State, Is.EqualTo(Unverified));
+                var accesscodeOk = ServiceController._accesscode;
+
+                for (int i = 0; i < 3; i++)
+                {
+                    var responseWrong = this.Verify("wrong code").Result;
+                    Assert.That(responseWrong.Value, Does.StartWith("Wrong access code"));
+                    Assert.That(ServiceController.State, Is.EqualTo(Unverified));
+                }
+
+                var responseDenied = this.Verify("wrong code").Result;
+                Assert.That(responseDenied.Value, Does.StartWith("Access denied"));
+                Assert.That(ServiceController.State, Is.EqualTo(Denied));
+            }
         }
     }
 }

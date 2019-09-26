@@ -86,13 +86,11 @@ namespace apitest.apiservice.Controllers
             this.Fsm.Authenticate(DbTestData.PHONENUMBER);
             Assert.That(this.State, Is.EqualTo(Unverified));
             Assert.That(_pnonenumber, Is.EqualTo(DbTestData.PHONENUMBER));
-            this.Fsm.Verify("1");   // wrong code
-            Assert.That(this.State, Is.EqualTo(Unverified));
-            this.Fsm.Verify("2");   // wrong code
-            Assert.That(this.State, Is.EqualTo(Unverified));
-            this.Fsm.Verify("3");   // wrong code
-            Assert.That(this.State, Is.EqualTo(Unverified));
-            this.Fsm.Verify("4");   // wrong code
+            for (int i = 0; i < 3; i++)
+            {
+                this.Fsm.Verify("wrong code");
+            }
+            this.Fsm.Verify("4");
             Assert.That(this.State, Is.EqualTo(Denied));
         }
 

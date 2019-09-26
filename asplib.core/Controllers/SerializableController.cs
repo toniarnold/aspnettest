@@ -18,7 +18,7 @@ namespace asplib.Controllers
         public IConfiguration Configuration { get { return this.configuration; } }
 
         [NonSerialized]
-        private IConfiguration configuration;
+        protected IConfiguration configuration;
 
         public Storage? SessionStorage { get; set; }
 

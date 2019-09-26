@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.TestHost;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using System;
+using System.IO;
 
 namespace apitest.apiservice
 {
@@ -50,6 +51,9 @@ namespace apitest.apiservice
                 {
                     _configuration = new ConfigurationBuilder()
                         .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                        .AddJsonFile(
+                            Path.Combine("apiservice", "appsettings.json"),
+                                optional: false, reloadOnChange: true)
                         .Build();
                     var startup = new Startup(_configuration);
                     var sc = new ServiceCollection();

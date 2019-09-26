@@ -1,6 +1,6 @@
 ﻿namespace apiservice.View
 {
-    public class AuthenticateQuery
+    public class AuthenticateRequest
     {
         public string Phonenumber { get; set; }
     }

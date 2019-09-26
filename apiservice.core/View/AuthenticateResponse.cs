@@ -1,6 +1,6 @@
 ﻿namespace apiservice.View
 {
-    public class AuthenticateResponse
+    public class AuthenticateResponse : IMessageResponse
     {
         private readonly AccesscodeContext.AccesscodeControllerState _state;
 

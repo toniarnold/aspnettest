@@ -1,7 +1,12 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using apicaller.Services.Dto;
+using apiservice.View;
+using asplib.Services;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Net.Http.Headers;
 using System;
 using System.Linq;
+using System.Net;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using System.Threading.Tasks;
@@ -14,7 +19,8 @@ namespace apicaller.Services
     {
         internal IConfiguration _configuration;
         internal IHttpClientFactory _clientFactory;
-        internal string[] _cookies;
+
+        public string[] Cookies { get; set; }
 
         internal virtual Uri ServiceHost
         {
@@ -23,7 +29,7 @@ namespace apicaller.Services
 
         internal HttpClient GetHttpClient()
         {
-            var client = CreateHttpClient();
+            var client = _clientFactory.CreateClient("ServiceClient");
             AddDefaultHeaders(client);
             return client;
         }
@@ -53,11 +59,19 @@ namespace apicaller.Services
         {
             using (var client = GetHttpClient())
             {
-                var uri = ResouceUri("authenticatePath");
-                var content = new StringContent(phonenumber);
-                var response = await client.PostAsync(uri, content);
-                _cookies = response.Headers.GetValues(SetCookie).ToArray();
-                return new OkResult();
+                var query = new AuthenticateRequest()
+                {
+                    Phonenumber = phonenumber
+                };
+                var uri = ResouceUri("authenticate");
+                var response = await client.PostAsync(uri, Json.Serialize(query));
+                if (response.StatusCode != HttpStatusCode.OK)
+                {
+                    return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
+                }
+                Cookies = response.Headers.GetValues(SetCookie).ToArray();
+                var result = Json.Deserialize<MessageResponseDto>(response.Content);
+                return result.Message;
             }
         }
 
@@ -65,10 +79,14 @@ namespace apicaller.Services
         {
             using (var client = GetHttpClient())
             {
-                var uri = ResouceUri("verifyPath");
-                var content = new StringContent(accesscode);
-                await client.PostAsync(uri, content);
-                return new OkResult();
+                var query = new VerifyRequest()
+                {
+                    Accesscode = accesscode
+                };
+                var uri = ResouceUri("verify");
+                var response = await client.PostAsync(uri, Json.Serialize(query));
+                var result = Json.Deserialize<MessageResponseDto>(response.Content);
+                return result.Message;
             }
         }
 
@@ -76,14 +94,9 @@ namespace apicaller.Services
         {
             Uri retval;
             var builder = new UriBuilder(ServiceHost);
-            builder.Path = _configuration.GetValue<string>("authenticatePath");
+            builder.Path = _configuration.GetValue<string>("accesscodePath").TrimEnd('/') + "/";
             Uri.TryCreate(builder.Uri, command, out retval);
             return retval;
-        }
-
-        internal virtual HttpClient CreateHttpClient()
-        {
-            return _clientFactory.CreateClient();
         }
 
         internal void AddDefaultHeaders(HttpClient client)
@@ -91,9 +104,9 @@ namespace apicaller.Services
             client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue(Application.Json));
             client.DefaultRequestHeaders.Add(UserAgent, ".NET HttpClient");
-            foreach (var cookie in _cookies ?? Enumerable.Empty<string>())
+            foreach (var cookie in Cookies ?? Enumerable.Empty<string>())
             {
-                client.DefaultRequestHeaders.Add(Cookie, cookie);
+                client.DefaultRequestHeaders.Add(HeaderNames.Cookie, cookie);
             }
         }
     }

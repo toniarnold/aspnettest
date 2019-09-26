@@ -67,7 +67,7 @@ namespace apitest.apiservice.Controllers
         [Test]
         public void AuthenticateTest()
         {
-            var query = new AuthenticateQuery()
+            var query = new AuthenticateRequest()
             {
                 Phonenumber = DbTestData.PHONENUMBER
             };
@@ -84,7 +84,7 @@ namespace apitest.apiservice.Controllers
             _pnonenumber = DbTestData.PHONENUMBER;
             this.State = Unverified;
 
-            var query = new VerifyQuery()
+            var query = new VerifyRequest()
             {
                 Accesscode = ACCESSCODE
             };
@@ -102,7 +102,7 @@ namespace apitest.apiservice.Controllers
             _pnonenumber = DbTestData.PHONENUMBER;
             this.State = Unverified;
 
-            var query = new VerifyQuery()
+            var query = new VerifyRequest()
             {
                 Accesscode = "wrong"
             };
@@ -120,7 +120,7 @@ namespace apitest.apiservice.Controllers
             _pnonenumber = DbTestData.PHONENUMBER;
             this.State = Unverified;
 
-            var query = new VerifyQuery()
+            var query = new VerifyRequest()
             {
                 Accesscode = "wrong"
             };

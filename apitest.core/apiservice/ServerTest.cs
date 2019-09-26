@@ -28,6 +28,8 @@ namespace apitest.apiservice
 
         private TestServer _server;
 
+        private IHttpClientFactory _clientFactory;
+
         /// <summary>
         /// IDeleteNewRows
         /// </summary>
@@ -44,7 +46,7 @@ namespace apitest.apiservice
 
         private HttpClient GetHttpClient()
         {
-            var client = _server.CreateClient();
+            var client = _clientFactory.CreateClient("ServiceClient");
             client.DefaultRequestHeaders.Accept.Add(
                 new MediaTypeWithQualityHeaderValue(Application.Json));
             client.DefaultRequestHeaders.Add(UserAgent, ".NET HttpClient");
@@ -62,6 +64,7 @@ namespace apitest.apiservice
         {
             _configuration = ServiceProvider.Configuration;
             _server = ServiceProvider.CreateTestServer();
+            _clientFactory = new TestServerClientFactory(_server);
 
             this.SelectMaxId(ConnectionString, "Accesscode", "accesscodeid");
             this.SelectMaxId(ConnectionString, "Main", "mainid");
@@ -96,7 +99,7 @@ namespace apitest.apiservice
         {
             using (var client = GetHttpClient())
             {
-                var query = new AuthenticateQuery()
+                var query = new AuthenticateRequest()
                 {
                     Phonenumber = DbTestData.PHONENUMBER
                 };
@@ -119,7 +122,7 @@ namespace apitest.apiservice
         {
             using (var client = GetHttpClient())    // doessn't retain session cookies by itself
             {
-                var queryAuth = new AuthenticateQuery()
+                var queryAuth = new AuthenticateRequest()
                 {
                     Phonenumber = DbTestData.PHONENUMBER
                 };
@@ -133,7 +136,7 @@ namespace apitest.apiservice
                 // Get the correct access code that "leaks" through IStaticController:
                 var accesscodeOk = ServiceController._accesscode;
 
-                var queryVerifyWrong = new VerifyQuery()
+                var queryVerifyWrong = new VerifyRequest()
                 {
                     Accesscode = "wrong code"
                 };
@@ -141,7 +144,7 @@ namespace apitest.apiservice
                 var resultWrong = Json.Deserialize<AuthenticateResponse>(responseWrong.Content);
                 Assert.That(resultWrong.State, Is.EqualTo("AuthMap.Unverified"));
 
-                var queryVerifyOk = new VerifyQuery()
+                var queryVerifyOk = new VerifyRequest()
                 {
                     Accesscode = accesscodeOk
                 };
@@ -156,7 +159,7 @@ namespace apitest.apiservice
         {
             using (var client = GetHttpClient())    // doessn't retain session cookies by itself
             {
-                var queryAuth = new AuthenticateQuery()
+                var queryAuth = new AuthenticateRequest()
                 {
                     Phonenumber = DbTestData.PHONENUMBER
                 };
@@ -164,25 +167,20 @@ namespace apitest.apiservice
                 var cookies = responseAuth.Headers.GetValues(SetCookie).ToList();
                 client.DefaultRequestHeaders.Add(Cookie, cookies[0]);   // set session
 
-                var queryVerifyWrong = new VerifyQuery()
+                var queryVerifyWrong = new VerifyRequest()
                 {
                     Accesscode = "wrong code"
                 };
-                var responseWrong1 = client.PostAsync("/api/accesscode/verify", Json.Serialize(queryVerifyWrong)).Result;
-                var resultWrong1 = Json.Deserialize<AuthenticateResponse>(responseWrong1.Content);
-                Assert.That(resultWrong1.State, Is.EqualTo("AuthMap.Unverified"));
+                for (int i = 0; i < 3; i++)
+                {
+                    var responseWrong = client.PostAsync("/api/accesscode/verify", Json.Serialize(queryVerifyWrong)).Result;
+                    var resultWrong = Json.Deserialize<AuthenticateResponse>(responseWrong.Content);
+                    Assert.That(resultWrong.State, Is.EqualTo("AuthMap.Unverified"));
+                }
 
-                var responseWrong2 = client.PostAsync("/api/accesscode/verify", Json.Serialize(queryVerifyWrong)).Result;
-                var resultWrong2 = Json.Deserialize<AuthenticateResponse>(responseWrong2.Content);
-                Assert.That(resultWrong2.State, Is.EqualTo("AuthMap.Unverified"));
-
-                var responseWrong3 = client.PostAsync("/api/accesscode/verify", Json.Serialize(queryVerifyWrong)).Result;
-                var resultWrong3 = Json.Deserialize<AuthenticateResponse>(responseWrong3.Content);
-                Assert.That(resultWrong3.State, Is.EqualTo("AuthMap.Unverified"));
-
-                var responseWrong4 = client.PostAsync("/api/accesscode/verify", Json.Serialize(queryVerifyWrong)).Result;
-                var resultWrong4 = Json.Deserialize<AuthenticateResponse>(responseWrong4.Content);
-                Assert.That(resultWrong4.State, Is.EqualTo("AuthMap.Denied"));
+                var responseDenied = client.PostAsync("/api/accesscode/verify", Json.Serialize(queryVerifyWrong)).Result;
+                var resultDenied = Json.Deserialize<AuthenticateResponse>(responseDenied.Content);
+                Assert.That(resultDenied.State, Is.EqualTo("AuthMap.Denied"));
             }
         }
     }

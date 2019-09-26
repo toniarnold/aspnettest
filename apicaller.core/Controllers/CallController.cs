@@ -12,9 +12,17 @@ namespace apicaller.Controllers
     [Clsid("1541FD7B-0F77-4E2C-B61E-4A479D662E23")]
     public class CallController : SerializableController
     {
-        internal ServiceClient _serviceClient;
+        internal IServiceClient _serviceClient;
+        internal string[] _serviceClientCookies;
 
-        public CallController(IConfiguration configuration) : base(configuration)
+        public CallController(
+            IConfiguration configuration,
+            IServiceClient serviceClient) : base(configuration)
+        {
+            _serviceClient = serviceClient;
+        }
+
+        public CallController()
         {
         }
 
@@ -27,12 +35,15 @@ namespace apicaller.Controllers
         [HttpPost("authenticate")]
         public async Task<ActionResult<string>> Authenticate([FromBody] string phonenumber)
         {
-            return await _serviceClient.Authenticate(phonenumber);
+            var authenticateResult = await _serviceClient.Authenticate(phonenumber);
+            _serviceClientCookies = _serviceClient.Cookies;
+            return authenticateResult;
         }
 
         [HttpPost("verify")]
         public async Task<ActionResult<string>> Verify([FromBody] string accesscode)
         {
+            _serviceClient.Cookies = _serviceClientCookies;
             return await _serviceClient.Verify(accesscode);
         }
     }

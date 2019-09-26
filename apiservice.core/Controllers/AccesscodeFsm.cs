@@ -5,7 +5,6 @@ using asplib.Controllers;
 using asplib.Model;
 using Microsoft.Extensions.Configuration;
 using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
 
 namespace apiservice.Controllers
@@ -62,7 +61,10 @@ namespace apiservice.Controllers
 
         internal void SaveAccesscode()
         {
-            Trace.Assert(this.Session != null, "Requires an existing Main to save an Accesscode entity");
+            if (this.Session == null)
+            {
+                throw new InvalidOperationException("Requires an existing Main to save an Accesscode entity");
+            }
             var accesscodeEntity = new Accesscode()
             {
                 Session = (Guid)this.Session,
