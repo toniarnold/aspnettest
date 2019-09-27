@@ -11,7 +11,7 @@ namespace apiservice.Controllers
         [HttpGet("helo")]
         public async Task<ActionResult<string>> Helo()
         {
-            return new ActionResult<string>("ehlo");
+            return await Task.Run(() => new ActionResult<string>("ehlo"));
         }
 
         [HttpPost("authenticate")]

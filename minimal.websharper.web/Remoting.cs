@@ -10,7 +10,7 @@ namespace minimal.websharper.web
     public static class Remoting
     {
         internal static IConfigurationRoot Configuration { get; set; }
-        internal static IHostingEnvironment Environment { get; set; }
+        internal static IWebHostEnvironment Environment { get; set; }
 
         private static DefaultHttpContext HttpContext
         {

@@ -3,7 +3,7 @@ using System;
 using System.Data.SqlClient;
 using System.Linq;
 
-namespace asplib.Model
+namespace asplib.Model.Db
 {
     /// <summary>
     /// ASP.NET Core Entity Framework DAL

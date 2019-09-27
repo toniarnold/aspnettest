@@ -1,5 +1,6 @@
 ﻿using asplib.Common;
 using asplib.Controllers;
+using asplib.Model.Db;
 using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
@@ -192,12 +193,10 @@ namespace asplib.Model
                         {
                             using (var db = new ASP_DBEntities())
                             {
-                                var sql = @"
-                                        DELETE FROM Main
-                                        WHERE session = @session
-                                    ";
-                                var parameters = new object[] { new SqlParameter("session", session) };
-                                db.Database.ExecuteSqlCommand(sql, parameters);
+                                db.Database.ExecuteSqlInterpolated($@"
+                                    DELETE FROM Main
+                                    WHERE session = {session}
+                                    ");
                             }
                         }
                         break;

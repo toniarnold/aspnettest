@@ -1,7 +1,7 @@
 ﻿using iie;
 using NUnit.Framework;
 using System.Collections.Generic;
-using CalculatorController = asp.Controllers.Calculator;
+using CalculatorController = asp.Controllers.CalculatorController;
 
 namespace asptest.Calculator
 {
@@ -10,7 +10,7 @@ namespace asptest.Calculator
     /// </summary>
     [TestFixture]
     [Category("SHDocVw.InternetExplorer")]
-    public abstract class CalculatorTestBase : SmcTest<CalculatorController, CalculatorContext, CalculatorContext.CalculatorState>
+    public abstract class CalculatorTestBase : SmcTest<CalculatorController, CalculatorContext, CalculatorContext.CalculatorControllerState>
     {
         protected Stack<string> Stack
         {

@@ -40,7 +40,7 @@ namespace asplib.Model
                 {
                     return formattter.Deserialize(stream);
                 }
-                catch (Exception e)
+                catch (Exception)
                 {
                     return null;
                 }

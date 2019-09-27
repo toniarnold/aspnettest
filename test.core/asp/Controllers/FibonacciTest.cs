@@ -1,6 +1,7 @@
 ﻿extern alias core;
 
 using asplib.Model;
+using asplib.Model.Db;
 using core::asp.Controllers;
 using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
@@ -31,11 +32,11 @@ namespace test.asp.Controllers
         [Test]
         public void VerifyFibonacciSums()
         {
-            Calculator inst;
+            CalculatorController inst;
             using (var db = new ASP_DBEntities())
             {
                 var bytes = db.LoadMain(this.config.GetValue<Guid>("asp.Controllers.FibonacciTest"));
-                inst = new Calculator();
+                inst = new CalculatorController();
                 inst.Deserialize(bytes);
                 inst.Fsm.Owner = inst;  // As in ISmcControl.LoadMain<M, F, S>(), see SMC Manual Section 9
             }

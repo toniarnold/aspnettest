@@ -8,17 +8,13 @@ namespace asp.Controllers
     /// <summary>
     /// Task class for Calculator.sm/Calculator_sm.cs
     /// </summary>
-    public partial class Calculator
+    public partial class CalculatorController
     {
         protected Stack<string> stack;
 
-        public Calculator()
+        public CalculatorController()
         {
             this.Construct();
-        }
-
-        public Calculator(IConfigurationRoot config) : base(config)
-        {
         }
 
         /// <summary>

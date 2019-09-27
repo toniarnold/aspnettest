@@ -10,7 +10,7 @@ namespace asptest.Calculator
     [Category("SHDocVw.InternetExplorer")]
     public class FibonacciTest : CalculatorTestBase
     {
-        private IConfigurationRoot config;
+        private IConfiguration config;
 
         [OneTimeSetUp]
         public void SetUpConfig()

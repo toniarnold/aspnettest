@@ -1,5 +1,6 @@
 ﻿using asplib.Controllers;
 using asplib.Model;
+using asplib.Model.Db;
 using iie;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -15,10 +16,10 @@ namespace asp.core
     public class Startup
     {
         public IConfigurationRoot Configuration { get; }
-        public IHostingEnvironment Environment { get; }
+        public IWebHostEnvironment Environment { get; }
         public IHttpContextAccessor HttpContext { get; }
 
-        public Startup(IHostingEnvironment env)
+        public Startup(IWebHostEnvironment env)
         {
             Environment = env;
             var dom = new ConfigurationBuilder()
@@ -49,7 +50,7 @@ namespace asp.core
             services.AddLogging();
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseDeveloperExceptionPage();    // always for this demo
             app.UseExceptionHandler("/Error/Error");
@@ -57,11 +58,10 @@ namespace asp.core
             app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseSession();
-            app.UseMvc(routes =>
+            app.UseRouting();
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Calculator}/{action=Index}/{id?}");
+                endpoints.MapControllerRoute("default", "{controller=Calculator}/{action=Index}/{id?}");
             });
         }
     }

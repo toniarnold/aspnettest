@@ -1,5 +1,6 @@
 ﻿using asplib.Controllers;
 using asplib.Model;
+using asplib.Model.Db;
 using iie;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -60,11 +61,10 @@ namespace minimal
             app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseSession();
-            app.UseMvc(routes =>
+            app.UseRouting();
+            app.UseEndpoints(endpoints =>
             {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller=Minimal}/{action=Index}/{id?}");
+                endpoints.MapControllerRoute("default", "{controller=Minimal}/{action=Index}/{id?}");
             });
         }
     }

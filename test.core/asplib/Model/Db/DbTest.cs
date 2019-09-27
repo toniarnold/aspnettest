@@ -1,4 +1,5 @@
 ﻿using asplib.Model;
+using asplib.Model.Db;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
@@ -6,7 +7,7 @@ using System;
 using System.Data;
 using System.Threading;
 
-namespace test.asplib.Model
+namespace test.asplib.Model.Db
 {
     [TestFixture]
     [Category("DbContext")]

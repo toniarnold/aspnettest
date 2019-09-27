@@ -1,4 +1,5 @@
 ﻿using asplib.Model;
+using asplib.Model.Db;
 using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
 using System;

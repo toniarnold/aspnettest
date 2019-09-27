@@ -8,10 +8,10 @@ namespace iie
 {
     public class TestRunner : TestRunnerBase, ITestEventListener
     {
-        private IConfigurationRoot Configuration { get; }
+        private IConfiguration Configuration { get; }
         private IWebHostEnvironment Environment { get; }
 
-        public TestRunner(IConfigurationRoot config, IWebHostEnvironment env, int port) : base(port)
+        public TestRunner(IConfiguration config, IWebHostEnvironment env, int port) : base(port)
         {
             Configuration = config;
             Environment = env;

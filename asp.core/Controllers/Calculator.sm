@@ -50,7 +50,7 @@
 %import asp.Controllers
 
 %start Map1::Splash
-%class Calculator
+%class CalculatorController
 
 %map Map1
 %%

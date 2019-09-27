@@ -1,4 +1,5 @@
 ﻿using asplib.Model;
+using asplib.Model.Db;
 using asplib.Remoting;
 using iie;
 using Microsoft.AspNetCore;
@@ -16,10 +17,10 @@ namespace asp.websharper.spa
     public class Startup
     {
         public IConfigurationRoot Configuration { get; }
-        public IHostingEnvironment Environment { get; }
+        public IWebHostEnvironment Environment { get; }
         public static HttpContext HttpContext { get; set; }
 
-        public Startup(IHostingEnvironment env)
+        public Startup(IWebHostEnvironment env)
         {
             Environment = env;
             var dom = new ConfigurationBuilder()
@@ -45,7 +46,7 @@ namespace asp.websharper.spa
                 .AddSitelet(TestResult.Main);
         }
 
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseDeveloperExceptionPage()
                 .UseMiddleware<IIEMiddleware>()

@@ -11,11 +11,11 @@ using System;
 namespace asp.Controllers
 {
     [Clsid("A4A6AD10-6435-4E86-B047-9BC3DCCF5982")]
-    public partial class Calculator : SmcController<CalculatorContext, CalculatorContext.CalculatorState>
+    public partial class CalculatorController : SmcController<CalculatorContext, CalculatorContext.CalculatorControllerState>
     {
-        private IHostingEnvironment Environment { get; }
+        private IWebHostEnvironment Environment { get; }
 
-        public Calculator(IConfigurationRoot config, IHostingEnvironment env, IHttpContextAccessor http) : base(config)
+        public CalculatorController(IConfiguration config, IWebHostEnvironment env, IHttpContextAccessor http) : base(config)
         {
             this.Construct();   // SMC part of the class
             Environment = env;

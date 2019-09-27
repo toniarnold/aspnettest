@@ -9,7 +9,7 @@ namespace asp.Models
         public string Operand { get; set; }
 
         [BindNever]
-        public CalculatorContext.CalculatorState State { get; set; }
+        public CalculatorContext.CalculatorControllerState State { get; set; }
 
         [BindNever]
         public Stack<string> Stack { get; set; }

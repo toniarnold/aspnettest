@@ -1,5 +1,6 @@
 ﻿using apiservice.Model.Db;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
 using System;
 using System.Data;
@@ -8,12 +9,24 @@ using System.Linq;
 namespace apitest.apiservice.Model.Db
 {
     /// <summary>
-    /// "Learning Tests" for an EF Core DbContext with the default constructor for the local DB.
+    /// "Learning Tests" for an EF Core DbContext
     /// </summary>
     [Category("Database")]
     [TestFixture]
     public class AspserviceDbContextTest : AspserviceDbContext
     {
+        /// <summary>
+        /// Replaces the generated OnConfiguring in AspserviceDbContext
+        /// </summary>
+        /// <param name="optionsBuilder"></param>
+        protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
+        {
+            if (!optionsBuilder.IsConfigured)
+            {
+                optionsBuilder.UseSqlServer(ServiceProvider.Configuration.GetConnectionString("ApiserviceDb"));
+            }
+        }
+
         [Test]
         public void LoadSessionLinqTest()
         {

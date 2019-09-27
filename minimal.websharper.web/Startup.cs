@@ -1,4 +1,5 @@
 ﻿using asplib.Model;
+using asplib.Model.Db;
 using iie;
 using Microsoft.AspNetCore;
 using Microsoft.AspNetCore.Builder;
@@ -14,10 +15,10 @@ namespace minimal.websharper.web
     public class Startup
     {
         public IConfigurationRoot Configuration { get; }
-        public IHostingEnvironment Environment { get; }
+        public IWebHostEnvironment Environment { get; }
         public IHttpContextAccessor HttpContext { get; }
 
-        public Startup(IHostingEnvironment env)
+        public Startup(IWebHostEnvironment env)
         {
             Environment = env;
             var dom = new ConfigurationBuilder()

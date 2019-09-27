@@ -59,12 +59,12 @@ namespace apicaller.Services
         {
             using (var client = GetHttpClient())
             {
-                var query = new AuthenticateRequest()
+                var request = new AuthenticateRequest()
                 {
                     Phonenumber = phonenumber
                 };
                 var uri = ResouceUri("authenticate");
-                var response = await client.PostAsync(uri, Json.Serialize(query));
+                var response = await client.PostAsync(uri, Json.Serialize(request));
                 if (response.StatusCode != HttpStatusCode.OK)
                 {
                     return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
@@ -79,12 +79,12 @@ namespace apicaller.Services
         {
             using (var client = GetHttpClient())
             {
-                var query = new VerifyRequest()
+                var request = new VerifyRequest()
                 {
                     Accesscode = accesscode
                 };
                 var uri = ResouceUri("verify");
-                var response = await client.PostAsync(uri, Json.Serialize(query));
+                var response = await client.PostAsync(uri, Json.Serialize(request));
                 var result = Json.Deserialize<MessageResponseDto>(response.Content);
                 return result.Message;
             }

@@ -1,5 +1,6 @@
 ﻿using asplib.Controllers;
 using asplib.Model;
+using asplib.Model.Db;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
@@ -16,9 +17,10 @@ namespace test.asplib.Controllers
         public dynamic ViewBag { get; }
 
         public HttpContext HttpContext { get { return null; } }
-        public IConfigurationRoot Configuration { get { return null; } }
+        public IConfiguration Configuration { get { return null; } }
         public Storage? SessionStorage { get { return null; } set { } }
         public object Model { get { return null; } }
+        public Guid? Session { get; set; }
 
         [OneTimeSetUp]
         public void SetUpConnectionString()

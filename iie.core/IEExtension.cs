@@ -1,4 +1,5 @@
 ﻿using asplib.Model;
+using asplib.Model.Db;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Data.SqlClient;
@@ -80,12 +81,10 @@ namespace iie
         {
             using (var db = new ASP_DBEntities())
             {
-                var sql = @"
+                db.Database.ExecuteSqlInterpolated($@"
                     DELETE FROM Main
-                    WHERE mainid > @max_mainid
-                ";
-                var parameters = new object[] { new SqlParameter("max_mainid", max_mainid) };
-                db.Database.ExecuteSqlCommand(sql, parameters);
+                    WHERE mainid > {@max_mainid}
+                    ");
             }
         }
 

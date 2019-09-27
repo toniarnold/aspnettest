@@ -12,14 +12,14 @@ namespace asplib.Remoting
     /// </summary>
     public static class RemotingContext
     {
-        public static void Set(IHostingEnvironment env, IConfigurationRoot conf)
+        public static void Set(IWebHostEnvironment env, IConfigurationRoot conf)
         {
             Environment = env;
             Configuration = conf;
         }
 
         public static IConfigurationRoot Configuration { get; private set; }
-        public static IHostingEnvironment Environment { get; private set; }
+        public static IWebHostEnvironment Environment { get; private set; }
 
         public static DefaultHttpContext HttpContext
         {

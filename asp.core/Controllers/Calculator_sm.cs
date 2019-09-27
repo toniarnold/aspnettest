@@ -22,7 +22,7 @@ public sealed class CalculatorContext :
 // Properties.
 //
 
-    public CalculatorState State
+    public CalculatorControllerState State
     {
         get
         {
@@ -32,7 +32,7 @@ public sealed class CalculatorContext :
                     new statemap.StateUndefinedException());
             }
 
-            return ((CalculatorState) state_);
+            return ((CalculatorControllerState) state_);
         }
         set
         {
@@ -40,7 +40,7 @@ public sealed class CalculatorContext :
         }
     }
 
-    public Calculator Owner
+    public CalculatorController Owner
     {
         get
         {
@@ -52,7 +52,7 @@ public sealed class CalculatorContext :
         }
     }
 
-    public CalculatorState[] States
+    public CalculatorControllerState[] States
     {
         get
         {
@@ -64,7 +64,7 @@ public sealed class CalculatorContext :
 // Member methods.
 //
 
-    public CalculatorContext(Calculator owner) :
+    public CalculatorContext(CalculatorController owner) :
         base (Map1.Splash)
     {
         _owner = owner;
@@ -172,7 +172,7 @@ public sealed class CalculatorContext :
         return;
     }
 
-    public CalculatorState valueOf(int stateId)
+    public CalculatorControllerState valueOf(int stateId)
     {
         return(_States[stateId]);
     }
@@ -195,7 +195,7 @@ public sealed class CalculatorContext :
             int index = 0;
             String name;
 
-            foreach (CalculatorState state in stateStack_)
+            foreach (CalculatorControllerState state in stateStack_)
             {
                 name = "stackIndex" + index;
                 info.AddValue(name, state.Id);
@@ -213,12 +213,12 @@ public sealed class CalculatorContext :
 //
 
     [NonSerialized]
-    private Calculator _owner;
+    private CalculatorController _owner;
 
     // Map state IDs to state objects.
     // Used to deserialize an FSM.
     [NonSerialized]
-    private static CalculatorState[] _States =
+    private static CalculatorControllerState[] _States =
     {
         Map1.Splash,
         Map1.Enter,
@@ -233,7 +233,7 @@ public sealed class CalculatorContext :
 //
 
     [System.CodeDom.Compiler.GeneratedCode("smc"," v. 6.6.0")]
-    public abstract class CalculatorState :
+    public abstract class CalculatorControllerState :
         statemap.State
     {
     //-----------------------------------------------------------
@@ -249,7 +249,7 @@ public sealed class CalculatorContext :
     // Member methods.
     //
 
-        internal CalculatorState(string name, int id) :
+        internal CalculatorControllerState(string name, int id) :
             base (name, id)
         {}
 
@@ -355,7 +355,7 @@ public sealed class CalculatorContext :
 
     [System.CodeDom.Compiler.GeneratedCode("smc"," v. 6.6.0")]
     internal class Map1_Default :
-        CalculatorState
+        CalculatorControllerState
     {
     //-----------------------------------------------------------
     // Properties.
@@ -465,7 +465,7 @@ public sealed class CalculatorContext :
             protected internal override void Enter(CalculatorContext context, string value)
             {
 
-                Calculator ctxt = context.Owner;
+                CalculatorController ctxt = context.Owner;
 
                 if (double.TryParse(value, out double _))
                 {
@@ -546,11 +546,11 @@ public sealed class CalculatorContext :
             protected internal override void Add(CalculatorContext context, Stack<string> stack)
             {
 
-                Calculator ctxt = context.Owner;
+                CalculatorController ctxt = context.Owner;
 
                 if (stack.Count >= 2)
                 {
-                    CalculatorState endState = context.State;
+                    CalculatorControllerState endState = context.State;
 
                     context.ClearState();
 
@@ -578,11 +578,11 @@ public sealed class CalculatorContext :
             protected internal override void Clr(CalculatorContext context, Stack<string> stack)
             {
 
-                Calculator ctxt = context.Owner;
+                CalculatorController ctxt = context.Owner;
 
                 if (stack.Count >= 1)
                 {
-                    CalculatorState endState = context.State;
+                    CalculatorControllerState endState = context.State;
 
                     context.ClearState();
 
@@ -610,9 +610,9 @@ public sealed class CalculatorContext :
             protected internal override void ClrAll(CalculatorContext context, Stack<string> stack)
             {
 
-                Calculator ctxt = context.Owner;
+                CalculatorController ctxt = context.Owner;
 
-                CalculatorState endState = context.State;
+                CalculatorControllerState endState = context.State;
 
                 context.ClearState();
 
@@ -631,11 +631,11 @@ public sealed class CalculatorContext :
             protected internal override void Div(CalculatorContext context, Stack<string> stack)
             {
 
-                Calculator ctxt = context.Owner;
+                CalculatorController ctxt = context.Owner;
 
                 if (stack.Count >= 2)
                 {
-                    CalculatorState endState = context.State;
+                    CalculatorControllerState endState = context.State;
 
                     context.ClearState();
 
@@ -672,11 +672,11 @@ public sealed class CalculatorContext :
             protected internal override void Mul(CalculatorContext context, Stack<string> stack)
             {
 
-                Calculator ctxt = context.Owner;
+                CalculatorController ctxt = context.Owner;
 
                 if (stack.Count >= 2)
                 {
-                    CalculatorState endState = context.State;
+                    CalculatorControllerState endState = context.State;
 
                     context.ClearState();
 
@@ -704,11 +704,11 @@ public sealed class CalculatorContext :
             protected internal override void Pow(CalculatorContext context, Stack<string> stack)
             {
 
-                Calculator ctxt = context.Owner;
+                CalculatorController ctxt = context.Owner;
 
                 if (stack.Count >= 1)
                 {
-                    CalculatorState endState = context.State;
+                    CalculatorControllerState endState = context.State;
 
                     context.ClearState();
 
@@ -736,11 +736,11 @@ public sealed class CalculatorContext :
             protected internal override void Sqrt(CalculatorContext context, Stack<string> stack)
             {
 
-                Calculator ctxt = context.Owner;
+                CalculatorController ctxt = context.Owner;
 
                 if (stack.Count >= 1)
                 {
-                    CalculatorState endState = context.State;
+                    CalculatorControllerState endState = context.State;
 
                     context.ClearState();
 
@@ -768,11 +768,11 @@ public sealed class CalculatorContext :
             protected internal override void Sub(CalculatorContext context, Stack<string> stack)
             {
 
-                Calculator ctxt = context.Owner;
+                CalculatorController ctxt = context.Owner;
 
                 if (stack.Count >= 2)
                 {
-                    CalculatorState endState = context.State;
+                    CalculatorControllerState endState = context.State;
 
                     context.ClearState();
 

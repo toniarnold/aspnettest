@@ -7,7 +7,7 @@ using CalculatorContext = core::CalculatorContext;
 namespace test.asp.Controllers
 {
     [TestFixture]
-    public class CalculatorTest : Calculator
+    public class CalculatorControllerTest : CalculatorController
     {
         [SetUp]
         public void SetUp()
