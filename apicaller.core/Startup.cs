@@ -1,6 +1,5 @@
 using apicaller.Services;
 using asplib.Controllers;
-using asplib.Model;
 using asplib.Model.Db;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -57,7 +56,7 @@ namespace apicaller
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthorization();
-            app.UseSession();   // for SerializableController
+            app.UseSession();   // for PersistentController
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

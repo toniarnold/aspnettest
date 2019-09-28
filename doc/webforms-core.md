@@ -119,7 +119,7 @@ Cookie") is now simply a *design choice*:
 
 | Function | WebForms | Core |
 | --- | --- | --- |
-| Objects persisted | Dedicated serializable ```Main``` | All serializable fields of the MVC Controller class inheriting from ```SerializableController``` | 
+| Objects persisted | Dedicated serializable ```Main``` | All serializable fields of the MVC Controller class inheriting from ```PersistentController``` | 
 | Hidden Input: Load the posted state | Explicit ```LoadMain()``` in the ```Page_Load``` event handler | Implicitly by  ```StorageControllerActivator``` |
 | Hidden Input: Render the new state | Explicit ```SaveMain()``` in the ```OnPreRender``` event handler | Explicit ```<input viewstate="@ViewBag.ViewState" />``` in the View |
 | Session Cookie: Load the stored state |  Explicit ```LoadMain()``` in the ```Page_Load``` event handler | Implicitly by ```StorageControllerActivator``` |
@@ -492,7 +492,7 @@ non-interchangeable dependency.
 In aspnettest for ASP.NET Core, the counterpart to the central ```Main```
 access point in ASP.NET WebForms is the serialized ```Controller``` maintained
 by the testing infrastructure which - when derived from
-```SerializableController``` - automatically assigns the ViewModel object used
+```PersistentController``` - automatically assigns the ViewModel object used
 in the last controller action as an accessible property to the Controller:
 
 

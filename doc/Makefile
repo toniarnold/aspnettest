@@ -9,8 +9,8 @@ DIA = components.dia \
 	test-with-storage.dia \
 	interaction-default.dia \
 	interaction-withroot.dia \
-	webforms-core.dia
-
+	webforms-core.dia \
+	apicaller-apiservice.dia
 
 
 .SUFFIXES: .dia .png

@@ -13,7 +13,7 @@ namespace asplib.Controllers
     /// Controller inheriting from the non-serializable Mvc.Controller
     /// with Serialize/Deserialize methods just for the additional members.
     /// </summary>
-    public class SerializableController : Controller, IStorageController
+    public class PersistentController : Controller, IStorageController
     {
         public IConfiguration Configuration { get { return this.configuration; } }
 
@@ -29,11 +29,11 @@ namespace asplib.Controllers
 
         public Guid? Session { get; set; }
 
-        public SerializableController()
+        public PersistentController()
         {
         }   // NUnit
 
-        public SerializableController(IConfiguration configuration) : base()
+        public PersistentController(IConfiguration configuration) : base()
         {
             this.configuration = configuration;
             this.SetController();
@@ -163,7 +163,7 @@ namespace asplib.Controllers
                  f.FieldType.IsSerializable &&
                  !f.Attributes.HasFlag(FieldAttributes.NotSerialized));
             members.AddRange(serializalbeFields);
-            if (type != typeof(SerializableController)) // ceiling parent
+            if (type != typeof(PersistentController)) // ceiling parent
             {
                 this.GetFields(type.BaseType, members);
             }

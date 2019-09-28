@@ -6,7 +6,7 @@ namespace apiservice.Services
     /// <summary>
     /// SMS service stub just writing the secret to the console
     /// </summary>
-    public class SMSService : ISMSService
+    public class SMSServiceMock : ISMSService
     {
         public async Task Send(string phonenumber, string message)
         {

@@ -39,6 +39,11 @@
     </None>
     <None Include="django-selenium.md" />
     <None Include="webforms-core.md" />
+    <None Include="restapi.md" />
+    <None Include="websharper.md" />
+    <None Include="apicaller-apiservice.dia">
+      <Filter>Sources</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="components.png">
@@ -60,6 +65,9 @@
       <Filter>Targets</Filter>
     </Image>
     <Image Include="test-with-storage.png">
+      <Filter>Targets</Filter>
+    </Image>
+    <Image Include="apicaller-apiservice.png">
       <Filter>Targets</Filter>
     </Image>
   </ItemGroup>

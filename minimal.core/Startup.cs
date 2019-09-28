@@ -1,5 +1,4 @@
 ﻿using asplib.Controllers;
-using asplib.Model;
 using asplib.Model.Db;
 using iie;
 using Microsoft.AspNetCore.Builder;
@@ -41,8 +40,8 @@ namespace minimal
                 options.Cookie.HttpOnly = true;
             });
             services.AddMvc(options =>
-            { 
-                options.EnableEndpointRouting = false;  
+            {
+                options.EnableEndpointRouting = false;
             })
                     .AddControllersAsServices();
             services.Replace(ServiceDescriptor.Transient<IControllerActivator, StorageControllerActivator>());

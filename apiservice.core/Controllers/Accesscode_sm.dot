@@ -26,24 +26,23 @@ digraph Accesscode {
         "%start"
             [label="" shape=circle style=filled fillcolor=black width=0.25];
 
+        //
+        // Transitions (Edges)
+        //
+
+        "AuthMap::Idle" -> "AuthMap::Unverified"
+            [label="Authenticate/\lSMSAccesscode;\l"];
+
+        "AuthMap::Unverified" -> "AuthMap::Verified"
+            [label="Verify\l\[ ctxt.IsValid(accesscode) \]/\lSaveAccesscode;\l"];
+
+        "AuthMap::Unverified" -> "AuthMap::Unverified"
+            [label="Verify\l\[ ctxt.HaveMoreAttempts() \]/\lIncrementAttempts;\l"];
+
+        "AuthMap::Unverified" -> "AuthMap::Denied"
+            [label="Verify/\l"];
+
+        "%start" -> "AuthMap::Idle"
     }
-
-    //
-    // Transitions (Edges)
-    //
-
-    "AuthMap::Idle" -> "AuthMap::Unverified"
-        [label="Authenticate/\lSMSAccesscode;\l"];
-
-    "AuthMap::Unverified" -> "AuthMap::Verified"
-        [label="Verify\l\[ ctxt.IsValid(accesscode) \]/\lSaveAccesscode;\l"];
-
-    "AuthMap::Unverified" -> "AuthMap::Unverified"
-        [label="Verify\l\[ ctxt.HaveMoreAttempts() \]/\lIncrementAttempts;\l"];
-
-    "AuthMap::Unverified" -> "AuthMap::Denied"
-        [label="Verify/\l"];
-
-    "%start" -> "AuthMap::Idle"
 
 }

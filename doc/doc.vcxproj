@@ -19,6 +19,7 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <None Include="apicaller-apiservice.dia" />
     <None Include="architecture.md" />
     <None Include="components.dia" />
     <None Include="iie-component.dia" />
@@ -28,14 +29,17 @@
     <None Include="Makefile" />
     <None Include="django-selenium.md" />
     <None Include="recordings.md" />
+    <None Include="restapi.md" />
     <None Include="setup.md" />
     <None Include="test-with-storage.dia" />
     <None Include="test-without-storage.dia" />
     <None Include="toc.md" />
     <None Include="webforms-core.md" />
+    <None Include="websharper.md" />
     <None Include="writing.md" />
   </ItemGroup>
   <ItemGroup>
+    <Image Include="apicaller-apiservice.png" />
     <Image Include="components.png" />
     <Image Include="iie-component.png" />
     <Image Include="iie-page.png" />

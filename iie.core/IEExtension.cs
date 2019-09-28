@@ -1,8 +1,6 @@
-﻿using asplib.Model;
-using asplib.Model.Db;
+﻿using asplib.Model.Db;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Data.SqlClient;
 
 namespace iie
 {

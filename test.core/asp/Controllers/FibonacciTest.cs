@@ -1,6 +1,5 @@
 ﻿extern alias core;
 
-using asplib.Model;
 using asplib.Model.Db;
 using core::asp.Controllers;
 using Microsoft.Extensions.Configuration;

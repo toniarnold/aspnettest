@@ -15,11 +15,11 @@
       <FileName>Model\StorageImplementation.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="asplib.Controllers.SerializableController">
+  <Class Name="asplib.Controllers.PersistentController">
     <Position X="8" Y="0.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAoBAAAgAAAIAAAAAAACDBAAAAgAgAAAAIAAA=</HashCode>
-      <FileName>Controllers\SerializableController.cs</FileName>
+      <HashCode>AAAAAAAAoBAAAwAAAIAAAAAAACDBAAAAgAgAAAAIAAA=</HashCode>
+      <FileName>Controllers\PersistentController.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
@@ -54,7 +54,7 @@
   <Interface Name="asplib.Controllers.IStorageController">
     <Position X="4" Y="2.5" Width="1.5" />
     <TypeIdentifier>
-      <HashCode>AAAAAAAAABAAAgAAAAAAAAAAAAAAAAAAgAgAACAAAAA=</HashCode>
+      <HashCode>AAAAAAAAABAAAwAAAAAAAAAAAAAAAAAAgAgAACAAAAA=</HashCode>
       <FileName>Controllers\IStorageController.cs</FileName>
     </TypeIdentifier>
   </Interface>

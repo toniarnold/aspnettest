@@ -6,7 +6,6 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Specialized;
-using System.Data.SqlClient;
 using System.Net;
 
 namespace asplib.Model
@@ -365,9 +364,9 @@ namespace asplib.Model
         /// <returns></returns>
         public static bool TryGetBytes(object main, out byte[] bytes, Func<byte[], byte[]> filter = null)
         {
-            if (main is SerializableController)
+            if (main is PersistentController)
             {
-                bytes = ((SerializableController)main).Serialize(filter); // shallow
+                bytes = ((PersistentController)main).Serialize(filter); // shallow
                 return true;
             }
             else if (main.GetType().IsSerializable)

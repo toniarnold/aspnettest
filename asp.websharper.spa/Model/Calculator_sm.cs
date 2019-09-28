@@ -13,7 +13,7 @@ using System.Collections.Generic;
 
 using asp.websharper.spa.Model;
 [Serializable]
-[System.CodeDom.Compiler.GeneratedCode("smc"," v. 6.6.0")]
+[System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.0.2")]
 public sealed class CalculatorContext :
     statemap.FSMContext,
     ISerializable
@@ -232,7 +232,7 @@ public sealed class CalculatorContext :
 // Inner classes.
 //
 
-    [System.CodeDom.Compiler.GeneratedCode("smc"," v. 6.6.0")]
+    [System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.0.2")]
     public abstract class CalculatorState :
         statemap.State
     {
@@ -314,7 +314,7 @@ public sealed class CalculatorContext :
                     context.GetTransition()));
         }
     }
-    [System.CodeDom.Compiler.GeneratedCode("smc"," v. 6.6.0")]
+    [System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.0.2")]
 
     internal abstract class Map1
     {
@@ -353,7 +353,7 @@ public sealed class CalculatorContext :
 
     }
 
-    [System.CodeDom.Compiler.GeneratedCode("smc"," v. 6.6.0")]
+    [System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.0.2")]
     internal class Map1_Default :
         CalculatorState
     {
@@ -381,7 +381,7 @@ public sealed class CalculatorContext :
     // Inner classes.
     //
 
-        [System.CodeDom.Compiler.GeneratedCode("smc"," v. 6.6.0")]
+        [System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.0.2")]
         internal class Map1_Splash :
             Map1_Default
         {
@@ -438,7 +438,7 @@ public sealed class CalculatorContext :
             }
         }
 
-        [System.CodeDom.Compiler.GeneratedCode("smc"," v. 6.6.0")]
+        [System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.0.2")]
         internal class Map1_Enter :
             Map1_Default
         {
@@ -519,7 +519,7 @@ public sealed class CalculatorContext :
             }
         }
 
-        [System.CodeDom.Compiler.GeneratedCode("smc"," v. 6.6.0")]
+        [System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.0.2")]
         internal class Map1_Calculate :
             Map1_Default
         {
@@ -821,7 +821,7 @@ public sealed class CalculatorContext :
             }
         }
 
-        [System.CodeDom.Compiler.GeneratedCode("smc"," v. 6.6.0")]
+        [System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.0.2")]
         internal class Map1_ErrorNumeric :
             Map1_Default
         {
@@ -878,7 +878,7 @@ public sealed class CalculatorContext :
             }
         }
 
-        [System.CodeDom.Compiler.GeneratedCode("smc"," v. 6.6.0")]
+        [System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.0.2")]
         internal class Map1_ErrorTuple :
             Map1_Default
         {
@@ -935,7 +935,7 @@ public sealed class CalculatorContext :
             }
         }
 
-        [System.CodeDom.Compiler.GeneratedCode("smc"," v. 6.6.0")]
+        [System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.0.2")]
         internal class Map1_ErrorEmpty :
             Map1_Default
         {

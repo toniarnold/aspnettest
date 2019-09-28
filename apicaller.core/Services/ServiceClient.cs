@@ -59,17 +59,10 @@ namespace apicaller.Services
         {
             using (var client = GetHttpClient())
             {
-                var request = new AuthenticateRequest()
-                {
-                    Phonenumber = phonenumber
-                };
-                var uri = ResouceUri("authenticate");
-                var response = await client.PostAsync(uri, Json.Serialize(request));
-                if (response.StatusCode != HttpStatusCode.OK)
-                {
-                    return new StatusCodeResult((int)HttpStatusCode.InternalServerError);
-                }
-                Cookies = response.Headers.GetValues(SetCookie).ToArray();
+                var request = new AuthenticateRequest() { Phonenumber = phonenumber };
+                var response = await client.PostAsync(ResouceUri("authenticate"), Json.Serialize(request));
+                if (response.StatusCode != HttpStatusCode.OK) return new StatusCodeResult((int)HttpStatusCode.ServiceUnavailable);
+                this.Cookies = response.Headers.GetValues(SetCookie).ToArray();
                 var result = Json.Deserialize<MessageResponseDto>(response.Content);
                 return result.Message;
             }
@@ -79,12 +72,9 @@ namespace apicaller.Services
         {
             using (var client = GetHttpClient())
             {
-                var request = new VerifyRequest()
-                {
-                    Accesscode = accesscode
-                };
-                var uri = ResouceUri("verify");
-                var response = await client.PostAsync(uri, Json.Serialize(request));
+                var request = new VerifyRequest() { Accesscode = accesscode };
+                var response = await client.PostAsync(ResouceUri("verify"), Json.Serialize(request));
+                if (response.StatusCode != HttpStatusCode.OK) return new StatusCodeResult((int)HttpStatusCode.ServiceUnavailable);
                 var result = Json.Deserialize<MessageResponseDto>(response.Content);
                 return result.Message;
             }

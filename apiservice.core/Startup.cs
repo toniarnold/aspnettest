@@ -1,7 +1,6 @@
 using apiservice.Model.Db;
 using apiservice.Services;
 using asplib.Controllers;
-using asplib.Model;
 using asplib.Model.Db;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -44,7 +43,7 @@ namespace apiservice
 
             services.AddDbContext<AspserviceDbContext>(options => options.UseSqlServer(Configuration.GetConnectionString("ApiserviceDb")));
             services.AddScoped<IAspserviceDb, AspserviceDb>();
-            services.AddScoped<ISMSService, SMSService>();
+            services.AddScoped<ISMSService, SMSServiceMock>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -57,7 +56,7 @@ namespace apiservice
             app.UseHttpsRedirection();
             app.UseRouting();
             app.UseAuthorization();
-            app.UseSession();   // for SerializableController
+            app.UseSession();   // for PersistentController
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();

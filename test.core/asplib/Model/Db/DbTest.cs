@@ -144,7 +144,7 @@ namespace test.asplib.Model.Db
                 try
                 {
                     var sql = db.InsertSQL(typeof(TestClass), bytes);
-                    db.Database.ExecuteSqlCommand(sql);
+                    db.Database.ExecuteSqlRaw(sql);
                     // really just executability without exception
                 }
                 finally

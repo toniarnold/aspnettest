@@ -10,11 +10,11 @@ namespace asplib.Controllers
     // If the application listens for FSM state transitions, then event handlers must also be put back in place.
 
     /// <summary>
-    /// Specialization of SerializableController with State
+    /// Specialization of PersistentController with State
     /// </summary>
     /// <typeparam name="F"></typeparam>
     /// <typeparam name="S"></typeparam>
-    public class SmcController<F, S> : SerializableController
+    public class SmcController<F, S> : PersistentController
         where F : statemap.FSMContext
         where S : statemap.State
     {

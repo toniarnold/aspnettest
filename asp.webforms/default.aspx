@@ -24,9 +24,9 @@
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
     <asp:ImageButton ID="testButton" runat="server" OnClick="testButton_Click"
         ImageUrl="nunit.png" CssClass="nunitimg" />
-    <iie:TestResult ID="testResult" runat="server"
-        CssClass="testresult" />
-    <uc:calculator ID="calculator" runat="server"
-        StorageLinkUrl="triptych.aspx"
-        StorageLinkClientID="TriptychLink" />
+    <iie:testresult id="testResult" runat="server"
+        cssclass="testresult" />
+    <uc:calculator id="calculator" runat="server"
+        storagelinkurl="triptych.aspx"
+        storagelinkclientid="TriptychLink" />
 </asp:Content>

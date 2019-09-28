@@ -1,6 +1,5 @@
 ﻿using apicaller.Services;
 using asplib.Controllers;
-using asplib.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using System.Threading.Tasks;
@@ -9,8 +8,7 @@ namespace apicaller.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Clsid("1541FD7B-0F77-4E2C-B61E-4A479D662E23")]
-    public class CallController : SerializableController
+    public class CallController : PersistentController
     {
         internal IServiceClient _serviceClient;
         internal string[] _serviceClientCookies;

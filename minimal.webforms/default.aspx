@@ -50,8 +50,8 @@
             </ul>
             <asp:ImageButton ID="testButton" runat="server" OnClick="testButton_Click"
                 ImageUrl="nunit.png" CssClass="nunitimg" />
-            <iie:TestResult ID="testResult" runat="server"
-                CssClass="testresult" />
+            <iie:testresult id="testResult" runat="server"
+                cssclass="testresult" />
         </div>
     </form>
 </body>

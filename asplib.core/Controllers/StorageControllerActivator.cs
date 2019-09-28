@@ -113,7 +113,7 @@ namespace asplib.Controllers
         }
 
         /// <summary>
-        /// Controller deserialization, either shallow (SerializableController) or deep (POCO controller)
+        /// Controller deserialization, either shallow (PersistentController) or deep (POCO controller)
         /// Robustly return a fresh/new instance if bytes are null.
         /// </summary>
         /// <param name="actionContext"></param>
@@ -125,13 +125,13 @@ namespace asplib.Controllers
                                                      byte[] bytes, Func<byte[], byte[]> filter = null)
         {
             object controller;
-            if (controllerTypeInfo.IsSubclassOf(typeof(SerializableController)))
+            if (controllerTypeInfo.IsSubclassOf(typeof(PersistentController)))
             {
                 // Instantiate and populate own fields with the serialized objects
                 controller = actionContext.HttpContext.RequestServices.GetService(controllerType);
                 if (bytes != null)
                 {
-                    ((SerializableController)controller).Deserialize(bytes, filter);
+                    ((PersistentController)controller).Deserialize(bytes, filter);
                 }
             }
             else if (controllerTypeInfo.IsSerializable)
@@ -149,7 +149,7 @@ namespace asplib.Controllers
             else
             {
                 throw new ArgumentException(String.Format(
-                    "{0} is neither a SerializableController nor a POCO controller",
+                    "{0} is neither a PersistentController nor a POCO controller",
                     controllerType.Name));
             }
 

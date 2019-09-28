@@ -36,7 +36,6 @@
 using System;
 using System.IO;
 using System.Diagnostics;
-using System.Diagnostics.CodeAnalysis;
 
 namespace statemap
 {
@@ -269,7 +268,6 @@ namespace statemap
         }
 
         // Release all acquired resources.
-        [SuppressMessage("Microsoft.Performance", "CA1821:Remove empty Finalizers")]
         ~FSMContext()  //TODO: Add disposable
         {
             name_ = null;

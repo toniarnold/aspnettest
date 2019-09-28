@@ -10,7 +10,7 @@ namespace test.asplib.Controllers
     // Build a Controller class hierarchy to test recursive member serialization
     public class NonSerializable { }
 
-    public class Controller1 : SerializableController
+    public class Controller1 : PersistentController
     {
         public string String1 { get; set; }
 
@@ -37,7 +37,7 @@ namespace test.asplib.Controllers
     }
 
     [TestFixture]
-    public class SerializableControllerTest : SerializableController
+    public class PersistentControllerTest : PersistentController
     {
         [Test]
         public void GetFieldsTest()

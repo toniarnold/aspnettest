@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Xml;
 
@@ -79,12 +78,6 @@ namespace iie
             {
                 return string.Join("<br />", this.Summary);
             }
-        }
-
-        [Obsolete("Replaced with SummaryHtml", true)]
-        public string PassedString
-        {
-            get { return this.SummaryHtml; }
         }
 
         public void OnTestEvent(string report)
