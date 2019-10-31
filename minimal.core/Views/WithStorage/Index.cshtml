@@ -28,7 +28,7 @@
         // Poor workaround for ASP.NET AutoPostBack="true"
         function doStoragePostBack(storage) {
             // "con­t­re cœur" client side: Immediately change the <input sessionstorage />
-            // before the PostBack such that the StorageControllerActivator picks up
+            // before the PostBack such that the PersistentControllerActivator picks up
             // the newly chosen storage before the WithStorageController has a chance
             // to react to the ChangeStorage action.
             document.getElementById("sessionstorage").value = storage;

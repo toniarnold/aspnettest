@@ -13,7 +13,7 @@ namespace asplib.Controllers
     /// Controller inheriting from the non-serializable Mvc.Controller
     /// with Serialize/Deserialize methods just for the additional members.
     /// </summary>
-    public class PersistentController : Controller, IStorageController
+    public class PersistentController : Controller, IPersistentController
     {
         public IConfiguration Configuration { get { return this.configuration; } }
 

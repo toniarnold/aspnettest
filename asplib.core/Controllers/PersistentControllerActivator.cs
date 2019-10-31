@@ -19,7 +19,7 @@ using System.Reflection;
 
 namespace asplib.Controllers
 {
-    public class StorageControllerActivator : IControllerActivator
+    public class PersistentControllerActivator : IControllerActivator
     {
         private IHttpContextAccessor httpContextAccessor;
 
@@ -30,7 +30,7 @@ namespace asplib.Controllers
 
         private IConfiguration Configuration { get; }
 
-        public StorageControllerActivator(IHttpContextAccessor http, IConfiguration configuration)
+        public PersistentControllerActivator(IHttpContextAccessor http, IConfiguration configuration)
         {
             this.httpContextAccessor = http;
             this.Configuration = configuration;
@@ -100,7 +100,7 @@ namespace asplib.Controllers
                 {
                     (bytes, filter) = StorageImplementation.DatabaseBytes(Configuration, HttpContext, storageID, session);
                     controller = DeserializeController(actionContext, controllerTypeInfo, controllerType, bytes, filter);
-                    ((IStorageController)controller).Session = session;
+                    ((IPersistentController)controller).Session = session;
                 }
                 else
                 {

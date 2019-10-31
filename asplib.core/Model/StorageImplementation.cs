@@ -12,7 +12,7 @@ namespace asplib.Model
 {
     /// <summary>
     /// Storage implementation w/o ASP.NET MVC specific runtime dependencies
-    /// used both by the StorageControllerExtension and the StorageServer for
+    /// used both by the PersistentControllerExtension and the StorageServer for
     /// asplib.websharper.
     /// </summary>
     public static class StorageImplementation
@@ -358,7 +358,7 @@ namespace asplib.Model
 
         /// <summary>
         /// Serializes the given controller into a byte array if it is
-        /// instantiable by this StorageControllerExtension
+        /// instantiable by this PersistentControllerExtension
         /// </summary>
         /// <param name="main"></param>
         /// <returns></returns>

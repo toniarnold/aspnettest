@@ -35,7 +35,7 @@ namespace apiservice
             });
             services.AddMvc()
                     .AddControllersAsServices();
-            services.Replace(ServiceDescriptor.Transient<IControllerActivator, StorageControllerActivator>());
+            services.Replace(ServiceDescriptor.Transient<IControllerActivator, PersistentControllerActivator>());
             services.AddOptions();
             services.AddSingleton(Configuration);
             services.AddHttpContextAccessor();

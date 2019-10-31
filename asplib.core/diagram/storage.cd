@@ -1,10 +1,10 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
 <ClassDiagram MajorVersion="1" MinorVersion="1">
-  <Class Name="asplib.Controllers.StorageControllerActivator">
+  <Class Name="asplib.Controllers.PersistentControllerActivator">
     <Position X="0.5" Y="0.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAAAAAAAAAAAAAAiAAAAAEAAgAAAADAAAAA=</HashCode>
-      <FileName>Controllers\StorageControllerActivator.cs</FileName>
+      <FileName>Controllers\PersistentControllerActivator.cs</FileName>
     </TypeIdentifier>
     <Lollipop Position="0.2" />
   </Class>
@@ -37,11 +37,11 @@
       <FileName>Controllers\IStaticController.cs</FileName>
     </TypeIdentifier>
   </Class>
-  <Class Name="asplib.Controllers.StorageControllerExtension" Collapsed="true">
+  <Class Name="asplib.Controllers.PersistentControllerExtension" Collapsed="true">
     <Position X="5.75" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAAAABAAYAEAEACAAAAAAAQAAAIAAAAAAAAIA=</HashCode>
-      <FileName>Controllers\IStorageController.cs</FileName>
+      <FileName>Controllers\IPersistentController.cs</FileName>
     </TypeIdentifier>
   </Class>
   <Interface Name="asplib.Controllers.IStaticController">
@@ -51,11 +51,11 @@
       <FileName>Controllers\IStaticController.cs</FileName>
     </TypeIdentifier>
   </Interface>
-  <Interface Name="asplib.Controllers.IStorageController">
+  <Interface Name="asplib.Controllers.IPersistentController">
     <Position X="4" Y="2.5" Width="1.5" />
     <TypeIdentifier>
       <HashCode>AAAAAAAAABAAAwAAAAAAAAAAAAAAAAAAgAgAACAAAAA=</HashCode>
-      <FileName>Controllers\IStorageController.cs</FileName>
+      <FileName>Controllers\IPersistentController.cs</FileName>
     </TypeIdentifier>
   </Interface>
   <Font Name="Segoe UI" Size="9" />

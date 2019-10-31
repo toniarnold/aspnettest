@@ -11,9 +11,9 @@ namespace test.asplib.Controllers
     [TestFixture]
     [Serializable]
     [Clsid("00000000-0000-0000-0000-000000000000")]
-    public class ControlStorageExtensionTest : IStorageController
+    public class PersistentControllerExtensionTest : IPersistentController
     {
-        // IStorageController
+        // IPersistentController
         public dynamic ViewBag { get; }
 
         public HttpContext HttpContext { get { return null; } }
@@ -34,13 +34,13 @@ namespace test.asplib.Controllers
         [Test]
         public void GetViewStateNameTest()
         {
-            Assert.That(this.GetStorageID(), Is.EqualTo("_STORAGEID_ControlStorageExtensionTest"));
+            Assert.That(this.GetStorageID(), Is.EqualTo("_STORAGEID_PersistentControllerExtensionTest"));
         }
 
         [Test]
         public void GetSessionStorageNameTest()
         {
-            Assert.That(this.GetSessionStorageID(), Is.EqualTo("_SESSIONSTORAGEID_ControlStorageExtensionTest"));
+            Assert.That(this.GetSessionStorageID(), Is.EqualTo("_SESSIONSTORAGEID_PersistentControllerExtensionTest"));
         }
 
         private string TestProperty { get; set; }
@@ -52,7 +52,7 @@ namespace test.asplib.Controllers
             var viewstate = this.ViewState();
             var fields = viewstate.Split(":");
             var bytes = Convert.FromBase64String(fields[1]);
-            var copy = (ControlStorageExtensionTest)Serialization.Deserialize(bytes);
+            var copy = (PersistentControllerExtensionTest)Serialization.Deserialize(bytes);
             Assert.That(copy.TestProperty, Is.EqualTo("test value"));
         }
 
@@ -66,7 +66,7 @@ namespace test.asplib.Controllers
             var fields = viewstate.Split(":");
             var encrypted = Convert.FromBase64String(fields[1]);
             var bytes = Crypt.Decrypt(secret, encrypted);
-            var copy = (ControlStorageExtensionTest)Serialization.Deserialize(bytes);
+            var copy = (PersistentControllerExtensionTest)Serialization.Deserialize(bytes);
             Serialization.Deserialize(bytes);
             Assert.That(copy.TestProperty, Is.EqualTo("test value"));
         }

@@ -39,7 +39,7 @@ namespace asplib.Remoting
         }
 
         /// <summary>
-        ///  Mirrors the MVC StorageControllerActivator for the WebSharper
+        ///  Mirrors the MVC PersistentControllerActivator for the WebSharper
         ///  context.
         /// </summary>
         /// <typeparam name="M"></typeparam>
