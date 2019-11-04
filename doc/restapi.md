@@ -1,7 +1,7 @@
 # REST API with SMC
 
 * [SMC API service with database persistence](#smc-api-service-with-database-persistence)
-* [API client with HTTP header persistence](#api-client-with-http-header-persistence)
+* [RESTful API client with HTTP header persistence](#restful-api-client-with-http-header-persistence)
 
 The claim that REST APIs are stateless is counteracted with almost any
 implementation, be it authentication state in a JWT header or implicit
