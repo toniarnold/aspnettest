@@ -43,7 +43,7 @@ namespace asplib.Controllers
         /// <returns></returns>
         public object Create(ControllerContext actionContext)
         {
-            object controller;
+            object controller = null;
             var controllerTypeInfo = actionContext.ActionDescriptor.ControllerTypeInfo;
             var controllerType = controllerTypeInfo.AsType();
             var storageID = StorageImplementation.GetStorageID(controllerTypeInfo.Name);
@@ -69,7 +69,7 @@ namespace asplib.Controllers
             }
             else
             {
-                // ---------- Load ViewState ----------
+                // ---------- Load from ViewState ----------
                 if (storage == Storage.ViewState &&
                     this.HttpContext.Request.Method == WebRequestMethods.Http.Post &&
                     this.HttpContext.Request.Form.ContainsKey(storageID))
@@ -81,20 +81,16 @@ namespace asplib.Controllers
                         (bytes, filter) = StorageImplementation.ViewStateBytes(this.Configuration, controllerString);
                         controller = DeserializeController(actionContext, controllerTypeInfo, controllerType, bytes, filter);
                     }
-                    else // Empty ViewState form
-                    {
-                        controller = actionContext.HttpContext.RequestServices.GetService(controllerType);
-                    }
                 }
 
-                // ---------- Load Session ----------
+                // ---------- Load from Session ----------
                 else if (storage == Storage.Session &&
                          this.HttpContext.Session.TryGetValue(storageID, out bytes))
                 {
                     controller = DeserializeController(actionContext, controllerTypeInfo, controllerType, bytes);
                 }
 
-                // ---------- Load Database ----------
+                // ---------- Load from Database ----------
                 else if (storage == Storage.Database &&
                          Guid.TryParse(this.HttpContext.Request.Cookies[storageID].FromCookieString()["session"], out session))
                 {
@@ -102,7 +98,21 @@ namespace asplib.Controllers
                     controller = DeserializeController(actionContext, controllerTypeInfo, controllerType, bytes, filter);
                     ((IPersistentController)controller).Session = session;
                 }
-                else
+
+                // ---------- Load from X-ViewState Header ----------
+                else if (storage == Storage.Header &&
+                            this.HttpContext.Request.Headers.ContainsKey(StorageImplementation.HeaderName))
+                {
+                    // input type=hidden from <input viewstate="@ViewBag.ViewState" />
+                    var controllerString = this.HttpContext.Request.Headers[StorageImplementation.HeaderName];
+                    if (!String.IsNullOrEmpty(controllerString))
+                    {
+                        (bytes, filter) = StorageImplementation.ViewStateBytes(this.Configuration, controllerString);
+                        controller = DeserializeController(actionContext, controllerTypeInfo, controllerType, bytes, filter);
+                    }
+                }
+
+                if (controller == null)
                 {
                     // ASP.NET Core implementation, no persistence, just return the new controller
                     controller = actionContext.HttpContext.RequestServices.GetService(controllerType);

@@ -19,5 +19,11 @@
         /// Database is the most persistent storage, cleared when persistent cookies are deleted
         /// </summary>
         Database,
+
+        /// <summary>
+        /// Header is only appropriate for formally stateless .NET Core API
+        /// clients without any dependency on session or database storage
+        /// </summary>
+        Header,
     }
 }

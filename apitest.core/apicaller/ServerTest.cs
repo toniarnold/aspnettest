@@ -1,4 +1,5 @@
-﻿using asplib.Model.Db;
+﻿using asplib.Model;
+using asplib.Model.Db;
 using asplib.Services;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.TestHost;
@@ -6,7 +7,6 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using NUnit.Framework;
 using System.Collections.Generic;
-using System.Linq;
 using System.Net.Http;
 using System.Net.Http.Headers;
 using static Microsoft.Net.Http.Headers.HeaderNames;
@@ -152,9 +152,7 @@ namespace apitest.apicaller
             using (var client = GetHttpClient())
             {
                 var responseAuth = client.PostAsync("/api/call/authenticate", Json.Serialize(DbTestData.PHONENUMBER)).Result;
-                var cookies = responseAuth.Headers.GetValues(SetCookie).ToList();
-                client.DefaultRequestHeaders.Add(Cookie, cookies[0]);   // set session
-
+                StorageImplementation.SetViewStateHeader(responseAuth, client);
                 var resultAuth = Json.Deserialize<string>(responseAuth.Content);
                 Assert.That(resultAuth, Does.StartWith("Sent an SMS"));
                 Assert.That(resultAuth, Does.Contain(DbTestData.PHONENUMBER));
@@ -162,11 +160,13 @@ namespace apitest.apicaller
                 for (int i = 0; i < 3; i++)
                 {
                     var responseWrong = client.PostAsync("/api/call/verify", Json.Serialize("wrong code")).Result;
+                    StorageImplementation.SetViewStateHeader(responseWrong, client);
                     var resultWrong = Json.Deserialize<string>(responseWrong.Content);
                     Assert.That(resultWrong, Does.StartWith("Wrong access code"));
                 }
 
                 var responseDenied = client.PostAsync("/api/call/verify", Json.Serialize("wrong code")).Result;
+                StorageImplementation.SetViewStateHeader(responseDenied, client);
                 var resultDeniedh = Json.Deserialize<string>(responseDenied.Content);
                 Assert.That(resultDeniedh, Does.StartWith("Access denied"));
             }

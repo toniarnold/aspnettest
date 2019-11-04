@@ -14,7 +14,7 @@ using System.Collections.Generic;
 using static AccesscodeContext.AuthMap;
 using ApiserviceServiceProvider = apitest.apiservice.ServiceProvider;
 
-namespace apitest.apicaller.core.Services
+namespace apitest.apicaller.Services
 {
     /// <summary>
     /// ServiceClient calls /authenticate/-methods on the apiservice.core

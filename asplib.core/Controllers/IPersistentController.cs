@@ -137,6 +137,12 @@ namespace asplib.Controllers
             StorageImplementation.SaveDatabase(inst.Configuration, inst.HttpContext, inst);
         }
 
+        public static void SaveHeader(this IPersistentController inst)
+        {
+            var filter = StorageImplementation.EncryptViewState(inst.Configuration);
+            inst.HttpContext.Response.Headers[StorageImplementation.HeaderName] = StorageImplementation.ViewState(inst, filter);
+        }
+
         /// <summary>
         /// name:value pair for the ViewStateInputTagHelper, to be used as
         /// <input viewstate="@ViewBag.ViewState" />

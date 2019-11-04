@@ -6,7 +6,9 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Specialized;
+using System.Linq;
 using System.Net;
+using System.Net.Http;
 
 namespace asplib.Model
 {
@@ -17,6 +19,11 @@ namespace asplib.Model
     /// </summary>
     public static class StorageImplementation
     {
+        /// <summary>
+        /// The custom header name for session storage in the header will not become "standard"
+        /// </summary>
+        public const string HeaderName = "X-ViewState";
+
         /// <summary>
         /// Globally set Session Storage
         /// </summary>
@@ -87,6 +94,19 @@ namespace asplib.Model
                 SameSite = SameSiteMode.Strict
             };
             httpContext.Response.Cookies.Append(storageID, newCookie.ToCookieString(), options);
+        }
+
+        /// <summary>
+        /// Add/Replace the X-ViewState default header on the client with the
+        /// new state received from the last response for the next request.
+        /// </summary>
+        /// <param name="response"></param>
+        /// <param name="client"></param>
+        public static void SetViewStateHeader(HttpResponseMessage response, HttpClient client)
+        {
+            var viewState = response.Headers.GetValues(StorageImplementation.HeaderName).ToList();
+            client.DefaultRequestHeaders.Remove(StorageImplementation.HeaderName);
+            client.DefaultRequestHeaders.Add(StorageImplementation.HeaderName, viewState[0]);
         }
 
         /// <summary>

@@ -81,6 +81,10 @@ namespace asplib.Controllers
                     this.SaveDatabase();
                     break;
 
+                case Storage.Header:
+                    this.SaveHeader();
+                    break;
+
                 default:
                     throw new NotImplementedException(String.Format(
                         "Storage {0}", this.GetStorage()));
