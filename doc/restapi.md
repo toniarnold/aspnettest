@@ -2,6 +2,13 @@
 
 * [SMC API service with database persistence](#smc-api-service-with-database-persistence)
 * [RESTful API client with HTTP header persistence](#restful-api-client-with-http-header-persistence)
+* [Levels of integration in testing with NUnit](#levels-of-integration-in-testing-with-nunit)
+   * [Why integration testing is important](#why-integration-testing-is-important)
+   * [DI in tests with a `ServiceProvider` class](#di-in-tests-with-a-serviceprovider-class)
+   * [Automatic transaction rollback with `IGlobalTransaction`](#automatic-transaction-rollback-with-iglobaltransaction)
+   * [Automatic cleanup with `IDeleteNewRows`](#automatic-cleanup-with-ideletenewrows)
+   * [Microservice integration tests with `TestServer`](#microservice-integration-tests-with-testserver)
+
 
 The claim that REST APIs are stateless is counteracted with almost any
 implementation, be it authentication state in a JWT header or implicit
@@ -204,3 +211,255 @@ The *size* of that header state representation is - unlike the virtually
 unlimited size of form input elements in the request/response payload stream -
 limited to a few kilobytes by the web server and competes with the other headers
 (particularly the JWT token for authentication) for that limited space.
+
+
+## Levels of integration in testing with NUnit
+
+### Why integration testing is important
+
+"A unit test that talks to a database is not a unit test." (Michael Feathers).
+By following that rule, people mock up everything except the narrow
+functionality under test (which ends up to be trivial outside special
+mathematically/logically complex applications), realize that the expense/yield
+ratio goes down the tubes and end up abandoning automated testing as unnecessary
+overhead at all - the primary goal of modern DevOps environments after all is
+enabling developers to fix errors where they occur: directly in production. I've
+got to hear this more or less exactly so.
+
+In my personal experience, with narrow unit testing, I'm testing what is
+expected, which is perfect during the initial development stage - but later on,
+things usually break at *unexpected* places due to things like implicit
+assumptions outside consciously made design contracts. Especially within the
+IoC/DI paradigm encouraged by the .NET Core framework, mocking up all
+dependencies quickly becomes very expensive, as this is relatively cheap only if
+the functionally provided by them is either trivial or not needed by the class
+under test (usually just persistence). And, most importantly: A test execution
+greenscreen then tendentiously means: "The mocked up engine works perfectly,
+no idea about the real engine."
+
+Another observation while building a complex freelance contract accounting
+application has been the fact that I've built a GUI tailored specifically to
+quickly and efficiently generate complex data records, and manually entering the
+same data line by line, number by number in the C# GUI not just felt, but
+actually *was* incredibly tedious and inefficient.
+
+So in this .NET Core API project, I've decided to embrace an inversion: All
+tests are functional integration tests by default by using the same .NET Core DI
+also in the NUnit test classes - unless the real objects are specifically
+instantiated with mocked up ones.
+
+This has the well known disadvantage that one single defect tends to immediately
+repaint the whole test explorer tree thoroughly in spotted red (the "burning
+Christmas tree pattern"), and the root cause of the problem can impossibly be
+deduced from the pattern of the red dots. At the end, the time saved upfront
+might be spent downstream by applying the infamous "checkout/compile/test"
+binary search pattern to find the particular single commit that broke things.
+This encourages the "commit each and every change separately" mentality, which
+can be dizzying in an environment where commits are expected to mirror the
+micromanaged "strictly-incremental-and-not-iterative" development tasks assigned
+to the developers.
+
+
+### DI in tests with a `ServiceProvider` class
+
+The `apitest.core` project covers both the `apiservoce.core` and
+`apicaller.core` Web API projects, each with its own DI dependency tree.
+Correspondingly, the `apitest.core/apicaller` and `apitest.core/apiservice`
+sub-folders each contain a static `ServiceProvider` class which reads both the
+main test-project's `appsettings.json` configuration file and combines it with
+the specific `appsettings.json` in that sub-folder. The idempotent
+`CreateMembers()` method instantiates the *productive* `Startup` class of the
+project under test and calls its *productive* `ConfigureServices` method to make
+accessible the .NET Core DI engine to the test classes. Here an excerpt:
+
+```csharp
+_configuration = new ConfigurationBuilder()
+    .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+    .AddJsonFile(
+        Path.Combine("apicaller", "appsettings.json"),
+            optional: false, reloadOnChange: true)
+    .Build();
+var startup = new Startup(_configuration);
+var sc = new ServiceCollection();
+startup.ConfigureServices(sc);
+_provider = sc.BuildServiceProvider();
+```
+
+Any test class inherits from the class under test and retrieves its dependencies
+once from the DI instance of the `ServiceProvider`, here from
+`apitest.apiservice.Controllers.AccesscodeControllerTest` (more on
+`RetrieveDbContexts()` in the next chapter):
+
+```csharp
+[OneTimeSetUp]
+public void ConfigureServices()
+{
+    _configuration = ServiceProvider.Configuration;
+    _DbContext = ServiceProvider.Get<AspserviceDbContext>();
+    _SMSService = ServiceProvider.Get<ISMSService>();
+    this.RetrieveDbContexts();
+}
+```
+
+This requires the dependency members to be declared at least as `internal`
+togehter with an `[assembly: InternalsVisibleTo("apitest.core")]` in the
+AssemblyInfo.cs of the project under test (instead of the usual `readonly` as
+in all textbooks on C# DI). 
+
+The infamous dependencies of the dependencies are automatically injected that
+way - and its precisely those tree of dependencies of dependencies which is
+prohibitively expensive to instantiate manually without DI in place in each and
+every test class - which in turn leads to the only allegedly compulsory "need to
+mock up everything" paradigm which in turn leads to the widespread "tests are
+too expensive" practice while still claiming to be "agile".
+
+
+### Automatic transaction rollback with `IGlobalTransaction`
+
+One - if not the main - reason to mock up anything that writes to the database
+is excessive growth of tables by running the tests. Luckily, with Entity
+Framework 6, Microsoft finally decided that there *might* still be use cases for
+developers to manage transactions consciously. The `this.RetrieveDbContexts()`
+extension method call in the `OneTimeSetup` above of a test class brought in by
+`IGlobalTransaction` initializes the automatic transaction rollback which
+eliminates that problem.
+
+It recursively walks the dependencies three and collects all `DbContext` objects
+found to make them accessible to these `SetUp`/`TearDown` test scaffolding to
+definitely solve that problem at a relatively low level:
+
+```csharp
+[SetUp]
+public void BeginTrans()
+{
+    this.BeginTransaction(IsolationLevel.ReadUncommitted);
+}
+
+[TearDown]
+public void RollbackTrans()
+{
+    this.RollbackTransaction();
+}
+```
+
+Thanks to the `ReadUncommitted` isolation level, assertions can be made on the
+data actually written to the database. But being able to rollback of course
+relies on the fact that the methods under test don't commit transactions,
+therefore "relatively low level". Methods "higher" in the call graph inevitably
+need to commit transactions initiated by themselves, ultimately if the caller
+calls *another* service (read "the microservice architecture").
+
+
+### Automatic cleanup with `IDeleteNewRows`
+
+As long as you refrain from the nowadays common "strictly use GUIDs as identity
+column" pattern<sup>1</sup>, you can use the `IDeleteNewRows` extension to clean up newly inserted
+rows by test runs. Of course, this cannot revert UPDATE changes applied to
+existing rows.
+
+As the possibly affected tables and identity columns can't be statically
+deduced, they need to be declared manually, as in this excerpt from the setup of
+the `CallControllerTest` class:
+
+```csharp
+[OneTimeSetUp]
+public void ConfigureServices()
+{
+    (...)
+    this.SelectMaxId(ConnectionString, "Accesscode", "accesscodeid");
+    this.SelectMaxId(ConnectionString, "Main", "mainid");
+}
+```
+
+The corresponding `TearDown`  method then deletes any rows not present in that
+tables when the test class was instantiated:
+
+```csharp
+        [TearDown]
+        public void DeleteNewRows()
+        {
+            this.DeleteNewRows(ConnectionString);
+        }
+```
+
+1. The usual reason given for strictly using GUIDs as identity *everywhere* (not
+   just for keys intended for GET parameters) is quite good "security by
+   obscurity", as in the modern SPA web world, users can and ultimately will
+   manipulate (integer) identities received from your backend, be it "just for
+   fun". But using non-sequential identity values inevitably leads to clustered
+   index fragmentation and subsequent performance degradation without periodic
+   *expensive* clustered index rebuilds. The `[Main]` table used here throughout
+   for controller persistence avoids that problem by using separate identity/PK
+   columns as shown below:
+
+    ```sql
+    CREATE TABLE [dbo].[Main](
+	    [mainid] [bigint] IDENTITY(1,1) NOT NULL,
+	    [session] [uniqueidentifier] DEFAULT NEWID() NOT NULL,
+        (...)
+    CONSTRAINT [PK_Main] PRIMARY KEY NONCLUSTERED
+    (
+	    [session] ASC
+    )
+    ```
+    The `NEWSEQUENTIALID()` T-SQL function was introduced to avoid the clustered
+    index fragmentation problem, but this comes at the price of drastically
+    lowering the "security by obscurity" virtue of using GUIDs, according to the
+    [docs](https://docs.microsoft.com/en-us/sql/t-sql/functions/newsequentialid-transact-sql?view=sql-server-2017):
+
+    >If privacy is a concern, do not use this function. It is possible to guess
+    >the value of the next generated GUID and, therefore, access data associated
+    >with that GUID.
+
+    *But*: By using controller persistence to emulate ASP.NET WebForms'
+    ViewState in a "modern" SPA with cleartext (within the browser) JSON data
+    transfer, integer IDs received from a client are just *indexes* to
+    transparently persisted (and thanks to the encryption *unmanipulable*) data
+    objects that were presented to the user in the interaction before, after all
+    access authorization checks. These IDs just *happen* to be identically equal
+    to the actual database identity. Such an ID should never be passed
+    *directly* to an SQL statement and thereby allowing above "just for fun"
+    de-facto SQL injection (despite using `SqlParameter`) to gain access to data
+    not belonging to the user. Just manipulate the *object* appointed by the ID
+    in memory and write its new state to the database. 
+
+    End of the GUID-as-"security by obscurity" discussion.
+
+
+### Microservice integration tests with `TestServer`
+
+The same `CallControllerTest` class uses a `TestServer` received from the
+`TestServerClientFactory`in the `asplib.Services` namespace by injecting that
+`_serviceClient` (which incidentally avoids touching the local network loopback
+interface, formally yielding a "unit test" in the wording, but of course not the
+spirit of Michael Feathers). 
+
+The above omitted lines in the `OneTimeSetup` scaffold this.
+`ApiserviceServiceProvider` is an alias for the custom `ServiceProvider` class
+of the *other* Web API service currently not under test, but used as a
+dependency.
+
+```csharp
+[OneTimeSetUp]
+public void ConfigureServices()
+{
+    this.configuration = ServiceProvider.Configuration;
+    _serviceServer = CreateApiserviceServer(ApiserviceServiceProvider.Configuration);
+    var clientFactory = new TestServerClientFactory(_serviceServer);
+    _serviceClient = new ServiceClient(this.configuration, clientFactory);
+    (...)
+}
+
+private TestServer CreateApiserviceServer(IConfiguration configuration)
+{
+    var builder = new WebHostBuilder()
+        .UseEnvironment("Development")
+        .UseConfiguration(configuration)
+        .UseStartup<ApiserviceStartup>();
+    return new TestServer(builder);
+}
+```
+
+The injected `_serviceClient` instance is never called by any test method
+directly, but indirectly as a side effect of calling top-level methods in the
+`CallController` under test.
