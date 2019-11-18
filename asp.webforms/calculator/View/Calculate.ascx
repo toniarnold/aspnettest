@@ -1,4 +1,4 @@
-﻿<%@ control language="C#" autoeventwireup="true" codebehind="Calculate.ascx.cs" inherits="asp.calculator.View.Calculate" %>
+﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="Calculate.ascx.cs" Inherits="asp.calculator.View.Calculate" %>
 <style>
     .button {
         height: 30px;

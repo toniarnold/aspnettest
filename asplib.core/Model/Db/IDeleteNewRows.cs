@@ -28,8 +28,7 @@ namespace asplib.Model.Db
             {
                 inst.MaxIds = new List<(string tablename, string columnname, object maxid)>();
             }
-
-            var sql = $"SELECT MAX([{columnname}]) FROM [{tablename}]";
+            var sql = $"SELECT ISNULL(MAX([{columnname}]), 0) FROM [{tablename}]";
             using (var conn = new SqlConnection(connecctionString))
             using (var cmd = new SqlCommand(sql, conn))
             {

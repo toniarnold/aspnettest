@@ -1,4 +1,6 @@
-﻿using NUnit.Framework;
+﻿using asplib.Model.Db;
+using NUnit.Framework;
+using System.Collections.Generic;
 
 namespace iie
 {
@@ -8,15 +10,20 @@ namespace iie
     /// Call SetUpStorage() to configure the storage for that specific test suite.
     /// Provides accessors for IStorageControl
     [TestFixture]
-    public abstract class StorageTest<C> : IETest<C>
+    public abstract class StorageTest<C> : IETest<C>, IDeleteNewRows
     {
+        /// <summary>
+        /// IDeleteNewRows
+        /// </summary>
+        public List<(string, string, object)> MaxIds { get; set; }
+
         /// <summary>
         /// Remember the last row in [Main] before the tests started
         /// </summary>
         [OneTimeSetUp]
         public void OneTimeSetUpDatabase()
         {
-            this.SetUpDatabase();
+            this.SelectMaxId(ASP_DBEntities.ConnectionString, "Main", "mainid");
         }
 
         /// <summary>
@@ -25,7 +32,7 @@ namespace iie
         [OneTimeTearDown]
         public void OneTimeTearDownDatabase()
         {
-            this.TearDownDatabase();
+            this.DeleteNewRows(ASP_DBEntities.ConnectionString);
         }
     }
 }

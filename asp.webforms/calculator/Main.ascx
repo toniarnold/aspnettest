@@ -1,12 +1,12 @@
-﻿<%@ control language="C#" autoeventwireup="true" codebehind="Main.ascx.cs" inherits="asp.calculator.Main" %>
-<%@ register assembly="AjaxControlToolkit" namespace="AjaxControlToolkit" tagprefix="ajaxToolkit" %>
-<%@ register assembly="asplib.webforms" namespace="asplib.View" tagprefix="asplib" %>
-<%@ register tagprefix="uc" tagname="Calculate" src="~/calculator/View/Calculate.ascx" %>
-<%@ register tagprefix="uc" tagname="Enter" src="~/calculator/View/Enter.ascx" %>
-<%@ register tagprefix="uc" tagname="Error" src="~/calculator/View/Error.ascx" %>
-<%@ register tagprefix="uc" tagname="Footer" src="~/calculator/View/Footer.ascx" %>
-<%@ register tagprefix="uc" tagname="Splash" src="~/calculator/View/Splash.ascx" %>
-<%@ register tagprefix="uc" tagname="Title" src="~/calculator/View/Title.ascx" %>
+﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="Main.ascx.cs" Inherits="asp.calculator.Main" %>
+<%@ Register Assembly="AjaxControlToolkit" Namespace="AjaxControlToolkit" TagPrefix="ajaxToolkit" %>
+<%@ Register Assembly="asplib.webforms" Namespace="asplib.View" TagPrefix="asplib" %>
+<%@ Register TagPrefix="uc" TagName="Calculate" Src="~/calculator/View/Calculate.ascx" %>
+<%@ Register TagPrefix="uc" TagName="Enter" Src="~/calculator/View/Enter.ascx" %>
+<%@ Register TagPrefix="uc" TagName="Error" Src="~/calculator/View/Error.ascx" %>
+<%@ Register TagPrefix="uc" TagName="Footer" Src="~/calculator/View/Footer.ascx" %>
+<%@ Register TagPrefix="uc" TagName="Splash" Src="~/calculator/View/Splash.ascx" %>
+<%@ Register TagPrefix="uc" TagName="Title" Src="~/calculator/View/Title.ascx" %>
 <style>
     .header-container {
         display: inline-grid;

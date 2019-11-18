@@ -1,7 +1,7 @@
-﻿<%@ page title="Calculator" language="C#" masterpagefile="~/asp.Master" autoeventwireup="true" codebehind="default.aspx.cs" inherits="asp._default" %>
+﻿<%@ Page Title="Calculator" Language="C#" MasterPageFile="~/asp.Master" AutoEventWireup="true" CodeBehind="default.aspx.cs" Inherits="asp._default" %>
 
-<%@ register assembly="iie.webforms" namespace="iie" tagprefix="iie" %>
-<%@ register tagprefix="uc" tagname="calculator" src="~/calculator/Main.ascx" %>
+<%@ Register Assembly="iie.webforms" Namespace="iie" TagPrefix="iie" %>
+<%@ Register TagPrefix="uc" TagName="calculator" Src="~/calculator/Main.ascx" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <style>
         .nunitimg {
