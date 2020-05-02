@@ -26,7 +26,7 @@ namespace asp.websharper.spa.Client
 
             return WebSharper.UI.Doc.ConcatMixed(
                 // The state-dependent parts which shape the calculator sub-application
-                HeaderDoc(viewCalculator, varCalculator, page),
+                HeaderDoc(viewCalculator, page),
                 TitleDoc(viewCalculator),
                 SplashDoc(viewCalculator),
                 EnterDoc(viewCalculator, varOperand, id),
@@ -37,7 +37,6 @@ namespace asp.websharper.spa.Client
         }
 
         public static object HeaderDoc(View<CalculatorViewModel> viewCalculator,
-                                            Var<CalculatorViewModel> varCalculator,
                                             Var<string> page) =>
             V(viewCalculator.V.SessionStorage).Map(thisStorage =>
             {
@@ -183,7 +182,7 @@ namespace asp.websharper.spa.Client
 
                         .StackContainer(
                             V((IEnumerable<string>)viewCalculator.V.Stack).DocSeqCached((string x) =>
-                                new Template.Index.TestSummaryItem().Line(x).Doc()
+                                new Template.Calculate.StackItem().Line(x).Doc()
                             )
                         )
                         .Doc()

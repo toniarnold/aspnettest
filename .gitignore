@@ -351,3 +351,4 @@ minimal.websharper.web/wwwroot/Scripts/WebSharper/*
 asp.websharper.spa/wwwroot/Content/*
 asp.websharper.spa/WebSharper.UI.Templates/*
 
+asp.websharper.spa.fs/wwwroot/Content/*

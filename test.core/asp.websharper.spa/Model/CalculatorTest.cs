@@ -1,8 +1,9 @@
 ﻿extern alias websharper_spa;
+extern alias websharper_spa_Model;
 
 using NUnit.Framework;
-using websharper_spa::asp.websharper.spa.Model;
-using CalculatorContext = websharper_spa::CalculatorContext;
+using websharper_spa_Model::asp.websharper.spa.Model;
+using CalculatorContext = websharper_spa_Model::CalculatorContext;
 
 namespace test.asp.websharper.spa.Model
 {
@@ -13,6 +14,13 @@ namespace test.asp.websharper.spa.Model
         public void SetUp()
         {
             base.Construct();
+        }
+
+        [Test]
+        public void NewCalculatorTest()
+        {
+            var c = new Calculator();       // freshly instantiated calculator...
+            Assert.That(c.State.Name, Is.EqualTo("Map1.Splash"));   // ...is in the init state
         }
 
         [Test]

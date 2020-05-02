@@ -1,0 +1,84 @@
+digraph Calculator {
+
+    node
+        [shape=Mrecord width=1.5];
+
+    subgraph cluster_Map1 {
+
+        label="Map1";
+
+        //
+        // States (Nodes)
+        //
+
+        "Map1::Splash"
+            [label="{Splash}"];
+
+        "Map1::Enter"
+            [label="{Enter}"];
+
+        "Map1::Calculate"
+            [label="{Calculate|Add\l\[stack.Count \>= 2\]/\l&nbsp;&nbsp;&nbsp;Add;\lSub\l\[stack.Count \>= 2\]/\l&nbsp;&nbsp;&nbsp;Sub;\lMul\l\[stack.Count \>= 2\]/\l&nbsp;&nbsp;&nbsp;Mul;\lDiv\l\[stack.Count \>= 2\]/\l&nbsp;&nbsp;&nbsp;Div;\lPow\l\[stack.Count \>= 1\]/\l&nbsp;&nbsp;&nbsp;Pow;\lSqrt\l\[stack.Count \>= 1\]/\l&nbsp;&nbsp;&nbsp;Sqrt;\lClr\l\[stack.Count \>= 1\]/\l&nbsp;&nbsp;&nbsp;Clr;\lClrAll/\l&nbsp;&nbsp;&nbsp;ClrAll;\l}"];
+
+        "Map1::ErrorNumeric"
+            [label="{ErrorNumeric}"];
+
+        "Map1::ErrorTuple"
+            [label="{ErrorTuple}"];
+
+        "Map1::ErrorEmpty"
+            [label="{ErrorEmpty}"];
+
+        "%start"
+            [label="" shape=circle style=filled fillcolor=black width=0.25];
+
+        //
+        // Transitions (Edges)
+        //
+
+        "Map1::Splash" -> "Map1::Enter"
+            [label="Enter/\l"];
+
+        "Map1::Enter" -> "Map1::Calculate"
+            [label="Enter\l\[double.TryParse(value, out double _)\]/\lPush;\l"];
+
+        "Map1::Enter" -> "Map1::ErrorNumeric"
+            [label="Enter/\l"];
+
+        "Map1::Calculate" -> "Map1::ErrorTuple"
+            [label="Add/\l"];
+
+        "Map1::Calculate" -> "Map1::ErrorTuple"
+            [label="Sub/\l"];
+
+        "Map1::Calculate" -> "Map1::ErrorTuple"
+            [label="Mul/\l"];
+
+        "Map1::Calculate" -> "Map1::ErrorTuple"
+            [label="Div/\l"];
+
+        "Map1::Calculate" -> "Map1::ErrorEmpty"
+            [label="Pow/\l"];
+
+        "Map1::Calculate" -> "Map1::ErrorEmpty"
+            [label="Sqrt/\l"];
+
+        "Map1::Calculate" -> "Map1::ErrorEmpty"
+            [label="Clr/\l"];
+
+        "Map1::Calculate" -> "Map1::Enter"
+            [label="Enter/\l"];
+
+        "Map1::ErrorNumeric" -> "Map1::Enter"
+            [label="Enter/\l"];
+
+        "Map1::ErrorTuple" -> "Map1::Enter"
+            [label="Enter/\l"];
+
+        "Map1::ErrorEmpty" -> "Map1::Enter"
+            [label="Enter/\l"];
+
+        "%start" -> "Map1::Splash"
+    }
+
+}

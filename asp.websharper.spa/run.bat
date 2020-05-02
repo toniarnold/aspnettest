@@ -1,3 +1,3 @@
 :Start
-dotnet .\bin\Debug\netcoreapp2.1\asp.websharper.spa.dll
+dotnet .\bin\Debug\netcoreapp3.0\asp.websharper.spa.dll
 GOTO Start

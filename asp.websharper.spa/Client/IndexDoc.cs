@@ -9,6 +9,7 @@ using WebSharper.UI;
 using WebSharper.UI.Client;
 using static WebSharper.UI.Client.Html;
 using static WebSharper.UI.V;
+using JSConsole = WebSharper.JavaScript.Console;
 
 namespace asp.websharper.spa.Client
 {
@@ -19,16 +20,19 @@ namespace asp.websharper.spa.Client
         public static void ClientMain()
         {
             var varCalculator = Var.Create(new CalculatorViewModel());
-            varCalculator.Set(null);    // throw away the dummy instance
             var viewCalculator = varCalculator.View.MapAsync<CalculatorViewModel, CalculatorViewModel>(c =>
             {
-                // Explicit null-check required by WebSharper anyway:
+                // Explicit null-check required by WebSharper only in C# (in F#, it is initialized):
                 if (c == null)
-                    // Get a new instance from the server
-                    return CalculatorServer.Load();
+                {
+                    JSConsole.Log("c == null");
+                    return CalculatorServer.Load(); // Get a new instance from the server
+                }
                 else
-                    // Return the existing instance
-                    return Task.FromResult(c);
+                {
+                    JSConsole.Log("Task.FromResult(c)");
+                    return Task.FromResult(c);      // Return the persistent instance
+                }
             });
 
             MainDoc(viewCalculator, varCalculator).RunById("main");

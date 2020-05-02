@@ -334,9 +334,9 @@ namespace asplib.Model
         }
 
         /// <summary>
-        /// Loads from viewstate.
+        /// Loads from ViewState.  Returns a new object if it is null.
         /// </summary>
-        /// <param name="construct">Contstructor function for the object if no viewstate is given</param>
+        /// <param name="construct">Constructor function for the object if no ViewState is given</param>
         /// <param name="viewstate">The viewstate string</param>
         /// <param name="filter">optional encryption filter</param>
         /// <returns></returns>
@@ -350,6 +350,14 @@ namespace asplib.Model
             return (T)Serialization.Deserialize(bytes, filter);
         }
 
+        /// <summary>
+        /// Deserializes the byte array. Returns a new object if it is null.
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="construct">Contstructor function for the object</param>
+        /// <param name="bytes"></param>
+        /// <param name="filter"></param>
+        /// <returns></returns>
         internal static T LoadFromBytes<T>(Func<T> construct, byte[] bytes, Func<byte[], byte[]> filter = null)
         {
             if (bytes == null)  // Initialization: return a new object

@@ -11,6 +11,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\asp.websharper.spa.Model\asp.websharper.spa.Model.csproj" />
     <ProjectReference Include="..\asplib.core\asplib.core.csproj" />
     <ProjectReference Include="..\iie.core\iie.core.csproj" />
     <ProjectReference Include="..\asp.websharper.spa\asp.websharper.spa.csproj" />

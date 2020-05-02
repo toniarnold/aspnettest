@@ -40,9 +40,19 @@ namespace asplib.Model
         /// </summary>
         public string ViewState;
 
+        /// <summary>
+        /// For [SPAEntryPoint] in F# to distinct an uninitialized instance yet to be retrieved from the server
+        /// </summary>
+        [JavaScript]
+        public bool IsNew { get; set; }
+
+        /// <summary>
+        /// Uninitialized instance (without FSM) required for initial Var.Create() in WebSharper
+        /// </summary>
         [JavaScript]
         public ViewModel()
         {
+            this.IsNew = true;
         }
 
         /// <summary>
@@ -73,11 +83,13 @@ namespace asplib.Model
         /// <summary>
         /// Recreates the Main object from the ViewState and copies members
         /// used on the client side with the overridden ExposeMembers().
+        /// Returns a new instance if no ViewState is given
         /// </summary>
         /// <param name="filter">The filter.</param>
         public virtual void DeserializeMain(Func<byte[], byte[]> filter = null)
         {
             this.Main = StorageImplementation.LoadFromViewstate(() => new M(), this.ViewState, filter);
+            this.IsNew = false;
         }
 
         /// <summary>

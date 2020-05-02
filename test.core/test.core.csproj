@@ -15,6 +15,9 @@
     <ProjectReference Include="..\asp.core\asp.core.csproj">
       <Aliases>core</Aliases>
     </ProjectReference>
+    <ProjectReference Include="..\asp.websharper.spa.Model\asp.websharper.spa.Model.csproj">
+      <Aliases>websharper_spa_Model</Aliases>
+    </ProjectReference>
     <ProjectReference Include="..\asp.websharper.spa\asp.websharper.spa.csproj">
       <Aliases>websharper_spa</Aliases>
     </ProjectReference>

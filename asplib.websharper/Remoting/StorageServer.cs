@@ -64,6 +64,7 @@ namespace asplib.Remoting
             if (HttpContext.Request.Method == WebRequestMethods.Http.Get &&
                 Guid.TryParse(HttpContext.Request.Query["session"], out sessionOverride))
             {
+                // ---------- Direct Load Database ----------
                 viewModel = new V();
                 (bytes, filter) = StorageImplementation.DatabaseBytes(Configuration, HttpContext, storageID, sessionOverride);
                 viewModel.Main = (M)StorageImplementation.LoadFromBytes(() => new M(), bytes, filter);
@@ -76,30 +77,28 @@ namespace asplib.Remoting
                     viewModel = new V();
                     filter = StorageImplementation.DecryptViewState(Configuration);
                     viewModel.ViewState = viewState;
-                    viewModel.DeserializeMain(filter);   // creates a new Main if viewState is null
+                    viewModel.DeserializeMain(filter);
                 }
 
                 // ---------- Load Session ----------
-                else if (storage == Storage.Session &&
-                        HttpContext.Session.TryGetValue(storageID, out bytes))
+                else if (storage == Storage.Session)
                 {
+                    HttpContext.Session.TryGetValue(storageID, out bytes);
                     viewModel = new V();
                     viewModel.SetMain(StorageImplementation.LoadFromBytes(() => new M(), bytes));
                 }
 
                 // ---------- Load Database ----------
-                else if (storage == Storage.Database &&
-                        Guid.TryParse(HttpContext.Request.Cookies[storageID].FromCookieString()["session"], out session))
+                else if (storage == Storage.Database)
                 {
+                    Guid.TryParse(HttpContext.Request.Cookies[storageID].FromCookieString()["session"], out session);
                     (bytes, filter) = StorageImplementation.DatabaseBytes(Configuration, HttpContext, storageID, session);
                     viewModel = new V();
                     viewModel.SetMain(StorageImplementation.LoadFromBytes(() => new M(), bytes, filter));
                 }
                 else
                 {
-                    // No persisted object available yet -> return a new one
-                    viewModel = new V();
-                    viewModel.SetMain(new M());
+                    throw new NotImplementedException("Storage {0} not implemented");
                 }
             }
 

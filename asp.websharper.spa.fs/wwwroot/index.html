@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>asp.websharper.spa.fs</title>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" type="text/css" href="Content/asp.websharper.spa.fs.css" />
+    <style>
+        /* Don't show the not-yet-loaded templates */
+        [ws-template], [ws-children-template] {
+            display: none;
+        }
+
+        h1 {
+            font-size: 1.25em;
+        }
+
+        a {
+            text-decoration: none;
+        }
+
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+        }
+
+        .nunitimg {
+            position: absolute;
+            top: 8px;
+            right: 8px;
+            height: 50px;
+            width: 50px;
+        }
+
+        .testresult {
+            position: absolute;
+            right: 0px;
+            top: 59px;
+            width: 140px;
+            background-color: rgba(255, 255, 255, 1);
+        }
+    </style>
+    <script type="text/javascript" src="Content/asp.websharper.spa.fs.head.js"></script>
+</head>
+<body>
+    <div id="main" ws-children-template="Main">
+        <a href="#" ws-onclick="Test"><img src="nunit.png" class="nunitimg" /></a>
+        <a href="/testresult" class="testresult">
+            <ul ws-hole="TestSummaryContainer">
+                <li ws-template="TestSummaryItem">${Line}</li>
+            </ul>
+        </a>
+    </div>
+    <script type="text/javascript" src="Content/asp.websharper.spa.fs.js"></script>
+</body>
+</html>

@@ -1,0 +1,37 @@
+﻿<!-- ClientLoad = Inline
+     ServerLoad = WhenChanged -->
+<div ws-children-template="Main">
+    <style>
+        .header-container {
+            display: inline-grid;
+            grid-template-columns: auto auto auto;
+            width: 100%;
+        }
+
+        .hamburger-box {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .hamburger {
+            border: 1px solid black;
+            padding: 2px;
+            display: block;
+        }
+
+        .grid {
+            background-color: rgba(255, 255, 255, 1);
+            font-size: small;
+        }
+
+        .link {
+            text-decoration: none;
+        }
+    </style>
+    <div class="header-container">
+        <a href="#" ws-onclick="StorageLink" class="hamburger-box">
+            Session Storage: ${Storage} ${Encrypted}
+        </a>
+    </div>
+</div>

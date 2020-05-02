@@ -6,9 +6,12 @@ namespace asplib.Model
     /// <summary>
     /// ViewModel for SMC task classes which exposes the State name and calls
     /// the required SetOwner() method on deserializing.
+    /// The inheriting class exposes the part which is translated to JavaScript,
+    /// this base class runs only on the server.
     /// </summary>
     /// <typeparam name="M"></typeparam>
     /// <seealso cref="asplib.Model.ViewModel{M}" />
+    [JavaScript(false)]
     public abstract class SmcViewModel<M, F, S> : ViewModel<M>
         where M : class, IStored<M>, new()
         where F : statemap.FSMContext
