@@ -63,7 +63,7 @@ module IndexDoc =
             if c.IsNew
                 then
                     JSConsole.Log("c.IsNew")
-                    CalculatorServer.LoadNew()
+                    CalculatorServer.Load()
                 else
                     JSConsole.Log("Task.FromResult(c)")
                     Task.FromResult(c)

@@ -17,7 +17,7 @@ type Startup private () =
         Startup() then
         this.Configuration <- configuration
         this.Environment <- env
-        let conf =  this.Configuration :?> IConfigurationRoot
+        let conf =  this.Configuration
         do RemotingContext.Set(env, conf) |> ignore
         do ASP_DBEntities.ConnectionString <- conf.["ASP_DBEntities"]
 
@@ -41,8 +41,8 @@ type Startup private () =
         app.UseDefaultFiles() |> ignore
         app.UseHttpsRedirection() |> ignore
         app.UseStaticFiles() |> ignore
-        app.UseWebSharper() |> ignore
         app.UseSession() |> ignore
+        app.UseWebSharper() |> ignore
 
         app.Run(fun context ->
             context.Response.StatusCode <- 404

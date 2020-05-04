@@ -13,7 +13,7 @@ namespace asplib.Model
     /// <seealso cref="asplib.Model.ViewModel{M}" />
     [JavaScript(false)]
     public abstract class SmcViewModel<M, F, S> : ViewModel<M>
-        where M : class, IStored<M>, new()
+        where M : class, ISmcTask<M, F, S>, new()
         where F : statemap.FSMContext
         where S : statemap.State
     {
@@ -61,11 +61,12 @@ namespace asplib.Model
 
         /// <summary>
         /// Copies sate names and fields and properties of Main() into
-        /// serializable fields visible to WebSharper
+        /// JavaScript fields visible to WebSharper
         /// </summary>
         public override void LoadMembers()
         {
             base.LoadMembers();
+            this.State = this.Main.State.ToString();
             this.LoadStateNames();
         }
 

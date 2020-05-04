@@ -19,21 +19,25 @@ module Model =
             ErrorEmpty : string
         }
 
-    /// The ViewModel is primarily running on the server
-    /// and explicitly exposes some fields/properties to the client
+    /// <summary>
+    /// Stored ViewModel wrapper for the calculator, passed back from remoting methods.
+    /// </summary>
     [<JavaScript>]
     type CalculatorViewModel() =
         inherit SmcViewModel<Calculator, CalculatorContext, CalculatorContext.CalculatorState>()
 
         /// General: SMC state as mutable enumeration
         [<DefaultValue>] val mutable Map1 : Map1
-        /// Specific: Stack of the calculator
+        /// Specific for Calculator: Make its Stack visible
         member val Stack = new List<string>() with get, set
 
         [<JavaScript false>]
         override this.LoadMembers() =
             base.LoadMembers()
-            this.State <- this.Main.State.ToString()
+            this.Stack <- new List<string>(this.Main.Stack)
+
+        [<JavaScript false>]
+        override this.LoadStateNames() =
             this.Map1 <-
                 {
                     Splash = CalculatorContext.Map1.Splash.Name
@@ -43,4 +47,3 @@ module Model =
                     ErrorTuple = CalculatorContext.Map1.ErrorTuple.Name
                     ErrorEmpty = CalculatorContext.Map1.ErrorEmpty.Name
                 }
-            this.Stack <- new List<string>(this.Main.Stack)

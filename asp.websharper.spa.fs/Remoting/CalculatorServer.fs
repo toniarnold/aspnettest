@@ -5,19 +5,20 @@ open asp.websharper.spa.fs.Model
 open asplib.Model
 open asplib.Remoting
 open WebSharper
+open System
 
 module CalculatorServer =
 
     let mutable Calculator = new Calculator()
 
     [<Rpc>]
-    let LoadNew () =
+    let Load () =
         use calculator = StorageServer.Load<Calculator, CalculatorViewModel>(null, &Calculator)
         calculator.ViewModelTask<Calculator, CalculatorViewModel>()
 
     [<Rpc>]
-    let Load sessionStorage =
-        use calculator =  StorageServer.Load<Calculator, CalculatorViewModel>(null, &Calculator, sessionStorage)
+    let LoadFrom (sessionStorage) =
+        use calculator =  StorageServer.Load<Calculator, CalculatorViewModel>(null, &Calculator, new Nullable<Storage>(sessionStorage))
         calculator.ViewModelTask<Calculator, CalculatorViewModel>()
 
     [<Rpc>]

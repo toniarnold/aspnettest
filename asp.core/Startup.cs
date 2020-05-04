@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Mvc.Controllers;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Hosting;
 using System;
 
 namespace asp.core
@@ -51,8 +52,14 @@ namespace asp.core
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            app.UseDeveloperExceptionPage();    // always for this demo
-            app.UseExceptionHandler("/Error/Error");
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseHsts();
+            }
             app.UseMiddleware<IIEMiddleware>(); // Global.asax
             app.UseDefaultFiles();
             app.UseStaticFiles();

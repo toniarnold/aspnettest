@@ -15,7 +15,7 @@ namespace asplib.Remoting
     /// </summary>
     public static class StorageServer
     {
-        private static IConfigurationRoot Configuration
+        private static IConfiguration Configuration
         {
             get { return RemotingContext.Configuration; }
         }
