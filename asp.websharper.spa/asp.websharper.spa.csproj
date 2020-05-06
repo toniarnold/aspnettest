@@ -32,6 +32,10 @@
     <Reference Include="asptest.websharper.spa">
       <HintPath>..\bin\asptest.websharper.spa.dll</HintPath>
     </Reference>
-  </ItemGroup>  
+  </ItemGroup>
+
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="xcopy /D /F /Y $(ProjectDir)..\asp.websharper.spa.Model\smc\Calculator_sm.png $(ProjectDir)\wwwroot\calculator" />
+  </Target>  
   
 </Project>

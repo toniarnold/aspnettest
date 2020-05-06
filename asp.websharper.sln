@@ -21,7 +21,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "asp.websharper.spa", "asp.w
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "asp.websharper.spa.Model", "asp.websharper.spa.Model\asp.websharper.spa.Model.csproj", "{69C72923-7C05-42DF-A3AC-2D26B3A7A762}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "calculator.websharper.spa", "asp.websharper.spa.Model\calculator.websharper.spa.vcxproj", "{4588A352-8E01-4F45-BC90-80ABC5AAC7AE}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "calculator.websharper.spa", "asp.websharper.spa.Model\smc\calculator.websharper.spa.vcxproj", "{4588A352-8E01-4F45-BC90-80ABC5AAC7AE}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iie.websharper", "iie.websharper\iie.websharper.csproj", "{132779BF-64A1-491C-8E5E-8C52F8A1A7A0}"
 EndProject

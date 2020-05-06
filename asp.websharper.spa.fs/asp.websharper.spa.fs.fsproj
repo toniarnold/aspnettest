@@ -38,4 +38,8 @@
     <PackageReference Update="FSharp.Core" Version="4.7.1" />
   </ItemGroup>
 
+  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
+    <Exec Command="xcopy /D /F /Y $(ProjectDir)..\asp.websharper.spa.Model\smc\Calculator_sm.png $(ProjectDir)\wwwroot\calculator" />
+  </Target>
+
 </Project>
