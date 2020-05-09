@@ -1,5 +1,5 @@
 ﻿<%@ Control Language="C#" AutoEventWireup="true" CodeBehind="Enter.ascx.cs" Inherits="asp.calculator.View.Enter" %>
 <p>
-    <asp:TextBox ID="operandTextBox" runat="server" EnableViewState="false"
-        size="15em" MaxLength="20"></asp:TextBox>
+    <asp:textbox id="operandTextBox" runat="server" enableviewstate="false"
+        size="15em" maxlength="20"></asp:textbox>
 </p>

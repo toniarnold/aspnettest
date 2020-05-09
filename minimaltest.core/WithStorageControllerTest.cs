@@ -1,6 +1,6 @@
 ﻿using asplib.Controllers;
 using asplib.Model;
-using iie;
+using iselenium;
 using minimal.Controllers;
 using minimal.Models;
 using NUnit.Framework;

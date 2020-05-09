@@ -1,6 +1,8 @@
-﻿using iie;
+﻿using iselenium;
 using NUnit.Framework;
+using OpenQA.Selenium;
 using System;
+using System.Collections.Generic;
 
 namespace minimaltest
 {
@@ -9,11 +11,18 @@ namespace minimaltest
     /// Application_EndRequest in Global.asax.cs, therefore the client id of
     /// the controls must be known in advance, as member name navigation cannot be used.
     /// Minimality here: Directly inherits from IIE, therefore an explicit
-    /// [OneTimeSetUp]/[OneTimeTearDown] for SetUpIE()/TearDownIE() is required.
+    /// [OneTimeSetUp]/[OneTimeTearDown] for SetUpIE()/TearDownIE() and
+    /// the vars/js/driver properties are required.
     /// </summary>
     [TestFixture]
     public class DefaultTest : IIE
     {
+#pragma warning disable IDE1006 // Members in Selenium-generated C# code
+        public IDictionary<string, object> vars { get; set; }
+        public IJavaScriptExecutor js { get; set; }
+        public IWebDriver driver { get; set; }
+#pragma warning restore IDE1006
+
         [OneTimeSetUp]
         public void OneTimeSetUpIE()
         {

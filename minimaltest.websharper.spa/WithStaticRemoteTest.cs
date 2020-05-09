@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace minimaltest.websharper.spa
 {
-    [TestFixture]
+    //[TestFixture]
     public class WithStaticRemoteTest : IETest
     {
         /// <summary>

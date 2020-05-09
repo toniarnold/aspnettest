@@ -6,10 +6,10 @@
     }
 </style>
 <p>
-    <asp:Button ID="addButton" runat="server" Text=" + " OnClick="addButton_Click" CssClass="button" />
-    <asp:Button ID="subButton" runat="server" Text=" - " OnClick="subButton_Click" CssClass="button" />
-    <asp:Button ID="mulButton" runat="server" Text=" * " OnClick="mulButton_Click" CssClass="button" />
-    <asp:Button ID="divButton" runat="server" Text=" / " OnClick="divButton_Click" CssClass="button" />
+    <asp:button id="addButton" runat="server" text=" + " onclick="addButton_Click" cssclass="button" />
+    <asp:button id="subButton" runat="server" text=" - " onclick="subButton_Click" cssclass="button" />
+    <asp:button id="mulButton" runat="server" text=" * " onclick="mulButton_Click" cssclass="button" />
+    <asp:button id="divButton" runat="server" text=" / " onclick="divButton_Click" cssclass="button" />
     <button id="powButton" runat="server"
         onserverclick="powButton_Click"
         class="button"
@@ -23,8 +23,8 @@
         type="button">
         &radic;<span style='text-decoration: overline'>x</span>
     </button>
-    <asp:Button ID="clrButton" runat="server" Text=" C " OnClick="clrButton_Click" CssClass="button" />
-    <asp:Button ID="clrAllButton" runat="server" Text="CA" OnClick="clrAllButton_Click" CssClass="button" />
+    <asp:button id="clrButton" runat="server" text=" C " onclick="clrButton_Click" cssclass="button" />
+    <asp:button id="clrAllButton" runat="server" text="CA" onclick="clrAllButton_Click" cssclass="button" />
 </p>
 
 <p>

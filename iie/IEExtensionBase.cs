@@ -190,7 +190,7 @@ namespace iie
         private static IHTMLElement GetHTMLElementByName(string name, int index = 0)
         {
             var elements = GetHTMLElementsByName(name);
-            if (elements.length < index)
+            if (elements.length <= index)
             {
                 throw new ArgumentException(String.Format(
                     "HTML input element with name='{0}' at index {1} not found", name, index));

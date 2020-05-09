@@ -1,4 +1,4 @@
-﻿using iie;
+﻿using iselenium;
 using minimal.Controllers;
 using minimal.Models;
 using NUnit.Framework;
@@ -31,7 +31,7 @@ namespace minimaltest
         public void WriteContentTest()
         {
             this.Navigate("/WithStatic");
-            this.WriteID("contentTextBox", "a first content line");
+            this.WriteID("ContentTextBox", "a first content line");
             this.ClickID("SubmitButton");
             // The following assertion lies: the empty model attribute is not reflected
             // in the GUI, as the updated model surprisingly isn't applied to the Razor view:
@@ -42,7 +42,7 @@ namespace minimaltest
             var firstString = this.Model.Content[0];
             Assert.That(firstString, Is.EqualTo("a first content line"));
 
-            this.WriteID("contentTextBox", "a second content line");
+            this.WriteID("ContentTextBox", "a second content line");
             this.ClickID("SubmitButton");
             Assert.That(this.Model.ContentTextBox, Is.Empty);
             Assert.That(this.Model.Content.Count, Is.EqualTo(2));

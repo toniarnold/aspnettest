@@ -1,0 +1,18 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+    <RootNamespace>iselenium</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="NUnit.Engine" Version="3.11.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\asplib.core\asplib.core.csproj" />
+    <ProjectReference Include="..\iselenium\iselenium.csproj" />
+  </ItemGroup>
+
+
+</Project>
