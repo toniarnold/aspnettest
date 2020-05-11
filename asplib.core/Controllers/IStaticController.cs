@@ -35,5 +35,13 @@
         {
             return StaticControllerExtension.Controller;
         }
+
+        /// <summary>
+        /// Delete the global controller reference
+        /// </summary>
+        public static void TearDownController()
+        {
+            Controller = null;
+        }
     }
 }

@@ -1,6 +1,6 @@
 ﻿<%@ Page Language="C#" AutoEventWireup="true" CodeBehind="default.aspx.cs" Inherits="minimal._default" %>
 
-<%@ Register Assembly="iie.webforms" Namespace="iie" TagPrefix="iie" %>
+<%@ Register Assembly="iselenium.webforms" Namespace="iselenium" TagPrefix="iie" %>
 
 <!DOCTYPE html>
 

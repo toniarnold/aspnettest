@@ -1,5 +1,7 @@
-﻿using iie;
+﻿using iselenium;
 using NUnit.Framework;
+using System.Collections.Generic;
+using OpenQA.Selenium;
 
 namespace minimaltest
 {
@@ -13,6 +15,12 @@ namespace minimaltest
     [TestFixture]
     public class DefaultTest : IIE
     {
+#pragma warning disable IDE1006 // Members in Selenium-generated C# code
+        public IDictionary<string, object> vars { get; set; }
+        public IJavaScriptExecutor js { get; set; }
+        public IWebDriver driver { get; set; }
+#pragma warning restore IDE1006
+
         [OneTimeSetUp]
         public void OneTimeSetUpIE()
         {

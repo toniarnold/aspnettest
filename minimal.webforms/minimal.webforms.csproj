@@ -1,4 +1,5 @@
 ﻿<Project ToolsVersion="15.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="..\packages\NUnit.Engine.3.11.1\build\net20\nunit.engine.props" Condition="Exists('..\packages\NUnit.Engine.3.11.1\build\net20\nunit.engine.props')" />
   <Import Project="..\packages\EntityFramework.6.3.0\build\EntityFramework.props" Condition="Exists('..\packages\EntityFramework.6.3.0\build\EntityFramework.props')" />
   <Import Project="..\packages\NUnit3TestAdapter.3.15.1\build\net35\NUnit3TestAdapter.props" Condition="Exists('..\packages\NUnit3TestAdapter.3.15.1\build\net35\NUnit3TestAdapter.props')" />
   <Import Project="..\packages\Microsoft.Net.Compilers.3.3.1\build\Microsoft.Net.Compilers.props" Condition="Exists('..\packages\Microsoft.Net.Compilers.3.3.1\build\Microsoft.Net.Compilers.props')" />
@@ -58,21 +59,17 @@
     </Reference>
     <Reference Include="Microsoft.CSharp" />
     <Reference Include="Mono.Cecil, Version=0.9.6.0, Culture=neutral, PublicKeyToken=0738eb9f132ed756, processorArchitecture=MSIL">
-      <HintPath>..\packages\NUnit.Engine.3.10.0\lib\net20\Mono.Cecil.dll</HintPath>
+      <HintPath>..\packages\NUnit.Engine.3.11.1\lib\net20\Mono.Cecil.dll</HintPath>
     </Reference>
-    <Reference Include="nunit-agent, Version=3.10.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\NUnit.Engine.3.10.0\lib\net20\nunit-agent.exe</HintPath>
-    </Reference>
-    <Reference Include="nunit-agent-x86, Version=3.10.0.0, Culture=neutral, processorArchitecture=x86">
-      <HintPath>..\packages\NUnit.Engine.3.10.0\lib\net20\nunit-agent-x86.exe</HintPath>
-    </Reference>
-    <Reference Include="nunit.engine, Version=3.10.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\packages\NUnit.Engine.3.10.0\lib\net20\nunit.engine.dll</HintPath>
-      <Private>True</Private>
+    <Reference Include="nunit.engine, Version=3.11.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit.Engine.3.11.1\lib\net20\nunit.engine.dll</HintPath>
     </Reference>
     <Reference Include="nunit.engine.api, Version=3.0.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
-      <HintPath>..\packages\NUnit.Engine.3.10.0\lib\net20\nunit.engine.api.dll</HintPath>
+      <HintPath>..\packages\NUnit.Engine.3.11.1\lib\net20\nunit.engine.api.dll</HintPath>
       <Private>True</Private>
+    </Reference>
+    <Reference Include="nunit.engine.core, Version=3.11.1.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
+      <HintPath>..\packages\NUnit.Engine.3.11.1\lib\net20\nunit.engine.core.dll</HintPath>
     </Reference>
     <Reference Include="nunit.framework, Version=3.12.0.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\packages\NUnit.3.12.0\lib\net45\nunit.framework.dll</HintPath>
@@ -148,14 +145,17 @@
       <Project>{2e7a40bd-0a76-41cc-88c7-cba07f73ad0f}</Project>
       <Name>asplib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\iie.webforms\iie.webforms.csproj">
-      <Project>{fbae78a0-e68c-4ed9-a1a8-5fcfd1695f39}</Project>
-      <Name>iie.webforms</Name>
+    <ProjectReference Include="..\iselenium.webforms\iselenium.webforms.csproj">
+      <Project>{f3bedb25-a002-4eb5-b951-4a5e3e2ec477}</Project>
+      <Name>iselenium.webforms</Name>
     </ProjectReference>
-    <ProjectReference Include="..\iie\iie.csproj">
-      <Project>{5bb3b5f0-35bf-4a55-ba1d-f4353eb3c6e8}</Project>
-      <Name>iie</Name>
+    <ProjectReference Include="..\iselenium\iselenium.csproj">
+      <Project>{47062059-6fe3-432c-bfb2-fa09d1c8b5ed}</Project>
+      <Name>iselenium</Name>
     </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <WCFMetadata Include="Connected Services\" />
   </ItemGroup>
   <PropertyGroup>
     <VisualStudioVersion Condition="'$(VisualStudioVersion)' == ''">10.0</VisualStudioVersion>
@@ -172,7 +172,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>55269</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://127.0.0.1:55269/minimal.webforms</IISUrl>
+          <IISUrl>http://localhost:55269/minimal.webforms</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
@@ -192,8 +192,11 @@
     <Error Condition="!Exists('..\packages\NUnit3TestAdapter.3.15.1\build\net35\NUnit3TestAdapter.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NUnit3TestAdapter.3.15.1\build\net35\NUnit3TestAdapter.props'))" />
     <Error Condition="!Exists('..\packages\EntityFramework.6.3.0\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.3.0\build\EntityFramework.props'))" />
     <Error Condition="!Exists('..\packages\EntityFramework.6.3.0\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.3.0\build\EntityFramework.targets'))" />
+    <Error Condition="!Exists('..\packages\Selenium.InternetExplorer.WebDriver.3.150.1\build\Selenium.InternetExplorer.WebDriver.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Selenium.InternetExplorer.WebDriver.3.150.1\build\Selenium.InternetExplorer.WebDriver.targets'))" />
+    <Error Condition="!Exists('..\packages\NUnit.Engine.3.11.1\build\net20\nunit.engine.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NUnit.Engine.3.11.1\build\net20\nunit.engine.props'))" />
   </Target>
   <Import Project="..\packages\EntityFramework.6.3.0\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.3.0\build\EntityFramework.targets')" />
+  <Import Project="..\packages\Selenium.InternetExplorer.WebDriver.3.150.1\build\Selenium.InternetExplorer.WebDriver.targets" Condition="Exists('..\packages\Selenium.InternetExplorer.WebDriver.3.150.1\build\Selenium.InternetExplorer.WebDriver.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

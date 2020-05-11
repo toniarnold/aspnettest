@@ -9,7 +9,7 @@ namespace iselenium
         public TestRunnerBase(int port)
         {
             // Initialize static fields when creating a new instance
-            SeleniumExtension.Port = port;
+            SeleniumExtensionBase.Port = port;
             Reports = new List<string>();
             Result = null;
         }
@@ -91,8 +91,8 @@ namespace iselenium
         /// </summary>
         protected void Configure(int requestTimeout, bool ieVisible)
         {
-            SeleniumExtension.RequestTimeout = requestTimeout;
-            SeleniumExtension.IEVisible = ieVisible;
+            SeleniumExtensionBase.RequestTimeout = requestTimeout;
+            SeleniumExtensionBase.IEVisible = ieVisible;
         }
     }
 }

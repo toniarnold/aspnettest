@@ -1,4 +1,4 @@
-﻿using iie;
+﻿using iselenium;
 using minimal;
 using NUnit.Framework;
 using System;

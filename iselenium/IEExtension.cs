@@ -7,7 +7,7 @@ namespace iselenium
     /// Extension marker interface for a test fixture running in Internet Explorer
     /// </summary>
     [Obsolete("Replaced by ISelenium")]
-    public interface IIE : ISelenium
+    public interface IIE : ISeleniumBase
     {
     }
 
@@ -18,22 +18,27 @@ namespace iselenium
     public static class IEExtension
     {
         /// <summary>
+        /// To be used with ClickID()
+        /// </summary>
+        public const string EXCEPTION_LINK_ID = "exception-link";
+
+        /// <summary>
         /// [OneTimeSetUp]
         /// Start Internet Explorer and set up events
         /// </summary>
         /// <param name="inst"></param>
-        public static void SetUpIE(this ISelenium inst)
+        public static void SetUpIE(this ISeleniumBase inst)
         {
-            SeleniumExtension.SetUpBrowser<InternetExplorerDriver>(inst);
+            SeleniumExtensionBase.SetUpBrowser<InternetExplorerDriver>(inst);
         }
 
         /// <summary>
         /// [OneTimeTearDown]
         /// Quit Internet Explorer
         /// </summary>
-        public static void TearDownIE(this ISelenium inst)
+        public static void TearDownIE(this ISeleniumBase inst)
         {
-            SeleniumExtension.TearDownBrowser(inst);
+            SeleniumExtensionBase.TearDownBrowser(inst);
         }
     }
 }

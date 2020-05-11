@@ -8,8 +8,9 @@ namespace iselenium
     {
     }
 
-    [Obsolete("Replaced by SeleniumTest<InternetExplorerDriver, TController>")]
-    public class IETest<TController> : SeleniumTest<InternetExplorerDriver, TController>
+    [Obsolete("Replaced by SeleniumTest<InternetExplorerDriver, TMain>")]
+    public class IETest<TMain> : SeleniumTest<InternetExplorerDriver, TMain>, ISelenium
+        where TMain : new()
     {
     }
 }

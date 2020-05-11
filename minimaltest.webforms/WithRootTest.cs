@@ -1,4 +1,4 @@
-﻿using iie;
+﻿using iselenium;
 using NUnit.Framework;
 using System.Web.UI.WebControls;
 

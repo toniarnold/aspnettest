@@ -6,7 +6,7 @@ using OpenQA.Selenium.IE;
 namespace iselenium
 {
     /// <summary>
-    /// Base class for Browser tests with accessors for ISmcControl
+    /// Base class for Selenium tests with accessors for ISmcControl
     /// </summary>
     [TestFixture]
     public abstract class SmcTest<TWebDriver, TController, FSMContext, TState> : StorageTest<TController>

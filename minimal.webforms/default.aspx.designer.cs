@@ -7,11 +7,13 @@
 // </automatisch generiert>
 //------------------------------------------------------------------------------
 
-namespace minimal {
-    
-    
-    public partial class _default {
-        
+namespace minimal
+{
+
+
+    public partial class _default
+    {
+
         /// <summary>
         /// form1-Steuerelement
         /// </summary>
@@ -20,7 +22,7 @@ namespace minimal {
         /// Zum Ändern Felddeklaration aus der Designerdatei in eine Code-Behind-Datei verschieben.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlForm form1;
-        
+
         /// <summary>
         /// testButton-Steuerelement
         /// </summary>
@@ -29,7 +31,7 @@ namespace minimal {
         /// Zum Ändern Felddeklaration aus der Designerdatei in eine Code-Behind-Datei verschieben.
         /// </remarks>
         protected global::System.Web.UI.WebControls.ImageButton testButton;
-        
+
         /// <summary>
         /// testResult-Steuerelement
         /// </summary>
@@ -37,6 +39,6 @@ namespace minimal {
         /// Automatisch generiertes Feld
         /// Zum Ändern Felddeklaration aus der Designerdatei in eine Code-Behind-Datei verschieben.
         /// </remarks>
-        protected global::iie.TestResult testResult;
+        protected global::iselenium.TestResult testResult;
     }
 }

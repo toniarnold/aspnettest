@@ -19,7 +19,7 @@ namespace iselenium
             await _next(context);
 
             // Application_EndRequest
-            SeleniumExtension.StatusCode = context.Response.StatusCode;
+            SeleniumExtensionBase.StatusCode = context.Response.StatusCode;
         }
     }
 }

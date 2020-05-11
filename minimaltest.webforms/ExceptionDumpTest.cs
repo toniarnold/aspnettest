@@ -1,4 +1,4 @@
-﻿using iie;
+﻿using iselenium;
 using minimal;
 using NUnit.Framework;
 using System.Web.UI.WebControls;
@@ -11,7 +11,7 @@ namespace minimaltest
     /// inherit from StorageTest for automatic database cleanup.
     /// </summary>
     [TestFixture]
-    public class ExceptionDumpTest : StorageTest<ContentStorage>
+    public class ExceptionDumpTest : StorageTest<ContentStorage>, ISelenium
     {
         [Test]
         public void ThrowRetrieveDumpTest()

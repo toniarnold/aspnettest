@@ -34,5 +34,13 @@
         {
             return ControlRootExtension.RootControl;
         }
+
+        /// <summary>
+        /// Delete the global RootControl reference
+        /// </summary>
+        public static void TearDownRoot()
+        {
+            ControlRootExtension.RootControl = null;
+        }
     }
 }
