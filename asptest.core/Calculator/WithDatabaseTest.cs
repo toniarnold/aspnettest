@@ -1,5 +1,5 @@
 ﻿using asplib.Model;
-using iie;
+using iselenium;
 using NUnit.Framework;
 
 namespace asptest.Calculator

@@ -59,7 +59,6 @@ namespace iie
         /// <summary>
         /// [OneTimeSetUp]
         /// </summary>
-        /// <param name="inst"></param>
         public static void SetUpDatabase(this IIE inst)
         {
             using (var db = new ASP_DBEntities())
@@ -75,7 +74,6 @@ namespace iie
         /// <summary>
         /// [OneTimeTearDown]
         /// </summary>
-        /// <param name="inst"></param>
         public static void TearDownDatabase(this IIE inst)
         {
             using (var db = new ASP_DBEntities())
@@ -96,9 +94,10 @@ namespace iie
         /// <binding protocol="http" bindingInformation="*:51333:127.0.0.1" />
         /// Wait for the response for AppSettings["RequestTimeout"] seconds.
         /// </summary>
-        /// <param name="inst"></param>
-        /// <param name="url"></param>
+        /// <param name="path">URL path</param>
         /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>
+        /// <param name="delay">Optional delay time in milliseconds before clicking the element</param>
+        /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete</param>
         public static void Navigate(this IIE inst, string path, int expectedStatusCode = 200, int delay = 0, int pause = 0)
         {
             IEExtensionBase.Navigate(path, expectedStatusCode, delay, pause);
@@ -107,9 +106,10 @@ namespace iie
         /// <summary>
         /// Asynchronously issue a GET request for the URL.
         /// </summary>
-        /// <param name="inst"></param>
-        /// <param name="url"></param>
-        /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>
+        /// <param name="url">URL to open in the browser</param>
+        /// <param name="expectedStatusCode">Expected StatusCode of the response</param>
+        /// <param name="delay">Optional delay time in milliseconds before clicking the element</param>
+        /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete</param>
         public static void NavigateURL(this IIE inst, string url, int expectedStatusCode = 200, int delay = 0, int pause = 0)
         {
             IEExtensionBase.NavigateURL(url, expectedStatusCode, delay, pause);
@@ -118,7 +118,7 @@ namespace iie
         /// <summary>
         /// Setter method for the global HTTP MainControl.Response.StatusCode to check
         /// </summary>
-        /// <param name="statusCode"></param>
+        /// <param name="statusCode">Actual StatusCode received</param>
         public static void SetStatusCode(int statusCode)
         {
             IEExtensionBase.StatusCode = statusCode;
@@ -127,8 +127,7 @@ namespace iie
         /// <summary>
         /// Get the HTML document body of the current document in Internet Explorer
         /// </summary>
-        /// <param name="inst"></param>
-        /// <returns></returns>
+        /// <returns> HTML document body</returns>
         public static string Html(this IIE inst)
         {
             return IEExtensionBase.Html();
@@ -138,7 +137,6 @@ namespace iie
         /// Click the ASP.NET control element (usually a Button instance) at the given path and wait for the response
         /// when expectPostBack is true.
         /// </summary>
-        /// <param name="inst"></param>
         /// <param name="path">Member name path to the control starting at the main control</param>
         /// <param name="expectPostBack">Whether to expect a server request from the click</param>
         /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>
@@ -154,7 +152,6 @@ namespace iie
         /// Click the ASP.NET control element (usually a Button instance) directly and wait for the response
         /// when expectPostBack is true.
         /// </summary>
-        /// <param name="inst"></param>
         /// <param name="control">The ASP.NET control to click on</param>
         /// <param name="expectPostBack">Whether to expect a server request from the click</param>
         /// <param name="expectedStatusCode">Expected StatusCode of the response</param>
@@ -170,7 +167,6 @@ namespace iie
         /// Click the ASP.NET control element (usually a Button instance) with the given clientID and wait for the response
         /// when expectPostBack is true.
         /// </summary>
-        /// <param name="inst"></param>
         /// <param name="clientId">HTML id attribute of the element to click on</param>
         /// <param name="expectPostBack">Whether to expect a server request from the click</param>
         /// <param name="expectedStatusCode">Expected StatusCode of the response</param>
@@ -186,7 +182,6 @@ namespace iie
         /// Select the item with the given value from a ListControl and wait for the response
         /// when expectPostBack is true.
         /// </summary>
-        /// <param name="inst"></param>
         /// <param name="path">Member name path to the control starting at the main control</param>
         /// <param name="value">value of the item to click on</param>
         /// <param name="expectPostBack">Whether to expect a server request from the click. Defaults to false</param>
@@ -218,7 +213,6 @@ namespace iie
         /// <summary>
         /// Write into the ASP.NET control (usually a TextBox instance) at the given path
         /// </summary>
-        /// <param name="inst"></param>
         /// <param name="path">Member name path to the control starting at the main control</param>
         /// <param name="text">Text to write</param>
         public static void Write(this IIE inst, string path, string text)
@@ -230,9 +224,8 @@ namespace iie
         /// <summary>
         /// Returns the ASP.NET control instance at the given path
         /// </summary>
-        /// <param name="inst"></param>
         /// <param name="path">Member name path to the control starting at the main control</param>
-        /// <returns></returns>
+        /// <returns>ASP.NET control</returns>
         public static Control GetControl(this IIE inst, string path)
         {
             return GetControl(inst, ControlRootExtension.GetRoot(), path);
@@ -242,7 +235,7 @@ namespace iie
         /// Get the element adapter with the given clientID
         /// </summary>
         /// <param name="clientID">ClientID resp. HTML id attribute of the element</param>
-        /// <returns></returns>
+        /// <returns>IHTMLElement wrapper</returns>
         public static HTMLElement GetHTMLElement(this IIE inst, string clientID)
         {
             return IEExtensionBase.GetHTMLElement(clientID);
@@ -253,7 +246,7 @@ namespace iie
         /// </summary>
         /// <param name="parentnode"></param>
         /// <param name="path">Member name path to the control starting at the main control</param>
-        /// <returns></returns>
+        /// <returns>IHTMLElement wrapper</returns>
         private static HTMLElement GetHTMLElement(this IIE inst, Control parentnode, string path)
         {
             if (ControlRootExtension.GetRoot() == null)

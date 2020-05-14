@@ -142,7 +142,7 @@
       <Name>asplib.webforms</Name>
     </ProjectReference>
     <ProjectReference Include="..\asplib\asplib.csproj">
-      <Project>{2e7a40bd-0a76-41cc-88c7-cba07f73ad0f}</Project>
+      <Project>{3d85354c-5d55-4684-a3bd-8b4f75bfadb4}</Project>
       <Name>asplib</Name>
     </ProjectReference>
     <ProjectReference Include="..\iselenium.webforms\iselenium.webforms.csproj">

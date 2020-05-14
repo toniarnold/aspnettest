@@ -44,6 +44,7 @@
     <None Include="apicaller-apiservice.dia">
       <Filter>Sources</Filter>
     </None>
+    <None Include="migrate-iie-iselenium.md" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="components.png">

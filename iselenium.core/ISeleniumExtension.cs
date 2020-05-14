@@ -11,7 +11,7 @@
         /// index and wait for the response when expectPostBack is true.
         /// </summary>
         /// <param name="inst"></param>
-        /// <param name="name">HTML name attribute of the element to click on</param>
+        /// <param name="name">HTML name or id attribute of the element to click on</param>
         /// <param name="expectRequest">Whether to expect a GET/POST request to the server from the click</param>
         /// <param name="samePage">Whether to expect a WebForms style PostBack to the same page with the same HTML element</param>
         /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>
@@ -21,7 +21,7 @@
                                 bool expectRequest = true, bool samePage = false,
                                 int expectedStatusCode = 200, int delay = 0, int pause = 0)
         {
-            SeleniumExtensionBase.ClickName(inst, name, index, 
+            SeleniumExtensionBase.ClickName(inst, name, index,
                                             expectRequest: expectRequest, samePage: samePage,
                                             expectedStatusCode: expectedStatusCode, delay: delay, pause: pause);
         }

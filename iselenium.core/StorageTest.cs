@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.IE;
+using System;
 using System.Collections.Generic;
 
 namespace iselenium
@@ -11,7 +12,6 @@ namespace iselenium
     /// for Storage.Database which cleans up newly added Main rows.
     /// Call SetUpStorage() to configure the storage for that specific test suite.
     /// Provides accessors for IStorageControl
-    [TestFixture]
     public abstract class StorageTest<TWebDriver, TController> : SeleniumTest<TWebDriver, TController>, IDeleteNewRows
         where TWebDriver : IWebDriver, new()
     {
@@ -44,8 +44,9 @@ namespace iselenium
     /// for Storage.Database which cleans up newly added Main rows.
     /// Call SetUpStorage() to configure the storage for that specific test suite.
     /// Provides accessors for IStorageControl
+    [Obsolete("Replaced by StorageTest<InternetExplorerDriver, TMain>")]
     [TestFixture]
-    public abstract class StorageTest<C> : StorageTest<InternetExplorerDriver, C>, IDeleteNewRows
+    public abstract class StorageTest<TController> : StorageTest<InternetExplorerDriver, TController>, IIE, ISelenium, IDeleteNewRows
     {
     }
 }

@@ -1,6 +1,6 @@
 ﻿using asplib.View;
-using OpenQA.Selenium;
 using NUnit.Framework;
+using OpenQA.Selenium;
 
 namespace iselenium
 {
@@ -24,7 +24,6 @@ namespace iselenium
         {
             get { return (IStorageControl<TMain>)ControlRootExtension.GetRoot(); }
         }
-
 
         /// <summary>
         /// Delete the global controller reference

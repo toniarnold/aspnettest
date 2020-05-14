@@ -1,6 +1,6 @@
 ﻿using asplib.Controllers;
 using asplib.Model.Db;
-using iie;
+using iselenium;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
@@ -52,14 +52,8 @@ namespace asp.core
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseHsts();
-            }
+            app.UseDeveloperExceptionPage();    // always for this demo
+            app.UseExceptionHandler("/Error/Error");
             app.UseMiddleware<IIEMiddleware>(); // Global.asax
             app.UseDefaultFiles();
             app.UseStaticFiles();

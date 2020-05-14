@@ -28,6 +28,7 @@
     <None Include="internet-explorer.dia" />
     <None Include="Makefile" />
     <None Include="django-selenium.md" />
+    <None Include="migrate-iie-iselenium.md" />
     <None Include="recordings.md" />
     <None Include="restapi.md" />
     <None Include="setup.md" />

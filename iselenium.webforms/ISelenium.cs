@@ -1,15 +1,10 @@
-﻿using asplib.Model;
-using asplib.View;
+﻿using asplib.View;
 using NUnit.Framework;
-using System;
+using OpenQA.Selenium;
 using System.Collections.Generic;
-using System.Data.SqlClient;
 using System.Linq;
 using System.Reflection;
 using System.Web.UI;
-using System.Web.UI.WebControls;
-using OpenQA.Selenium;
-using OpenQA.Selenium.Support.UI;
 
 namespace iselenium
 {
@@ -27,7 +22,6 @@ namespace iselenium
         /// </summary>
         public const string EXCEPTION_LINK_ID = "exception-link";
 
-
         /// <summary>
         /// Click the ASP.NET control element (usually a Button instance) at the given path and wait for the response
         /// when expectPostBack is true.
@@ -39,15 +33,14 @@ namespace iselenium
         /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>
         /// <param name="delay">Optional delay time in milliseconds before clicking the element</param>
         /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete</param>
-        public static void Click(this ISelenium inst, string path, 
-                                bool expectRequest = true, bool samePage = false, 
+        public static void Click(this ISelenium inst, string path,
+                                bool expectRequest = true, bool samePage = false,
                                 int expectedStatusCode = 200, int delay = 0, int pause = 0)
         {
             var button = GetControl(inst, path);
             SeleniumExtensionBase.ClickID(inst, button.ClientID, expectRequest: expectRequest, samePage: samePage,
                                             expectedStatusCode: expectedStatusCode, delay: delay, pause: pause);
         }
-
 
         /// <summary>
         /// Get the element adapter with the given clientID

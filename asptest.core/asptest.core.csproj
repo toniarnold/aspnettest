@@ -16,7 +16,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\asp.core\asp.core.csproj" />
-    <ProjectReference Include="..\iie.core\iie.core.csproj" />
+    <ProjectReference Include="..\iselenium.core\iselenium.core.csproj" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

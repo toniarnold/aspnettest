@@ -1,6 +1,6 @@
 ﻿using asplib.Model;
 using asptest.Calculator;
-using iie;
+using iselenium;
 using NUnit.Framework;
 using System;
 using System.Text.RegularExpressions;

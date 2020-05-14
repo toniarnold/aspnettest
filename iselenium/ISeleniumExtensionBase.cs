@@ -100,7 +100,8 @@ namespace iselenium
         /// <returns></returns>
         public static string Html(this ISeleniumBase inst)
         {
-            return inst.driver.FindElement(By.TagName("body")).GetAttribute("outerHTML");
+            var html = inst.driver.FindElement(By.TagName("body")).GetAttribute("outerHTML");
+            return IIECompatible(inst) ? html.Replace("\r\n", "\n") : html;
         }
 
         /// <summary>
@@ -256,8 +257,10 @@ namespace iselenium
 
         /// <summary>
         /// Get the element with the given name at the given index
+        /// When in IECompatible mode, name *or* id behavior mimics that of SHDocVw.InternetExplorer
+        /// for backwards compatibility
         /// </summary>
-        /// <param name="name">name attribute of the element</param>
+        /// <param name="name">HTML name attribute of the element to click on</param>
         /// <param name="index">index of the element collection with that name, defaults to 0</param>
         /// <returns></returns>
         public static IWebElement GetHTMLElementByName(this ISeleniumBase inst, string name, int index = 0)
@@ -265,13 +268,20 @@ namespace iselenium
             var elements = inst.driver.FindElements(By.Name(name));
             if (elements.Count <= index)
             {
+                if (IIECompatible(inst))
+                {
+                    elements = inst.driver.FindElements(By.Id(name));
+                    if (elements.Count <= index)
+                    {
+                        throw new ArgumentException(String.Format(
+                            "HTML input element with name='{0}' or id='{0}' at index {1} not found", name, index));
+                    }
+                    return elements[index];
+                }
                 throw new ArgumentException(String.Format(
-                    "HTML input element with name='{0}' at index {1} not found", name, index));
+                    "HTML input element with name='{0}'at index {1} not found", name, index));
             }
-            else
-            {
-                return elements[index];
-            }
+            return elements[index];
         }
 
         /// <summary>
@@ -332,6 +342,11 @@ namespace iselenium
             Assert.That(StatusCode, Is.AnyOf(expectedStatusCode,
                 (int)HttpStatusCode.NotModified,
                 (int)HttpStatusCode.NotFound)); // WebSharper a href="#"-Links?
+        }
+
+        private static bool IIECompatible(this ISeleniumBase inst)
+        {
+            return inst is IIE;
         }
     }
 }

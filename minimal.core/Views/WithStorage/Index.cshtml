@@ -34,7 +34,7 @@
             document.getElementById("sessionstorage").value = storage;
             document.forms[0].action = "/WithStorage/ChangeStorage";
             document.forms[0].submit();
-    }
+        }
     </script>
 </head>
 <body onload="clearContentTextBox()">
@@ -46,7 +46,7 @@
         <input asp-for="Storage" type="radio" value="@Storage.Database" onclick="doStoragePostBack('Database');" /> Database
         <br />
         <input asp-for="ContentTextBox" />
-        <button type="submit" id="SubmitButton" name="SubmitButton">Submit</button>
+        <button type="submit" id="SubmitButton">Submit</button>
         <ul>
             @foreach (var item in Model.Content)
             {

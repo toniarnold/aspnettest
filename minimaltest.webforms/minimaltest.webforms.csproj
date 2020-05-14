@@ -84,10 +84,6 @@
       <Project>{36e1692e-9b7c-467c-adbe-a3f86575269a}</Project>
       <Name>asp.webforms</Name>
     </ProjectReference>
-    <ProjectReference Include="..\asplib\asplib.csproj">
-      <Project>{2e7a40bd-0a76-41cc-88c7-cba07f73ad0f}</Project>
-      <Name>asplib</Name>
-    </ProjectReference>
     <ProjectReference Include="..\iselenium.webforms\iselenium.webforms.csproj">
       <Project>{f3bedb25-a002-4eb5-b951-4a5e3e2ec477}</Project>
       <Name>iselenium.webforms</Name>

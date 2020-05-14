@@ -31,8 +31,7 @@ a text editor and find for the relevant ```<bindings>``` by searching for
 ```
 
 Replace ```localhost``` with its IP address ```127.0.0.1``` in both websites,
-otherwise Internet Explorer will not work with your site (it really is Internet
-Explorer 11 in spite of Edge, as it doesn't render CSS Flexbox nicely):
+otherwise Internet Explorer will not work with your site:
 
 ```xml
 <bindings>

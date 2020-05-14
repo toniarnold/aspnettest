@@ -148,7 +148,7 @@ namespace iie
         /// Get all input elements with the given name as simple struct w/o dependency to COM
         /// </summary>
         /// <param name="name">name attribute of the element</param>
-        /// <returns></returns>
+        /// <returns>List of IHTMLElement wrapper</returns>
         public static List<HTMLElement> GetHTMLElements(string name)
         {
             var elements = GetHTMLElementsByName(name);
@@ -205,7 +205,7 @@ namespace iie
         /// Get all input elements with the given name
         /// </summary>
         /// <param name="name">name attribute of the element</param>
-        /// <returns></returns>
+        /// <returns>Unwrapped IHTMLElement collection</returns>
         private static IHTMLElementCollection GetHTMLElementsByName(string name)
         {
             var elements = Document.getElementsByName(name);

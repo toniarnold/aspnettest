@@ -48,11 +48,11 @@ namespace iie
         /// This requires changing the binding in .\.vs\config\applicationhost.config to
         /// <binding protocol="http" bindingInformation="*:51333:127.0.0.1" />
         /// Wait for the response for AppSettings["RequestTimeout"] seconds.
+        /// </summary>
+        /// <param name="path">URL path</param>
+        /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>
         /// <param name="delay">Optional delay time in milliseconds before clicking the element</param>
         /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete</param>
-        /// </summary>
-        /// <param name="url"></param>
-        /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>
         public static void Navigate(this IIE inst, string path, int expectedStatusCode = 200, int delay = 0, int pause = 0)
         {
             IEExtensionBase.Navigate(path, expectedStatusCode, delay, pause);
@@ -63,6 +63,8 @@ namespace iie
         /// </summary>
         /// <param name="url"></param>
         /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>
+        /// <param name="delay">Optional delay time in milliseconds before clicking the element</param>
+        /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete</param>
         public static void NavigateURL(this IIE inst, string url, int expectedStatusCode = 200, int delay = 0, int pause = 0)
         {
             IEExtensionBase.NavigateURL(url, expectedStatusCode, delay, pause);
@@ -72,8 +74,8 @@ namespace iie
         /// Click the HTML element (usually a Button) with the given name and
         /// index and wait for the response when expectPostBack is true.
         /// </summary>
-        /// <param name="inst"></param>
-        /// <param name="path">Member name path to the control starting at the main control</param>
+        /// <param name="name">name attribute of the element</param>
+        /// <param name="index">index of the element collection with that name, defaults to 0</param>
         /// <param name="expectPostBack">Whether to expect a server request from the click</param>
         /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>
         /// <param name="delay">Optional delay time in milliseconds before clicking the element</param>
@@ -100,9 +102,9 @@ namespace iie
         /// <summary>
         /// Write into the HTML element (usually a text input) with the given clientID
         /// </summary>
-        /// <param name="inst"></param>
-        /// <param name="clientId">HTML id attribute of the element to click on</param>
+        /// <param name="name">name attribute of the element</param>
         /// <param name="text">Text to write</param>
+        /// <param name="index">index of the element collection with that name, defaults to 0</param>
         public static void Write(this IIE inst, string name, string text, int index = 0)
         {
             IEExtensionBase.WriteName(name, text, index);
@@ -111,7 +113,6 @@ namespace iie
         /// <summary>
         /// Write into the HTML element (usually a text input) with the given clientID
         /// </summary>
-        /// <param name="inst"></param>
         /// <param name="clientId">HTML id attribute of the element to click on</param>
         /// <param name="text">Text to write</param>
         public static void WriteID(this IIE inst, string clientId, string text)
@@ -124,18 +125,12 @@ namespace iie
         /// collection with the given name and wait for the response when
         /// expectPostBack is true.
         /// </summary>
-        /// <param name="inst"></param>
-        /// <param name="name">Member name path to the control starting at the
-        /// main control</param>
+        /// <param name="name">name attribute of the element</param>
         /// <param name="value">value of the item to click on</param>
-        /// <param name="expectPostBack">Whether to expect a server request
-        /// from the click. Defaults to false</param>
-        /// <param name="expectedStatusCode">Expected StatusCode of the
-        /// response</param>
-        /// <param name="delay">Optional delay time in milliseconds before
-        /// clicking the element</param>
-        /// <param name="pause">Optional pause time in milliseconds after IE
-        /// claims DocumentComplete</param>
+        /// <param name="expectPostBack">Whether to expect a server request from the click. Defaults to false</param>
+        /// <param name="expectedStatusCode">Expected StatusCode of the response</param>
+        /// <param name="delay">Optional delay time in milliseconds before clicking the element</param>
+        /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete</param>
         public static void Select(this IIE inst, string name, string value, bool expectPostBack = false, int expectedStatusCode = 200, int delay = 0, int pause = 0)
         {
             var list = IEExtensionBase.GetHTMLElements(name);
@@ -161,7 +156,7 @@ namespace iie
         /// Get the element adapter with the given clientID
         /// </summary>
         /// <param name="clientID">ClientID resp. HTML id attribute of the element</param>
-        /// <returns></returns>
+        /// <returns>IHTMLElement wrapper</returns>
         public static HTMLElement GetHTMLElement(this IIE inst, string clientID)
         {
             return IEExtensionBase.GetHTMLElement(clientID);
@@ -170,8 +165,7 @@ namespace iie
         /// <summary>
         /// Get the HTML document body of the current document in Internet Explorer
         /// </summary>
-        /// <param name="inst"></param>
-        /// <returns></returns>
+        /// <returns> HTML document body</returns>
         public static string Html(this IIE inst)
         {
             return IEExtensionBase.Html();
