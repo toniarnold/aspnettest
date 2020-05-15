@@ -81,7 +81,6 @@
     <Compile Include="asplib\View\ControlStorageExtensionTest.cs" />
     <Compile Include="asp\calculator\Control\CalculatorTest.cs" />
     <Compile Include="asp\calculator\Control\FibonacciTest.cs" />
-    <Compile Include="iie\IIETest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
@@ -100,14 +99,6 @@
     <ProjectReference Include="..\asplib\asplib.csproj">
       <Project>{2e7a40bd-0a76-41cc-88c7-cba07f73ad0f}</Project>
       <Name>asplib</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\iie.webforms\iie.webforms.csproj">
-      <Project>{fbae78a0-e68c-4ed9-a1a8-5fcfd1695f39}</Project>
-      <Name>iie.webforms</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\iie\iie.csproj">
-      <Project>{5bb3b5f0-35bf-4a55-ba1d-f4353eb3c6e8}</Project>
-      <Name>iie</Name>
     </ProjectReference>
     <ProjectReference Include="..\smc\smc.csproj">
       <Project>{079cccf0-0fb4-463a-81dc-98493d097d6a}</Project>

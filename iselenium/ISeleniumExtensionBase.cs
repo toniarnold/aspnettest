@@ -144,7 +144,8 @@ namespace iselenium
                                     int expectedStatusCode = 200, int delay = 0, int pause = 0)
         {
             var button = GetHTMLElementById(inst, clientId);
-            Click(inst, button, expectRequest: expectRequest, delay: delay, pause: pause);
+            Click(inst, button, expectRequest: expectRequest, expectedStatusCode: expectedStatusCode,
+                    delay: delay, pause: pause);
             if (samePage)
             {
                 var _ = new WebDriverWait(inst.driver, TimeSpan.FromSeconds(RequestTimeout))
