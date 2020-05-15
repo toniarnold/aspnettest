@@ -1,10 +1,12 @@
 ﻿using asplib.View;
 using NUnit.Framework;
 using OpenQA.Selenium;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
 using System.Web.UI;
+using System.Web.UI.WebControls;
 
 namespace iselenium
 {
@@ -26,20 +28,87 @@ namespace iselenium
         /// Click the ASP.NET control element (usually a Button instance) at the given path and wait for the response
         /// when expectPostBack is true.
         /// </summary>
-        /// <param name="inst"></param>
         /// <param name="path">Member name path to the control starting at the main control</param>
-        /// <param name="expectRequest">Whether to expect a GET/POST request to the server from the click</param>
-        /// <param name="samePage">Whether to expect a WebForms style PostBack to the same page with the same control</param>
+        /// <param name="expectPostBack">Whether to expect a server request from the click</param>
         /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>
         /// <param name="delay">Optional delay time in milliseconds before clicking the element</param>
         /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete</param>
-        public static void Click(this ISelenium inst, string path,
-                                bool expectRequest = true, bool samePage = false,
-                                int expectedStatusCode = 200, int delay = 0, int pause = 0)
+        public static void Click(this ISelenium inst, string path, bool expectPostBack = true, int expectedStatusCode = 200, int delay = 0, int pause = 0)
         {
             var button = GetControl(inst, path);
-            SeleniumExtensionBase.ClickID(inst, button.ClientID, expectRequest: expectRequest, samePage: samePage,
+            SeleniumExtensionBase.ClickID(inst, button.ClientID, expectRequest: expectPostBack, samePage: false,
                                             expectedStatusCode: expectedStatusCode, delay: delay, pause: pause);
+        }
+
+        /// <summary>
+        /// Click the ASP.NET control element (usually a Button instance) directly and wait for the response
+        /// when expectPostBack is true.
+        /// </summary>
+        /// <param name="control">The ASP.NET control to click on</param>
+        /// <param name="expectPostBack">Whether to expect a server request from the click</param>
+        /// <param name="expectedStatusCode">Expected StatusCode of the response</param>
+        /// <param name="delay">Optional delay time in milliseconds before clicking the element</param>
+        /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete</param>
+        public static void Click(this ISelenium inst, Control control, bool expectPostBack = true, int expectedStatusCode = 200, int delay = 0, int pause = 0)
+        {
+            var button = GetHTMLElement(inst, control.ClientID);
+            SeleniumExtensionBase.Click(inst, button, expectPostBack, expectedStatusCode, delay, pause);
+        }
+
+        /// <summary>
+        /// Select the item with the given value from a ListControl and wait for the response
+        /// when expectPostBack is true.
+        /// </summary>
+        /// <param name="path">Member name path to the control starting at the main control</param>
+        /// <param name="value">value of the item to click on</param>
+        /// <param name="expectPostBack">Whether to expect a server request from the click. Defaults to false</param>
+        /// <param name="expectedStatusCode">Expected StatusCode of the response</param>
+        /// <param name="delay">Optional delay time in milliseconds before clicking the element</param>
+        /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete</param>
+        public static void Select(this ISelenium inst, string path, string value, bool expectPostBack = false, int expectedStatusCode = 200, int delay = 0, int pause = 0)
+        {
+            var list = GetControl(inst, path) as ListControl;
+            if (list == null)
+            {
+                throw new Exception(String.Format("ListControl at '{0}' not found", path));
+            }
+            for (int idx = 0; idx <= list.Items.Count; idx++)
+            {
+                if (idx == list.Items.Count)
+                {
+                    throw new Exception(String.Format("ListControl at '{0}': value '{1}' not found", path, value));
+                }
+                else if (list.Items[idx].Value == value)
+                {
+                    string itemID = String.Format("{0}_{1}", list.ClientID, idx);
+                    SeleniumExtensionBase.ClickID(inst, itemID, expectRequest: expectPostBack, samePage: true,
+                                                expectedStatusCode: expectedStatusCode, delay: delay, pause: pause);
+                    break;
+                }
+            }
+        }
+
+        /// <summary>
+        /// Write into the ASP.NET control (usually a TextBox instance) at the given path
+        /// </summary>
+        /// <param name="path">Member name path to the control starting at the main control</param>
+        /// <param name="text">Text to write</param>
+        public static void Write(this ISelenium inst, string path, string text)
+        {
+            var textinput = GetHTMLElement(inst, ControlRootExtension.GetRoot(), path);
+            textinput.Clear();
+            textinput.SendKeys(text);
+        }
+
+        /// <summary>
+        /// Returns the ASP.NET control instance at the given path
+        /// </summary>
+        /// <param name="inst"></param>
+        /// <param name="path">Member name path to the control starting at the main control</param>
+        /// <returns></returns>
+        public static Control GetControl(this ISelenium inst, string path)
+        {
+            return GetControl(inst, ControlRootExtension.GetRoot(), path);
         }
 
         /// <summary>
@@ -53,14 +122,19 @@ namespace iselenium
         }
 
         /// <summary>
-        /// Returns the ASP.NET control instance at the given path
+        /// Navigates to the element through the given path, reads
         /// </summary>
-        /// <param name="inst"></param>
+        /// <param name="parentnode"></param>
         /// <param name="path">Member name path to the control starting at the main control</param>
-        /// <returns></returns>
-        public static Control GetControl(this ISelenium inst, string path)
+        /// <returns>IHTMLElement wrapper</returns>
+        private static IWebElement GetHTMLElement(this ISelenium inst, Control parentnode, string path)
         {
-            return GetControl(inst, ControlRootExtension.GetRoot(), path);
+            if (ControlRootExtension.GetRoot() == null)
+            {
+                throw new InvalidOperationException("IE tests must run in the w3wp.exe address space");
+            }
+            var control = GetControl(inst, ControlRootExtension.GetRoot(), path);
+            return GetHTMLElement(inst, control.ClientID);
         }
 
         /// <summary>

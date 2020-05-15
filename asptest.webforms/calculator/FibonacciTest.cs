@@ -1,4 +1,4 @@
-﻿using iie;
+﻿using iselenium;
 using NUnit.Framework;
 using System.Configuration;
 using System.Linq;

@@ -195,13 +195,13 @@
       <Project>{2e7a40bd-0a76-41cc-88c7-cba07f73ad0f}</Project>
       <Name>asplib</Name>
     </ProjectReference>
-    <ProjectReference Include="..\iie.webforms\iie.webforms.csproj">
-      <Project>{fbae78a0-e68c-4ed9-a1a8-5fcfd1695f39}</Project>
-      <Name>iie.webforms</Name>
+    <ProjectReference Include="..\iselenium.webforms\iselenium.webforms.csproj">
+      <Project>{f3bedb25-a002-4eb5-b951-4a5e3e2ec477}</Project>
+      <Name>iselenium.webforms</Name>
     </ProjectReference>
-    <ProjectReference Include="..\iie\iie.csproj">
-      <Project>{5bb3b5f0-35bf-4a55-ba1d-f4353eb3c6e8}</Project>
-      <Name>iie</Name>
+    <ProjectReference Include="..\iselenium\iselenium.csproj">
+      <Project>{3feb9de5-b0dd-4b24-892c-fd80e2ce55bc}</Project>
+      <Name>iselenium</Name>
     </ProjectReference>
     <ProjectReference Include="..\smc\smc.csproj">
       <Project>{079cccf0-0fb4-463a-81dc-98493d097d6a}</Project>
@@ -227,7 +227,7 @@
           <AutoAssignPort>True</AutoAssignPort>
           <DevelopmentServerPort>51333</DevelopmentServerPort>
           <DevelopmentServerVPath>/</DevelopmentServerVPath>
-          <IISUrl>http://127.0.0.1:51333/asp.webforms</IISUrl>
+          <IISUrl>http://localhost:51333/asp.webforms</IISUrl>
           <NTLMAuthentication>False</NTLMAuthentication>
           <UseCustomServer>False</UseCustomServer>
           <CustomServerUrl>
@@ -245,12 +245,14 @@
     <Error Condition="!Exists('..\packages\Microsoft.Net.Compilers.3.3.1\build\Microsoft.Net.Compilers.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Microsoft.Net.Compilers.3.3.1\build\Microsoft.Net.Compilers.props'))" />
     <Error Condition="!Exists('..\packages\EntityFramework.6.3.0\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.3.0\build\EntityFramework.props'))" />
     <Error Condition="!Exists('..\packages\EntityFramework.6.3.0\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\EntityFramework.6.3.0\build\EntityFramework.targets'))" />
+    <Error Condition="!Exists('..\packages\Selenium.InternetExplorer.WebDriver.3.150.1\build\Selenium.InternetExplorer.WebDriver.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Selenium.InternetExplorer.WebDriver.3.150.1\build\Selenium.InternetExplorer.WebDriver.targets'))" />
   </Target>
   <PropertyGroup>
     <PreBuildEvent>
     </PreBuildEvent>
   </PropertyGroup>
   <Import Project="..\packages\EntityFramework.6.3.0\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.3.0\build\EntityFramework.targets')" />
+  <Import Project="..\packages\Selenium.InternetExplorer.WebDriver.3.150.1\build\Selenium.InternetExplorer.WebDriver.targets" Condition="Exists('..\packages\Selenium.InternetExplorer.WebDriver.3.150.1\build\Selenium.InternetExplorer.WebDriver.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

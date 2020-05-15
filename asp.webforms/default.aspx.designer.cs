@@ -28,7 +28,7 @@ namespace asp {
         /// Automatisch generiertes Feld
         /// Zum Ändern Felddeklaration aus der Designerdatei in eine Code-Behind-Datei verschieben.
         /// </remarks>
-        protected global::iie.TestResult testResult;
+        protected global::iselenium.TestResult testResult;
         
         /// <summary>
         /// calculator-Steuerelement

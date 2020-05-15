@@ -158,10 +158,11 @@ namespace iselenium
         /// </summary>
         /// <param name="element">The HTML element itself</param>
         /// <param name="expectRequest">Whether to expect a GET/POST request to the server from the click</param>
+        /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>///
         /// <param name="delay">Optional delay time in milliseconds before clicking the element</param>
         /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete</param>
-        private static void Click(this ISeleniumBase inst, IWebElement element, bool expectRequest = true,
-                                    int delay = 0, int pause = 0)
+        public static void Click(this ISeleniumBase inst, IWebElement element, bool expectRequest = true,
+                                 int expectedStatusCode = 200, int delay = 0, int pause = 0)
         {
             Thread.Sleep(delay);
             element.Click();
@@ -170,6 +171,7 @@ namespace iselenium
                 AwaitBeginRequest(element);
             }
             Thread.Sleep(pause);
+            AssertStatusCode(expectedStatusCode);
         }
 
         /// <summary>

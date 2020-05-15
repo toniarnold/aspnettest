@@ -1,6 +1,6 @@
 ﻿<%@ Page Title="Calculator" Language="C#" MasterPageFile="~/asp.Master" AutoEventWireup="true" CodeBehind="default.aspx.cs" Inherits="asp._default" %>
 
-<%@ Register Assembly="iie.webforms" Namespace="iie" TagPrefix="iie" %>
+<%@ Register Assembly="iselenium.webforms" Namespace="iselenium" TagPrefix="iie" %>
 <%@ Register TagPrefix="uc" TagName="calculator" Src="~/calculator/Main.ascx" %>
 <asp:Content ID="Content1" ContentPlaceHolderID="head" runat="server">
     <style>
