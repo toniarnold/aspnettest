@@ -30,7 +30,7 @@ namespace asptest.calculator
 
         public void ClearSession()
         {
-            this.Navigate("/asp.webforms/default.aspx?clear=true&endresponse=true");
+            this.Navigate("/default.aspx?clear=true&endresponse=true");
         }
 
         // Accessors for the control under test
@@ -43,13 +43,13 @@ namespace asptest.calculator
         public void InsertOrphaneDeleteTest()
         {
             // Initialize (eventually with a new cookie/row)
-            this.Navigate("/asp.webforms/default.aspx");
+            this.Navigate("/default.aspx");
             this.rowCountBefore = this.GridView.Rows.Count;
 
             // Create a unique test number to store
             var rnd = new Random();
             var unique = rnd.NextDouble().ToString();
-            this.Navigate("/asp.webforms/default.aspx");
+            this.Navigate("/default.aspx");
             this.Click("footer.enterButton");
             this.Write("enter.operandTextBox", unique);
             this.Click("footer.enterButton");
@@ -67,7 +67,7 @@ namespace asptest.calculator
             this.Write("enter.operandTextBox", "except");
             this.Click("footer.enterButton", expectedStatusCode: 500);
             Assert.That(this.Html(), Does.Contain("Deliberate Exception"));
-            this.Navigate("/asp.webforms/default.aspx");
+            this.Navigate("/default.aspx");
             this.Click("hamburgerDiv", expectPostBack: false);
             Assert.That(this.GridView.Rows.Count, Is.EqualTo(this.rowCountBefore + 1));
 

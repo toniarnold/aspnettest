@@ -13,7 +13,7 @@ namespace asptest.calculator
         public void VerifyFibonacciSums()
         {
             // Load the stored canonical test case
-            this.Navigate(string.Format("/asp.webforms/default.aspx?session={0}",
+            this.Navigate(string.Format("/default.aspx?session={0}",
                 ConfigurationManager.AppSettings["asptest.calculator.FibonacciTest"]));
             Assert.That(this.Stack.Count, Is.GreaterThanOrEqualTo(3));  // non-empty sequence
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));

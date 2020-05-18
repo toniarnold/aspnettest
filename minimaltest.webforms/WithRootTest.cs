@@ -14,14 +14,14 @@ namespace minimaltest
         [Test]
         public void NavigateWithRootTest()
         {
-            this.Navigate("/minimal.webforms/withroot.aspx");
+            this.Navigate("/withroot.aspx");
             Assert.That(this.Html(), Does.Contain("<h1>minimalist test setup with root</h1>"));
         }
 
         [Test]
         public void WriteContentTest()
         {
-            this.Navigate("/minimal.webforms/withroot.aspx");
+            this.Navigate("/withroot.aspx");
 
             this.Write("contentTextBox", "a first content line");
             this.Click("submitButton");

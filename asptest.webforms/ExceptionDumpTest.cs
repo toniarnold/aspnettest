@@ -27,7 +27,7 @@ namespace asptest
             // Create a unique test number to store with the exception
             var rnd = new Random();
             var unique = rnd.NextDouble().ToString();
-            this.Navigate("/asp.webforms/default.aspx");
+            this.Navigate("/default.aspx");
             this.Click("footer.enterButton");
             this.Write("enter.operandTextBox", unique);
             this.Click("footer.enterButton");

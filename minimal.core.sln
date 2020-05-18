@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iselenium", "iselenium\isel
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iselenium.core", "iselenium.core\iselenium.core.csproj", "{274BBDCC-E22E-4AED-9950-441C05D51112}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "minimaltest.runner.core", "minimaltest.runner.core\minimaltest.runner.core.csproj", "{D5F8ECCE-8336-49BD-A5D0-F6EF1F7CF309}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -51,6 +53,10 @@ Global
 		{274BBDCC-E22E-4AED-9950-441C05D51112}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{274BBDCC-E22E-4AED-9950-441C05D51112}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{274BBDCC-E22E-4AED-9950-441C05D51112}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D5F8ECCE-8336-49BD-A5D0-F6EF1F7CF309}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D5F8ECCE-8336-49BD-A5D0-F6EF1F7CF309}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D5F8ECCE-8336-49BD-A5D0-F6EF1F7CF309}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D5F8ECCE-8336-49BD-A5D0-F6EF1F7CF309}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

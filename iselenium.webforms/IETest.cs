@@ -4,7 +4,7 @@ using System;
 namespace iselenium
 {
     [Obsolete("Replaced by SeleniumTest<InternetExplorerDriver>")]
-    public class IETest : SeleniumTestBase<InternetExplorerDriver>, IIE, ISelenium
+    public class IETest : SeleniumTest<InternetExplorerDriver>, IIE, ISelenium
     {
     }
 

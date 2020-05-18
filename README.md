@@ -24,7 +24,7 @@ The unit test on the left-hand side inherits from the `Calculator` app class,
 directly calls the transition methods on the contained state machine and 
 asserts its result states and the calculation result on the stack.
 
-The GUI test on the right-hand side talks via COM to an Internet Explorer instance, 
+The GUI test on the right-hand side talks via COM to an Internet Explorer[*](#migration-to-selenium) instance, 
 writes into a `TextBox` and clicks an ASP.NET `Button`. Indirectly, these clicks call
 the very same transition methods on the state machine in the embedded `Calculator` instance 
 and - this is the salient point - assert the result states strongly typed directly 
@@ -85,3 +85,13 @@ To quote again:
 
 ![Tests running...](doc/img/running.gif)
 
+
+## Migration to Selenium
+
+All [Screen Recordings](./doc/recordings.md) were done with COM
+SHDocVw.InternetExplorer. This IIE interface is now deprecated and being
+[replaced with ISelenium](doc/migrate-iie-iselenium.md), as it is not functional
+no more with current win10 versions.
+
+ISelenium is API compatible to the legacy IEE interface. Currently, the various
+In-App test examples as is are backwards compatible with IIE, too.

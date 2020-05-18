@@ -29,7 +29,7 @@ namespace asptest.calculator
         [TearDown]
         public void ClearSession()
         {
-            this.Navigate("/asp.webforms/default.aspx?clear=true&endresponse=true");
+            this.Navigate("/default.aspx?clear=true&endresponse=true");
         }
 
         /// <summary>
@@ -37,7 +37,7 @@ namespace asptest.calculator
         /// </summary>
         private void Reload()
         {
-            this.Navigate("/asp.webforms/default.aspx");
+            this.Navigate("/default.aspx");
         }
 
         /// <summary>
@@ -46,7 +46,7 @@ namespace asptest.calculator
         [Test]
         public void AddSessionPersistsTest()
         {
-            this.Navigate("/asp.webforms/default.aspx");
+            this.Navigate("/default.aspx");
             this.Click("footer.enterButton");
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
             this.Reload();
@@ -78,7 +78,7 @@ namespace asptest.calculator
                 Assert.That(this.Stack.Peek(), Is.EqualTo("5"));
                 Assert.That(this.Stack.Count, Is.EqualTo(before - 1));
                 Assert.That(this.Html(), Does.Contain(" 5\n"));
-                this.Navigate("/asp.webforms/default.aspx");
+                this.Navigate("/default.aspx");
             });
         }
     }

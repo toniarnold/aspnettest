@@ -20,7 +20,7 @@ While for IIE, the COM references to ```Interop.MSHTML``` and
 packages must be added to the web/test projects, too (similar to NUnit itself).
 
 The ISelenium library only references the generic ```Selenium.WebDriver``` to
-communicate with the browser. Therefore, thhe concrete WebDriver NuGet package
+communicate with the browser. Therefore, the concrete WebDriver NuGet package
 is required for the web project, either
 ```Selenium.InternetExplorer.WebDriver``` (32 bit),
 ```Selenium.Firefox.WebDriver``` or ```Selenium.Chrome.WebDriver```. 

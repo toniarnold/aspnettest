@@ -16,7 +16,7 @@ namespace minimaltest
         [Test]
         public void ThrowRetrieveDumpTest()
         {
-            this.Navigate("/minimal.webforms/withstorage.aspx");
+            this.Navigate("/withstorage.aspx");
             this.Write("contentTextBox", "a benign content line");
             this.Click("submitButton");
             this.AssertBenignLine();

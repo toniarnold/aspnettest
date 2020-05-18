@@ -8,7 +8,7 @@ namespace iselenium
     /// Minimal base class for Selenium tests with a [OneTimeSetUp]/[OneTimeTearDown]
     /// pair for starting/stopping the browser
     /// </summary>
-    public abstract class SeleniumTestBase<TWebDriver> : ISeleniumBase
+    public abstract class SeleniumTest<TWebDriver> : ISeleniumBase
         where TWebDriver : IWebDriver, new()
     {
 #pragma warning disable IDE1006 // Members in Selenium-generated C# code

@@ -8,7 +8,7 @@ namespace iselenium
     /// Minimal base class for Selenium tests with a [OneTimeSetUp]/[OneTimeTearDown]
     /// pair for starting/stopping the browser and a Controller accessor.
     /// </summary>
-    public abstract class SeleniumTest<TWebDriver, TController> : SeleniumTestBase<TWebDriver>, ISelenium
+    public abstract class SeleniumTest<TWebDriver, TController> : SeleniumTest<TWebDriver>, ISelenium
         where TWebDriver : IWebDriver, new()
     {
         /// <summary>

@@ -9,7 +9,7 @@ namespace asptest.calculator
         [Test]
         public void NavigateDefaultTest()
         {
-            this.Navigate("/asp.webforms/default.aspx");
+            this.Navigate("/default.aspx");
             Assert.Multiple(() =>
             {
                 Assert.That(this.Html(), Does.Contain("RPN calculator"));
@@ -21,7 +21,7 @@ namespace asptest.calculator
         [Test]
         public void InitEnterTest()
         {
-            this.Navigate("/asp.webforms/default.aspx");
+            this.Navigate("/default.aspx");
             this.Click("footer.enterButton");
             Assert.Multiple(() =>
             {
@@ -33,7 +33,7 @@ namespace asptest.calculator
         [Test]
         public void EnterTest()
         {
-            this.Navigate("/asp.webforms/default.aspx");
+            this.Navigate("/default.aspx");
             this.Click("footer.enterButton");
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
             this.Write("enter.operandTextBox", "1");
@@ -50,7 +50,7 @@ namespace asptest.calculator
         [Test]
         public void AddTest()
         {
-            this.Navigate("/asp.webforms/default.aspx");
+            this.Navigate("/default.aspx");
             this.Click("footer.enterButton");
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
             this.Write("enter.operandTextBox", "2");
@@ -75,7 +75,7 @@ namespace asptest.calculator
         [Test]
         public void ClrTest()
         {
-            this.Navigate("/asp.webforms/default.aspx");
+            this.Navigate("/default.aspx");
             this.Click("footer.enterButton");
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
             this.Write("enter.operandTextBox", "2");
@@ -98,7 +98,7 @@ namespace asptest.calculator
         [Test]
         public void ClrAllTest()
         {
-            this.Navigate("/asp.webforms/default.aspx");
+            this.Navigate("/default.aspx");
             this.Click("footer.enterButton");
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
             this.Write("enter.operandTextBox", "2");
@@ -121,7 +121,7 @@ namespace asptest.calculator
         [Test]
         public void DivTest()
         {
-            this.Navigate("/asp.webforms/default.aspx");
+            this.Navigate("/default.aspx");
             this.Click("footer.enterButton");
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
             this.Write("enter.operandTextBox", "12");
@@ -146,7 +146,7 @@ namespace asptest.calculator
         [Test]
         public void MulTest()
         {
-            this.Navigate("/asp.webforms/default.aspx");
+            this.Navigate("/default.aspx");
             this.Click("footer.enterButton");
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
             this.Write("enter.operandTextBox", "4");
@@ -171,7 +171,7 @@ namespace asptest.calculator
         [Test]
         public void PowTest()
         {
-            this.Navigate("/asp.webforms/default.aspx");
+            this.Navigate("/default.aspx");
             this.Click("footer.enterButton");
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
             this.Write("enter.operandTextBox", "2");
@@ -191,7 +191,7 @@ namespace asptest.calculator
         [Test]
         public void SqrtTest()
         {
-            this.Navigate("/asp.webforms/default.aspx");
+            this.Navigate("/default.aspx");
             this.Click("footer.enterButton");
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
             this.Write("enter.operandTextBox", "49");
@@ -211,7 +211,7 @@ namespace asptest.calculator
         [Test]
         public void SubTest()
         {
-            this.Navigate("/asp.webforms/default.aspx");
+            this.Navigate("/default.aspx");
             this.Click("footer.enterButton");
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
             this.Write("enter.operandTextBox", "12");

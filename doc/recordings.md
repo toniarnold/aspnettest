@@ -1,7 +1,15 @@
 # Screen Recordings
 
-**_[Bug #3](/../../issues/3): Due to (probably) Win10 update 1809, Internet Explorer visibility is disabled in `SetUpIE()`,
-as it cannot run no more in the foreground._**
+[Bug #3](/../../issues/3): Due to (probably) win10 update 1809, Internet Explorer visibility is disabled in `SetUpIE()`,
+as it cannot run no more in the foreground.
+
+Later, win10 disabled http://127.0.0.1, not only for that reason the whole
+project had to be [migrated from IIE to ISelenium](migrate-iie-iselenium.md) -
+goodbye super-fast COM SHDocVw.InternetExplorer control,
+Selenium.InternetExplorer.WebDriver is way slower.
+
+There's currently no plan to re-record everything, thus these recordings are
+rather historical.
 
 * [Synopsis in the README](#synopsis-in-the-readme)
 * [Core Dump on unhandled Exceptions](#core-dump-on-unhandled-exceptions)

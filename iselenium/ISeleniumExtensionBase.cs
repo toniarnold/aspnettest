@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Net;
+using System.Text.RegularExpressions;
 using System.Threading;
 
 namespace iselenium
@@ -24,6 +25,11 @@ namespace iselenium
 
     public static class SeleniumExtensionBase
     {
+        /// <summary>
+        /// True when the TestRunner is started out of the web server process, e.g. by the NUnit3TestAdapter
+        /// </summary>
+        public static bool OutOfProcess { get; set; } = false;
+
         /// <summary>
         /// Port of the web development server to send callback HTTP requests to
         /// </summary>
@@ -102,6 +108,22 @@ namespace iselenium
         {
             var html = inst.driver.FindElement(By.TagName("body")).GetAttribute("outerHTML");
             return IIECompatible(inst) ? html.Replace("\r\n", "\n") : html;
+        }
+
+        /// <summary>
+        /// Assert that there is no TestResult.xml with result="Failed" shown.
+        /// Intended For running tests from ITestServer in a TestAdapter.
+        /// </summary>
+        /// <param name="inst"></param>
+        public static void AssertTestsOK(this ISeleniumBase inst)
+        {
+            var testRunTag = inst.driver.FindElements(By.TagName("test-run"));
+            if (testRunTag.Count > 0)
+            {
+                var xml = testRunTag[0].Text;
+                bool failed = Regex.IsMatch(xml, @"\bresult=""Failed""", RegexOptions.Singleline);
+                Assert.That(!failed, xml);
+            }
         }
 
         /// <summary>
@@ -342,9 +364,12 @@ namespace iselenium
         /// <param name="expectedStatusCode">The expected status code.</param>
         private static void AssertStatusCode(int expectedStatusCode)
         {
-            Assert.That(StatusCode, Is.AnyOf(expectedStatusCode,
-                (int)HttpStatusCode.NotModified,
-                (int)HttpStatusCode.NotFound)); // WebSharper a href="#"-Links?
+            if (!SeleniumExtensionBase.OutOfProcess)
+            {
+                Assert.That(StatusCode, Is.AnyOf(expectedStatusCode,
+                    (int)HttpStatusCode.NotModified,
+                    (int)HttpStatusCode.NotFound)); // WebSharper a href="#"-Links?
+            }
         }
 
         private static bool IIECompatible(this ISeleniumBase inst)

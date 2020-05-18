@@ -18,16 +18,16 @@ namespace asptest
         public void ClearStorage()
         {
             ControlStorageExtension.SessionStorage = Storage.Database;
-            this.Navigate("/asp.webforms/default.aspx?clear=true&endresponse=true");
+            this.Navigate("/default.aspx?clear=true&endresponse=true");
             ControlStorageExtension.SessionStorage = Storage.Session;
-            this.Navigate("/asp.webforms/default.aspx?clear=true&endresponse=true");
+            this.Navigate("/default.aspx?clear=true&endresponse=true");
             ControlStorageExtension.SessionStorage = null;
         }
 
         [Test]
         public void NavigateTriptychTest()
         {
-            this.Navigate("/asp.webforms/triptych.aspx");
+            this.Navigate("/triptych.aspx");
             this.AssertTriptychHtml();
         }
 
@@ -48,7 +48,7 @@ namespace asptest
         [Test]
         public void CircumambulateStorageTypes()
         {
-            this.Navigate("/asp.webforms/triptych.aspx");
+            this.Navigate("/triptych.aspx");
             this.AssertTriptychHtml();
             this.ClickID("StorageLinkViewState");
             Assert.That(this.Html(), Does.Contain("Session Storage: ViewState"));

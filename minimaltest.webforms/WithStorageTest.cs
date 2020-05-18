@@ -20,13 +20,13 @@ namespace minimaltest
         [OneTimeSetUp]
         public void ClearDatabaseStorage()
         {
-            this.Navigate(String.Format("/minimal.webforms/withstorage.aspx?clear=true&storage=database&endresponse=true"));
+            this.Navigate(String.Format("/withstorage.aspx?clear=true&storage=database&endresponse=true"));
         }
 
         [Test]
         public void NavigateWithStorageTest()
         {
-            this.Navigate("/minimal.webforms/withstorage.aspx");
+            this.Navigate("/withstorage.aspx");
             Assert.That(this.Html(), Does.Contain("<h1>minimalist test setup with storage</h1>"));
         }
 
@@ -38,7 +38,7 @@ namespace minimaltest
         [Test]
         public void StorageViewStateTest()
         {
-            this.Navigate("/minimal.webforms/withstorage.aspx");
+            this.Navigate("/withstorage.aspx");
             var storageList = (RadioButtonList)this.GetControl("storageList");
             Assert.That(storageList.SelectedValue, Is.EqualTo("ViewState"));    // default
             this.WriteContentTest(() => this.Nop());
@@ -47,7 +47,7 @@ namespace minimaltest
         [Test]
         public void StorageSessionTest()
         {
-            this.Navigate("/minimal.webforms/withstorage.aspx");
+            this.Navigate("/withstorage.aspx");
             this.Select("storageList", "Session", expectPostBack: true);
             this.WriteContentTest(() => this.Reload());
         }
@@ -55,7 +55,7 @@ namespace minimaltest
         [Test]
         public void StorageDatabaseTest()
         {
-            this.Navigate("/minimal.webforms/withstorage.aspx");
+            this.Navigate("/withstorage.aspx");
             this.Select("storageList", "Database", expectPostBack: true);
             this.WriteContentTest(() => this.RestartIE());
         }
@@ -73,7 +73,7 @@ namespace minimaltest
         /// </summary>
         private void Reload()
         {
-            this.Navigate("/minimal.webforms/withstorage.aspx");
+            this.Navigate("/withstorage.aspx");
             this.Select("storageList", "Session", expectPostBack: true);
         }
 
@@ -84,7 +84,7 @@ namespace minimaltest
         {
             this.TearDownIE();
             this.SetUpIE();
-            this.Navigate("/minimal.webforms/withstorage.aspx");
+            this.Navigate("/withstorage.aspx");
             this.Select("storageList", "Database", expectPostBack: true);
         }
 
@@ -127,7 +127,7 @@ namespace minimaltest
         public void ClearStorageTest()
         {
             // Local setup: Store a value into the database
-            this.Navigate("/minimal.webforms/withstorage.aspx");
+            this.Navigate("/withstorage.aspx");
             this.Select("storageList", "Database", expectPostBack: true);
             this.Write("contentTextBox", "a stored content line");
             this.Click("submitButton");

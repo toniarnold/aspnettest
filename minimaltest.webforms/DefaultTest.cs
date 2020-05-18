@@ -36,14 +36,14 @@ namespace minimaltest
         [Test]
         public void NavigateDefaultTest()
         {
-            this.Navigate("/minimal.webforms/default.aspx");
+            this.Navigate("/default.aspx");
             Assert.That(this.Html(), Does.Contain("<h1>minimalist test setup</h1>"));
         }
 
         [Test]
         public void ClickWithRootTest()
         {
-            this.Navigate("/minimal.webforms/default.aspx");
+            this.Navigate("/default.aspx");
             Assert.That(this.Html(), Does.Contain("<h1>minimalist test setup</h1>"));
             this.ClickID("withroot-link");
             Assert.That(this.Html(), Does.Contain("<h1>minimalist test setup with root</h1>"));
@@ -52,7 +52,7 @@ namespace minimaltest
         [Test]
         public void ClickWithstorageTest()
         {
-            this.Navigate("/minimal.webforms/default.aspx");
+            this.Navigate("/default.aspx");
             this.ClickID("withstorage-link");
             Assert.That(this.Html(), Does.Contain("<h1>minimalist test setup with storage</h1>"));
         }
@@ -61,7 +61,7 @@ namespace minimaltest
         //[Ignore("System.Runtime.Remoting.RemotingException in TestEngine.GetRunner")]
         public void RecursiveTestTest()
         {
-            this.Navigate("/minimal.webforms/default.aspx");
+            this.Navigate("/default.aspx");
             // If this would work here, it would be evocative of Goethe's "The Sorcerer's Apprentice"...
             this.ClickID("testButton");
         }

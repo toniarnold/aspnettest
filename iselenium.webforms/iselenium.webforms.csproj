@@ -77,6 +77,7 @@
     <Compile Include="Global.asax.cs" />
     <Compile Include="IDatabaseExtension.cs" />
     <Compile Include="IETest.cs" />
+    <Compile Include="ITestServer.cs" />
     <Compile Include="IWebElementExtension.cs" />
     <Compile Include="ISelenium.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

@@ -26,7 +26,7 @@ namespace asptest.calculator
         [TearDown]
         public void ClearDatabase()
         {
-            this.Navigate("/asp.webforms/default.aspx?clear=true&endresponse=true");
+            this.Navigate("/default.aspx?clear=true&endresponse=true");
         }
 
         /// <summary>
@@ -36,7 +36,7 @@ namespace asptest.calculator
         {
             this.TearDownIE();
             this.SetUpIE();
-            this.Navigate("/asp.webforms/default.aspx");
+            this.Navigate("/default.aspx");
         }
 
         /// <summary>
@@ -45,7 +45,7 @@ namespace asptest.calculator
         [Test]
         public void AddSessionPersistsTest()
         {
-            this.Navigate("/asp.webforms/default.aspx");
+            this.Navigate("/default.aspx");
             this.Click("footer.enterButton");
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
             this.RestartIE();
