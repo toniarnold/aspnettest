@@ -49,8 +49,8 @@ namespace iselenium
             inst.ServerProcess = Process.Start(info);
             SeleniumExtensionBase.OutOfProcess = true;
             SeleniumExtensionBase.Port = port;
-            // SeleniumExtensionBase.RequestTimeout = timeout; is too late after OneTimeSetUBrowser()
-            inst.driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(timeout);
+            SeleniumExtensionBase.RequestTimeout = timeout;
+            inst.driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(timeout); // too late after OneTimeSetUBrowser()
         }
 
         public static void StopServer(this ITestServer inst)
