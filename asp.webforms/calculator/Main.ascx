@@ -37,23 +37,23 @@
 </style>
 
 <div class="header-container">
-    <asplib:ShareButton ID="shareButton" runat="server"
-        OnServerClick="shareButton_Click" />
+    <asplib:sharebutton id="shareButton" runat="server"
+        onserverclick="shareButton_Click" />
     <a href="<%= this.StorageLinkUrl %>" id="<%= this.StorageLinkClientID %>" class="hamburger-box">Session Storage: <%= this.Storage %> <%= this.Encrypted %>
     </a>
     <div class="hamburger-box" id="hamburgerDiv" runat="server">
         <span class="hamburger">☰</span>
     </div>
-    <ajaxToolkit:PopupControlExtender ID="PopEx" runat="server"
-        TargetControlID="hamburgerDiv"
-        PopupControlID="gridViewPanel"
-        Position="Bottom"
-        OffsetX="-100" />
-    <asp:ObjectDataSource ID="sessionDumpDataSource" runat="server"
-        TypeName="asp.calculator.Main"
-        SelectMethod="AllMainRows" />
-    <asp:UpdatePanel ID="gridViewPanel" runat="server"
-        UpdateMode="Always">
+    <ajaxtoolkit:popupcontrolextender id="PopEx" runat="server"
+        targetcontrolid="hamburgerDiv"
+        popupcontrolid="gridViewPanel"
+        position="Bottom"
+        offsetx="-100" />
+    <asp:objectdatasource id="sessionDumpDataSource" runat="server"
+        typename="asp.calculator.Main"
+        selectmethod="AllMainRows" />
+    <asp:updatepanel id="gridViewPanel" runat="server"
+        updatemode="Always">
         <ContentTemplate>
             <asp:GridView ID="sessionDumpGridView" runat="server"
                 DataSourceID="sessionDumpDataSource"
@@ -92,14 +92,14 @@
                 </Columns>
             </asp:GridView>
         </ContentTemplate>
-    </asp:UpdatePanel>
+    </asp:updatepanel>
 </div>
 
-<uc:Title ID="title" runat="server" />
+<uc:title id="title" runat="server" />
 <hr />
-<uc:Splash ID="splash" runat="server" />
-<uc:Enter ID="enter" runat="server" />
-<uc:Calculate ID="calculate" runat="server" />
-<uc:Error ID="error" runat="server" />
+<uc:splash id="splash" runat="server" />
+<uc:enter id="enter" runat="server" />
+<uc:calculate id="calculate" runat="server" />
+<uc:error id="error" runat="server" />
 <hr />
-<uc:Footer ID="footer" runat="server" />
+<uc:footer id="footer" runat="server" />

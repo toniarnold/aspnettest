@@ -61,8 +61,10 @@ namespace iselenium
             inst.driver = new TWebDriver();
             inst.js = (IJavaScriptExecutor)inst.driver;
             inst.vars = new Dictionary<string, object>();
-
-            inst.driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(RequestTimeout);
+            if (RequestTimeout > 0)
+            {
+                inst.driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(RequestTimeout);
+            }
         }
 
         /// <summary>

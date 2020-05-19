@@ -20,7 +20,7 @@ namespace iselenium
         /// Server: IIS Express, optionally overrides %PROGRAMFILES%\IIS Express\iisexpress.exe
         /// Root: server application root directory
         /// Port: port to listen on
-        /// Timeout: expected duration of all tests
+        /// RequestTimeout: expected duration of all tests
         /// </summary>
         /// <param name="inst"></param>
         public static void StartServer(this ITestServer inst)
@@ -29,7 +29,7 @@ namespace iselenium
                             @"%PROGRAMFILES%\IIS Express\iisexpress.exe";
             StartServer(inst, server, ConfigurationManager.AppSettings["Root"],
                         int.Parse(ConfigurationManager.AppSettings["Port"]),
-                        int.Parse(ConfigurationManager.AppSettings["Timeout"]));
+                        int.Parse(ConfigurationManager.AppSettings["RequestTimeout"]));
         }
 
         /// <summary>
@@ -50,7 +50,7 @@ namespace iselenium
             inst.ServerProcess = Process.Start(info);
             SeleniumExtensionBase.OutOfProcess = true;
             SeleniumExtensionBase.Port = port;
-            SeleniumExtensionBase.RequestTimeout = timeout;
+            // SeleniumExtensionBase.RequestTimeout = timeout; too late after OneTimeSetUBrowser()
             inst.driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(timeout);
         }
 

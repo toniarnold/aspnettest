@@ -20,7 +20,7 @@ namespace iselenium
         /// Server: path to the server.exe (the .NET Core binary)
         /// Root: server application root directory
         /// Port: port to listen on
-        /// Timeout: expected duration of all tests
+        /// RequestTimeout: expected duration of all tests
         /// </summary>
         public static void StartServer(this ITestServer inst)
         {
@@ -30,7 +30,7 @@ namespace iselenium
                 .AddEnvironmentVariables()
                 .Build();
             StartServer(inst, config["Server"], config["Root"],
-                        config.GetValue<int>("Port"), config.GetValue<int>("Timeout"));
+                        config.GetValue<int>("Port"), config.GetValue<int>("RequestTimeout"));
         }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace iselenium
             inst.ServerProcess = Process.Start(info);
             SeleniumExtensionBase.OutOfProcess = true;
             SeleniumExtensionBase.Port = port;
-            SeleniumExtensionBase.RequestTimeout = timeout;
+            // SeleniumExtensionBase.RequestTimeout = timeout; is too late after OneTimeSetUBrowser()
             inst.driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(timeout);
         }
 

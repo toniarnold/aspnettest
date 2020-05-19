@@ -34,5 +34,14 @@ namespace iselenium
         {
             this.TearDownBrowser();
         }
+
+        /// <summary>
+        /// Ensures reproducibility
+        /// </summary>
+        [SetUp]
+        public void DeleteAllCookies()
+        {
+            this.driver.Manage().Cookies.DeleteAllCookies();
+        }
     }
 }
