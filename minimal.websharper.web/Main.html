@@ -18,10 +18,13 @@
             padding: 0;
         }
 
-        .nunitimg {
+        .nunibutton {
             position: absolute;
             top: 8px;
             right: 8px;
+        }
+
+        .nunitimg {
             height: 50px;
             width: 50px;
         }
@@ -37,7 +40,9 @@
 </head>
 <body>
     <h1>minimalist test setup web</h1>
-    <a ws-onclick="Test"><img src="nunit.png" class="nunitimg" /></a>
+    <a ws-onclick="Test">
+        <img src="nunit.png" class="nunitimg" />
+    </a>
     <a ws-onclick="Result" class="testresult">${TestResult}</a>
 
     <script ws-replace="scripts"></script>

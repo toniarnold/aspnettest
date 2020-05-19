@@ -5,10 +5,13 @@
             text-decoration: none;
         }
 
-        .nunitimg {
+        .nunibutton {
             position: absolute;
             top: 8px;
             right: 8px;
+        }
+
+        .nunitimg {
             height: 50px;
             width: 50px;
         }
@@ -24,7 +27,7 @@
 }
 
 <div>
-    <a asp-controller="Calculator" asp-action="Test" id="testButton">
+    <a asp-controller="Calculator" asp-action="Test" id="testButton" class="nunibutton">
         <img src="~/nunit.png" class="nunitimg" />
     </a>
     <a class="testresult" asp-controller="Calculator" asp-action="Result">@Html.Raw(ViewBag.TestResult)</a>

@@ -25,10 +25,13 @@
             padding: 0;
         }
 
-        .nunitimg {
+        .nunibutton {
             position: absolute;
             top: 8px;
             right: 8px;
+        }
+
+        .nunitimg {
             height: 50px;
             width: 50px;
         }
@@ -51,7 +54,9 @@
             <li><a href="#" ws-onclick="WithStorage" id="withstorage-link">with remote storage</a></li>
         </ul>
 
-        <a href="#" ws-onclick="Test"><img src="nunit.png" class="nunitimg" /></a>
+        <a href="#" ws-onclick="Test" class="nunibutton">
+            <img src="nunit.png" class="nunitimg" />
+        </a>
         <a href="/testresult" class="testresult">
             <ul ws-hole="TestSummaryContainer">
                 <li ws-template="TestSummaryItem">${Line}</li>

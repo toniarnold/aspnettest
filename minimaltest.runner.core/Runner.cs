@@ -1,13 +1,13 @@
 using iselenium;
 using NUnit.Framework;
-using OpenQA.Selenium.IE;
+using OpenQA.Selenium.Edge;
 using System.Diagnostics;
 
 namespace minimaltest.runner
 {
     [TestFixture]
     [Category("ITestServer")]
-    public class Runner : SeleniumTest<InternetExplorerDriver>, ITestServer
+    public class Runner : SeleniumTest<EdgeDriver>, ITestServer
     {
         public Process ServerProcess { get; set; }
 

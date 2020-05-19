@@ -19,10 +19,13 @@
             padding: 0;
         }
 
-        .nunitimg {
+        .nunibutton {
             position: absolute;
             top: 8px;
             right: 8px;
+        }
+
+        .nunitimg {
             height: 50px;
             width: 50px;
         }
@@ -42,7 +45,7 @@
         <li><a asp-controller="WithStatic" asp-action="Index" id="withstatic-link">with static controller</a></li>
         <li><a asp-controller="WithStorage" asp-action="Index" id="withstorage-link">with persistent controller storage</a></li>
     </ul>
-    <a asp-controller="Minimal" asp-action="Test" id="testButton">
+    <a asp-controller="Minimal" asp-action="Test" id="testButton" class="nunibutton">
         <img src="~/nunit.png" class="nunitimg" />
     </a>
     <a class="testresult" asp-controller="Minimal" asp-action="Result">@Html.Raw(ViewBag.TestResult)</a>
