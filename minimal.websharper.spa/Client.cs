@@ -1,5 +1,5 @@
 ﻿using asplib.Remoting;
-using iie;
+using iselenium;
 using System.Collections.Generic;
 using WebSharper;
 using WebSharper.JavaScript;

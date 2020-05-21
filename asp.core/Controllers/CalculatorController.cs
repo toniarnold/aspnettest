@@ -59,7 +59,7 @@ namespace asp.Controllers
             }
             else
             {
-                return this.Result();
+                return this.ResultFailed();
             }
 
             model.State = this.State;
@@ -68,12 +68,21 @@ namespace asp.Controllers
         }
 
         /// <summary>
-        /// View the test result as XML page
+        /// View only the failed test results as XML page
+        /// </summary>
+        /// <returns></returns>
+        public IActionResult ResultFailed()
+        {
+            return Content(TestRunner.ResultFailedXml, "application/xml");
+        }
+
+        /// <summary>
+        /// View the whole test result as XML page after clicking on the test summary
         /// </summary>
         /// <returns></returns>
         public IActionResult Result()
         {
-            return Content(TestRunner.StaticResultString, "application/xml");
+            return Content(TestRunner.ResultXml, "application/xml");
         }
 
         /// <summary>

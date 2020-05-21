@@ -1,0 +1,17 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.0</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="WebSharper" Version="4.6.1.381" />
+    <PackageReference Include="WebSharper.CSharp" Version="4.6.1.381" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\asplib.websharper\asplib.websharper.csproj" />
+    <ProjectReference Include="..\iselenium.core\iselenium.core.csproj" />
+  </ItemGroup>
+
+</Project>

@@ -12,6 +12,7 @@
   <ItemGroup>
 	<PackageReference Include="FSharp.Core" Version="4.7.1" />
     <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="16.3.0" />
+    <PackageReference Include="Selenium.InternetExplorer.WebDriver" Version="3.150.1" />
     <PackageReference Include="WebSharper" Version="4.6.1.381" />
     <PackageReference Include="WebSharper.CSharp" Version="4.6.1.381" />
     <PackageReference Include="WebSharper.UI" Version="4.6.1.207" />
@@ -24,8 +25,8 @@
     <ProjectReference Include="..\asplib.websharper\asplib.websharper.csproj" />
     <ProjectReference Include="..\asplib\asplib.csproj" />
     <ProjectReference Include="..\iie.core\iie.core.csproj" />
-    <ProjectReference Include="..\iie.websharper\iie.websharper.csproj" />
     <ProjectReference Include="..\iie\iie.csproj" />
+    <ProjectReference Include="..\iselenium.websharper\iselenium.websharper.csproj" />
   </ItemGroup>
 
   <ItemGroup>

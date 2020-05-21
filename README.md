@@ -93,5 +93,6 @@ SHDocVw.InternetExplorer. This IIE interface is now deprecated and being
 [replaced with ISelenium](doc/migrate-iie-iselenium.md), as it is not functional
 no more with current win10 versions.
 
-ISelenium is API compatible to the legacy IEE interface. Currently, the various
-In-App test examples as is are backwards compatible with IIE, too.
+ISelenium is currently still API compatible to the legacy IEE interface. The git
+tag ```Examples-IIE-compatible``` marks the end of backwards compatibility for
+the various In-App test examples.

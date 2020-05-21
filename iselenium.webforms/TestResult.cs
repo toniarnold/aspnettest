@@ -4,8 +4,7 @@ using System.Web.UI.WebControls;
 namespace iselenium
 {
     /// <summary>
-    /// Test result summary encapsulating intermediate storage of the ResultString
-    /// in the ViewState for displaying it when clicked.
+    /// Test result summary LinkButton
     /// </summary>
     public class TestResult : LinkButton
     {
@@ -15,20 +14,14 @@ namespace iselenium
             this.Click += TestResult_Click;
         }
 
-        public string ResultString
-        {
-            get { return (string)this.ViewState["RESULTSTRING"]; }
-            set { this.ViewState["RESULTSTRING"] = value; }
-        }
-
         /// <summary>
         /// Directly render the result as an application/xml response
         /// </summary>
-        public void RenderTestResult()
+        public void RenderTestResult(string resultXml)
         {
             this.Page.Response.Clear();
             this.Page.Response.AddHeader("Content-Type", "application/xml");
-            this.Page.Response.Write(this.ResultString);
+            this.Page.Response.Write(resultXml);
             this.Page.Response.End();
         }
 
@@ -39,7 +32,7 @@ namespace iselenium
 
         protected void TestResult_Click(object sender, EventArgs e)
         {
-            this.RenderTestResult();
+            this.RenderTestResult(TestRunner.ResultXml);   // always the whole result
         }
     }
 }

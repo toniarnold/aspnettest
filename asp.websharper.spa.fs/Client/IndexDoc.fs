@@ -2,7 +2,7 @@
 
 open asp.websharper.spa.fs.Model
 open asp.websharper.spa.fs.Server
-open iie
+open iselenium
 open WebSharper
 open WebSharper.JavaScript
 open WebSharper.UI

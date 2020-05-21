@@ -2,7 +2,7 @@ namespace asp.websharper.spa.fs
 
 open asplib.Model.Db
 open asplib.Remoting
-open iie
+open iselenium
 open System
 open Microsoft.AspNetCore.Builder
 open Microsoft.AspNetCore.Hosting

@@ -13,7 +13,7 @@
   <ItemGroup>
     <ProjectReference Include="..\asplib.core\asplib.core.csproj" />
     <ProjectReference Include="..\asptest.core\asptest.core.csproj" />
-    <ProjectReference Include="..\iie.core\iie.core.csproj" />
+    <ProjectReference Include="..\iselenium.websharper\iselenium.websharper.csproj" />
     <ProjectReference Include="..\minimal.websharper.web\minimal.websharper.web.csproj" />
   </ItemGroup>
 

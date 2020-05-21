@@ -374,7 +374,7 @@ protected void testButton_Click(object sender, ImageClickEventArgs e)
     }
     else
     {
-        this.testResult.RenderTestResult();
+        this.testResult.RenderTestResult(TestRunner.ResultFailedXml);
     }
 }
 ```

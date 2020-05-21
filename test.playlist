@@ -121,4 +121,5 @@
   <Add Test="test.asplib.Model.MainTest.SetGetInstanceTest" />
   <Add Test="test.asplib.View.ControlStorageExtensionTest.EncryptDatabaseStorageUninitializedTest" />
   <Add Test="test.asplib.View.ControlStorageExtensionTest.StorageUninitializedTest" />
+  <Add Test="test.iselenium.TestRunnerBaseTest.OnlyFailedTest" />
 </Playlist>

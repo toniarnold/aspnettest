@@ -1,6 +1,6 @@
 ﻿using asp.websharper.spa.Model;
 using asp.websharper.spa.Remoting;
-using iie;
+using iselenium;
 using System;
 using System.Threading.Tasks;
 using WebSharper;

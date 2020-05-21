@@ -1,4 +1,4 @@
-﻿using iie;
+﻿using iselenium;
 using minimal.websharper.spa;
 using NUnit.Framework;
 using System.Collections.Generic;

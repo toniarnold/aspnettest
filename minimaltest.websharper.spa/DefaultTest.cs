@@ -1,11 +1,19 @@
-﻿using iie;
+﻿using iselenium;
 using NUnit.Framework;
+using OpenQA.Selenium;
+using System.Collections.Generic;
 
 namespace minimaltest.websharper.spa
 {
     [TestFixture]
     public class DefaultTest : IIE
     {
+#pragma warning disable IDE1006 // Members in Selenium-generated C# code
+        public IDictionary<string, object> vars { get; set; }
+        public IJavaScriptExecutor js { get; set; }
+        public IWebDriver driver { get; set; }
+#pragma warning restore IDE1006
+
         [OneTimeSetUp]
         public void OneTimeSetUpIE()
         {

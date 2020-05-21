@@ -25,15 +25,13 @@ namespace asp
         {
             var testRunner = new TestRunner(this.Request.Url.Port);
             testRunner.Run("asptest.webforms");
-            this.testResult.ResultString = testRunner.ResultString;
-
             if (testRunner.Passed)
             {
                 this.testResult.Text = testRunner.SummaryHtml;
             }
             else
             {
-                this.testResult.RenderTestResult();
+                this.testResult.RenderTestResult(TestRunner.ResultFailedXml);
             }
         }
     }
