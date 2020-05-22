@@ -1,5 +1,5 @@
 ﻿using asp.websharper.spa.Client;
-using iie;
+using iselenium;
 using NUnit.Framework;
 using static asplib.View.TagHelper;
 

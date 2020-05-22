@@ -1,5 +1,5 @@
 ﻿using asp.websharper.spa.Remoting;
-using iie;
+using iselenium;
 using NUnit.Framework;
 using System.Collections.Generic;
 
