@@ -24,6 +24,7 @@ namespace minimal.websharper.spa
             using (var content = StorageServer.Load<Content, ContentViewModel>(viewState, out Content))
             {
                 content.Add(item);
+                Content = content;
                 return content.ViewModelTask<Content, ContentViewModel>();
             }
         }
@@ -39,6 +40,7 @@ namespace minimal.websharper.spa
         {
             using (var content = StorageServer.Load<Content, ContentViewModel>(viewState, out Content))
             {
+                Content = content;
                 return content.ViewModelTask<Content, ContentViewModel>();
             }
         }

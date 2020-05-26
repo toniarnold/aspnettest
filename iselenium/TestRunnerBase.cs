@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NUnit.Engine;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Xml;
@@ -9,7 +10,7 @@ namespace iselenium
     /// Common base class for the distinct .NET Framework and .NET Core TestRunners
     /// Handles basic NUnit test runner configuration and test results
     /// </summary>
-    public abstract class TestRunnerBase
+    public abstract class TestRunnerBase : ITestEventListener
     {
         public TestRunnerBase(int port)
         {
@@ -131,6 +132,52 @@ namespace iselenium
             {
                 return string.Join("<br />", this.Summary);
             }
+        }
+
+        public void Run(string testproject, string approot, string testFilterWhere)
+        {
+            try
+            {
+                TestServerIPC.CreateOrOpenMmmfs();
+
+                // To avoid a cyclic project dependency, the test DLL must be read
+                // from an explicit path in the file system, and in .NET Code,
+                // it additionally must be formally referenced, therefore the
+                // diff / if errorlevel 1 xcopy construct in the post build event
+                // to avoid endlessly recompiling a newer, but identical DLL
+                // in a cyclic dependency loop.
+                var dll = Path.Combine(approot, @"..\bin", testproject + ".dll");
+                var package = new TestPackage(dll);
+                // NUnit.EnginePackageSettings
+                package.AddSetting("ProcessModel", "Single");
+                package.AddSetting("DomainUsage", "None");  // irrelevant in core
+                using (var engine = CreateTestEngine())
+                using (var runner = engine.GetRunner(package))
+                {
+                    var filter = TestFilter.Empty;
+                    if (!String.IsNullOrWhiteSpace(testFilterWhere))
+                    {
+                        var builder = new TestFilterBuilder();
+                        builder.SelectWhere(testFilterWhere);
+                        filter = builder.GetFilter();   // returns TestFilter.Empty when no TestFilterWhere is given
+                    }
+                    Result = runner.Run(this, filter);
+                    // Communicate results back to the caller process (additionally to the static Result).
+                    TestServerIPC.TestSummary = String.Join("\n", this.Summary);
+                    TestServerIPC.TestResultXml = ResultXml;
+                    TestServerIPC.TestResultFailedXml = ResultFailedXml;
+                }
+            }
+            finally
+            {
+                TestServerIPC.IsTestRunning = false;
+            }
+        }
+
+        // Only for .NET Core
+        protected virtual ITestEngine CreateTestEngine()
+        {
+            return TestEngineActivator.CreateInstance();
         }
 
         /// <summary>

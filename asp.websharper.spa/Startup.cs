@@ -43,7 +43,7 @@ namespace asp.websharper.spa
                     options.Cookie.HttpOnly = true;
                 })
                 .AddLogging()
-                .AddSitelet(TestResult.Main);
+                .AddSitelet(TestResultSite.Main);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

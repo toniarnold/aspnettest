@@ -43,7 +43,9 @@ Even more, in Edge itself, access to localhost must be enabled. Type
 However, this will not enable the now blocked http://127.0.0.1 (to ptotect local
 webservices from malicious CORS requests from a remote web site, see e.g.
 [Hacker News - I can see your local web
-servers](https://news.ycombinator.com/item?id=20028108)). No http://127.0.0.1 no
+servers](https://news.ycombinator.com/item?id=20028108)) or [Hacker News - Why 
+Is This Website Port Scanning 
+Me?](https://news.ycombinator.com/item?id=23246170). No http://127.0.0.1 no
 more is the main reason why IIE with direct COM communication is now abandoned,
 although it was by far the fastest test driver. No more [tweak the
 solution](setup.md#clone-and-tweak-the-solution) because "localhost" seems to

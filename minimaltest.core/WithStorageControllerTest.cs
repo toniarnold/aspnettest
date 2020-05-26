@@ -20,7 +20,9 @@ namespace minimaltest
         }
 
         /// <summary>
-        /// There could be a manually generated row in IE's current cookie, thus explicitly delete.
+        /// IIE: There could be a manually generated row in IE's current cookie, thus explicitly delete.
+        /// SeleniumTest: Due to DeleteAllCookies() as [SetUp], this is not necessary no more as [OneTimeSetUp],
+        /// but method under test in ClearStorageTest()
         /// </summary>
         [OneTimeSetUp]
         public void ClearDatabaseStorage()

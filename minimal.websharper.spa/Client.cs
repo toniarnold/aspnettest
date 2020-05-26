@@ -41,12 +41,12 @@ namespace minimal.websharper.spa
                 // Test button with result summary
                 .Test(async (el, ev) =>
                 {
-                    var result = await TestServer.Test("minimaltest.websharper.spa");
+                    var result = await RemoteTestRunner.Run("minimaltest.websharper.spa");
                     testSummary.Clear();
                     testSummary.AppendMany(result.Summary);
                     if (!result.Passed)
                     {
-                        JS.Window.Location.Assign(TestResult.Path);
+                        JS.Window.Location.Assign(TestResultSite.PathFailed);
                     }
                 })
                 .TestSummaryContainer(
@@ -116,19 +116,19 @@ namespace minimal.websharper.spa
 
                     // <input ws-var="Storage" value="${ViewState}" type="radio" /> ViewState
                     // in the template yields:
-                    // Using ws-var on a <input type="radio"> node is not supported yet
-                    // Thus programmatically:
+                    // Using ws-var on a <input type="radio"> node is not supported yet, thus programmatic.
+                    // Auto-generates the name: <input name="uinref4" type="radio">, manual ids for test.SelectID().
                     .StorageRadio(
                         label(
-                            radio(storage, asplib.Model.Storage.ViewState),
+                            radio(storage, asplib.Model.Storage.ViewState, attr.id("storageViewState")),
                             "ViewState"
                          ),
                         label(
-                            radio(storage, asplib.Model.Storage.Session),
+                            radio(storage, asplib.Model.Storage.Session, attr.id("storageSession")),
                             "Session"
                          ),
                         label(
-                            radio(storage, asplib.Model.Storage.Database),
+                            radio(storage, asplib.Model.Storage.Database, attr.id("storageDatabase")),
                             "Database"
                          )
                     )

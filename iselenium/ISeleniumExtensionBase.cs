@@ -6,7 +6,6 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Diagnostics;
 using System.Net;
-using System.Text.RegularExpressions;
 using System.Threading;
 
 namespace iselenium
@@ -54,7 +53,6 @@ namespace iselenium
         /// [OneTimeSetUp]
         /// Start Internet Explorer and set up events
         /// </summary>
-        /// <param name="inst"></param>
         public static void SetUpBrowser<TWebDriver>(this ISeleniumBase inst)
             where TWebDriver : IWebDriver, new()
         {
@@ -116,15 +114,20 @@ namespace iselenium
         /// Assert that there is no TestResult.xml with result="Failed" shown.
         /// Intended For running tests from ITestServer in a TestAdapter.
         /// </summary>
-        /// <param name="inst"></param>
         public static void AssertTestsOK(this ISeleniumBase inst)
         {
-            var testRunTag = inst.driver.FindElements(By.TagName("test-run"));
-            if (testRunTag.Count > 0)
+            while (TestServerIPC.IsTestRunning)    // poll until the tests are finished
             {
-                var xml = testRunTag[0].Text;
-                bool failed = Regex.IsMatch(xml, @"\bresult=""Failed""", RegexOptions.Singleline);
-                Assert.That(!failed, xml);
+                Thread.Sleep(1000); // 1 sec poll/await interval
+            }
+            var failedXml = TestServerIPC.TestResultFailedXml;
+            if (!string.IsNullOrEmpty(failedXml))
+            {
+                Assert.Fail(failedXml);
+            }
+            else
+            {
+                Assert.Pass(TestServerIPC.TestResultXml);
             }
         }
 
@@ -132,7 +135,6 @@ namespace iselenium
         /// Click the HTML element (usually a Button) with the given name and
         /// index and wait for the response when expectPostBack is true.
         /// </summary>
-        /// <param name="inst"></param>
         /// <param name="name">HTML name attribute of the element to click on</param>
         /// <param name="expectRequest">Whether to expect a GET/POST request to the server from the click</param>
         /// <param name="samePage">Whether to expect a WebForms style PostBack to the same page</param>
@@ -147,8 +149,8 @@ namespace iselenium
             Click(inst, button, expectRequest: expectRequest, delay: delay, pause: pause);
             if (expectRequest && samePage)
             {
-                var _ = new WebDriverWait(inst.driver, TimeSpan.FromSeconds(RequestTimeout))
-                            .Until(drv => drv.FindElement(By.Name(name)).Displayed);
+                new WebDriverWait(inst.driver, TimeSpan.FromSeconds(RequestTimeout))
+                    .Until(drv => drv.FindElement(By.Name(name)).Displayed);
             }
             AssertStatusCode(expectedStatusCode);
         }
@@ -158,22 +160,23 @@ namespace iselenium
         /// and wait for the response when expectPostBack is true.
         /// </summary>
         /// <param name="clientId">HTML id attribute of the element to click on</param>
+        /// <param name="index">index of the element collection with that clientId, defaults to 0</param>
         /// <param name="expectRequest">Whether to expect a GET/POST request to the server from the click</param>
         /// <param name="samePage">Whether to expect a WebForms style PostBack to the same page</param>
         /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>///
         /// <param name="delay">Optional delay time in milliseconds before clicking the element</param>
         /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete</param>
-        public static void ClickID(this ISeleniumBase inst, string clientId,
+        public static void ClickID(this ISeleniumBase inst, string clientId, int index = 0,
                                     bool expectRequest = true, bool samePage = false,
                                     int expectedStatusCode = 200, int delay = 0, int pause = 0)
         {
-            var button = GetHTMLElementById(inst, clientId);
+            var button = GetHTMLElementById(inst, clientId, index);
             Click(inst, button, expectRequest: expectRequest, expectedStatusCode: expectedStatusCode,
                     delay: delay, pause: pause);
             if (samePage)
             {
-                var _ = new WebDriverWait(inst.driver, TimeSpan.FromSeconds(RequestTimeout))
-                            .Until(drv => drv.FindElement(By.Id(clientId)).Displayed);
+                new WebDriverWait(inst.driver, TimeSpan.FromSeconds(RequestTimeout))
+                    .Until(drv => drv.FindElement(By.Id(clientId)).Displayed);
             }
             AssertStatusCode(expectedStatusCode);
         }
@@ -218,11 +221,22 @@ namespace iselenium
         /// <param name="inst"></param>
         /// <param name="clientId">HTML id attribute of the element to click on</param>
         /// <param name="text">Text to write</param>
-        public static void WriteID(this ISeleniumBase inst, string clientId, string text)
+        /// <param name="discrete">send chars individually (for WebSharper)</param>
+        public static void WriteID(this ISeleniumBase inst, string clientId, string text, bool discrete = false)
         {
             var textinput = GetHTMLElementById(inst, clientId);
             textinput.Clear();
-            textinput.SendKeys(text);
+            if (!discrete)
+            {
+                textinput.SendKeys(text);
+            }
+            else
+            {
+                for (int i = 0; i < text.Length; i++)
+                {
+                    textinput.SendKeys(text[i].ToString());
+                }
+            }
         }
 
         /// <summary>
@@ -239,26 +253,23 @@ namespace iselenium
         public static void Select(this ISeleniumBase inst, string name, string value, bool expectPostBack = false,
                                     int expectedStatusCode = 200, int delay = 0, int pause = 0)
         {
-            var list = GetHTMLElemensByName(inst, name);
+            var list = GetHTMLElementsByName(inst, name);
             if (list == null)
             {
-                throw new Exception(String.Format("No HTML input elements with name = found", name));
+                throw new ArgumentException(String.Format("No HTML input elements with name='{0}' found", name));
             }
             for (int idx = 0; idx <= list.Count; idx++)
             {
                 if (idx == list.Count)
                 {
-                    throw new Exception(String.Format("HTML input element '{0}': value '{1}' not found", name, value));
+                    throw new ArgumentException(String.Format("HTML input element with name='{0}', value='{1}' not found", name, value));
                 }
                 else if (list[idx].GetAttribute("value") == value)
                 {
                     ClickName(inst, name, idx, expectRequest: expectPostBack, samePage: true, expectedStatusCode: expectedStatusCode,
                             delay: delay, pause: pause);
-                    if (expectPostBack)
-                    {
-                        var _ = new WebDriverWait(inst.driver, TimeSpan.FromSeconds(RequestTimeout))
-                                    .Until(drv => drv.FindElements(By.Name(name))[idx].Selected);
-                    }
+                    new WebDriverWait(inst.driver, TimeSpan.FromSeconds(RequestTimeout))
+                        .Until(drv => drv.FindElements(By.Name(name))[idx].Selected);
                     break;
                 }
             }
@@ -268,17 +279,34 @@ namespace iselenium
         /// Get the element with the given clientID
         /// </summary>
         /// <param name="clientID">ClientID resp. HTML id attribute of the element</param>
+        /// <param name="index">index of the element collection with that name, defaults to 0</param>
         /// <returns></returns>
-        public static IWebElement GetHTMLElementById(this ISeleniumBase inst, string clientID)
+        public static IWebElement GetHTMLElementById(this ISeleniumBase inst, string clientID, int index = 0)
         {
-            var element = inst.driver.FindElement(By.Id(clientID));
-            if (element == null)
+            var elements = inst.driver.FindElements(By.Id(clientID));
+            if (elements.Count <= index)
             {
-                throw new Exception(String.Format("HTML element with ClientID='{0}' not found", clientID));
+                throw new ArgumentException(String.Format(
+                   "HTML input element with id='{0}' at index={1} not found", clientID, index));
+            }
+            return elements[index];
+        }
+
+        /// <summary>
+        /// Get all input elements with the given clientID
+        /// </summary>
+        /// <param name="id">HTML id attribute of the elements</param>
+        /// <returns></returns>
+        public static ReadOnlyCollection<IWebElement> GetHTMLElementsByID(this ISeleniumBase inst, string id)
+        {
+            var elements = inst.driver.FindElements(By.Id(id));
+            if (elements.Count == 0)
+            {
+                throw new ArgumentException(String.Format("HTML input element with id='{0}' not found", id));
             }
             else
             {
-                return element;
+                return elements;
             }
         }
 
@@ -287,7 +315,7 @@ namespace iselenium
         /// When in IECompatible mode, name *or* id behavior mimics that of SHDocVw.InternetExplorer
         /// for backwards compatibility
         /// </summary>
-        /// <param name="name">HTML name attribute of the element to click on</param>
+        /// <param name="name">HTML name attribute of the element</param>
         /// <param name="index">index of the element collection with that name, defaults to 0</param>
         /// <returns></returns>
         public static IWebElement GetHTMLElementByName(this ISeleniumBase inst, string name, int index = 0)
@@ -301,12 +329,12 @@ namespace iselenium
                     if (elements.Count <= index)
                     {
                         throw new ArgumentException(String.Format(
-                            "HTML input element with name='{0}' or id='{0}' at index {1} not found", name, index));
+                            "HTML input element with name='{0}' or id='{0}' at index={1} not found", name, index));
                     }
                     return elements[index];
                 }
                 throw new ArgumentException(String.Format(
-                    "HTML input element with name='{0}'at index {1} not found", name, index));
+                    "HTML input element with name='{0}' at index={1} not found", name, index));
             }
             return elements[index];
         }
@@ -314,9 +342,9 @@ namespace iselenium
         /// <summary>
         /// Get all input elements with the given name
         /// </summary>
-        /// <param name="name">name attribute of the element</param>
+        /// <param name="name">name attribute of the elements</param>
         /// <returns></returns>
-        public static ReadOnlyCollection<IWebElement> GetHTMLElemensByName(this ISeleniumBase inst, string name)
+        public static ReadOnlyCollection<IWebElement> GetHTMLElementsByName(this ISeleniumBase inst, string name)
         {
             var elements = inst.driver.FindElements(By.Name(name));
             if (elements.Count == 0)
@@ -344,9 +372,7 @@ namespace iselenium
                 {
                     var _ = element.Displayed;
                 }
-#pragma warning disable CS0168 // Variable ist deklariert, wird jedoch niemals verwendet
-                catch (StaleElementReferenceException _)
-#pragma warning restore CS0168 // Variable ist deklariert, wird jedoch niemals verwendet
+                catch (StaleElementReferenceException)
                 {
                     isPostBack = true;
                     break;

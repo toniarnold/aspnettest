@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using OpenQA.Selenium;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace iselenium
 {
@@ -21,7 +22,7 @@ namespace iselenium
         /// Start the browser
         /// </summary>
         [OneTimeSetUp]
-        public virtual void OneTimeSetUBrowser()
+        public virtual void OneTimeSetUpBrowser()
         {
             this.SetUpBrowser<TWebDriver>();
         }
@@ -41,6 +42,7 @@ namespace iselenium
         [SetUp]
         public void DeleteAllCookies()
         {
+            Thread.Sleep(1000); // avoid eventual OpenQA.Selenium.NoSuchWindowException
             this.driver.Manage().Cookies.DeleteAllCookies();
         }
     }

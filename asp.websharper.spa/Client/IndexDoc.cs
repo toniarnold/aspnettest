@@ -55,12 +55,12 @@ namespace asp.websharper.spa.Client
                     // Test button with result summary
                     .Test(async (el, ev) =>
                     {
-                        var result = await TestServer.Test("asptest.websharper.spa");
+                        var result = await RemoteTestRunner.Run("asptest.websharper.spa");
                         testSummary.Clear();
                         testSummary.AppendMany(result.Summary);
                         if (!result.Passed)
                         {
-                            JS.Window.Location.Assign(TestResult.Path);
+                            JS.Window.Location.Assign(TestResultSite.PathFailed);
                         }
                     })
                     .TestSummaryContainer(

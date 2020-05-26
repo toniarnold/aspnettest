@@ -5,7 +5,10 @@ using WebSharper;
 
 namespace iselenium
 {
-    public static class TestServer
+    /// <summary>
+    /// WebSharper remoting server invoking the TestRunner
+    /// </summary>
+    public static class RemoteTestRunner
     {
         /// <summary>
         /// JS Value class
@@ -17,11 +20,9 @@ namespace iselenium
         }
 
         [Remote]
-        public static async Task<TestResult> Test(string testproject)
+        public static async Task<TestResult> Run(string testproject)
         {
-#pragma warning disable CS0246 // Der Typ- oder Namespacename "TestRunner" wurde nicht gefunden (möglicherweise fehlt eine using-Direktive oder ein Assemblyverweis).
             var testRunner = new TestRunner(
-#pragma warning restore CS0246 // Der Typ- oder Namespacename "TestRunner" wurde nicht gefunden (möglicherweise fehlt eine using-Direktive oder ein Assemblyverweis).
                 RemotingContext.Configuration,
                 RemotingContext.Environment,
                 RemotingContext.Port);

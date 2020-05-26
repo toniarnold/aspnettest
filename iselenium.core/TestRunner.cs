@@ -1,8 +1,6 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using NUnit.Engine;
-using System;
-using System.IO;
 
 namespace iselenium
 {
@@ -30,31 +28,7 @@ namespace iselenium
         /// <param name="testproject"></param>
         public void Run(string testproject)
         {
-            // To avoid a cyclic project dependency, the test DLL must be read
-            // from an explicit path in the file system, and in .NET Code,
-            // it additionally must be formally referenced, therefore the
-            // diff / if errorlevel 1 xcopy construct in the post build event
-            // to avoid endlessly recompiling a newer, but identical DLL
-            // in a cyclic dependency loop.
-            var approot = Environment.ContentRootPath;
-            var dll = Path.Combine(approot, @"..\bin", testproject + ".dll");
-            var package = new TestPackage(dll);
-            // NUnit.EnginePackageSettings
-            package.AddSetting("ProcessModel", "Single");
-            package.AddSetting("DomainUsage", "None");  // irrelevant in core
-            using (var engine = TestEngineActivator.CreateInstance())
-            using (var runner = engine.GetRunner(package))
-            {
-                var filter = TestFilter.Empty;
-                var where = Configuration["TestFilterWhere"];
-                if (!String.IsNullOrWhiteSpace(where))
-                {
-                    var builder = new TestFilterBuilder();
-                    builder.SelectWhere(where);
-                    filter = builder.GetFilter();   // returns TestFilter.Empty when no TestFilterWhere is given
-                }
-                TestRunnerBase.Result = runner.Run(this, filter);
-            }
+            base.Run(testproject, Environment.ContentRootPath, Configuration["TestFilterWhere"]);
         }
     }
 }

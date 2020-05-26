@@ -28,7 +28,7 @@ type Startup private () =
             options.Cookie.HttpOnly <- true
         ) |> ignore
         services.AddLogging() |> ignore
-        services.AddSitelet(TestResult.Main) |> ignore
+        services.AddSitelet(TestResultSite.Main) |> ignore
 
     member this.Configure(app: IApplicationBuilder, env: IWebHostEnvironment) =
 

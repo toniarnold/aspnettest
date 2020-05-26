@@ -14,7 +14,7 @@ namespace iselenium
     /// <summary>
     /// Methods for managing the Internet Explorer instance
     /// </summary>
-    [Obsolete("Replaced by SeleniumExtension with SetUpBrowser<TWebDriver>")]
+    [Obsolete("Replaced by SeleniumExtension with SetUpBrowser<IWebDriver>")]
     public static class IEExtension
     {
         /// <summary>
@@ -27,6 +27,7 @@ namespace iselenium
         /// Start Internet Explorer and set up events
         /// </summary>
         /// <param name="inst"></param>
+        [Obsolete("Replaced by SetUpBrowser<IWebDriver>")]
         public static void SetUpIE(this ISeleniumBase inst)
         {
             SeleniumExtensionBase.SetUpBrowser<InternetExplorerDriver>(inst);
@@ -36,6 +37,7 @@ namespace iselenium
         /// [OneTimeTearDown]
         /// Quit Internet Explorer
         /// </summary>
+        [Obsolete("Replaced by TearDownBrowser")]
         public static void TearDownIE(this ISeleniumBase inst)
         {
             SeleniumExtensionBase.TearDownBrowser(inst);

@@ -1,12 +1,13 @@
 ﻿using iselenium;
 using NUnit.Framework;
 using OpenQA.Selenium;
+using OpenQA.Selenium.IE;
 using System.Collections.Generic;
 
-namespace minimaltest.websharper.spa
+namespace minimaltest
 {
     [TestFixture]
-    public class DefaultTest : IIE
+    public class DefaultTest : ISelenium
     {
 #pragma warning disable IDE1006 // Members in Selenium-generated C# code
         public IDictionary<string, object> vars { get; set; }
@@ -17,13 +18,13 @@ namespace minimaltest.websharper.spa
         [OneTimeSetUp]
         public void OneTimeSetUpIE()
         {
-            this.SetUpIE();
+            this.SetUpBrowser<InternetExplorerDriver>();
         }
 
         [OneTimeTearDown]
         public void OneTimeTearDownIE()
         {
-            this.TearDownIE();
+            this.TearDownBrowser();
         }
 
         [Test]

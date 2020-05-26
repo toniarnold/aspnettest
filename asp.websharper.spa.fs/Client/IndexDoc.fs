@@ -42,11 +42,11 @@ module IndexDoc =
             Index.Main()
                 .Test(fun _ ->
                     async {
-                        let! result = TestServer.Test("asptest.websharper.spa") |> Async.AwaitTask
+                        let! result = RemoteTestRunner.Run("asptest.websharper.spa") |> Async.AwaitTask
                         testSummary.Clear()
                         testSummary.AppendMany(result.Summary)
                         if not result.Passed then
-                            JS.Window.Location.Assign(TestResult.Path)
+                            JS.Window.Location.Assign(TestResultSite.PathFailed)
                     }
                     |> Async.Start
                 )

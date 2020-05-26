@@ -42,13 +42,13 @@ namespace minimal.websharper.spa
                     options.Cookie.HttpOnly = true;
                 })
                 .AddLogging()
-                .AddSitelet(TestResult.Main);
+                .AddSitelet(TestResultSite.Main);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseDeveloperExceptionPage()
-                .UseMiddleware<IIEMiddleware>()
+                .UseMiddleware<ISeleniumMiddleware>()
                 // https://support.microsoft.com/en-us/help/234067/how-to-prevent-caching-in-internet-explorer
                 // But even this does not stop IE from sending 304 responses:
                 .Use(async (httpContext, next) =>

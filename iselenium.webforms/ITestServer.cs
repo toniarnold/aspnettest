@@ -1,5 +1,4 @@
 ﻿using NUnit.Framework;
-using OpenQA.Selenium;
 using System;
 using System.Configuration;
 using System.Diagnostics;
@@ -7,10 +6,8 @@ using System.IO;
 
 namespace iselenium
 {
-    public interface ITestServer
+    public interface ITestServer : ITestServerBase
     {
-        Process ServerProcess { get; set; }
-        IWebDriver driver { get; set; }
     }
 
     public static class TestServerExtension
@@ -20,16 +17,17 @@ namespace iselenium
         /// Server: IIS Express, optionally overrides %PROGRAMFILES%\IIS Express\iisexpress.exe
         /// Root: server application root directory
         /// Port: port to listen on
-        /// RequestTimeout: expected duration of all tests
+        /// RequestTimeout: expected duration of all tests in sec
+        /// ServerStartTimeout: expected start time of the server in sec
         /// </summary>
-        /// <param name="inst"></param>
         public static void StartServer(this ITestServer inst)
         {
             var server = ConfigurationManager.AppSettings["Server"] ??
                             @"%PROGRAMFILES%\IIS Express\iisexpress.exe";
             StartServer(inst, server, ConfigurationManager.AppSettings["Root"],
                         int.Parse(ConfigurationManager.AppSettings["Port"]),
-                        int.Parse(ConfigurationManager.AppSettings["RequestTimeout"]));
+                        int.Parse(ConfigurationManager.AppSettings["RequestTimeout"]),
+                        int.Parse(ConfigurationManager.AppSettings["ServerStartTimeout"]));
         }
 
         /// <summary>
@@ -38,8 +36,10 @@ namespace iselenium
         /// <param name="server">IIS Express, usually %PROGRAMFILES%\IIS Express\iisexpress.exe</param>
         /// <param name="root">server application root directory</param>
         /// <param name="port">port to listen on</param>
-        /// <param name="timeout">expected duration of all tests</param>
-        public static void StartServer(this ITestServer inst, string server, string root, int port, int timeout)
+        /// <param name="timeout">expected duration of all tests in sec</param>
+        /// <param name="servertimeout">expected start time of the server in sec</param>
+        public static void StartServer(this ITestServer inst, string server, string root,
+                                        int port, int timeout, int servertimeout)
         {
             var info = new ProcessStartInfo();
             info.FileName = server.Replace("%PROGRAMFILES%",
@@ -48,16 +48,13 @@ namespace iselenium
             info.Arguments = String.Format("/path:{0} /port:{1} /trace:error", path, port);
             info.UseShellExecute = true;
             inst.ServerProcess = Process.Start(info);
+            TestServerExtensionBase.WaitForServerPort(port, servertimeout);
             SeleniumExtensionBase.OutOfProcess = true;
             SeleniumExtensionBase.Port = port;
             SeleniumExtensionBase.RequestTimeout = timeout;
             inst.driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(timeout);   // too late after OneTimeSetUBrowser()
 
-        }
-
-        public static void StopServer(this ITestServer inst)
-        {
-            inst.ServerProcess.Kill();
+            TestServerIPC.CreateOrOpenMmmfs();
         }
     }
 }

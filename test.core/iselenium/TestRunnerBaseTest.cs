@@ -15,7 +15,16 @@ namespace test.iselenium
         /// Mocks testRunnerBase.Result = runner.Run(this, filter);
         /// </summary>
         [OneTimeSetUp]
-        public void ReadTestResult()
+        public void AssignTestResult()
+        {
+            TestRunnerBase.Result = ReadTestResult();
+        }
+
+        /// <summary>
+        /// Also used by TestServerIPCTest
+        /// </summary>
+        /// <returns></returns>
+        public static XmlNode ReadTestResult()
         {
             var filename = Path.GetFullPath(
                             Path.Join(TestContext.CurrentContext.WorkDirectory,
@@ -23,7 +32,7 @@ namespace test.iselenium
                                     "TestResult-example.xml"));
             var doc = new XmlDocument();
             doc.Load(filename);
-            TestRunnerBase.Result = doc.LastChild;
+            return doc.LastChild;
         }
 
         [Test]

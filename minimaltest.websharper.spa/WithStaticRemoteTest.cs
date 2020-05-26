@@ -1,12 +1,14 @@
 ﻿using iselenium;
 using minimal.websharper.spa;
 using NUnit.Framework;
+using OpenQA.Selenium.IE;
 using System.Collections.Generic;
 
-namespace minimaltest.websharper.spa
+namespace minimaltest
 {
-    //[TestFixture]
-    public class WithStaticRemoteTest : IETest
+    [TestFixture]
+    //public class WithStaticRemoteTest : SeleniumTest<ChromeDriver>
+    public class WithStaticRemoteTest : SeleniumTest<InternetExplorerDriver>
     {
         /// <summary>
         /// Typed accessor to the only model object in the app
@@ -30,16 +32,16 @@ namespace minimaltest.websharper.spa
         public void WriteContentTest()
         {
             this.Navigate("/");
-            this.ClickID("withstatic-link");
-            this.WriteID("contentTextBox", "a first content line");
-            this.ClickID("submitButton");
+            this.ClickID("withstatic-link", expectRequest: false, pause: 500);
+            this.WriteID("contentTextBox", "a first content line", discrete: true);
+            this.ClickID("submitButton", expectRequest: false, pause: 500);
 
             Assert.That(this.Content.Count, Is.EqualTo(1));
             var firstString = this.Content[0];
             Assert.That(firstString, Is.EqualTo("a first content line"));
 
-            this.WriteID("contentTextBox", "a second content line");
-            this.ClickID("submitButton");
+            this.WriteID("contentTextBox", "a second content line", discrete: true);
+            this.ClickID("submitButton", expectRequest: false, pause: 500);
             Assert.That(this.Content.Count, Is.EqualTo(2));
             var firstString2 = this.Content[0];
             Assert.That(firstString2, Is.EqualTo("a first content line"));
