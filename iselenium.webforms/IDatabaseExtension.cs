@@ -19,7 +19,6 @@ namespace iselenium
         /// <summary>
         /// [OneTimeSetUp]
         /// </summary>
-        /// <param name="inst"></param>
         public static void SetUpDatabase(this IDatabase inst)
         {
             using (var db = new ASP_DBEntities())
@@ -35,7 +34,6 @@ namespace iselenium
         /// <summary>
         /// [OneTimeTearDown]
         /// </summary>
-        /// <param name="inst"></param>
         public static void TearDownDatabase(this IDatabase inst)
         {
             using (var db = new ASP_DBEntities())

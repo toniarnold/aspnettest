@@ -93,17 +93,16 @@ namespace iselenium
         /// </summary>
         /// <param name="path">Member name path to the control starting at the main control</param>
         /// <param name="text">Text to write</param>
-        public static void Write(this ISelenium inst, string path, string text)
+        /// <param name="throttle">Time interval in milliseconds between sending chars to a text input when > 0</param>
+        public static void Write(this ISelenium inst, string path, string text, int throttle = 0)
         {
             var textinput = GetHTMLElement(inst, ControlRootExtension.GetRoot(), path);
-            textinput.Clear();
-            textinput.SendKeys(text);
+            SeleniumExtensionBase.SendKeys(textinput, text, throttle);
         }
 
         /// <summary>
         /// Returns the ASP.NET control instance at the given path
         /// </summary>
-        /// <param name="inst"></param>
         /// <param name="path">Member name path to the control starting at the main control</param>
         /// <returns></returns>
         public static Control GetControl(this ISelenium inst, string path)

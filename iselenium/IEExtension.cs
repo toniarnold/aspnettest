@@ -26,7 +26,6 @@ namespace iselenium
         /// [OneTimeSetUp]
         /// Start Internet Explorer and set up events
         /// </summary>
-        /// <param name="inst"></param>
         [Obsolete("Replaced by SetUpBrowser<IWebDriver>")]
         public static void SetUpIE(this ISeleniumBase inst)
         {

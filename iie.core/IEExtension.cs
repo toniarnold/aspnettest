@@ -27,7 +27,6 @@ namespace iie
         /// [OneTimeSetUp]
         /// Start Internet Explorer and set up events
         /// </summary>
-        /// <param name="inst"></param>
         public static void SetUpIE(this IIE inst)
         {
             IEExtensionBase.SetUpIE();
@@ -75,7 +74,7 @@ namespace iie
         /// index and wait for the response when expectPostBack is true.
         /// </summary>
         /// <param name="name">name attribute of the element</param>
-        /// <param name="index">index of the element collection with that name, defaults to 0</param>
+        /// <param name="index">Index of the element collection with that name, defaults to 0</param>
         /// <param name="expectPostBack">Whether to expect a server request from the click</param>
         /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>
         /// <param name="delay">Optional delay time in milliseconds before clicking the element</param>
@@ -104,7 +103,7 @@ namespace iie
         /// </summary>
         /// <param name="name">name attribute of the element</param>
         /// <param name="text">Text to write</param>
-        /// <param name="index">index of the element collection with that name, defaults to 0</param>
+        /// <param name="index">Index of the element collection with that name, defaults to 0</param>
         public static void Write(this IIE inst, string name, string text, int index = 0)
         {
             IEExtensionBase.WriteName(name, text, index);

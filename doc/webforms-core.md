@@ -419,7 +419,7 @@ public IActionResult Test()
 /// <returns></returns>
 public IActionResult Result()
 {
-    return Content(TestRunner.StaticResultString, "application/xml");
+    return Content(TestRunner.StaticResultString, "application/xml; charset=UTF-8");
 }
 ```
 

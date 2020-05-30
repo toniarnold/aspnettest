@@ -27,7 +27,6 @@ namespace asplib.Model
         /// ViewState or implicitly on the server.
         /// </summary>
         /// <typeparam name="M"></typeparam>
-        /// <param name="inst">The inst.</param>
         public static void Save<M>(this IStored<M> inst)
             where M : class, IStored<M>, new()
         {

@@ -49,11 +49,15 @@ namespace iselenium
 
         public static void StopServer(this ITestServerBase inst)
         {
-            if (inst.ServerProcess != null)
-            {
-                inst.ServerProcess.Kill();
-            }
             TestServerIPC.Dispose();
+            try
+            {
+                if (inst != null)
+                {
+                    inst.ServerProcess.Kill();
+                }
+            }
+            catch { }
         }
     }
 }

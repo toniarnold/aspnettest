@@ -19,7 +19,7 @@ namespace iselenium
                 .With<ResultEndpoint>((ctx, endpoint) =>
                     Content.Custom(
                         Status: Http.Status.Ok,
-                        Headers: new[] { Http.Header.Custom("Content-Type", "application/xml") },
+                        Headers: new[] { Http.Header.Custom("Content-Type", "application/xml; charset=UTF-8") },
                         WriteBody: stream =>
                         {
                             using (var w = new System.IO.StreamWriter(stream))

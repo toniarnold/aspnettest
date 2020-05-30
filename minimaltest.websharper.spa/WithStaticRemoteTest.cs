@@ -1,14 +1,19 @@
 ﻿using iselenium;
 using minimal.websharper.spa;
 using NUnit.Framework;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.IE;
 using System.Collections.Generic;
 
 namespace minimaltest
 {
-    [TestFixture]
-    //public class WithStaticRemoteTest : SeleniumTest<ChromeDriver>
-    public class WithStaticRemoteTest : SeleniumTest<InternetExplorerDriver>
+    [TestFixture(typeof(ChromeDriver))]
+    [TestFixture(typeof(FirefoxDriver))]    // at the speed of continental drift...
+    [TestFixture(typeof(InternetExplorerDriver))]
+    public class WithStaticRemoteTest<TWebDriver> : SpaTest<TWebDriver>
+        where TWebDriver : IWebDriver, new()
     {
         /// <summary>
         /// Typed accessor to the only model object in the app
@@ -24,7 +29,7 @@ namespace minimaltest
         public void NavigateWithStaticRemotingTest()
         {
             this.Navigate("/");
-            this.ClickID("withstatic-link");
+            this.Click("withstatic-link");
             Assert.That(this.Html(), Does.Contain("<h1>minimalist test setup with static remote</h1>"));
         }
 
@@ -32,17 +37,18 @@ namespace minimaltest
         public void WriteContentTest()
         {
             this.Navigate("/");
-            this.ClickID("withstatic-link", expectRequest: false, pause: 500);
-            this.WriteID("contentTextBox", "a first content line", discrete: true);
-            this.ClickID("submitButton", expectRequest: false, pause: 500);
-
-            Assert.That(this.Content.Count, Is.EqualTo(1));
+            this.Click("withstatic-link");
+            this.Write("contentTextBox", "a first content line");
+            this.Click("submitButton");
+            // Lambda with return outer NullReferenceException, which would disable polling, simpler assert below
+            this.AssertPoll(() => { return this.Content.Count; }, () => Is.EqualTo(1));
             var firstString = this.Content[0];
             Assert.That(firstString, Is.EqualTo("a first content line"));
 
-            this.WriteID("contentTextBox", "a second content line", discrete: true);
-            this.ClickID("submitButton", expectRequest: false, pause: 500);
-            Assert.That(this.Content.Count, Is.EqualTo(2));
+            this.Write("contentTextBox", "a second content line");
+            this.Click("submitButton");
+            // Avoids code block lambda by a better constraint
+            this.AssertPoll(() => this.Content, () => Has.Exactly(2).Items);
             var firstString2 = this.Content[0];
             Assert.That(firstString2, Is.EqualTo("a first content line"));
             var secondString = this.Content[1];

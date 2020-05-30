@@ -305,7 +305,6 @@ namespace asplib.Model
         /// Render the SQL INSERT script for the serialization of the current
         /// Controller
         /// </summary>
-        /// <param name="inst"></param>
         /// <returns></returns>
         public static string InsertSQL(this object inst)
         {
@@ -325,7 +324,6 @@ namespace asplib.Model
         /// Base64 encoded serialization of the main object, to be used in
         /// ViewState HTML input fields
         /// </summary>
-        /// <param name="inst"></param>
         /// <returns></returns>
         internal static string ViewState(object main, Func<byte[], byte[]> filter = null)
         {
@@ -370,7 +368,6 @@ namespace asplib.Model
         /// <summary>
         /// Returns a byte array as a serialization of the controller
         /// </summary>
-        /// <param name="inst"></param>
         /// <returns></returns>
         internal static byte[] Bytes(object main, Func<byte[], byte[]> filter = null)
         {

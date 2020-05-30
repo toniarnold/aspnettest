@@ -20,7 +20,7 @@ namespace iselenium
         public void RenderTestResult(string resultXml)
         {
             this.Page.Response.Clear();
-            this.Page.Response.AddHeader("Content-Type", "application/xml");
+            this.Page.Response.AddHeader("Content-Type", "application/xml; charset=UTF-8");
             this.Page.Response.Write(resultXml);
             this.Page.Response.End();
         }

@@ -1,15 +1,22 @@
 ﻿using iselenium;
 using minimal.websharper.spa;
 using NUnit.Framework;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.IE;
 using System;
 using System.Collections.Generic;
 
+// using OpenQA.Selenium.Firefox;
+
 namespace minimaltest
 {
-    [TestFixture]
-    public class WithStorageRemoteTest : SeleniumTest<InternetExplorerDriver>
-
+    // public class WithStorageRemoteTest : SpaTest<FirefoxDriver>  // forget this one...
+    [TestFixture(typeof(ChromeDriver))]
+    [TestFixture(typeof(InternetExplorerDriver))]
+    public class WithStorageRemoteTest<TWebDriver> : SpaTest<TWebDriver>
+        where TWebDriver : IWebDriver, new()
+        //public class WithStorageRemoteTest : SpaTest<ChromeDriver>
     {
         /// <summary>
         /// Typed accessor to the only model object in the app
@@ -25,7 +32,7 @@ namespace minimaltest
         private void NavigatekWithStorageRemote()
         {
             this.Navigate("/");
-            this.ClickID("withstorage-link", pause: 500);
+            this.Click("withstorage-link");
         }
 
         [Test]
@@ -54,16 +61,20 @@ namespace minimaltest
         public void StorageSessionTest()
         {
             this.NavigatekWithStorageRemote();
-            this.ClickID("storageSession", expectRequest: false, pause: 500);
+            this.Click("storageSession");
             this.WriteContentTest(() => this.Reload());
         }
 
         [Test]
         public void StorageDatabaseTest()
         {
-            this.NavigatekWithStorageRemote();
-            this.ClickID("storageDatabase", expectRequest: false, pause: 500);
-            this.WriteContentTest(() => this.RestartBrowser());
+            // Chrome is "user friendly", no persistent cookies in selenium remote  mode
+            if (!(this.driver is ChromeDriver))
+            {
+                this.NavigatekWithStorageRemote();
+                this.Click("storageDatabase");
+                this.WriteContentTest(() => this.RestartBrowser());
+            }
         }
 
         // "survives()"-Method implementations with explicit storage selection,
@@ -80,7 +91,7 @@ namespace minimaltest
         private void Reload()
         {
             this.NavigatekWithStorageRemote();
-            this.ClickID("storageSession", expectRequest: false, pause: 500);
+            this.Click("storageSession");
         }
 
         /// <summary>
@@ -91,7 +102,7 @@ namespace minimaltest
             this.OneTimeTearDownBrowser();
             this.OneTimeSetUpBrowser();
             this.NavigatekWithStorageRemote();
-            this.ClickID("storageDatabase", expectRequest: false, pause: 500);
+            this.Click("storageDatabase");
         }
 
         /// <summary>
@@ -100,23 +111,17 @@ namespace minimaltest
         /// </summary>
         public void WriteContentTest(Action survives)
         {
-            this.WriteID("contentTextBox", "a first content line", discrete: true);
-            this.ClickID("submitButton", expectRequest: false, pause: 500);
-            Assert.That(this.Content, Has.Exactly(1).Items);
-            Assert.That(this.Content[0], Is.EqualTo("a first content line"));
-            // Assertions on the Controller level (= Model level in WebForms)
-            Assert.That(this.Content, Has.Exactly(1).Items);
+            this.Write("contentTextBox", "a first content line");
+            this.Click("submitButton");
+            this.AssertPoll(() => this.Content, () => Has.Exactly(1).Items);
             Assert.That(this.Content[0], Is.EqualTo("a first content line"));
 
             survives(); // Reload() or RestartIE()
+            this.AssertPoll(() => this.Html(), () => Does.Contain("a first content line"));
 
-            this.WriteID("contentTextBox", "a second content line", discrete: true);
-            this.ClickID("submitButton", expectRequest: false, pause: 500);
-            Assert.That(this.Content, Has.Exactly(2).Items);
-            Assert.That(this.Content[0], Is.EqualTo("a first content line"));
-            Assert.That(this.Content[1], Is.EqualTo("a second content line"));
-            // Assertions on the Controller level (= Model level in WebForms)
-            Assert.That(this.Content, Has.Exactly(2).Items);
+            this.Write("contentTextBox", "a second content line");
+            this.Click("submitButton");
+            this.AssertPoll(() => this.Content, () => Has.Exactly(2).Items);
             Assert.That(this.Content[0], Is.EqualTo("a first content line"));
             Assert.That(this.Content[1], Is.EqualTo("a second content line"));
         }

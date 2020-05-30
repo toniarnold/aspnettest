@@ -19,6 +19,11 @@ namespace iselenium
 #pragma warning restore IDE1006
 
         /// <summary>
+        /// Suppress [SetUp] DeleteAllCookies()
+        /// </summary>
+        public bool KeepCookies { get; set; } = false;
+
+        /// <summary>
         /// Start the browser
         /// </summary>
         [OneTimeSetUp]
@@ -42,8 +47,11 @@ namespace iselenium
         [SetUp]
         public void DeleteAllCookies()
         {
-            Thread.Sleep(1000); // avoid eventual OpenQA.Selenium.NoSuchWindowException
-            this.driver.Manage().Cookies.DeleteAllCookies();
+            if (!KeepCookies)
+            {
+                Thread.Sleep(1000); // avoid eventual OpenQA.Selenium.NoSuchWindowException
+                this.driver.Manage().Cookies.DeleteAllCookies();
+            }
         }
     }
 }

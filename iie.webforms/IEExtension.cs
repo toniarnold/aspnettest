@@ -41,7 +41,6 @@ namespace iie
         /// [OneTimeSetUp]
         /// Start Internet Explorer and set up events
         /// </summary>
-        /// <param name="inst"></param>
         public static void SetUpIE(this IIE inst)
         {
             IEExtensionBase.SetUpIE();

@@ -16,7 +16,10 @@ namespace iselenium
                     int.Parse(ConfigurationManager.AppSettings["RequestTimeout"]),
                 String.IsNullOrWhiteSpace(
                     ConfigurationManager.AppSettings["IEVisible"]) ? false :
-                    bool.Parse(ConfigurationManager.AppSettings["IEVisible"]));
+                    bool.Parse(ConfigurationManager.AppSettings["IEVisible"]),
+                String.IsNullOrWhiteSpace(ConfigurationManager.AppSettings["TestWriteThrottle"]) ? 0 :
+                            int.Parse(ConfigurationManager.AppSettings["TestWriteThrottle"])
+                );
         }
 
         private List<string> reports = new List<string>();

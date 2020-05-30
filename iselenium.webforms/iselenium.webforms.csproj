@@ -79,7 +79,7 @@
     <Compile Include="IETest.cs" />
     <Compile Include="ITestServer.cs" />
     <Compile Include="IWebElementExtension.cs" />
-    <Compile Include="ISelenium.cs" />
+    <Compile Include="ISeleniumExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SeleniumTest.cs" />
     <Compile Include="SmcTest.cs" />

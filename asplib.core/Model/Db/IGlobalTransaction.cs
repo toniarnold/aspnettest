@@ -24,7 +24,6 @@ namespace asplib.Model.Db
         /// Retrieve all DbContext instances for the DbContexts property.
         /// Call immediately after ConfigureServices()
         /// </summary>
-        /// <param name="inst"></param>
         public static void RetrieveDbContexts(this IGlobalTransaction inst)
         {
             inst.DbContexts = DbContextMembers(inst).ToList();
@@ -57,7 +56,6 @@ namespace asplib.Model.Db
         /// <summary>
         /// Recursively get all contained DbContext objects
         /// </summary>
-        /// <param name="inst"></param>
         /// <returns></returns>
         internal static IEnumerable<DbContext> DbContextMembers(this IGlobalTransaction inst)
         {
@@ -84,7 +82,6 @@ namespace asplib.Model.Db
         /// Get all direct members except those already present in the recursion
         /// accumulator to avoid getting trapped in a cyclic reference tree.
         /// </summary>
-        /// <param name="inst"></param>
         /// <param name="acc"></param>
         /// <returns></returns>
         internal static IEnumerable<object> DirectMembers(object inst, List<object> acc)

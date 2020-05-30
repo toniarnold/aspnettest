@@ -1,5 +1,6 @@
 ﻿using iselenium;
 using NUnit.Framework;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -55,6 +56,14 @@ namespace test.iselenium
         {
             var nested = XElement.Parse(node.OuterXml);
             return nested.DescendantsAndSelf("test-case");
+        }
+
+        [Test]
+        public void ResultXmlFormatTest()
+        {
+            var xml = TestRunnerBase.ResultXml;
+            Assert.That(!String.IsNullOrEmpty(xml));
+            Assert.Pass(xml);
         }
     }
 }

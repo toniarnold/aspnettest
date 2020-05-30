@@ -7,7 +7,7 @@ namespace minimaltest.runner.websharper.spa
 {
     [TestFixture]
     [Category("ITestServer")]
-    public class Runner : SeleniumTest<EdgeDriver>, ITestServer
+    public class Runner : SpaTest<EdgeDriver>, ITestServer
     {
         public Process ServerProcess { get; set; }
 
@@ -27,7 +27,7 @@ namespace minimaltest.runner.websharper.spa
         public void RunTests()
         {
             this.Navigate("/");
-            this.ClickID("testButton", expectRequest: false, delay: 500);
+            this.Click("testButton");
             this.AssertTestsOK();
         }
     }

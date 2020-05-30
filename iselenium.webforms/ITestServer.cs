@@ -54,7 +54,7 @@ namespace iselenium
             SeleniumExtensionBase.RequestTimeout = timeout;
             inst.driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(timeout);   // too late after OneTimeSetUBrowser()
 
-            TestServerIPC.CreateOrOpenMmmfs();
+            TestServerIPC.CreateOrOpenMmmfs();  // Create as parent process
         }
     }
 }

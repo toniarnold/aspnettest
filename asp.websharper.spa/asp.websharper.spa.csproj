@@ -11,10 +11,10 @@
     <PackageReference Include="FSharp.Core" Version="4.7.2" />
     <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="16.6.1" />
     <PackageReference Include="Selenium.InternetExplorer.WebDriver" Version="3.150.1" />
-    <PackageReference Include="WebSharper" Version="4.6.2.386" />    
-    <PackageReference Include="WebSharper.CSharp" Version="4.6.2.386" />
-    <PackageReference Include="WebSharper.UI" Version="4.6.2.209" />
-    <PackageReference Include="WebSharper.UI.CSharp" Version="4.6.2.209" />
+    <PackageReference Include="WebSharper" Version="4.6.3.388" />    
+    <PackageReference Include="WebSharper.CSharp" Version="4.6.3.388" />
+    <PackageReference Include="WebSharper.UI" Version="4.6.3.210" />
+    <PackageReference Include="WebSharper.UI.CSharp" Version="4.6.3.210" />
     <PackageReference Include="WebSharper.AspNetCore" Version="4.6.1.129" />
   </ItemGroup>
 

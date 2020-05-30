@@ -1,3 +1,3 @@
 :Start
-dotnet .\bin\Debug\netcoreapp2.1\minimal.websharper.spa.dll
+dotnet .\bin\Debug\netcoreapp3.1\minimal.websharper.spa.dll
 GOTO Start

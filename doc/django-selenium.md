@@ -158,7 +158,6 @@ public static class IEExtension
     /// [OneTimeSetUp]
     /// Start Internet Explorer and set up events
     /// </summary>
-    /// <param name="inst"></param>
     public static void SetUpIE(this IIE inst)
     {
         Trace.Assert(ie == null, "Only one SHDocVw.InternetExplorer instance allowed");
@@ -172,7 +171,6 @@ public static class IEExtension
     /// [OneTimeTearDown]
     /// Quit Internet Explorer
     /// </summary>
-    /// <param name="inst"></param>
     public static void TearDownIE(this IIE inst)
     {
         if (ie != null)
@@ -369,7 +367,6 @@ and implicit waits in Selenium terminology are collapsed into one method:
 /// Click the ASP.NET control element (usually a Button instance) at the given path and wait for the response
 /// when expectPostBack is true.
 /// </summary>
-/// <param name="inst"></param>
 /// <param name="path">Member name path to the control starting at the main control</param>
 /// <param name="expectPostBack">Whether to expect a server request from the click</param>
 /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>

@@ -25,10 +25,11 @@ namespace iselenium
         /// Directly configure the test engine without dependency on a specific
         /// configuration framework.
         /// </summary>
-        protected void Configure(int requestTimeout, bool ieVisible)
+        protected void Configure(int requestTimeout, bool ieVisible, int throttle)
         {
             SeleniumExtensionBase.RequestTimeout = requestTimeout;
             SeleniumExtensionBase.IEVisible = ieVisible;
+            SeleniumExtensionBase.WriteThrottle = throttle;
         }
 
         #region IIE Compatibility
@@ -71,9 +72,10 @@ namespace iselenium
             get
             {
                 using (var stringwriter = new StringWriter())
-                using (var xmlwriter = new XmlTextWriter(stringwriter))
+                using (var xmlwriter = XmlWriter.Create(stringwriter, XmlSettings()))
                 {
                     Result.WriteTo(xmlwriter);
+                    xmlwriter.Flush();
                     return stringwriter.ToString();
                 }
             }
@@ -88,12 +90,22 @@ namespace iselenium
             get
             {
                 using (var stringwriter = new StringWriter())
-                using (var xmlwriter = new XmlTextWriter(stringwriter))
+                using (var xmlwriter = XmlWriter.Create(stringwriter, XmlSettings()))
                 {
                     ResultFailures.WriteTo(xmlwriter);
+                    xmlwriter.Flush();
                     return stringwriter.ToString();
                 }
             }
+        }
+
+        private static XmlWriterSettings XmlSettings()
+        {
+            var settings = new XmlWriterSettings();
+            settings.Encoding = System.Text.Encoding.UTF8;
+            settings.Indent = true;
+            settings.OmitXmlDeclaration = true;
+            return settings;
         }
 
         /// <summary>
@@ -138,8 +150,6 @@ namespace iselenium
         {
             try
             {
-                TestServerIPC.CreateOrOpenMmmfs();
-
                 // To avoid a cyclic project dependency, the test DLL must be read
                 // from an explicit path in the file system, and in .NET Code,
                 // it additionally must be formally referenced, therefore the
@@ -163,6 +173,7 @@ namespace iselenium
                     }
                     Result = runner.Run(this, filter);
                     // Communicate results back to the caller process (additionally to the static Result).
+                    TestServerIPC.CreateOrOpenMmmfs();  // Open when run as child process, Create otherwise
                     TestServerIPC.TestSummary = String.Join("\n", this.Summary);
                     TestServerIPC.TestResultXml = ResultXml;
                     TestServerIPC.TestResultFailedXml = ResultFailedXml;

@@ -6,6 +6,9 @@ using System.Collections.Generic;
 
 namespace minimaltest
 {
+    /// <summary>
+    /// Directly inherits from the ISelenium extension, therefore set the defaults explicitly
+    /// </summary>
     [TestFixture]
     public class DefaultTest : ISelenium
     {
@@ -33,7 +36,8 @@ namespace minimaltest
             for (int i = 1; i <= 3; i++)    // trying to catch 304 responses early on...
             {
                 this.Navigate("/");
-                Assert.That(this.Html(), Does.Contain("<h1>minimalist test setup spa</h1>"));
+                Assert.That(this.Html(wait: SeleniumExtensionBase.RequestTimeout),
+                            Does.Contain("<h1>minimalist test setup spa</h1>"));
             }
         }
 
@@ -42,16 +46,18 @@ namespace minimaltest
         {
             this.Navigate("/");
             Assert.That(this.Html(), Does.Contain("<h1>minimalist test setup spa</h1>"));
-            this.ClickID("withstatic-link");
-            Assert.That(this.Html(), Does.Contain("<h1>minimalist test setup with static remote</h1>"));
+            this.ClickID("withstatic-link", expectRequest: false, wait: SeleniumExtensionBase.RequestTimeout);
+            Assert.That(this.Html(wait: SeleniumExtensionBase.RequestTimeout),
+                        Does.Contain("<h1>minimalist test setup with static remote</h1>"));
         }
 
         [Test]
         public void ClickWithStorageRemoteTest()
         {
             this.Navigate("/");
-            this.ClickID("withstorage-link");
-            Assert.That(this.Html(), Does.Contain("<h1>minimalist test setup with remote storage</h1>"));
+            this.ClickID("withstorage-link", expectRequest: false, wait: SeleniumExtensionBase.RequestTimeout);
+            Assert.That(this.Html(wait: SeleniumExtensionBase.RequestTimeout),
+                        Does.Contain("<h1>minimalist test setup with remote storage</h1>"));
         }
     }
 }

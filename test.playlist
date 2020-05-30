@@ -127,4 +127,5 @@
   <Add Test="test.iselenium.TestServerIPCTest.TestResultFailedXmlTest" />
   <Add Test="test.iselenium.TestServerIPCTest.TestResultXmlTest" />
   <Add Test="test.iselenium.TestServerIPCTest.TestSummaryTest" />
+  <Add Test="test.iselenium.TestRunnerBaseTest.ResultXmlFormatTest" />
 </Playlist>

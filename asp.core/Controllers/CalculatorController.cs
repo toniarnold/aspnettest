@@ -73,7 +73,7 @@ namespace asp.Controllers
         /// <returns></returns>
         public IActionResult ResultFailed()
         {
-            return Content(TestRunner.ResultFailedXml, "application/xml");
+            return Content(TestRunner.ResultFailedXml, "application/xml; charset=UTF-8");
         }
 
         /// <summary>
@@ -82,7 +82,7 @@ namespace asp.Controllers
         /// <returns></returns>
         public IActionResult Result()
         {
-            return Content(TestRunner.ResultXml, "application/xml");
+            return Content(TestRunner.ResultXml, "application/xml; charset=UTF-8");
         }
 
         /// <summary>

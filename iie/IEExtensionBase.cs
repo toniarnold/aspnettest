@@ -185,7 +185,7 @@ namespace iie
         /// Get the element with the given name at the given index
         /// </summary>
         /// <param name="name">name attribute of the element</param>
-        /// <param name="index">index of the element collection with that name, defaults to 0</param>
+        /// <param name="index">Index of the element collection with that name, defaults to 0</param>
         /// <returns></returns>
         private static IHTMLElement GetHTMLElementByName(string name, int index = 0)
         {

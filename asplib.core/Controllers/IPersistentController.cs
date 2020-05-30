@@ -47,7 +47,6 @@ namespace asplib.Controllers
         /// 3. Configured storage in key="SessionStorage" value="Database"
         /// 4. Defaults to ViewState
         /// </summary>
-        /// <param name="inst"></param>
         /// <returns></returns>
         public static Storage GetStorage(this IPersistentController inst)
         {
@@ -67,7 +66,6 @@ namespace asplib.Controllers
         /// <summary>
         /// Set the control-local session storage type. Case insensitive.
         /// </summary>
-        /// <param name="inst"></param>
         /// <param name="storage"></param>
         public static void SetStorage(this IPersistentController inst, string storage)
         {
@@ -77,7 +75,6 @@ namespace asplib.Controllers
         /// <summary>
         /// Set the control-local session storage type from code
         /// </summary>
-        /// <param name="inst"></param>
         /// <param name="storage"></param>
         public static void SetStorage<M>(this IPersistentController inst, Storage storage)
         {
@@ -87,7 +84,6 @@ namespace asplib.Controllers
         /// <summary>
         /// StorageID-String unique to store/retrieve/clear the Controller instance
         /// </summary>
-        /// <param name="inst"></param>
         /// <returns></returns>
         public static string GetStorageID(this IPersistentController inst)
         {
@@ -97,7 +93,6 @@ namespace asplib.Controllers
         /// <summary>
         /// SessionStorageID-String unique to post/retrieve the storage type
         /// </summary>
-        /// <param name="inst"></param>
         /// <returns></returns>
         public static string GetSessionStorageID(this IPersistentController inst)
         {
@@ -107,7 +102,6 @@ namespace asplib.Controllers
         /// <summary>
         /// Add the ViewState input to the ViewBag for rendering in the view
         /// </summary>
-        /// <param name="inst"></param>
         public static void SaveViewState(this IPersistentController inst)
         {
             inst.ViewBag.SessionStorage = ViewBagSessionStorage(inst, Storage.ViewState);
@@ -119,7 +113,6 @@ namespace asplib.Controllers
         /// Add the serialized controller to the session and the storage type to the ViewBag
         /// to be posted such that PersistentControllerActivator can read it.
         /// </summary>
-        /// <param name="inst"></param>
         public static void SaveSession(this IPersistentController inst)
         {
             inst.ViewBag.SessionStorage = ViewBagSessionStorage(inst, Storage.Session);
@@ -130,7 +123,6 @@ namespace asplib.Controllers
         /// Store the serialized controller to the database. Reference to it is
         /// kept in a persistent cookie.
         /// </summary>
-        /// <param name="inst"></param>
         public static void SaveDatabase(this IPersistentController inst)
         {
             inst.ViewBag.SessionStorage = ViewBagSessionStorage(inst, Storage.Database);
@@ -147,7 +139,6 @@ namespace asplib.Controllers
         /// name:value pair for the ViewStateInputTagHelper, to be used as
         /// <input viewstate="@ViewBag.ViewState" />
         /// </summary>
-        /// <param name="inst"></param>
         /// <returns></returns>
         internal static string ViewState(this IPersistentController inst, Func<byte[], byte[]> filter = null)
         {
@@ -160,7 +151,6 @@ namespace asplib.Controllers
         /// name:value pair for the SessionStorageInputTagHelper, to be used as
         /// <input viewstate="@ViewBag.ViewState" />
         /// </summary>
-        /// <param name="inst"></param>
         /// <returns></returns>
         internal static string ViewBagSessionStorage(this IPersistentController inst, Storage sessionstorage)
         {

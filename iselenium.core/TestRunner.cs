@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using NUnit.Engine;
+using System;
 
 namespace iselenium
 {
@@ -15,7 +16,10 @@ namespace iselenium
             Environment = env;
 
             this.Configure(Configuration.GetValue<int>("RequestTimeout"),
-                           Configuration.GetValue<bool>("IEVisible"));
+                           Configuration.GetValue<bool>("IEVisible"),
+                           String.IsNullOrWhiteSpace(config["TestWriteThrottle"]) ? 0 :
+                                config.GetValue<int>("TestWriteThrottle")
+                );
         }
 
         /// <summary>
