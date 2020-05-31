@@ -26,7 +26,7 @@ namespace minimaltest.runner.websharper.spa
         [Test]
         public void RunTests()
         {
-            this.Navigate("/");
+            this.Navigate("/", delay: 2000);    // server not yet ready on 1st run
             this.Click("testButton");
             this.AssertTestsOK();
         }

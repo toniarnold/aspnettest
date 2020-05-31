@@ -2,6 +2,10 @@ Copyright (C) 2018-2020 Toni Arnold <toni__arnold@bluewin.ch>
 See the COPYING file in the same directory as this file for the license.
 
 
-The #region NUnit Assert.That signatures in SeleniumExtensionBase from:
+Dependencies:
+
+SMC: Copyright (C) 2004-2020 Charles W. Rapp.
+
+#region NUnit Assert.That signatures in SeleniumExtensionBase from:
 Copyright (c) 2011 Charlie Poole, Rob Prouse
 See the file .iselenium/SeleniumExtensionBaseAssertPoll.cs for the license.

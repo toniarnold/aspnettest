@@ -10,6 +10,9 @@ EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iselenium", "iselenium\iselenium.csproj", "{3FEB9DE5-B0DD-4B24-892C-FD80E2CE55BC}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "asp.webforms", "asp.webforms\asp.webforms.csproj", "{36E1692E-9B7C-467C-ADBE-A3F86575269A}"
+	ProjectSection(ProjectDependencies) = postProject
+		{69EB69AB-0D24-4974-8D7D-2D2CDB62DCFA} = {69EB69AB-0D24-4974-8D7D-2D2CDB62DCFA}
+	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "asplib", "asplib\asplib.csproj", "{1B0B5ED6-795A-4F6B-9628-C369B204C8C3}"
 EndProject
@@ -138,6 +141,7 @@ Global
 		{776E3032-BFD5-4C20-9867-942F045A8B0F}.Release|x86.ActiveCfg = Release|Any CPU
 		{776E3032-BFD5-4C20-9867-942F045A8B0F}.Release|x86.Build.0 = Release|Any CPU
 		{69EB69AB-0D24-4974-8D7D-2D2CDB62DCFA}.Debug|Any CPU.ActiveCfg = Debug|Win32
+		{69EB69AB-0D24-4974-8D7D-2D2CDB62DCFA}.Debug|Any CPU.Build.0 = Debug|Win32
 		{69EB69AB-0D24-4974-8D7D-2D2CDB62DCFA}.Debug|ARM.ActiveCfg = Debug|Win32
 		{69EB69AB-0D24-4974-8D7D-2D2CDB62DCFA}.Debug|ARM64.ActiveCfg = Debug|Win32
 		{69EB69AB-0D24-4974-8D7D-2D2CDB62DCFA}.Debug|x64.ActiveCfg = Debug|x64
@@ -145,6 +149,7 @@ Global
 		{69EB69AB-0D24-4974-8D7D-2D2CDB62DCFA}.Debug|x86.ActiveCfg = Debug|Win32
 		{69EB69AB-0D24-4974-8D7D-2D2CDB62DCFA}.Debug|x86.Build.0 = Debug|Win32
 		{69EB69AB-0D24-4974-8D7D-2D2CDB62DCFA}.Release|Any CPU.ActiveCfg = Release|Win32
+		{69EB69AB-0D24-4974-8D7D-2D2CDB62DCFA}.Release|Any CPU.Build.0 = Release|Win32
 		{69EB69AB-0D24-4974-8D7D-2D2CDB62DCFA}.Release|ARM.ActiveCfg = Release|Win32
 		{69EB69AB-0D24-4974-8D7D-2D2CDB62DCFA}.Release|ARM64.ActiveCfg = Release|Win32
 		{69EB69AB-0D24-4974-8D7D-2D2CDB62DCFA}.Release|x64.ActiveCfg = Release|x64

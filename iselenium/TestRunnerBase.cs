@@ -156,7 +156,7 @@ namespace iselenium
                 // diff / if errorlevel 1 xcopy construct in the post build event
                 // to avoid endlessly recompiling a newer, but identical DLL
                 // in a cyclic dependency loop.
-                var dll = Path.Combine(approot, @"..\bin", testproject + ".dll");
+                var dll = Path.Combine(approot, "..", "bin", testproject + ".dll");
                 var package = new TestPackage(dll);
                 // NUnit.EnginePackageSettings
                 package.AddSetting("ProcessModel", "Single");
