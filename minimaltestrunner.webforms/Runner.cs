@@ -1,9 +1,9 @@
-using iselenium;
+﻿using iselenium;
 using NUnit.Framework;
 using OpenQA.Selenium.Edge;
 using System.Diagnostics;
 
-namespace minimaltest.runner
+namespace minimaltestrunner
 {
     [TestFixture]
     [Category("ITestServer")]
@@ -26,8 +26,8 @@ namespace minimaltest.runner
         [Test]
         public void RunTests()
         {
-            this.Navigate("/");
-            this.ClickID("testButton");
+            this.Navigate("/default.aspx");
+            this.ClickID("testButton"); // manually look up WebForms id with out of process tests
             this.AssertTestsOK();
         }
     }

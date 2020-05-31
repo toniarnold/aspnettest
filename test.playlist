@@ -31,9 +31,10 @@
   <Add Test="apitest.apiservice.Model.Db.AspserviceDbContextTest.TransactionTest" />
   <Add Test="apitest.apiservice.Model.Db.AspserviceDbTest.InsertAccesscodeTest" />
   <Add Test="apitest.apiservice.Model.Db.AspserviceDbTest.LoadTestSessionTest" />
-  <Add Test="asptest.runner.core.Runner.RunTests" />
-  <Add Test="asptest.runner.Runner.RunTests" />
-  <Add Test="minimaltest.runner.Runner.RunTests" />
+  <Add Test="asptestrunner.core.Runner.RunTests" />
+  <Add Test="asptestrunner.Runner.RunTests" />
+  <Add Test="minimaltestrunner.Runner.RunTests" />
+  <Add Test="minimaltestrunner.websharper.spa.Runner.RunTests" />
   <Add Test="test.asp.Controllers.CalculatorControllerTest.AddTest" />
   <Add Test="test.asp.Controllers.CalculatorControllerTest.ClrAllTest" />
   <Add Test="test.asp.Controllers.CalculatorControllerTest.ClrTest" />
@@ -97,6 +98,14 @@
   <Add Test="test.asplib.View.TagHelperTest.IEmptyParentTest" />
   <Add Test="test.asplib.View.TagHelperTest.IdNoParentTest" />
   <Add Test="test.asplib.View.TagHelperTest.IdWithParentsTest" />
+  <Add Test="test.iselenium.AssertPollExactCoutnOperatorTest.Test" />
+  <Add Test="test.iselenium.ISeleniumExtensionBaseAssertPollTest.Test" />
+  <Add Test="test.iselenium.TestRunnerBaseTest.OnlyFailedTest" />
+  <Add Test="test.iselenium.TestRunnerBaseTest.ResultXmlFormatTest" />
+  <Add Test="test.iselenium.TestServerIPCTest.IsTestRunningTest" />
+  <Add Test="test.iselenium.TestServerIPCTest.TestResultFailedXmlTest" />
+  <Add Test="test.iselenium.TestServerIPCTest.TestResultXmlTest" />
+  <Add Test="test.iselenium.TestServerIPCTest.TestSummaryTest" />
   <Add Test="test.asp.calculator.Control.CalculatorTest.AddTest" />
   <Add Test="test.asp.calculator.Control.CalculatorTest.ClrAllTest" />
   <Add Test="test.asp.calculator.Control.CalculatorTest.ClrTest" />
@@ -121,11 +130,4 @@
   <Add Test="test.asplib.Model.MainTest.SetGetInstanceTest" />
   <Add Test="test.asplib.View.ControlStorageExtensionTest.EncryptDatabaseStorageUninitializedTest" />
   <Add Test="test.asplib.View.ControlStorageExtensionTest.StorageUninitializedTest" />
-  <Add Test="test.iselenium.TestRunnerBaseTest.OnlyFailedTest" />
-  <Add Test="minimaltest.runner.websharper.spa.Runner.RunTests" />
-  <Add Test="test.iselenium.TestServerIPCTest.IsTestRunningTest" />
-  <Add Test="test.iselenium.TestServerIPCTest.TestResultFailedXmlTest" />
-  <Add Test="test.iselenium.TestServerIPCTest.TestResultXmlTest" />
-  <Add Test="test.iselenium.TestServerIPCTest.TestSummaryTest" />
-  <Add Test="test.iselenium.TestRunnerBaseTest.ResultXmlFormatTest" />
 </Playlist>

@@ -24,7 +24,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iselenium", "iselenium\isel
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iselenium.core", "iselenium.core\iselenium.core.csproj", "{34E7EE40-2F5E-4A19-8071-14406760AF4C}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "asptest.runner.core", "asptest.runner.core\asptest.runner.core.csproj", "{EF2C819B-0C91-4CA0-BA66-AD781E103B8F}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "asptestrunner.core", "asptestrunner.core\asptestrunner.core.csproj", "{EF2C819B-0C91-4CA0-BA66-AD781E103B8F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

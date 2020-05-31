@@ -10,7 +10,7 @@
     <ProjectGuid>{4E6A82CF-8D05-4555-84B9-98EB10176880}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>minimaltest.runner</RootNamespace>
+    <RootNamespace>minimaltestrunner</RootNamespace>
     <AssemblyName>minimaltest.runner.webforms</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

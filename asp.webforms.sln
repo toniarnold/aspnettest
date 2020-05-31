@@ -24,7 +24,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iselenium.webforms", "isele
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "asptest.webforms", "asptest.webforms\asptest.webforms.csproj", "{BB3B66BB-8287-4CA9-BA93-A686DF41062E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "asptest.runner.webforms", "asptest.runner.webforms\asptest.runner.webforms.csproj", "{B1F18DB1-C667-4F2F-9998-BBA83105C0FC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "asptestrunner.webforms", "asptestrunner.webforms\asptestrunner.webforms.csproj", "{B1F18DB1-C667-4F2F-9998-BBA83105C0FC}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

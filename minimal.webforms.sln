@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iselenium", "iselenium\isel
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iselenium.webforms", "iselenium.webforms\iselenium.webforms.csproj", "{F3BEDB25-A002-4EB5-B951-4A5E3E2EC477}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "minimaltest.runner.webforms", "minimaltest.runner.webforms\minimaltest.runner.webforms.csproj", "{4E6A82CF-8D05-4555-84B9-98EB10176880}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "minimaltestrunner.webforms", "minimaltestrunner.webforms\minimaltestrunner.webforms.csproj", "{4E6A82CF-8D05-4555-84B9-98EB10176880}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

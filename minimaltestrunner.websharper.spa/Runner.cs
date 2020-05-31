@@ -1,13 +1,13 @@
-using iselenium;
+﻿using iselenium;
 using NUnit.Framework;
 using OpenQA.Selenium.Edge;
 using System.Diagnostics;
 
-namespace asptest.runner.core
+namespace minimaltestrunner.websharper.spa
 {
     [TestFixture]
     [Category("ITestServer")]
-    public class Runner : SeleniumTest<EdgeDriver>, ITestServer
+    public class Runner : SpaTest<EdgeDriver>, ITestServer
     {
         public Process ServerProcess { get; set; }
 
@@ -26,8 +26,8 @@ namespace asptest.runner.core
         [Test]
         public void RunTests()
         {
-            this.Navigate("/");
-            this.ClickID("testButton");
+            this.Navigate("/", delay: 7000);    // server not yet ready on 1st run
+            this.Click("testButton");
             this.AssertTestsOK();
         }
     }

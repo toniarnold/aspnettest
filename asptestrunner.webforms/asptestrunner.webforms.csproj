@@ -10,7 +10,7 @@
     <ProjectGuid>{B1F18DB1-C667-4F2F-9998-BBA83105C0FC}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>asptest.runner</RootNamespace>
+    <RootNamespace>asptestrunner</RootNamespace>
     <AssemblyName>asptest.runner.webforms</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>

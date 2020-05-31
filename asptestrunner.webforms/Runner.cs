@@ -3,7 +3,7 @@ using NUnit.Framework;
 using OpenQA.Selenium.Edge;
 using System.Diagnostics;
 
-namespace asptest.runner
+namespace asptestrunner
 {
     [TestFixture]
     [Category("ITestServer")]

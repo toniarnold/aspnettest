@@ -28,7 +28,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iselenium.core", "iselenium
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iselenium", "iselenium\iselenium.csproj", "{DF68D1C6-B15F-4C81-B02F-0100E812DE9F}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "minimaltest.runner.websharper.spa", "minimaltest.runner.websharper.spa\minimaltest.runner.websharper.spa.csproj", "{1426438A-A84F-437F-B369-8BF296FF08FA}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "minimaltestrunner.websharper.spa", "minimaltestrunner.websharper.spa\minimaltestrunner.websharper.spa.csproj", "{1426438A-A84F-437F-B369-8BF296FF08FA}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

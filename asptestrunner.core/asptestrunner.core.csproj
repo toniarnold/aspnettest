@@ -4,20 +4,22 @@
     <TargetFramework>netcoreapp3.1</TargetFramework>
 
     <IsPackable>false</IsPackable>
+
+    <RootNamespace>asptestrunner</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="nunit" Version="3.12.0" />
+    <PackageReference Include="NUnit" Version="3.12.0" />
     <PackageReference Include="NUnit3TestAdapter" Version="3.16.1">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.6.1" />
+    <PackageReference Include="Selenium.InternetExplorer.WebDriver" Version="3.150.1" />
   </ItemGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\iselenium.core\iselenium.core.csproj" />
-    <ProjectReference Include="..\minimal.websharper.spa\minimal.websharper.spa.csproj" />
   </ItemGroup>
 
   <ItemGroup>

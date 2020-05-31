@@ -90,13 +90,13 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iselenium.core", "iselenium
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iselenium.webforms", "iselenium.webforms\iselenium.webforms.csproj", "{F3BEDB25-A002-4EB5-B951-4A5E3E2EC477}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "asptest.runner.core", "asptest.runner.core\asptest.runner.core.csproj", "{51A1C167-4643-498B-88BB-F6490B1AC60A}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "asptestrunner.core", "asptestrunner.core\asptestrunner.core.csproj", "{51A1C167-4643-498B-88BB-F6490B1AC60A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "asptest.runner.webforms", "asptest.runner.webforms\asptest.runner.webforms.csproj", "{B1F18DB1-C667-4F2F-9998-BBA83105C0FC}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "asptestrunner.webforms", "asptestrunner.webforms\asptestrunner.webforms.csproj", "{B1F18DB1-C667-4F2F-9998-BBA83105C0FC}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "minimaltest.runner.core", "minimaltest.runner.core\minimaltest.runner.core.csproj", "{A6D28542-7F60-4368-A199-09245D843060}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "minimaltestrunner.core", "minimaltestrunner.core\minimaltestrunner.core.csproj", "{A6D28542-7F60-4368-A199-09245D843060}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "minimaltest.runner.webforms", "minimaltest.runner.webforms\minimaltest.runner.webforms.csproj", "{4E6A82CF-8D05-4555-84B9-98EB10176880}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "minimaltestrunner.webforms", "minimaltestrunner.webforms\minimaltestrunner.webforms.csproj", "{4E6A82CF-8D05-4555-84B9-98EB10176880}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iselenium.websharper", "iselenium.websharper\iselenium.websharper.csproj", "{7F9818D1-EBC5-48D5-9218-82C595D08D9B}"
 EndProject
@@ -108,7 +108,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iie.webforms", "iie.webform
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iie.websharper", "iie.websharper\iie.websharper.csproj", "{5C576129-B0BB-41DB-A910-05AFBD49C34F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "minimaltest.runner.websharper.spa", "minimaltest.runner.websharper.spa\minimaltest.runner.websharper.spa.csproj", "{C6F3A17B-DEE8-4869-AC2A-75104162FDC8}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "minimaltestrunner.websharper.spa", "minimaltestrunner.websharper.spa\minimaltestrunner.websharper.spa.csproj", "{C6F3A17B-DEE8-4869-AC2A-75104162FDC8}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

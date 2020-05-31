@@ -5,7 +5,7 @@
 
     <IsPackable>false</IsPackable>
 
-    <RootNamespace>minimaltest.runner</RootNamespace>
+    <RootNamespace>minimaltestrunner</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
