@@ -34,10 +34,11 @@ type Startup private () =
 
         if (env.IsDevelopment()) then
             app.UseDeveloperExceptionPage() |> ignore
+            WebSharper.Web.Remoting.DisableCsrfProtection() |> ignore   // Prevent HTTP 403 errors in GUI tests
         else
             app.UseHsts() |> ignore
 
-        app.UseMiddleware<IIEMiddleware>() |> ignore
+        app.UseMiddleware<ISeleniumMiddleware>() |> ignore
         app.UseDefaultFiles() |> ignore
         app.UseHttpsRedirection() |> ignore
         app.UseStaticFiles() |> ignore

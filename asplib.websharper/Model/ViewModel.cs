@@ -4,12 +4,12 @@ using WebSharper;
 namespace asplib.Model
 {
     /// <summary>
-    /// ViewModel for the type M. Encapsulates the ViewState to make it visible
-    /// to the WebSharper client.
+    /// ViewModel for the stored type TModel. Encapsulates the "ViewState" to make
+    /// it visible to the WebSharper client.
     /// </summary>
-    /// <typeparam name="M"></typeparam>
-    public abstract class ViewModel<M>
-        where M : class, IStored<M>, new()
+    /// <typeparam name="TModel"></typeparam>
+    public abstract class ViewModel<TModel>
+        where TModel : class, IStored<TModel>, new()
     {
         /// <summary>
         /// The serialized Main model object to be stored on the client,
@@ -17,7 +17,7 @@ namespace asplib.Model
         /// Can as object instance only be accessed on the server side.
         /// </summary>
         [NonSerialized]
-        public M Main;
+        public TModel Main;
 
         /// <summary>
         /// Local session storage type in the instance, overrides the global
@@ -88,7 +88,7 @@ namespace asplib.Model
         /// <param name="filter">The filter.</param>
         public virtual void DeserializeMain(Func<byte[], byte[]> filter = null)
         {
-            this.Main = StorageImplementation.LoadFromViewstate(() => new M(), this.ViewState, filter);
+            this.Main = StorageImplementation.LoadFromViewstate(() => new TModel(), this.ViewState, filter);
             this.IsNew = false;
         }
 
@@ -97,7 +97,7 @@ namespace asplib.Model
         /// </summary>
         /// <typeparam name="M"></typeparam>
         /// <param name="main">The main.</param>
-        public virtual void SetMain(M main)
+        public virtual void SetMain(TModel main)
         {
             this.Main = main;
         }

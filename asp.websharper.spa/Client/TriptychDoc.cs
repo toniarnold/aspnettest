@@ -22,6 +22,7 @@ namespace asp.websharper.spa.Client
 
         /// <summary>
         /// Set up three calculator model objects for each calculator view
+        /// Explicitly set to null to enforce loading needed (unlike in F#)
         /// </summary>
         public static WebSharper.UI.Doc MainDoc(Var<string> page)
         {

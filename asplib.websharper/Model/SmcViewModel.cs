@@ -9,13 +9,13 @@ namespace asplib.Model
     /// The inheriting class exposes the part which is translated to JavaScript,
     /// this base class runs only on the server.
     /// </summary>
-    /// <typeparam name="M"></typeparam>
+    /// <typeparam name="TModel"></typeparam>
     /// <seealso cref="asplib.Model.ViewModel{M}" />
     [JavaScript(false)]
-    public abstract class SmcViewModel<M, F, S> : ViewModel<M>
-        where M : class, ISmcTask<M, F, S>, new()
-        where F : statemap.FSMContext
-        where S : statemap.State
+    public abstract class SmcViewModel<TModel, TFSMContext, TState> : ViewModel<TModel>
+        where TModel : class, ISmcTask<TModel, TFSMContext, TState>, new()
+        where TFSMContext : statemap.FSMContext
+        where TState : statemap.State
     {
         public string State;
 
@@ -39,10 +39,10 @@ namespace asplib.Model
         /// Calls SetOwner() after assigning main
         /// </summary>
         /// <param name="main">The main.</param>
-        public override void SetMain(M main)
+        public override void SetMain(TModel main)
         {
             base.SetMain(main);
-            var smcMain = (ISmcTask<M, F, S>)this.Main;
+            var smcMain = (ISmcTask<TModel, TFSMContext, TState>)this.Main;
             smcMain.SetOwner();
         }
 
@@ -55,7 +55,7 @@ namespace asplib.Model
         private void DeserializeSmcTask(Func<byte[], byte[]> filter = null)
         {
             base.DeserializeMain(filter);
-            var smcMain = (ISmcTask<M, F, S>)this.Main;
+            var smcMain = (ISmcTask<TModel, TFSMContext, TState>)this.Main;
             smcMain.SetOwner();
         }
 

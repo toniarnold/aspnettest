@@ -1,5 +1,6 @@
 ﻿using iselenium;
 using NUnit.Framework;
+using System;
 
 namespace test.iselenium
 {
@@ -24,6 +25,20 @@ namespace test.iselenium
             Assert.That(TestServerIPC.IsTestRunning, Is.True);  // always true on initialization
             TestServerIPC.IsTestRunning = false;
             Assert.That(TestServerIPC.IsTestRunning, Is.False);
+        }
+
+        [Test]
+        public void IsTestRunningDisposedTest()
+        {
+            this.DisposeMmfs();
+            this.DisposeMmfs();
+            // Default: uninitialized must not throw
+            Assert.That(TestServerIPC.IsTestRunning, Is.False);
+            // finally {} in TestRunnerBase.Run after an exception must not throw
+            TestServerIPC.IsTestRunning = false;
+            // But false claims to be running must throw
+            Assert.That(() => TestServerIPC.IsTestRunning = true,
+                Throws.Exception.TypeOf<NullReferenceException>());
         }
 
         [Test]

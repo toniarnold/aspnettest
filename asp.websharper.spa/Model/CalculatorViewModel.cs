@@ -5,6 +5,20 @@ using WebSharper;
 namespace asp.websharper.spa.Model
 {
     /// <summary>
+    /// Typed state names for the context class must be retrieved from the server
+    /// </summary>
+    [JavaScript]
+    public class Map1
+    {
+        public string Splash;
+        public string Enter;
+        public string Calculate;
+        public string ErrorNumeric;
+        public string ErrorTuple;
+        public string ErrorEmpty;
+    }
+
+    /// <summary>
     /// Stored ViewModel for the calculator, passed back from remoting methods
     /// </summary>
     public class CalculatorViewModel : SmcViewModel<Calculator, CalculatorContext, CalculatorContext.CalculatorState>
@@ -38,19 +52,5 @@ namespace asp.websharper.spa.Model
                 ErrorEmpty = CalculatorContext.Map1.ErrorEmpty.Name,
             };
         }
-    }
-
-    /// <summary>
-    /// Typed state names for the context class must be retrieved from the server
-    /// </summary>
-    [JavaScript]
-    public class Map1
-    {
-        public string Splash;
-        public string Enter;
-        public string Calculate;
-        public string ErrorNumeric;
-        public string ErrorTuple;
-        public string ErrorEmpty;
     }
 }

@@ -130,4 +130,6 @@
   <Add Test="test.asplib.Model.MainTest.SetGetInstanceTest" />
   <Add Test="test.asplib.View.ControlStorageExtensionTest.EncryptDatabaseStorageUninitializedTest" />
   <Add Test="test.asplib.View.ControlStorageExtensionTest.StorageUninitializedTest" />
+  <Add Test="asptestrunner.CSharpRunner.RunTests" />
+  <Add Test="asptestrunner.FSharpRunner.RunTests" />
 </Playlist>

@@ -1,3 +1,3 @@
 :Start
-.\bin\Debug\netcoreapp3.0\asp.core.exe
+.\bin\Debug\netcoreapp3.1\asp.core.exe
 GOTO Start

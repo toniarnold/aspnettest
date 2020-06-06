@@ -23,10 +23,26 @@ namespace iselenium
 
         public static void Dispose()
         {
-            MmfIsTestRunning.Dispose();
-            MmfTestSummary.Dispose();
-            MmfTestResultXml.Dispose();
-            MmfTestResultFailedXml.Dispose();
+            if (MmfIsTestRunning != null)
+            {
+                MmfIsTestRunning.Dispose();
+                MmfIsTestRunning = null;
+            }
+            if (MmfTestSummary != null)
+            {
+                MmfTestSummary.Dispose();
+                MmfTestSummary = null;
+            }
+            if (MmfTestResultXml != null)
+            {
+                MmfTestResultXml.Dispose();
+                MmfTestResultXml = null;
+            }
+            if (MmfTestResultFailedXml != null)
+            {
+                MmfTestResultFailedXml.Dispose();
+                MmfTestResultFailedXml = null;
+            }
         }
 
         /// <summary>
@@ -53,6 +69,8 @@ namespace iselenium
         {
             get
             {
+                if (MmfIsTestRunning == null)
+                    return false;
                 bool running = false;
                 var mutex = new Mutex(true);
                 using (var stream = MmfIsTestRunning.CreateViewStream())
@@ -65,13 +83,17 @@ namespace iselenium
             }
             set
             {
-                var mutex = new Mutex(true);
-                using (var stream = MmfIsTestRunning.CreateViewStream())
+                // Silently skip  finally { TestServerIPC.IsTestRunning = false; } in TestRunnerBase.Run
+                if (MmfIsTestRunning != null || value == true)
                 {
-                    BinaryWriter writer = new BinaryWriter(stream);
-                    writer.Write(value);
+                    var mutex = new Mutex(true);
+                    using (var stream = MmfIsTestRunning.CreateViewStream())
+                    {
+                        BinaryWriter writer = new BinaryWriter(stream);
+                        writer.Write(value);
+                    }
+                    mutex.ReleaseMutex();
                 }
-                mutex.ReleaseMutex();
             }
         }
 

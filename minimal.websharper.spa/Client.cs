@@ -83,8 +83,8 @@ namespace minimal.websharper.spa
                 {
                     contentList.Add(contentTextBox.Value);
                     contentTextBox.Set("");
-                    var json = new List<string>(contentList.Value);
-                    await StaticRemoting.Put(json);
+                    var conent = new List<string>(contentList.Value);
+                    await StaticRemoting.Put(conent);
                 })
                 .Doc();
         }

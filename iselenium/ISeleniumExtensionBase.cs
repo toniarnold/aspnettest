@@ -24,7 +24,7 @@ namespace iselenium
 
     public static partial class SeleniumExtensionBase
     {
-        private const int FAST_POLL_MILLISECONDS = 20;  // > system quantum for context switches (10-15 ms)
+        internal const int FAST_POLL_MILLISECONDS = 20;  // > system quantum for context switches (10-15 ms)
 
         /// <summary>
         /// True when the TestRunner is started out of the web server process, e.g. by the NUnit3TestAdapter
@@ -78,8 +78,11 @@ namespace iselenium
         /// </summary>
         public static void TearDownBrowser(this ISeleniumBase inst)
         {
-            inst.driver.Quit();
-            inst.driver = null;
+            if (inst.driver != null)
+            {
+                inst.driver.Quit();
+                inst.driver = null;
+            }
         }
 
         /// <summary>

@@ -1,12 +1,13 @@
 ﻿using asp.websharper.spa.Client;
 using iselenium;
 using NUnit.Framework;
+using OpenQA.Selenium;
 using static asplib.View.TagHelper;
 
-namespace asptest.websharper.spa.Calculator
+namespace asptest.Calculator
 {
-    [TestFixture]
-    public class CalculateTest : CalculatorTestBase
+    public class CalculateTest<TWebDriver> : CalculatorTestBase<TWebDriver>
+        where TWebDriver : IWebDriver, new()
     {
         [Test]
         public void NavigateIndexTest()
@@ -14,7 +15,7 @@ namespace asptest.websharper.spa.Calculator
             this.Navigate("/");
             Assert.Multiple(() =>
             {
-                Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Splash)); // "early binding"
+                this.AssertPoll(() => this.State, () => Is.EqualTo(CalculatorContext.Map1.Splash)); // "early binding"
                 Assert.That(this.Html(), Does.Contain("RPN calculator SPA"));
                 Assert.That(this.Html(), Does.Contain("Map1.Splash"));          // even later than "late binding"
             });
@@ -23,11 +24,10 @@ namespace asptest.websharper.spa.Calculator
         [Test]
         public void InitEnterTest()
         {
-            this.Navigate("/");
-            this.ClickID(CalculatorDoc.EnterButton);
+            this.Click(Id(CalculatorDoc.EnterButton));
             Assert.Multiple(() =>
             {
-                Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
+                this.AssertPoll(() => this.State, () => Is.EqualTo(CalculatorContext.Map1.Enter));
                 Assert.That(this.Html(), Does.Contain("Map1.Enter"));
             });
         }
@@ -35,17 +35,16 @@ namespace asptest.websharper.spa.Calculator
         [Test]
         public void EnterTest()
         {
-            this.Navigate("/");
-            this.ClickID(Id(CalculatorDoc.EnterButton));
-            Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
-            this.WriteID(Id(CalculatorDoc.OperandTextbox), "1");
-            this.ClickID(Id(CalculatorDoc.EnterButton));
+            this.Click(Id(CalculatorDoc.EnterButton));
+            this.AssertPoll(() => this.State, () => Is.EqualTo(CalculatorContext.Map1.Enter));
+            this.Write(Id(CalculatorDoc.OperandTextbox), "1");
+            this.Click(Id(CalculatorDoc.EnterButton));
             Assert.Multiple(() =>
             {
-                Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
+                this.AssertPoll(() => this.State, () => Is.EqualTo(CalculatorContext.Map1.Calculate));
                 Assert.That(this.Stack.Peek(), Is.EqualTo("1"));
                 Assert.That(this.Stack.Count, Is.EqualTo(1));
-                Assert.That(this.Html(), Does.Contain(" 1\n"));
+                Assert.That(this.Html(), Does.Contain("<ul><li>1</li></ul>"));
             });
         }
     }

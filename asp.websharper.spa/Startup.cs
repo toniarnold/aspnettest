@@ -51,12 +51,13 @@ namespace asp.websharper.spa
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
+                WebSharper.Web.Remoting.DisableCsrfProtection();    // Prevent HTTP 403 errors in GUI tests
             }
             else
             {
                 app.UseHsts();
             }
-            app.UseMiddleware<IIEMiddleware>()
+            app.UseMiddleware<ISeleniumMiddleware>()
                 // https://support.microsoft.com/en-us/help/234067/how-to-prevent-caching-in-internet-explorer
                 // But even this does not stop IE from sending 304 responses:
                 .Use(async (httpContext, next) =>

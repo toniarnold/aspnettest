@@ -20,7 +20,7 @@ namespace asp.websharper.spa.Remoting
         /// <summary>
         /// Static reference to the Model fur NUnit test assertions
         /// </summary>
-        public static Calculator Calculator;
+        public static CalculatorViewModel CalculatorViewModel;
 
         /// <summary>
         /// Initializes a new Calculator by loading it from the null viewState
@@ -29,7 +29,7 @@ namespace asp.websharper.spa.Remoting
         [Remote]
         public static Task<CalculatorViewModel> Load()
         {
-            using (var calculator = StorageServer.Load<Calculator, CalculatorViewModel>(null, out Calculator))
+            using (var calculator = StorageServer.Load<Calculator, CalculatorViewModel>(null, out CalculatorViewModel))
             {
                 return calculator.ViewModelTask<Calculator, CalculatorViewModel>();
             }
@@ -46,7 +46,7 @@ namespace asp.websharper.spa.Remoting
         [Remote]
         public static Task<CalculatorViewModel> Load(Storage sessionStorage)
         {
-            using (var calculator = StorageServer.Load<Calculator, CalculatorViewModel>(null, out Calculator, sessionStorage))
+            using (var calculator = StorageServer.Load<Calculator, CalculatorViewModel>(null, out CalculatorViewModel, sessionStorage))
             {
                 return calculator.ViewModelTask<Calculator, CalculatorViewModel>();
             }
@@ -55,7 +55,7 @@ namespace asp.websharper.spa.Remoting
         [Remote]
         public static Task<CalculatorViewModel> Enter(string viewState, string value)
         {
-            using (var calculator = StorageServer.Load<Calculator, CalculatorViewModel>(viewState, out Calculator))
+            using (var calculator = StorageServer.Load<Calculator, CalculatorViewModel>(viewState, out CalculatorViewModel))
             {
                 calculator.Fsm.Enter(value);
                 return calculator.ViewModelTask<Calculator, CalculatorViewModel>();
@@ -65,7 +65,7 @@ namespace asp.websharper.spa.Remoting
         [Remote]
         public static Task<CalculatorViewModel> Add(string viewState)
         {
-            using (var calculator = StorageServer.Load<Calculator, CalculatorViewModel>(viewState, out Calculator))
+            using (var calculator = StorageServer.Load<Calculator, CalculatorViewModel>(viewState, out CalculatorViewModel))
             {
                 calculator.Fsm.Add(calculator.Stack);
                 return calculator.ViewModelTask<Calculator, CalculatorViewModel>();
@@ -75,7 +75,7 @@ namespace asp.websharper.spa.Remoting
         [Remote]
         public static Task<CalculatorViewModel> Sub(string viewState)
         {
-            using (var calculator = StorageServer.Load<Calculator, CalculatorViewModel>(viewState, out Calculator))
+            using (var calculator = StorageServer.Load<Calculator, CalculatorViewModel>(viewState, out CalculatorViewModel))
             {
                 calculator.Fsm.Sub(calculator.Stack);
                 return calculator.ViewModelTask<Calculator, CalculatorViewModel>();
@@ -85,7 +85,7 @@ namespace asp.websharper.spa.Remoting
         [Remote]
         public static Task<CalculatorViewModel> Mul(string viewState)
         {
-            using (var calculator = StorageServer.Load<Calculator, CalculatorViewModel>(viewState, out Calculator))
+            using (var calculator = StorageServer.Load<Calculator, CalculatorViewModel>(viewState, out CalculatorViewModel))
             {
                 calculator.Fsm.Mul(calculator.Stack);
                 return calculator.ViewModelTask<Calculator, CalculatorViewModel>();
@@ -95,7 +95,7 @@ namespace asp.websharper.spa.Remoting
         [Remote]
         public static Task<CalculatorViewModel> Div(string viewState)
         {
-            using (var calculator = StorageServer.Load<Calculator, CalculatorViewModel>(viewState, out Calculator))
+            using (var calculator = StorageServer.Load<Calculator, CalculatorViewModel>(viewState, out CalculatorViewModel))
             {
                 calculator.Fsm.Div(calculator.Stack);
                 return calculator.ViewModelTask<Calculator, CalculatorViewModel>();
@@ -105,7 +105,7 @@ namespace asp.websharper.spa.Remoting
         [Remote]
         public static Task<CalculatorViewModel> Pow(string viewState)
         {
-            using (var calculator = StorageServer.Load<Calculator, CalculatorViewModel>(viewState, out Calculator))
+            using (var calculator = StorageServer.Load<Calculator, CalculatorViewModel>(viewState, out CalculatorViewModel))
             {
                 calculator.Fsm.Pow(calculator.Stack);
                 return calculator.ViewModelTask<Calculator, CalculatorViewModel>();
@@ -115,7 +115,7 @@ namespace asp.websharper.spa.Remoting
         [Remote]
         public static Task<CalculatorViewModel> Sqrt(string viewState)
         {
-            using (var calculator = StorageServer.Load<Calculator, CalculatorViewModel>(viewState, out Calculator))
+            using (var calculator = StorageServer.Load<Calculator, CalculatorViewModel>(viewState, out CalculatorViewModel))
             {
                 calculator.Fsm.Sqrt(calculator.Stack);
                 return calculator.ViewModelTask<Calculator, CalculatorViewModel>();
@@ -125,7 +125,7 @@ namespace asp.websharper.spa.Remoting
         [Remote]
         public static Task<CalculatorViewModel> Clr(string viewState)
         {
-            using (var calculator = StorageServer.Load<Calculator, CalculatorViewModel>(viewState, out Calculator))
+            using (var calculator = StorageServer.Load<Calculator, CalculatorViewModel>(viewState, out CalculatorViewModel))
             {
                 calculator.Fsm.Clr(calculator.Stack);
                 return calculator.ViewModelTask<Calculator, CalculatorViewModel>();
@@ -135,7 +135,7 @@ namespace asp.websharper.spa.Remoting
         [Remote]
         public static Task<CalculatorViewModel> ClrAll(string viewState)
         {
-            using (var calculator = StorageServer.Load<Calculator, CalculatorViewModel>(viewState, out Calculator))
+            using (var calculator = StorageServer.Load<Calculator, CalculatorViewModel>(viewState, out CalculatorViewModel))
             {
                 calculator.Fsm.ClrAll(calculator.Stack);
                 return calculator.ViewModelTask<Calculator, CalculatorViewModel>();

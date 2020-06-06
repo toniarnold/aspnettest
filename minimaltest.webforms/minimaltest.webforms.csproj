@@ -116,8 +116,16 @@
     <Error Condition="!Exists('..\packages\NUnit3TestAdapter.3.16.1\build\net35\NUnit3TestAdapter.props')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\NUnit3TestAdapter.3.16.1\build\net35\NUnit3TestAdapter.props'))" />
   </Target>
   <PropertyGroup>
-    <PostBuildEvent>diff --binary $(TargetPath) $(SolutionDir)\bin
-if errorlevel 1 xcopy /d /f /y $(TargetDir)\$(TargetName).* $(SolutionDir)\bin</PostBuildEvent>
+    <PostBuildEvent>
+      diff --binary $(TargetPath) $(SolutionDir)\bin
+      if errorlevel 1 xcopy /d /f /y $(TargetDir)\$(TargetName).* $(SolutionDir)\bin
+    </PostBuildEvent>
   </PropertyGroup>
+  <Target Name="CleanBin" AfterTargets="Clean">
+    <ItemGroup>
+      <FilesToDelete Include="$(SolutionDir)\bin\$(TargetName).*" />
+    </ItemGroup>
+    <Delete Files="@(FilesToDelete)" />
+  </Target>
   <Import Project="..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
 </Project>

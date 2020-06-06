@@ -12,8 +12,17 @@ namespace iselenium
 
     public static class TestServerExtension
     {
+        public static IConfiguration GetConfig(this ITestServer inst)
+        {
+            return new ConfigurationBuilder()
+                .SetBasePath(TestContext.CurrentContext.WorkDirectory)
+                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddEnvironmentVariables()
+                .Build();
+        }
+
         /// <summary>
-        /// Start the web application .exe as web server according to appsettings.json
+        /// Start the web application .exe as web server according to appsettings.json:
         /// Server: path to the server.exe (the .NET Core binary)
         /// Root: server application root directory
         /// Port: port to listen on
@@ -22,37 +31,46 @@ namespace iselenium
         /// </summary>
         public static void StartServer(this ITestServer inst)
         {
-            var config = new ConfigurationBuilder()
-                .SetBasePath(TestContext.CurrentContext.WorkDirectory)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                .AddEnvironmentVariables()
-                .Build();
-            StartServer(inst, config["Server"], config["Root"], config.GetValue<int>("Port"),
-                        config.GetValue<int>("RequestTimeout"), config.GetValue<int>("ServerStartTimeout"));
+            var config = GetConfig(inst);
+            StartServer(inst, config);
         }
 
         /// <summary>
-        /// Start the web application .exe as web server with these parameters
+        /// Start the web application .exe as web server with optional parameters
+        /// overriding the default configuration in appsettings.json:
+        /// Server: path to the server.exe (the .NET Core binary)
+        /// Root: server application root directory
+        /// Port: port to listen on
+        /// RequestTimeout: expected duration of all tests in sec
+        /// ServerStartTimeout: expected start time of the server in sec
         /// </summary>
-        /// <param name="server">path to the server.exe (the .NET Core binary)</param>
-        /// <param name="root">server application root directory</param>
-        /// <param name="port">port to listen on</param>
-        /// <param name="timeout">expected duration of all tests in sec</param>
+        /// <param name="config">default configuration</param>
+        /// <param name="server">explicit path to the server.exe (the .NET Core binary)</param>
+        /// <param name="root">explicit server application root directory</param>
+        /// <param name="port">explicit port to listen on</param>
+        /// <param name="timeout">explicit expected duration of all tests in sec</param>
         /// <param name="servertimeout">expected start time of the server in sec</param>
-        public static void StartServer(this ITestServer inst, string server, string root,
-                                        int port, int timeout, int servertimeout)
+        public static void StartServer(this ITestServer inst, IConfiguration config,
+                                       string server = null, string root = null, int? port = null,
+                                       int? timeout = null, int? servertimeout = null)
         {
+            string cserver = server ?? config["Server"];
+            string croot = root ?? config["Root"];
+            int cport = port ?? config.GetValue<int>("Port");
+            int ctimeout = timeout ?? config.GetValue<int>("RequestTimeout");
+            int cservertimeout = servertimeout ?? config.GetValue<int>("ServerStartTimeout");
+
             var info = new ProcessStartInfo();
-            info.FileName = Path.GetFullPath(Path.Join(TestContext.CurrentContext.WorkDirectory, server));
-            info.Arguments = String.Format("--urls=http://localhost:{0}/", port);
-            info.WorkingDirectory = Path.GetFullPath(Path.Join(TestContext.CurrentContext.WorkDirectory, root));
+            info.FileName = Path.GetFullPath(Path.Join(TestContext.CurrentContext.WorkDirectory, cserver));
+            info.Arguments = String.Format("--urls=http://localhost:{0}/", cport);
+            info.WorkingDirectory = Path.GetFullPath(Path.Join(TestContext.CurrentContext.WorkDirectory, croot));
             info.UseShellExecute = true;
             inst.ServerProcess = Process.Start(info);
-            TestServerExtensionBase.WaitForServerPort(port, servertimeout);
+            TestServerExtensionBase.WaitForServerPort(cport, cservertimeout);
             SeleniumExtensionBase.OutOfProcess = true;
-            SeleniumExtensionBase.Port = port;
-            SeleniumExtensionBase.RequestTimeout = timeout;
-            inst.driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(timeout); // too late after OneTimeSetUBrowser()
+            SeleniumExtensionBase.Port = cport;
+            SeleniumExtensionBase.RequestTimeout = ctimeout;
+            inst.driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(ctimeout); // too late after OneTimeSetUBrowser()
 
             TestServerIPC.CreateOrOpenMmmfs();  // Create as parent process
         }

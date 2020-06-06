@@ -6,7 +6,7 @@
     public enum Storage
     {
         /// <summary>
-        /// ViewState is the least persistent storage, cleared when navigating to the url
+        /// ViewState (=DOM in WebSharper) is the least persistent storage, cleared when navigating to the URL
         /// </summary>
         ViewState,
 

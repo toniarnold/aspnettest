@@ -43,7 +43,7 @@ namespace asptest.Calculator
         /// Same as AddTest(), but with Internet Explorer restart before each action.
         /// </summary>
         [Test]
-        public void AddSessionPersistsTest()
+        public void AddWithPersistenceTest()
         {
             this.Navigate("/");
             this.Click("EnterButton");

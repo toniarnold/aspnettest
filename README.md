@@ -15,6 +15,48 @@
 
 > * How can we fix them? Well, let's avoid having to "find" the controls, and instead make them always available. Then, let's use our favorite language and environment to write the test code.
 
+### Three ideas make up a whole
+
+Running the GUI tests in the application process is just one of three orthogonal
+concepts. Having a persistent monolithic core .NET application detached from the
+concrete GUI framework is the second one. Whether it is persisted only across
+requests (ViewState in WebForms terms, the DOM in SPA terms), the browser
+session or a database entry referenced by a persistent browser cookie is an
+interchangeable configuration detail (and can even be changed at runtime).
+For-free transparent persistence allows programming just like a desktop
+application where the class with `static void Main(string[] args)` naturally
+provides static state memory that gets manipulated by GUI events.
+
+Persistence across requests is the precondition for implementing the application
+as an SMC state machine as the third idea where button clicks perform state
+transitions and distinct states correspond to pages or parts  displayed in the
+browser. The SMC part just decorates the application and imposes no further
+restrictions on it - calling formal state transitions from GUI events instead of
+class methods directly is just a matter of convention. Automatically generating
+state diagrams as self-documentation is not the least virtue provided by the SMC
+compiler.
+
+When GUI events execute state transitions on a persistent SMC class statically
+accessible to the testing class, test case assertions can observe the expected
+model state directly and explicitly instead of guessing correctness indirectly
+and thus roughly by observing the GUI state change triggered by the model state
+change.
+
+1. In-process web application GUI test...
+2. ...of a persistent, monolithic...
+3. ...state machine...
+
+...decoupled from the concrete web GUI framework (ancient WebForms, SSR MVC
+core, WebSharper SPA (optionally C# or F#) makes the aspnettest way of doing
+things (to my knowledge) unique - and blatantly ordinary at the same time,
+simply based on the model of classic native desktop applications.
+
+And even further: With WebForms (using `UpdatePanel`) and WebSharper, nothing
+stands in the way of compositionally building up very complex web applications
+made out of arbitrary many loosely coupled SMC monoliths, as demonstrated with
+the respective triptych examples with three components not even sharing the
+persistence mechanism (DOM, session and database).
+
 ### In Code
 
 The demo code is a direct port of my PHP example from [The State Machine Compiler](http://smc.sourceforge.net) 

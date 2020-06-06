@@ -2,6 +2,7 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>asptest</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
@@ -15,13 +16,20 @@
 
   <ItemGroup>
     <ProjectReference Include="..\asp.websharper.spa.Model\asp.websharper.spa.Model.csproj" />
-    <ProjectReference Include="..\asplib.core\asplib.core.csproj" />
     <ProjectReference Include="..\asp.websharper.spa\asp.websharper.spa.csproj" />
-    <ProjectReference Include="..\iselenium.core\iselenium.core.csproj" />
+    <ProjectReference Include="..\asplib.websharper\asplib.websharper.csproj" />
+    <ProjectReference Include="..\iselenium.websharper\iselenium.websharper.csproj" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">
     <Exec Command="diff --binary $(TargetPath) $(SolutionDir)\bin&#xD;&#xA;if errorlevel 1 xcopy /d /f /y $(TargetDir)\$(TargetName).* $(SolutionDir)\bin" />
   </Target>  
+
+  <Target Name="CleanBin" AfterTargets="Clean">
+    <ItemGroup>
+      <FilesToDelete Include="$(SolutionDir)\bin\$(TargetName).*" />
+    </ItemGroup>
+    <Delete Files="@(FilesToDelete)" />
+  </Target>
   
 </Project>

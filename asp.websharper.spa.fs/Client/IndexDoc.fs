@@ -42,7 +42,7 @@ module IndexDoc =
             Index.Main()
                 .Test(fun _ ->
                     async {
-                        let! result = RemoteTestRunner.Run("asptest.websharper.spa") |> Async.AwaitTask
+                        let! result = RemoteTestRunner.Run("asptest.websharper.spa.fs") |> Async.AwaitTask
                         testSummary.Clear()
                         testSummary.AppendMany(result.Summary)
                         if not result.Passed then
@@ -50,7 +50,10 @@ module IndexDoc =
                     }
                     |> Async.Start
                 )
-                .TestSummaryContainer()
+                .TestSummaryContainer(
+                    testSummary.View.DocSeqCached(fun(x: string) ->
+                        Index.TestSummaryItem().Line(x).Doc())
+                )
                 .Doc()
             ,
             Page(page, viewCalculator, varCalculator)
@@ -63,10 +66,10 @@ module IndexDoc =
             if c.IsNew
                 then
                     JSConsole.Log("c.IsNew")
-                    CalculatorServer.Load()
+                    CalculatorServer.Load() // Get a new instance from the server
                 else
                     JSConsole.Log("Task.FromResult(c)")
-                    Task.FromResult(c)
+                    Task.FromResult(c)      // Return the persistent instance
         )
 
         MainDoc(viewCalculator, varCalculator).RunById "main"

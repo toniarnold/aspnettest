@@ -20,12 +20,11 @@ namespace asp.websharper.spa.Client
         public static void ClientMain()
         {
             var varCalculator = Var.Create(new CalculatorViewModel());
-            varCalculator.Set(null);    // In the SPAEntryPointm it remains anyway null (only in C#, in F# it is initialized)
             var viewCalculator = varCalculator.View.MapAsync<CalculatorViewModel, CalculatorViewModel>(c =>
             {
                 if (c == null)
                 {
-                    JSConsole.Log("c == null");
+                    JSConsole.Log("C#: c == null instead of c.IsNew as in F#");
                     return CalculatorServer.Load(); // Get a new instance from the server
                 }
                 else

@@ -8,7 +8,7 @@ namespace minimal.websharper.spa
     public static class StorageRemoting
     {
         // Static reference to the Model
-        public static Content Content;
+        public static ContentViewModel ViewModel;
 
         /// <summary>
         /// Adds the specified content to the stored model and returns it to
@@ -21,10 +21,9 @@ namespace minimal.websharper.spa
         [Remote]
         public static Task<ContentViewModel> Add(string viewState, string item)
         {
-            using (var content = StorageServer.Load<Content, ContentViewModel>(viewState, out Content))
+            using (var content = StorageServer.Load<Content, ContentViewModel>(viewState, out ViewModel))
             {
                 content.Add(item);
-                Content = content;
                 return content.ViewModelTask<Content, ContentViewModel>();
             }
         }
@@ -38,9 +37,8 @@ namespace minimal.websharper.spa
         [Remote]
         public static Task<ContentViewModel> Reload(string viewState)
         {
-            using (var content = StorageServer.Load<Content, ContentViewModel>(viewState, out Content))
+            using (var content = StorageServer.Load<Content, ContentViewModel>(viewState, out ViewModel))
             {
-                Content = content;
                 return content.ViewModelTask<Content, ContentViewModel>();
             }
         }

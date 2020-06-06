@@ -11,7 +11,8 @@ using System.Collections.Generic;
 
 namespace minimaltest
 {
-    // public class WithStorageRemoteTest : SpaTest<FirefoxDriver>  // forget this one...
+    //public class WithStaticRemoteTest : SpaTest<InternetExplorerDriver>   // For TestFilter with 1 Browser
+    //public class WithStorageRemoteTest : SpaTest<FirefoxDriver>  // does not work with FireFox
     [TestFixture(typeof(ChromeDriver))]
     [TestFixture(typeof(InternetExplorerDriver))]
     public class WithStorageRemoteTest<TWebDriver> : SpaTest<TWebDriver>
@@ -23,7 +24,7 @@ namespace minimaltest
         /// </summary>
         public List<string> Content
         {
-            get { return StorageRemoting.Content; }
+            get { return StorageRemoting.ViewModel.Content; }
         }
 
         /// <summary>

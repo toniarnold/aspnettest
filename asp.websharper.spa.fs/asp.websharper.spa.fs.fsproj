@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <Compile Include="Model\CalculatorViewModel.fs" />
+    <Compile Include="Properties\AssemblyInfo.fs" />
     <Compile Include="Remoting\CalculatorServer.fs" />
     <Compile Include="Client\Pagename.fs" />
     <Compile Include="Client\CalculatorDoc.fs" />    
@@ -17,6 +18,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="16.6.1" />
     <PackageReference Include="Selenium.InternetExplorer.WebDriver" Version="3.150.1" />
     <PackageReference Include="WebSharper" Version="4.6.3.388" />    
     <PackageReference Include="WebSharper.FSharp" Version="4.6.3.388" />
@@ -31,6 +33,12 @@
     <ProjectReference Include="..\asplib\asplib.csproj" />
     <ProjectReference Include="..\iselenium.websharper\iselenium.websharper.csproj" />
     <ProjectReference Include="..\smc\smc.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="asptest.websharper.spa.fs">
+      <HintPath>..\bin\asptest.websharper.spa.fs.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>

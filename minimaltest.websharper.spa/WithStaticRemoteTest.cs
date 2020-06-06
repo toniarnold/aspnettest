@@ -9,6 +9,7 @@ using System.Collections.Generic;
 
 namespace minimaltest
 {
+    //public class WithStaticRemoteTest : SpaTest<InternetExplorerDriver>   // For TestFilter with 1 Browser
     [TestFixture(typeof(ChromeDriver))]
     [TestFixture(typeof(FirefoxDriver))]    // at the speed of continental drift...
     [TestFixture(typeof(InternetExplorerDriver))]

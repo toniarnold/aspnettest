@@ -1,3 +1,3 @@
 :Start
-dotnet .\bin\Debug\netcoreapp3.1\asp.websharper.spa.fs.dll
+.\bin\Debug\netcoreapp3.1\asp.websharper.spa.fs.exe
 GOTO Start

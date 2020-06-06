@@ -1,4 +1,8 @@
 ﻿using OpenQA.Selenium;
+using System;
+using System.Linq;
+using System.Net;
+using System.Threading;
 
 namespace iselenium
 {
@@ -6,11 +10,43 @@ namespace iselenium
     /// Base class for Browser tests of SPA applications like WebSharper.
     /// Overrides some SeleniumExtensionBase methods with default expectPostBack: false
     /// and explicit wait for RequestTimeout seconds.
+    /// No dependency on WebSharper specific, therefore in asplib.core,
     /// </summary>
     /// <typeparam name="TWebDriver"></typeparam>
     public abstract class SpaTest<TWebDriver> : SeleniumTest<TWebDriver>
         where TWebDriver : IWebDriver, new()
     {
+        /// <summary>
+        /// Start the browser and poll the root directory to be available (SPAs
+        /// are known to have a long startup time)
+        /// Without explicitly WebSharper.Web.Remoting.DisableCsrfProtection()
+        /// this can prevent HTTP 403 errors on startup.
+        /// </summary>
+        public override void OneTimeSetUpBrowser()
+        {
+            this.SetUpBrowser<TWebDriver>();
+            if (!SeleniumExtensionBase.OutOfProcess)    // OutOfProcess the server starts afterwards
+            {
+                this.PollHttpOK();
+            }
+        }
+
+        private void PollHttpOK()
+        {
+            for (int i = 0;
+                 i < SeleniumExtensionBase.RequestTimeout * 1000 / SeleniumExtensionBase.FAST_POLL_MILLISECONDS;
+                 i++)
+            {
+                var rooturl = String.Format("http://localhost:{0}{1}", SeleniumExtensionBase.Port, "/");
+                this.driver.Navigate().GoToUrl(rooturl);
+                int[] ok = { (int)HttpStatusCode.OK, (int)HttpStatusCode.NotModified,
+                             (int)HttpStatusCode.NotFound }; // Specific WebSharper
+                if (ok.Contains(SeleniumExtensionBase.StatusCode))
+                    break;
+                Thread.Sleep(SeleniumExtensionBase.FAST_POLL_MILLISECONDS);
+            }
+        }
+
         /// <summary>
         /// Get the HTML source of the page, wait RequestTimeout seconds for the body element to appear
         /// </summary>

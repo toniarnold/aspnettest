@@ -48,10 +48,10 @@
 </head>
 <body>
     <div id="main" ws-children-template="Main">
-        <a href="#" ws-onclick="Test" class="nunibutton">
+        <a href="#" ws-onclick="Test" id="testButton" class="nunibutton">
             <img src="nunit.png" class="nunitimg" />
         </a>
-        <a href="/testresult" class="testresult">
+        <a href="/testresult/passed" class="testresult">
             <ul ws-hole="TestSummaryContainer">
                 <li ws-template="TestSummaryItem">${Line}</li>
             </ul>

@@ -47,6 +47,7 @@ namespace minimal.websharper.spa
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            //WebSharper.Web.Remoting.DisableCsrfProtection();    // Prevent HTTP 403 errors in GUI tests
             app.UseDeveloperExceptionPage()
                 .UseMiddleware<ISeleniumMiddleware>()
                 // https://support.microsoft.com/en-us/help/234067/how-to-prevent-caching-in-internet-explorer

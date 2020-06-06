@@ -3,7 +3,7 @@ using NUnit.Framework;
 using OpenQA.Selenium.Edge;
 using System.Diagnostics;
 
-namespace minimaltestrunner.websharper.spa
+namespace minimaltestrunner
 {
     [TestFixture]
     [Category("ITestServer")]

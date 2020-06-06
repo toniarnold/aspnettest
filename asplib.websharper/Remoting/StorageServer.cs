@@ -43,11 +43,11 @@ namespace asplib.Remoting
         ///  context.
         /// </summary>
         /// <typeparam name="M"></typeparam>
-        /// <param name="accessor">non-thread safe static reference</param>
+        /// <param name="viewModelAccessor">non-thread safe static reference to the ViewModel</param>
         /// <returns></returns>
         // [Remote] -> Yields "Remote methods must not be generic" from WebSharper:
         // https://github.com/dotnet-websharper/core/issues/1048
-        public static M Load<M, V>(string viewState, out M accessor, Storage? sessionStorage = null)
+        public static M Load<M, V>(string viewState, out V viewModelAccessor, Storage? sessionStorage = null)
             where M : class, IStored<M>, new()
             where V : ViewModel<M>, new()
         {
@@ -113,8 +113,8 @@ namespace asplib.Remoting
             // Include the ViewModel instance as member of the returned Main
             viewModel.Main.ViewModel = viewModel;
 
-            // Set a reference to the Model
-            accessor = viewModel.Main;
+            // Set a reference to the ViewModel
+            viewModelAccessor = viewModel;
 
             return viewModel.Main;
         }

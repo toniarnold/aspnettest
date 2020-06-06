@@ -8,6 +8,9 @@ open WebSharper
 open WebSharper.UI
 open WebSharper.UI.Templating
 
+/// <summary>
+/// Triptych containing three CalculatorDoc which different storage each.
+/// </summary>
 [<JavaScript>]
 module TriptychDoc =
 
