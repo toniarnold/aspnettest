@@ -14,12 +14,15 @@ namespace iselenium
 
         public async Task Invoke(HttpContext context)
         {
-            // Application_BeginRequest
+            // Application_BeginRequest in WebForms
 
             await _next(context);
 
-            // Application_EndRequest
-            SeleniumExtensionBase.StatusCode = context.Response.StatusCode;
+            // Application_EndRequest in WebForms
+            if (context.Request.Path != "/favicon.ico")
+            {
+                SeleniumExtensionBase.StatusCode = context.Response.StatusCode;
+            }
         }
     }
 }

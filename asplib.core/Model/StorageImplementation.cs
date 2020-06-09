@@ -25,7 +25,7 @@ namespace asplib.Model
         public const string HeaderName = "X-ViewState";
 
         /// <summary>
-        /// Globally set Session Storage
+        /// Globally set Session Storage, overrides config Storage
         /// </summary>
         public static Storage? SessionStorage { get; set; }
 

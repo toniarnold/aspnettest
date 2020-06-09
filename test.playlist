@@ -132,4 +132,10 @@
   <Add Test="test.asplib.View.ControlStorageExtensionTest.StorageUninitializedTest" />
   <Add Test="asptestrunner.CSharpRunner.RunTests" />
   <Add Test="asptestrunner.FSharpRunner.RunTests" />
+  <Add Test="test.iselenium.TestRunnerBaseTest.TestResultFilteredFailedTest" />
+  <Add Test="test.iselenium.TestRunnerBaseTest.TestStatusFailedTest" />
+  <Add Test="test.iselenium.TestRunnerBaseTest.TestStatusPassedTest" />
+  <Add Test="test.iselenium.TestRunnerBaseTest.TestStatusSkippedTest" />
+  <Add Test="test.iselenium.TestServerIPCTest.IsTestRunningDisposedTest" />
+  <Add Test="test.iselenium.TestServerIPCTest.TestStatusTest" />
 </Playlist>

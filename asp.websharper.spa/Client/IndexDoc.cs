@@ -59,7 +59,7 @@ namespace asp.websharper.spa.Client
                         testSummary.AppendMany(result.Summary);
                         if (!result.Passed)
                         {
-                            JS.Window.Location.Assign(TestResultSite.PathFailed);
+                            JS.Window.Location.Assign(TestResultSite.ResultXmlPath);
                         }
                     })
                     .TestSummaryContainer(
@@ -67,6 +67,7 @@ namespace asp.websharper.spa.Client
                             new Template.Index.TestSummaryItem().Line(x).Doc()
                         )
                     )
+                    .ResultXmlPath(TestResultSite.ResultXmlPath)
                     .Doc()
                 ,
 

@@ -17,6 +17,17 @@ namespace asp.websharper.spa.Client
     [JavaScript]
     public static class CalculatorDoc
     {
+        public const string StorageLink = "StorageLink";
+        public const string OperandTextbox = "OperandTextbox";
+        public const string AddButton = "AddButton";
+        public const string SubButton = "SubButton";
+        public const string MulButton = "MulButton";
+        public const string DivButton = "DivButton";
+        public const string PowButton = "PowButton";
+        public const string SqrtButton = "SqrtButton";
+        public const string ClrButton = "ClrButton";
+        public const string ClrAllButton = "ClrAllButton";
+
         public static WebSharper.UI.Doc MainDoc(View<CalculatorViewModel> viewCalculator,
                                             Var<CalculatorViewModel> varCalculator,
                                             Var<string> page,
@@ -26,7 +37,7 @@ namespace asp.websharper.spa.Client
 
             return WebSharper.UI.Doc.ConcatMixed(
                 // The state-dependent parts which shape the calculator sub-application
-                HeaderDoc(viewCalculator, page),
+                HeaderDoc(viewCalculator, page, id),
                 TitleDoc(viewCalculator),
                 SplashDoc(viewCalculator),
                 EnterDoc(viewCalculator, varOperand, id),
@@ -37,10 +48,11 @@ namespace asp.websharper.spa.Client
         }
 
         public static object HeaderDoc(View<CalculatorViewModel> viewCalculator,
-                                            Var<string> page) =>
+                                            Var<string> page, string idParent) =>
             V(viewCalculator.V.SessionStorage).Map(thisStorage =>
             {
                 return new Template.Header.Main()
+                    .IdStorageLink(Id(idParent, StorageLink))
                     .Storage(V(viewCalculator.V.VSessionStorage))
                     .StorageLink(async (el, ev) =>
                     {
@@ -114,8 +126,6 @@ namespace asp.websharper.spa.Client
                     : WebSharper.UI.Doc.Empty;
             });
 
-        public const string OperandTextbox = "OperandTextbox";
-
         /// <summary>
         /// Calculate: Mutates the calculator's persistent Stack, therefore
         /// View and Variable required.
@@ -188,15 +198,6 @@ namespace asp.websharper.spa.Client
                         .Doc()
                     : WebSharper.UI.Doc.Empty;
             }));
-
-        public const string AddButton = "AddButton";
-        public const string SubButton = "SubButton";
-        public const string MulButton = "MulButton";
-        public const string DivButton = "DivButton";
-        public const string PowButton = "PowButton";
-        public const string SqrtButton = "SqrtButton";
-        public const string ClrButton = "ClrButton";
-        public const string ClrAllButton = "ClrAllButton";
 
         /// <summary>
         /// Error: The calculator is read only, passing the View suffices.

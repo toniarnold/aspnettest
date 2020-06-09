@@ -42,6 +42,14 @@ namespace test.iselenium
         }
 
         [Test]
+        public void TestStatusTest()
+        {
+            Assert.That(TestServerIPC.TestStatus, Is.EqualTo(TestStatus.Unknown));
+            TestServerIPC.TestStatus = TestStatus.Passed;
+            Assert.That(TestServerIPC.TestStatus, Is.EqualTo(TestStatus.Passed));
+        }
+
+        [Test]
         public void TestSummaryTest()
         {
             const string RESULT = @"
@@ -57,17 +65,9 @@ Duration: 65.377405";
         [Test]
         public void TestResultXmlTest()
         {
-            var xml = TestRunnerBaseTest.ReadTestResult().ToString(); ;
+            var xml = TestRunnerBaseTest.ReadTestResult("TestResult-failed.xml").ToString(); ;
             TestServerIPC.TestResultXml = xml;
             Assert.That(TestServerIPC.TestResultXml, Is.EqualTo(xml));
-        }
-
-        [Test]
-        public void TestResultFailedXmlTest()
-        {
-            var xml = TestRunnerBaseTest.ReadTestResult().ToString(); ;
-            TestServerIPC.TestResultFailedXml = xml;
-            Assert.That(TestServerIPC.TestResultFailedXml, Is.EqualTo(xml));
         }
     }
 }

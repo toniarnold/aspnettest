@@ -31,13 +31,13 @@ namespace minimal.Controllers
             var testRunner = new TestRunner(Configuration, Environment, (int)this.Request.Host.Port);
             testRunner.Run("minimaltest.core");
 
-            if (testRunner.Passed)
+            if (TestRunner.Passed)
             {
                 ViewBag.TestResult = testRunner.SummaryHtml;
             }
             else
             {
-                return this.ResultFailed();
+                return this.ResultXml();
             }
 
             return View("index");
@@ -47,9 +47,9 @@ namespace minimal.Controllers
         /// View only the failed test results as XML page
         /// </summary>
         /// <returns></returns>
-        public IActionResult ResultFailed()
+        public IActionResult ResultXml()
         {
-            return Content(TestRunner.ResultFailedXml, "application/xml; charset=UTF-8");
+            return Content(TestRunner.ResultXml, "application/xml; charset=UTF-8");
         }
 
         /// <summary>

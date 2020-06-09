@@ -66,6 +66,7 @@ namespace iselenium
         /// <summary>
         /// Return the test results as XML string
         /// static for later retrieval after the tests ran
+        /// Filtered if the tests didnt pass
         /// </summary>
         public static string ResultXml
         {
@@ -74,25 +75,27 @@ namespace iselenium
                 using (var stringwriter = new StringWriter())
                 using (var xmlwriter = XmlWriter.Create(stringwriter, XmlSettings()))
                 {
-                    Result.WriteTo(xmlwriter);
-                    xmlwriter.Flush();
-                    return stringwriter.ToString();
-                }
-            }
-        }
+                    if (Passed)
+                    {
+                        Result.WriteTo(xmlwriter);
+                    }
+                    else
+                    {
+                        switch (TestStatus)
+                        {
+                            case TestStatus.Failed:
+                            case TestStatus.Inconclusive:
+                            case TestStatus.Passed:
+                            case TestStatus.Skipped:
+                            case TestStatus.Warning:
+                                TestResultFiltered(Result, TestStatus).WriteTo(xmlwriter);
+                                break;
 
-        /// <summary>
-        /// Return only the failed test results as XML string
-        /// static for later retrieval after the tests ran
-        /// </summary>
-        public static string ResultFailedXml
-        {
-            get
-            {
-                using (var stringwriter = new StringWriter())
-                using (var xmlwriter = XmlWriter.Create(stringwriter, XmlSettings()))
-                {
-                    ResultFailures.WriteTo(xmlwriter);
+                            default:     // TestStatus.Unknown
+                                Result.WriteTo(xmlwriter);
+                                break;
+                        }
+                    }
                     xmlwriter.Flush();
                     return stringwriter.ToString();
                 }
@@ -111,11 +114,23 @@ namespace iselenium
         /// <summary>
         /// True when the test suite passed
         /// </summary>
-        public bool Passed
+        public static bool Passed
+        {
+            get => TestStatus == TestStatus.Passed;
+        }
+
+        /// <summary>
+        /// The overall status of the whole tests suite reported by NUnit
+        /// </summary>
+        /// <returns></returns>
+        internal static TestStatus TestStatus
         {
             get
             {
-                return Result.Attributes["result"].Value == "Passed";
+                var result = Result.Attributes["result"].Value;
+                TestStatus status;
+                TestStatus.TryParse(result, out status);
+                return status;
             }
         }
 
@@ -140,10 +155,7 @@ namespace iselenium
         /// </summary>
         public string SummaryHtml
         {
-            get
-            {
-                return string.Join("<br />", this.Summary);
-            }
+            get => string.Join("<br />", this.Summary);
         }
 
         public void Run(string testproject, string approot, string testFilterWhere)
@@ -174,9 +186,9 @@ namespace iselenium
                     Result = runner.Run(this, filter);
                     // Communicate results back to the caller process (additionally to the static Result).
                     TestServerIPC.CreateOrOpenMmmfs();  // Open when run as child process, Create otherwise
+                    TestServerIPC.TestStatus = TestStatus;
                     TestServerIPC.TestSummary = String.Join("\n", this.Summary);
                     TestServerIPC.TestResultXml = ResultXml;
-                    TestServerIPC.TestResultFailedXml = ResultFailedXml;
                 }
             }
             finally
@@ -207,25 +219,18 @@ namespace iselenium
         /// </summary>
         internal static XmlNode Result { get; set; }
 
-        // lazy computation out of the static Result
-        private static XmlNode ResultFailures
-        {
-            get
-            {
-                return OnlyFailed(Result);
-            }
-        }
-
         /// <summary>
-        /// Recursion entry point for filtering only the failed test results
+        /// Recursion entry point for filtering the test results according to status
         /// </summary>
         /// <param name="testResult">complete test result coming from NUnit</param>
-        /// <returns>only the failed test results</returns>
-        internal static XmlNode OnlyFailed(XmlNode testResult)
+        /// <param name="status">status filter</param>
+        /// <returns>only the test results with the given status</returns>
+
+        internal static XmlNode TestResultFiltered(XmlNode testResult, TestStatus status)
         {
-            var failed = new XmlDocument();
-            OnlyFailed(testResult, failed, failed);
-            return failed;
+            var filtered = new XmlDocument();
+            TestResultFiltered(testResult, status, filtered, filtered);
+            return filtered;
         }
 
         /// <summary>
@@ -233,24 +238,26 @@ namespace iselenium
         /// result="Failed" to the "failed" tree.
         /// </summary>
         /// <param name="all">all test results</param>
-        /// <param name="failed">initially empty document for only the failed test results</param>
-        private static void OnlyFailed(XmlNode all, XmlNode failed, XmlDocument failedDoc)
+        /// <param name="status">status filter</param>
+        /// <param name="filtered">initially empty document for only the failed test results</param>
+        /// <param name="filteredDoc">document root of the filtered node</param>
+        private static void TestResultFiltered(XmlNode all, TestStatus status, XmlNode filtered, XmlDocument filteredDoc)
         {
             foreach (XmlNode child in all.ChildNodes)
             {
                 var result = child.Attributes["result"];
-                if (result != null && result.Value == "Failed")
+                if (result != null && result.Value == status.ToString())
                 {
                     if (child.Name == "test-case")  // is leaf?
                     {
-                        var failedTestCase = failedDoc.ImportNode(child, true);  // incl. message and stack-trace
-                        failed.AppendChild(failedTestCase); // terminate
+                        var failedTestCase = filteredDoc.ImportNode(child, true);  // incl. message and stack-trace
+                        filtered.AppendChild(failedTestCase); // terminate
                     }
                     else
                     {
-                        var failedChild = failedDoc.ImportNode(child, false);   // only the node itself
-                        failed.AppendChild(failedChild);
-                        OnlyFailed(child, failedChild, failedDoc);  // continue depth-first with the empty failedChild
+                        var failedChild = filteredDoc.ImportNode(child, false);   // only the node itself
+                        filtered.AppendChild(failedChild);
+                        TestResultFiltered(child, status, failedChild, filteredDoc);  // continue depth-first with the empty failedChild
                     }
                 }
             }

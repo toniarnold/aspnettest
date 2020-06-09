@@ -60,7 +60,7 @@ namespace asp.core
             app.UseRouting();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute("default", "{controller=Calculator}/{action=Index}/{id?}");
+                endpoints.MapControllerRoute("default", "{controller=Calculator}/{action=Index}");
             });
         }
     }

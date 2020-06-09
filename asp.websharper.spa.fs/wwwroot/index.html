@@ -51,12 +51,12 @@
         <a href="#" ws-onclick="Test" id="testButton" class="nunibutton">
             <img src="nunit.png" class="nunitimg" />
         </a>
-        <a href="/testresult/passed" class="testresult">
+        <a href="${ResultXmlPath}" class="testresult">
             <ul ws-hole="TestSummaryContainer">
                 <li ws-template="TestSummaryItem">${Line}</li>
             </ul>
         </a>
     </div>
-    <script type="text/javascript" src="Content/asp.websharper.spa.fs.js"></script>
+    <script type="text/javascript" src="Content/asp.websharper.spa.fs.min.js"></script>
 </body>
 </html>

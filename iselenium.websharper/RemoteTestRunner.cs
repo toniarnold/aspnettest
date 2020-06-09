@@ -28,7 +28,7 @@ namespace iselenium
                 RemotingContext.Port);
             await Task.Run(() => testRunner.Run(testproject));
             var result = new TestResult();
-            result.Passed = testRunner.Passed;
+            result.Passed = TestRunner.Passed;
             result.Summary = testRunner.Summary;
             return result;
         }

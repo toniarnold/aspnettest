@@ -25,7 +25,9 @@ namespace iselenium
         public override void OneTimeSetUpBrowser()
         {
             this.SetUpBrowser<TWebDriver>();
-            if (!SeleniumExtensionBase.OutOfProcess)    // OutOfProcess the server starts afterwards
+            // When OutOfProcess is true, the tests are running in a TestAdapter in Visual Studio test runner,
+            // and the browser gets started before the web server is running and polling can't start yet:
+            if (!SeleniumExtensionBase.OutOfProcess)
             {
                 this.PollHttpOK();
             }
@@ -37,10 +39,9 @@ namespace iselenium
                  i < SeleniumExtensionBase.RequestTimeout * 1000 / SeleniumExtensionBase.FAST_POLL_MILLISECONDS;
                  i++)
             {
-                var rooturl = String.Format("http://localhost:{0}{1}", SeleniumExtensionBase.Port, "/");
+                var rooturl = String.Format("http://localhost:{0}", SeleniumExtensionBase.Port);
                 this.driver.Navigate().GoToUrl(rooturl);
-                int[] ok = { (int)HttpStatusCode.OK, (int)HttpStatusCode.NotModified,
-                             (int)HttpStatusCode.NotFound }; // Specific WebSharper
+                int[] ok = { (int)HttpStatusCode.OK, (int)HttpStatusCode.NotModified };
                 if (ok.Contains(SeleniumExtensionBase.StatusCode))
                     break;
                 Thread.Sleep(SeleniumExtensionBase.FAST_POLL_MILLISECONDS);
@@ -100,7 +101,7 @@ namespace iselenium
         /// Get the element with the given id
         /// Wait RequestTimeout seconds for the element to appear.
         /// </summary>
-        /// <param name="id">ClientID resp. HTML id attribute of the element</param>
+        /// <param name="id">HTML id attribute of the elements</param>
         /// <param name="index">Index of the element collection with that name, defaults to 0</param>
         /// <param name="wait">Explicit WebDriverWait in seconds  for the element to appear</param>
         /// <returns></returns>

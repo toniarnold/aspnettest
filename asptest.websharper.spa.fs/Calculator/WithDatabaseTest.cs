@@ -3,18 +3,21 @@ using asplib.Model;
 using iselenium;
 using NUnit.Framework;
 using OpenQA.Selenium;
+using OpenQA.Selenium.IE;
 using static asplib.View.TagHelper;
 
 namespace asptest.Calculator
 {
-    [Ignore("Wont't work with browser restart")]
+    [TestFixture(typeof(InternetExplorerDriver))]
     public class WithDatabaseTest<TWebDriver> : CalculatorTestBase<TWebDriver>
         where TWebDriver : IWebDriver, new()
     {
-        [OneTimeSetUp]
-        public void SetUpStorage()
+        public override void OneTimeSetUpBrowser()
         {
+            // Set overriding storage before the browser gets started
             StorageImplementation.SessionStorage = Storage.Database;
+            base.OneTimeSetUpBrowser();
+            this.Navigate("/", delay: 1000, pause: 1000); // defensively load twice for restoring state
         }
 
         [OneTimeTearDown]
@@ -23,13 +26,10 @@ namespace asptest.Calculator
             StorageImplementation.SessionStorage = null;
         }
 
-        /// <summary>
-        /// Session must be cleared after each single test such that the app behaves like the ViewState Test
-        /// </summary>
         [TearDown]
         public void ClearDatabase()
         {
-            this.Navigate("/?clear=true");
+            this.OneTimeTearDownDatabase();  // unneeded with only one test
         }
 
         /// <summary>
@@ -65,11 +65,9 @@ namespace asptest.Calculator
             this.Click(Id(CalculatorDoc.AddButton));
             this.AssertAddFinalState(before);
             this.RestartBrowser();
+            this.AssertAddFinalState(before);
         }
 
-        /// <summary>
-        /// Assert twice, once after reloading
-        /// </summary>
         private void AssertAddFinalState(int before)
         {
             Assert.Multiple(() =>

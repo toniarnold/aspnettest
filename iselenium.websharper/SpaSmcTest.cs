@@ -12,7 +12,7 @@ namespace iselenium
     /// <typeparam name="TModel">the SMC model class itself</typeparam>
     /// <typeparam name="TFSMContext">SMC context class</typeparam>
     /// <typeparam name="TState">SMC state</typeparam>
-    public abstract class SpaSmcTest<TWebDriver, TViewModel, TModel, TFSMContext, TState> : SpaTest<TWebDriver>
+    public abstract class SpaSmcTest<TWebDriver, TViewModel, TModel, TFSMContext, TState> : SpaStorageTest<TWebDriver>
         where TWebDriver : IWebDriver, new()
         where TViewModel : SmcViewModel<TModel, TFSMContext, TState>, new()
         where TModel : class, ISmcTask<TModel, TFSMContext, TState>, new()

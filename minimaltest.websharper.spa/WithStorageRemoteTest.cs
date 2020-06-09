@@ -15,7 +15,7 @@ namespace minimaltest
     //public class WithStorageRemoteTest : SpaTest<FirefoxDriver>  // does not work with FireFox
     [TestFixture(typeof(ChromeDriver))]
     [TestFixture(typeof(InternetExplorerDriver))]
-    public class WithStorageRemoteTest<TWebDriver> : SpaTest<TWebDriver>
+    public class WithStorageRemoteTest<TWebDriver> : SpaStorageTest<TWebDriver>
         where TWebDriver : IWebDriver, new()
         //public class WithStorageRemoteTest : SpaTest<ChromeDriver>
     {

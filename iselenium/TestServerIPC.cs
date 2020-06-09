@@ -6,7 +6,7 @@ namespace iselenium
 {
     /// <summary>
     /// IPC for sharing running status and test results in 2nd-order GUI tests between
-    /// the test running in a test adapter in Visual Studio and the test running in the
+    /// the test running in a TestAdapter in Visual Studio and the test running in the
     /// web server process.
     /// </summary>
     public static class TestServerIPC
@@ -17,9 +17,9 @@ namespace iselenium
         // thus the same fields can be used for creator and consumer.
 
         private static MemoryMappedFile MmfIsTestRunning;
+        private static MemoryMappedFile MmfTestStatus;
         private static MemoryMappedFile MmfTestSummary;
         private static MemoryMappedFile MmfTestResultXml;
-        private static MemoryMappedFile MmfTestResultFailedXml;
 
         public static void Dispose()
         {
@@ -27,6 +27,11 @@ namespace iselenium
             {
                 MmfIsTestRunning.Dispose();
                 MmfIsTestRunning = null;
+            }
+            if (MmfTestStatus != null)
+            {
+                MmfTestStatus.Dispose();
+                MmfTestStatus = null;
             }
             if (MmfTestSummary != null)
             {
@@ -38,11 +43,6 @@ namespace iselenium
                 MmfTestResultXml.Dispose();
                 MmfTestResultXml = null;
             }
-            if (MmfTestResultFailedXml != null)
-            {
-                MmfTestResultFailedXml.Dispose();
-                MmfTestResultFailedXml = null;
-            }
         }
 
         /// <summary>
@@ -52,9 +52,9 @@ namespace iselenium
         public static void CreateOrOpenMmmfs()
         {
             MmfIsTestRunning = MemoryMappedFile.CreateOrOpen("is-test-running", 1);
+            MmfTestStatus = MemoryMappedFile.CreateOrOpen("test-status", 1);
             MmfTestSummary = MemoryMappedFile.CreateOrOpen("test-result", 100);
             MmfTestResultXml = MemoryMappedFile.CreateOrOpen("test-result-xml", 500000);
-            MmfTestResultFailedXml = MemoryMappedFile.CreateOrOpen("test-result-failed-xml", 500000);
 
             // Initialize the tests as running such that AssertTestOK is guaranteed to wait
             // when it is reached before the web server reacted to clicking the test button.
@@ -91,6 +91,40 @@ namespace iselenium
                     {
                         BinaryWriter writer = new BinaryWriter(stream);
                         writer.Write(value);
+                    }
+                    mutex.ReleaseMutex();
+                }
+            }
+        }
+
+        /// <summary>
+        /// Shared between processes.
+        /// </summary>
+        public static TestStatus TestStatus
+        {
+            get
+            {
+                var status = TestStatus.Unknown;
+                if (MmfTestStatus == null)
+                    return status;
+                var mutex = new Mutex(true);
+                using (var stream = MmfTestStatus.CreateViewStream())
+                {
+                    var reader = new BinaryReader(stream);
+                    status = (TestStatus)reader.ReadInt32();
+                }
+                mutex.ReleaseMutex();
+                return status;
+            }
+            set
+            {
+                if (MmfTestStatus != null)
+                {
+                    var mutex = new Mutex(true);
+                    using (var stream = MmfTestStatus.CreateViewStream())
+                    {
+                        BinaryWriter writer = new BinaryWriter(stream);
+                        writer.Write((int)value);
                     }
                     mutex.ReleaseMutex();
                 }
@@ -147,35 +181,6 @@ namespace iselenium
             {
                 var mutex = new Mutex(true);
                 using (var stream = MmfTestResultXml.CreateViewStream())
-                {
-                    var writer = new BinaryWriter(stream);
-                    writer.Write(value);
-                }
-                mutex.ReleaseMutex();
-            }
-        }
-
-        /// <summary>
-        /// Shared between processes, capacity 500000 chars.
-        /// </summary>
-        public static string TestResultFailedXml
-        {
-            get
-            {
-                string result;
-                var mutex = new Mutex(true);
-                using (var stream = MmfTestResultFailedXml.CreateViewStream())
-                {
-                    var reader = new BinaryReader(stream);
-                    result = reader.ReadString();
-                }
-                mutex.ReleaseMutex();
-                return result;
-            }
-            set
-            {
-                var mutex = new Mutex(true);
-                using (var stream = MmfTestResultFailedXml.CreateViewStream())
                 {
                     var writer = new BinaryWriter(stream);
                     writer.Write(value);

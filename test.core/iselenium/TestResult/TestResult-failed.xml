@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<test-run id="0" duration="285.727726" end-time="2020-05-14 13:16:23Z" start-time="2020-05-14 13:11:37Z" clr-version="3.1.4" engine-version="3.11.1.0" asserts="580" skipped="0" inconclusive="0" failed="5" passed="44" total="49" result="Failed" testcasecount="49" runstate="Runnable" fullname="C:\_\wwwroot\bin\asptest.core.dll" name="asptest.core.dll">
+  <command-line>
+    <![CDATA[
+C:\_\wwwroot\asp.core\bin\Debug\netcoreapp3.0\asp.core.dll
+]]>
+  </command-line>
+  <test-suite id="0-1055" duration="285.155038" end-time="2020-05-14 13:16:23Z" start-time="2020-05-14 13:11:38Z" asserts="580" skipped="0" inconclusive="0" failed="5" passed="44" total="49" result="Failed" testcasecount="49" runstate="Runnable" fullname="C:/_/wwwroot/asp.core/bin/Debug/netcoreapp3.0/asptest.core.dll" name="asptest.core.dll" warnings="0" site="Child" type="Assembly">
+    <environment clr-version="3.1.4" os-architecture="x64" uiculture="de-DE" culture="de-CH" user-domain="HP" user="tarnold" machine-name="HP" cwd="C:\_\wwwroot\asp.core" platform="Win32NT" os-version="Microsoft Windows 10.0.18363" framework-version="3.12.0.0" />
+    <settings>
+      <setting name="ProcessModel" value="Single" />
+      <setting name="DomainUsage" value="None" />
+      <setting name="NumberOfTestWorkers" value="4" />
+    </settings>
+    <properties>
+      <property name="_PID" value="9732" />
+      <property name="_APPDOMAIN" value="asp.core" />
+    </properties>
+    <failure>
+      <message>
+        <![CDATA[
+One or more child tests had errors
+]]>
+      </message>
+    </failure>
+    <test-suite id="0-1056" duration="285.137888" end-time="2020-05-14 13:16:23Z" start-time="2020-05-14 13:11:38Z" asserts="580" skipped="0" inconclusive="0" failed="5" passed="44" total="49" result="Failed" testcasecount="49" runstate="Runnable" fullname="asptest" name="asptest" warnings="0" site="Child" type="TestSuite">
+      <failure>
+        <message>
+          <![CDATA[
+One or more child tests had errors
+]]>
+        </message>
+      </failure>
+      <test-suite id="0-1057" duration="276.749056" end-time="2020-05-14 13:16:14Z" start-time="2020-05-14 13:11:38Z" asserts="568" skipped="0" inconclusive="0" failed="5" passed="43" total="48" result="Failed" testcasecount="48" runstate="Runnable" fullname="asptest.Calculator" name="Calculator" warnings="0" site="Child" type="TestSuite">
+        <failure>
+          <message>
+            <![CDATA[
+One or more child tests had errors
+]]>
+          </message>
+        </failure>
+        <test-suite id="0-1002" duration="56.602381" end-time="2020-05-14 13:12:34Z" start-time="2020-05-14 13:11:38Z" asserts="116" skipped="0" inconclusive="0" failed="0" passed="11" total="11" result="Passed" testcasecount="11" runstate="Runnable" fullname="asptest.Calculator.CalculateTest" name="CalculateTest" warnings="0" type="TestFixture" classname="asptest.Calculator.CalculateTest">
+          <properties>
+            <property name="Category" value="SHDocVw.InternetExplorer" />
+          </properties>
+          <test-case id="0-1006" duration="7.742671" end-time="2020-05-14 13:11:51Z" start-time="2020-05-14 13:11:43Z" asserts="14" result="Passed" runstate="Runnable" fullname="asptest.Calculator.CalculateTest.AddTest" name="AddTest" classname="asptest.Calculator.CalculateTest" seed="38329284" methodname="AddTest" />
+          <test-case id="0-1008" duration="6.371588" end-time="2020-05-14 13:11:57Z" start-time="2020-05-14 13:11:51Z" asserts="12" result="Passed" runstate="Runnable" fullname="asptest.Calculator.CalculateTest.ClrAllTest" name="ClrAllTest" classname="asptest.Calculator.CalculateTest" seed="431516489" methodname="ClrAllTest" />
+          <test-case id="0-1007" duration="6.126074" end-time="2020-05-14 13:12:03Z" start-time="2020-05-14 13:11:57Z" asserts="12" result="Passed" runstate="Runnable" fullname="asptest.Calculator.CalculateTest.ClrTest" name="ClrTest" classname="asptest.Calculator.CalculateTest" seed="1450365498" methodname="ClrTest" />
+          <test-case id="0-1009" duration="6.121599" end-time="2020-05-14 13:12:09Z" start-time="2020-05-14 13:12:03Z" asserts="14" result="Passed" runstate="Runnable" fullname="asptest.Calculator.CalculateTest.DivTest" name="DivTest" classname="asptest.Calculator.CalculateTest" seed="91549846" methodname="DivTest" />
+          <test-case id="0-1005" duration="2.859105" end-time="2020-05-14 13:12:12Z" start-time="2020-05-14 13:12:09Z" asserts="8" result="Passed" runstate="Runnable" fullname="asptest.Calculator.CalculateTest.EnterTest" name="EnterTest" classname="asptest.Calculator.CalculateTest" seed="2060769412" methodname="EnterTest" />
+          <test-case id="0-1004" duration="1.202469" end-time="2020-05-14 13:12:13Z" start-time="2020-05-14 13:12:12Z" asserts="4" result="Passed" runstate="Runnable" fullname="asptest.Calculator.CalculateTest.InitEnterTest" name="InitEnterTest" classname="asptest.Calculator.CalculateTest" seed="1208728137" methodname="InitEnterTest" />
+          <test-case id="0-1010" duration="6.250001" end-time="2020-05-14 13:12:20Z" start-time="2020-05-14 13:12:13Z" asserts="14" result="Passed" runstate="Runnable" fullname="asptest.Calculator.CalculateTest.MulTest" name="MulTest" classname="asptest.Calculator.CalculateTest" seed="1801192285" methodname="MulTest" />
+          <test-case id="0-1003" duration="0.483639" end-time="2020-05-14 13:12:20Z" start-time="2020-05-14 13:12:20Z" asserts="4" result="Passed" runstate="Runnable" fullname="asptest.Calculator.CalculateTest.NavigateDefaultTest" name="NavigateDefaultTest" classname="asptest.Calculator.CalculateTest" seed="10261134" methodname="NavigateDefaultTest" />
+          <test-case id="0-1011" duration="3.749785" end-time="2020-05-14 13:12:24Z" start-time="2020-05-14 13:12:20Z" asserts="10" result="Passed" runstate="Runnable" fullname="asptest.Calculator.CalculateTest.PowTest" name="PowTest" classname="asptest.Calculator.CalculateTest" seed="1360030797" methodname="PowTest" />
+          <test-case id="0-1012" duration="3.796677" end-time="2020-05-14 13:12:28Z" start-time="2020-05-14 13:12:24Z" asserts="10" result="Passed" runstate="Runnable" fullname="asptest.Calculator.CalculateTest.SqrtTest" name="SqrtTest" classname="asptest.Calculator.CalculateTest" seed="783063937" methodname="SqrtTest" />
+          <test-case id="0-1013" duration="6.046563" end-time="2020-05-14 13:12:34Z" start-time="2020-05-14 13:12:28Z" asserts="14" result="Passed" runstate="Runnable" fullname="asptest.Calculator.CalculateTest.SubTest" name="SubTest" classname="asptest.Calculator.CalculateTest" seed="468359594" methodname="SubTest" />
+        </test-suite>
+        <test-suite id="0-1014" duration="42.286522" end-time="2020-05-14 13:13:16Z" start-time="2020-05-14 13:12:34Z" asserts="49" skipped="0" inconclusive="0" failed="0" passed="1" total="1" result="Passed" testcasecount="1" runstate="Runnable" fullname="asptest.Calculator.FibonacciTest" name="FibonacciTest" warnings="0" type="TestFixture" classname="asptest.Calculator.FibonacciTest">
+          <properties>
+            <property name="Category" value="SHDocVw.InternetExplorer" />
+            <property name="Category" value="SHDocVw.InternetExplorer" />
+          </properties>
+          <test-case id="0-1015" duration="40.343674" end-time="2020-05-14 13:13:16Z" start-time="2020-05-14 13:12:36Z" asserts="48" result="Passed" runstate="Runnable" fullname="asptest.Calculator.FibonacciTest.VerifyFibonacciSums" name="VerifyFibonacciSums" classname="asptest.Calculator.FibonacciTest" seed="1945521317" methodname="VerifyFibonacciSums" />
+        </test-suite>
+        <test-suite id="0-1016" duration="60.802601" end-time="2020-05-14 13:14:17Z" start-time="2020-05-14 13:13:16Z" asserts="129" skipped="0" inconclusive="0" failed="2" passed="10" total="12" result="Failed" testcasecount="12" runstate="Runnable" fullname="asptest.Calculator.WithDatabaseEncryptedTest" name="WithDatabaseEncryptedTest" warnings="0" site="Child" type="TestFixture" classname="asptest.Calculator.WithDatabaseEncryptedTest">
+          <properties>
+            <property name="Category" value="SHDocVw.InternetExplorer" />
+            <property name="Category" value="SHDocVw.InternetExplorer" />
+            <property name="Category" value="SHDocVw.InternetExplorer" />
+          </properties>
+          <failure>
+            <message>
+              <![CDATA[
+One or more child tests had errors
+]]>
+            </message>
+          </failure>
+          <test-case id="0-1017" duration="11.430348" end-time="2020-05-14 13:13:29Z" start-time="2020-05-14 13:13:18Z" asserts="11" result="Failed" runstate="Runnable" fullname="asptest.Calculator.WithDatabaseEncryptedTest.AddSessionPersistsTest" name="AddSessionPersistsTest" classname="asptest.Calculator.WithDatabaseTest" seed="771707767" methodname="AddSessionPersistsTest" label="Error">
+            <failure>
+              <message>
+                <![CDATA[
+System.ArgumentException : HTML input element with name='Operand' or id='Operand' at index 0 not found
+]]>
+              </message>
+              <stack-trace>
+                <![CDATA[
+   at iselenium.SeleniumExtensionBase.GetHTMLElementByName(ISeleniumBase inst, String name, Int32 index) in C:\_\wwwroot\iselenium\ISeleniumExtensionBase.cs:line 279
+   at iselenium.SeleniumExtensionBase.Write(ISeleniumBase inst, String name, String text, Int32 index) in C:\_\wwwroot\iselenium\ISeleniumExtensionBase.cs:line 183
+   at asptest.Calculator.WithDatabaseTest.AddSessionPersistsTest() in C:\_\wwwroot\asptest.core\Calculator\WithDatabaseTest.cs:line 59
+]]>
+              </stack-trace>
+            </failure>
+          </test-case>
+          <test-case id="0-1021" duration="6.546431" end-time="2020-05-14 13:13:36Z" start-time="2020-05-14 13:13:29Z" asserts="15" result="Passed" runstate="Runnable" fullname="asptest.Calculator.WithDatabaseEncryptedTest.AddTest" name="AddTest" classname="asptest.Calculator.CalculateTest" seed="1354370884" methodname="AddTest" />
+          <test-case id="0-1023" duration="5.906602" end-time="2020-05-14 13:13:42Z" start-time="2020-05-14 13:13:36Z" asserts="13" result="Passed" runstate="Runnable" fullname="asptest.Calculator.WithDatabaseEncryptedTest.ClrAllTest" name="ClrAllTest" classname="asptest.Calculator.CalculateTest" seed="1206899561" methodname="ClrAllTest" />
+          <test-case id="0-1022" duration="5.781098" end-time="2020-05-14 13:13:48Z" start-time="2020-05-14 13:13:42Z" asserts="13" result="Passed" runstate="Runnable" fullname="asptest.Calculator.WithDatabaseEncryptedTest.ClrTest" name="ClrTest" classname="asptest.Calculator.CalculateTest" seed="95070640" methodname="ClrTest" />
+          <test-case id="0-1024" duration="2.748155" end-time="2020-05-14 13:13:50Z" start-time="2020-05-14 13:13:48Z" asserts="6" result="Failed" runstate="Runnable" fullname="asptest.Calculator.WithDatabaseEncryptedTest.DivTest" name="DivTest" classname="asptest.Calculator.CalculateTest" seed="1753496096" methodname="DivTest">
+            <failure>
+              <message>
+                <![CDATA[
+  Expected: <Map1.Calculate>
+  But was:  <Map1.Enter>
+]]>
+              </message>
+              <stack-trace>
+                <![CDATA[
+   at asptest.Calculator.CalculateTest.DivTest() in C:\_\wwwroot\asptest.core\Calculator\CalculateTest.cs:line 129
+]]>
+              </stack-trace>
+            </failure>
+            <assertions>
+              <assertion result="Failed">
+                <message>
+                  <![CDATA[
+  Expected: <Map1.Calculate>
+  But was:  <Map1.Enter>
+]]>
+                </message>
+                <stack-trace>
+                  <![CDATA[
+   at asptest.Calculator.CalculateTest.DivTest() in C:\_\wwwroot\asptest.core\Calculator\CalculateTest.cs:line 129
+]]>
+                </stack-trace>
+              </assertion>
+            </assertions>
+          </test-case>
+          <test-case id="0-1020" duration="3.964777" end-time="2020-05-14 13:13:54Z" start-time="2020-05-14 13:13:50Z" asserts="9" result="Passed" runstate="Runnable" fullname="asptest.Calculator.WithDatabaseEncryptedTest.EnterTest" name="EnterTest" classname="asptest.Calculator.CalculateTest" seed="955024049" methodname="EnterTest" />
+          <test-case id="0-1019" duration="2.113001" end-time="2020-05-14 13:13:56Z" start-time="2020-05-14 13:13:54Z" asserts="5" result="Passed" runstate="Runnable" fullname="asptest.Calculator.WithDatabaseEncryptedTest.InitEnterTest" name="InitEnterTest" classname="asptest.Calculator.CalculateTest" seed="1214745433" methodname="InitEnterTest" />
+          <test-case id="0-1025" duration="6.186917" end-time="2020-05-14 13:14:03Z" start-time="2020-05-14 13:13:56Z" asserts="15" result="Passed" runstate="Runnable" fullname="asptest.Calculator.WithDatabaseEncryptedTest.MulTest" name="MulTest" classname="asptest.Calculator.CalculateTest" seed="1723084478" methodname="MulTest" />
+          <test-case id="0-1018" duration="0.515358" end-time="2020-05-14 13:14:03Z" start-time="2020-05-14 13:14:03Z" asserts="5" result="Passed" runstate="Runnable" fullname="asptest.Calculator.WithDatabaseEncryptedTest.NavigateDefaultTest" name="NavigateDefaultTest" classname="asptest.Calculator.CalculateTest" seed="764716830" methodname="NavigateDefaultTest" />
+          <test-case id="0-1026" duration="3.625008" end-time="2020-05-14 13:14:07Z" start-time="2020-05-14 13:14:03Z" asserts="11" result="Passed" runstate="Runnable" fullname="asptest.Calculator.WithDatabaseEncryptedTest.PowTest" name="PowTest" classname="asptest.Calculator.CalculateTest" seed="1224035195" methodname="PowTest" />
+          <test-case id="0-1027" duration="3.843685" end-time="2020-05-14 13:14:11Z" start-time="2020-05-14 13:14:07Z" asserts="11" result="Passed" runstate="Runnable" fullname="asptest.Calculator.WithDatabaseEncryptedTest.SqrtTest" name="SqrtTest" classname="asptest.Calculator.CalculateTest" seed="1732092937" methodname="SqrtTest" />
+          <test-case id="0-1028" duration="6.249372" end-time="2020-05-14 13:14:17Z" start-time="2020-05-14 13:14:11Z" asserts="15" result="Passed" runstate="Runnable" fullname="asptest.Calculator.WithDatabaseEncryptedTest.SubTest" name="SubTest" classname="asptest.Calculator.CalculateTest" seed="101934830" methodname="SubTest" />
+        </test-suite>
+        <test-suite id="0-1029" duration="60.543948" end-time="2020-05-14 13:15:18Z" start-time="2020-05-14 13:14:17Z" asserts="126" skipped="0" inconclusive="0" failed="3" passed="9" total="12" result="Failed" testcasecount="12" runstate="Runnable" fullname="asptest.Calculator.WithDatabaseTest" name="WithDatabaseTest" warnings="0" site="Child" type="TestFixture" classname="asptest.Calculator.WithDatabaseTest">
+          <properties>
+            <property name="Category" value="SHDocVw.InternetExplorer" />
+            <property name="Category" value="SHDocVw.InternetExplorer" />
+          </properties>
+          <failure>
+            <message>
+              <![CDATA[
+One or more child tests had errors
+]]>
+            </message>
+          </failure>
+          <test-case id="0-1030" duration="11.302999" end-time="2020-05-14 13:14:30Z" start-time="2020-05-14 13:14:19Z" asserts="11" result="Failed" runstate="Runnable" fullname="asptest.Calculator.WithDatabaseTest.AddSessionPersistsTest" name="AddSessionPersistsTest" classname="asptest.Calculator.WithDatabaseTest" seed="575301116" methodname="AddSessionPersistsTest" label="Error">
+            <failure>
+              <message>
+                <![CDATA[
+System.ArgumentException : HTML input element with name='Operand' or id='Operand' at index 0 not found
+]]>
+              </message>
+              <stack-trace>
+                <![CDATA[
+   at iselenium.SeleniumExtensionBase.GetHTMLElementByName(ISeleniumBase inst, String name, Int32 index) in C:\_\wwwroot\iselenium\ISeleniumExtensionBase.cs:line 279
+   at iselenium.SeleniumExtensionBase.Write(ISeleniumBase inst, String name, String text, Int32 index) in C:\_\wwwroot\iselenium\ISeleniumExtensionBase.cs:line 183
+   at asptest.Calculator.WithDatabaseTest.AddSessionPersistsTest() in C:\_\wwwroot\asptest.core\Calculator\WithDatabaseTest.cs:line 59
+]]>
+              </stack-trace>
+            </failure>
+          </test-case>
+          <test-case id="0-1034" duration="6.549629" end-time="2020-05-14 13:14:36Z" start-time="2020-05-14 13:14:30Z" asserts="15" result="Passed" runstate="Runnable" fullname="asptest.Calculator.WithDatabaseTest.AddTest" name="AddTest" classname="asptest.Calculator.CalculateTest" seed="1698346488" methodname="AddTest" />
+          <test-case id="0-1036" duration="6.030269" end-time="2020-05-14 13:14:42Z" start-time="2020-05-14 13:14:36Z" asserts="13" result="Passed" runstate="Runnable" fullname="asptest.Calculator.WithDatabaseTest.ClrAllTest" name="ClrAllTest" classname="asptest.Calculator.CalculateTest" seed="577807217" methodname="ClrAllTest" />
+          <test-case id="0-1035" duration="5.813922" end-time="2020-05-14 13:14:48Z" start-time="2020-05-14 13:14:42Z" asserts="13" result="Passed" runstate="Runnable" fullname="asptest.Calculator.WithDatabaseTest.ClrTest" name="ClrTest" classname="asptest.Calculator.CalculateTest" seed="1896739580" methodname="ClrTest" />
+          <test-case id="0-1037" duration="2.592626" end-time="2020-05-14 13:14:51Z" start-time="2020-05-14 13:14:48Z" asserts="6" result="Failed" runstate="Runnable" fullname="asptest.Calculator.WithDatabaseTest.DivTest" name="DivTest" classname="asptest.Calculator.CalculateTest" seed="601227898" methodname="DivTest">
+            <failure>
+              <message>
+                <![CDATA[
+  Expected: <Map1.Calculate>
+  But was:  <Map1.Enter>
+]]>
+              </message>
+              <stack-trace>
+                <![CDATA[
+   at asptest.Calculator.CalculateTest.DivTest() in C:\_\wwwroot\asptest.core\Calculator\CalculateTest.cs:line 129
+]]>
+              </stack-trace>
+            </failure>
+            <assertions>
+              <assertion result="Failed">
+                <message>
+                  <![CDATA[
+  Expected: <Map1.Calculate>
+  But was:  <Map1.Enter>
+]]>
+                </message>
+                <stack-trace>
+                  <![CDATA[
+   at asptest.Calculator.CalculateTest.DivTest() in C:\_\wwwroot\asptest.core\Calculator\CalculateTest.cs:line 129
+]]>
+                </stack-trace>
+              </assertion>
+            </assertions>
+          </test-case>
+          <test-case id="0-1033" duration="3.421047" end-time="2020-05-14 13:14:54Z" start-time="2020-05-14 13:14:51Z" asserts="6" result="Failed" runstate="Runnable" fullname="asptest.Calculator.WithDatabaseTest.EnterTest" name="EnterTest" classname="asptest.Calculator.CalculateTest" seed="331175176" methodname="EnterTest" label="Error">
+            <failure>
+              <message>
+                <![CDATA[
+System.InvalidOperationException : Stack empty.  1)   Expected: <Map1.Calculate>
+  But was:  <Map1.Enter>
+
+]]>
+              </message>
+              <stack-trace>
+                <![CDATA[
+   at System.Collections.Generic.Stack`1.ThrowForEmptyStack()
+   at System.Collections.Generic.Stack`1.Peek()
+   at asptest.Calculator.CalculateTest.<EnterTest>b__2_0() in C:\_\wwwroot\asptest.core\Calculator\CalculateTest.cs:line 44
+   at NUnit.Framework.Assert.Multiple(TestDelegate testDelegate)
+   at asptest.Calculator.CalculateTest.EnterTest() in C:\_\wwwroot\asptest.core\Calculator\CalculateTest.cs:line 41
+]]>
+              </stack-trace>
+            </failure>
+            <assertions>
+              <assertion result="Failed">
+                <message>
+                  <![CDATA[
+  Expected: <Map1.Calculate>
+  But was:  <Map1.Enter>
+]]>
+                </message>
+                <stack-trace>
+                  <![CDATA[
+   at asptest.Calculator.CalculateTest.<EnterTest>b__2_0() in C:\_\wwwroot\asptest.core\Calculator\CalculateTest.cs:line 43
+   at NUnit.Framework.Assert.Multiple(TestDelegate testDelegate)
+   at asptest.Calculator.CalculateTest.EnterTest() in C:\_\wwwroot\asptest.core\Calculator\CalculateTest.cs:line 41
+]]>
+                </stack-trace>
+              </assertion>
+              <assertion result="Error">
+                <message>
+                  <![CDATA[
+System.InvalidOperationException : Stack empty.
+]]>
+                </message>
+                <stack-trace>
+                  <![CDATA[
+   at System.Collections.Generic.Stack`1.ThrowForEmptyStack()
+   at System.Collections.Generic.Stack`1.Peek()
+   at asptest.Calculator.CalculateTest.<EnterTest>b__2_0() in C:\_\wwwroot\asptest.core\Calculator\CalculateTest.cs:line 44
+   at NUnit.Framework.Assert.Multiple(TestDelegate testDelegate)
+   at asptest.Calculator.CalculateTest.EnterTest() in C:\_\wwwroot\asptest.core\Calculator\CalculateTest.cs:line 41
+]]>
+                </stack-trace>
+              </assertion>
+            </assertions>
+          </test-case>
+          <test-case id="0-1032" duration="2.015374" end-time="2020-05-14 13:14:56Z" start-time="2020-05-14 13:14:54Z" asserts="5" result="Passed" runstate="Runnable" fullname="asptest.Calculator.WithDatabaseTest.InitEnterTest" name="InitEnterTest" classname="asptest.Calculator.CalculateTest" seed="702665296" methodname="InitEnterTest" />
+          <test-case id="0-1038" duration="6.906531" end-time="2020-05-14 13:15:03Z" start-time="2020-05-14 13:14:56Z" asserts="15" result="Passed" runstate="Runnable" fullname="asptest.Calculator.WithDatabaseTest.MulTest" name="MulTest" classname="asptest.Calculator.CalculateTest" seed="1550305784" methodname="MulTest" />
+          <test-case id="0-1031" duration="0.499366" end-time="2020-05-14 13:15:04Z" start-time="2020-05-14 13:15:03Z" asserts="5" result="Passed" runstate="Runnable" fullname="asptest.Calculator.WithDatabaseTest.NavigateDefaultTest" name="NavigateDefaultTest" classname="asptest.Calculator.CalculateTest" seed="1267274634" methodname="NavigateDefaultTest" />
+          <test-case id="0-1039" duration="3.796612" end-time="2020-05-14 13:15:08Z" start-time="2020-05-14 13:15:04Z" asserts="11" result="Passed" runstate="Runnable" fullname="asptest.Calculator.WithDatabaseTest.PowTest" name="PowTest" classname="asptest.Calculator.CalculateTest" seed="782526658" methodname="PowTest" />
+          <test-case id="0-1040" duration="3.718616" end-time="2020-05-14 13:15:11Z" start-time="2020-05-14 13:15:08Z" asserts="11" result="Passed" runstate="Runnable" fullname="asptest.Calculator.WithDatabaseTest.SqrtTest" name="SqrtTest" classname="asptest.Calculator.CalculateTest" seed="664547953" methodname="SqrtTest" />
+          <test-case id="0-1041" duration="6.203635" end-time="2020-05-14 13:15:17Z" start-time="2020-05-14 13:15:11Z" asserts="15" result="Passed" runstate="Runnable" fullname="asptest.Calculator.WithDatabaseTest.SubTest" name="SubTest" classname="asptest.Calculator.CalculateTest" seed="689200828" methodname="SubTest" />
+        </test-suite>
+        <test-suite id="0-1042" duration="56.498964" end-time="2020-05-14 13:16:14Z" start-time="2020-05-14 13:15:18Z" asserts="148" skipped="0" inconclusive="0" failed="0" passed="12" total="12" result="Passed" testcasecount="12" runstate="Runnable" fullname="asptest.Calculator.WithSessionTest" name="WithSessionTest" warnings="0" type="TestFixture" classname="asptest.Calculator.WithSessionTest">
+          <properties>
+            <property name="Category" value="SHDocVw.InternetExplorer" />
+            <property name="Category" value="SHDocVw.InternetExplorer" />
+          </properties>
+          <test-case id="0-1043" duration="7.554347" end-time="2020-05-14 13:15:27Z" start-time="2020-05-14 13:15:19Z" asserts="21" result="Passed" runstate="Runnable" fullname="asptest.Calculator.WithSessionTest.AddSessionPersistsTest" name="AddSessionPersistsTest" classname="asptest.Calculator.WithSessionTest" seed="467963985" methodname="AddSessionPersistsTest" />
+          <test-case id="0-1047" duration="5.859179" end-time="2020-05-14 13:15:33Z" start-time="2020-05-14 13:15:27Z" asserts="15" result="Passed" runstate="Runnable" fullname="asptest.Calculator.WithSessionTest.AddTest" name="AddTest" classname="asptest.Calculator.CalculateTest" seed="359623151" methodname="AddTest" />
+          <test-case id="0-1049" duration="5.875298" end-time="2020-05-14 13:15:39Z" start-time="2020-05-14 13:15:33Z" asserts="13" result="Passed" runstate="Runnable" fullname="asptest.Calculator.WithSessionTest.ClrAllTest" name="ClrAllTest" classname="asptest.Calculator.CalculateTest" seed="1533668764" methodname="ClrAllTest" />
+          <test-case id="0-1048" duration="5.733962" end-time="2020-05-14 13:15:44Z" start-time="2020-05-14 13:15:39Z" asserts="13" result="Passed" runstate="Runnable" fullname="asptest.Calculator.WithSessionTest.ClrTest" name="ClrTest" classname="asptest.Calculator.CalculateTest" seed="1859239158" methodname="ClrTest" />
+          <test-case id="0-1050" duration="6.078496" end-time="2020-05-14 13:15:50Z" start-time="2020-05-14 13:15:44Z" asserts="15" result="Passed" runstate="Runnable" fullname="asptest.Calculator.WithSessionTest.DivTest" name="DivTest" classname="asptest.Calculator.CalculateTest" seed="1276564396" methodname="DivTest" />
+          <test-case id="0-1046" duration="2.687245" end-time="2020-05-14 13:15:53Z" start-time="2020-05-14 13:15:50Z" asserts="9" result="Passed" runstate="Runnable" fullname="asptest.Calculator.WithSessionTest.EnterTest" name="EnterTest" classname="asptest.Calculator.CalculateTest" seed="479176691" methodname="EnterTest" />
+          <test-case id="0-1045" duration="1.218635" end-time="2020-05-14 13:15:54Z" start-time="2020-05-14 13:15:53Z" asserts="5" result="Passed" runstate="Runnable" fullname="asptest.Calculator.WithSessionTest.InitEnterTest" name="InitEnterTest" classname="asptest.Calculator.CalculateTest" seed="1258270875" methodname="InitEnterTest" />
+          <test-case id="0-1051" duration="5.874542" end-time="2020-05-14 13:16:00Z" start-time="2020-05-14 13:15:54Z" asserts="15" result="Passed" runstate="Runnable" fullname="asptest.Calculator.WithSessionTest.MulTest" name="MulTest" classname="asptest.Calculator.CalculateTest" seed="1479734184" methodname="MulTest" />
+          <test-case id="0-1044" duration="0.500216" end-time="2020-05-14 13:16:01Z" start-time="2020-05-14 13:16:00Z" asserts="5" result="Passed" runstate="Runnable" fullname="asptest.Calculator.WithSessionTest.NavigateDefaultTest" name="NavigateDefaultTest" classname="asptest.Calculator.CalculateTest" seed="2109997754" methodname="NavigateDefaultTest" />
+          <test-case id="0-1052" duration="3.734370" end-time="2020-05-14 13:16:04Z" start-time="2020-05-14 13:16:01Z" asserts="11" result="Passed" runstate="Runnable" fullname="asptest.Calculator.WithSessionTest.PowTest" name="PowTest" classname="asptest.Calculator.CalculateTest" seed="1226222769" methodname="PowTest" />
+          <test-case id="0-1053" duration="3.671912" end-time="2020-05-14 13:16:08Z" start-time="2020-05-14 13:16:04Z" asserts="11" result="Passed" runstate="Runnable" fullname="asptest.Calculator.WithSessionTest.SqrtTest" name="SqrtTest" classname="asptest.Calculator.CalculateTest" seed="421257559" methodname="SqrtTest" />
+          <test-case id="0-1054" duration="5.874699" end-time="2020-05-14 13:16:14Z" start-time="2020-05-14 13:16:08Z" asserts="15" result="Passed" runstate="Runnable" fullname="asptest.Calculator.WithSessionTest.SubTest" name="SubTest" classname="asptest.Calculator.CalculateTest" seed="1017063191" methodname="SubTest" />
+        </test-suite>
+      </test-suite>
+      <test-suite id="0-1000" duration="8.387745" end-time="2020-05-14 13:16:23Z" start-time="2020-05-14 13:16:14Z" asserts="12" skipped="0" inconclusive="0" failed="0" passed="1" total="1" result="Passed" testcasecount="1" runstate="Runnable" fullname="asptest.ExceptionDumpTest" name="ExceptionDumpTest" warnings="0" type="TestFixture" classname="asptest.ExceptionDumpTest">
+        <properties>
+          <property name="Category" value="SHDocVw.InternetExplorer" />
+        </properties>
+        <test-case id="0-1001" duration="6.574162" end-time="2020-05-14 13:16:22Z" start-time="2020-05-14 13:16:16Z" asserts="12" result="Passed" runstate="Runnable" fullname="asptest.ExceptionDumpTest.ThrowDumpTest" name="ThrowDumpTest" classname="asptest.ExceptionDumpTest" seed="426834767" methodname="ThrowDumpTest" />
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

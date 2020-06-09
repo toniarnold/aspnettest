@@ -46,7 +46,7 @@ module IndexDoc =
                         testSummary.Clear()
                         testSummary.AppendMany(result.Summary)
                         if not result.Passed then
-                            JS.Window.Location.Assign(TestResultSite.PathFailed)
+                            JS.Window.Location.Assign(TestResultSite.ResultXmlPath)
                     }
                     |> Async.Start
                 )
@@ -54,6 +54,7 @@ module IndexDoc =
                     testSummary.View.DocSeqCached(fun(x: string) ->
                         Index.TestSummaryItem().Line(x).Doc())
                 )
+                .ResultXmlPath(TestResultSite.ResultXmlPath)
                 .Doc()
             ,
             Page(page, viewCalculator, varCalculator)

@@ -46,7 +46,7 @@ namespace minimal.websharper.spa
                     testSummary.AppendMany(result.Summary);
                     if (!result.Passed)
                     {
-                        JS.Window.Location.Assign(TestResultSite.PathFailed);
+                        JS.Window.Location.Assign(TestResultSite.ResultXmlPath);
                     }
                 })
                 .TestSummaryContainer(
@@ -54,6 +54,7 @@ namespace minimal.websharper.spa
                         new Template.Index.TestSummaryItem().Line(x).Doc()
                     )
                 )
+                .ResultXmlPath(TestResultSite.ResultXmlPath)
 
                 .Doc();
         }

@@ -1,16 +1,17 @@
-﻿using asplib.Model;
+﻿using asp.websharper.spa.fs;
+using asplib.Model;
 using asptest.Calculator;
 using iselenium;
 using NUnit.Framework;
+using OpenQA.Selenium;
 using OpenQA.Selenium.IE;
+using static asplib.View.TagHelper;
 
 namespace asptest
 {
-    [Ignore("Works in debug mode, but usually not from the runner")]
-    [TestFixture]
-    //public class TriptychTest<TWebDriver> : CalculatorTestBase<TWebDriver>
-    //    where TWebDriver : IWebDriver, new()
-    public class TriptychTest : CalculatorTestBase<InternetExplorerDriver>
+    [TestFixture(typeof(InternetExplorerDriver))]
+    public class TriptychTest<TWebDriver> : CalculatorTestBase<TWebDriver>
+        where TWebDriver : IWebDriver, new()
     {
         [SetUp]
         public void UnsetStorage()
@@ -31,7 +32,7 @@ namespace asptest
         [Test]
         public void NavigateTriptychTest()
         {
-            this.Click("storageLink");
+            this.Click(Id(CalculatorDoc.StorageLink));
             this.AssertTriptychHtml();
         }
 
@@ -42,36 +43,36 @@ namespace asptest
         {
             Assert.Multiple(() =>
             {
-                this.AssertPoll(() => this.Html(), () => Does.Contain("Session Storage: ViewState"));
-                this.AssertPoll(() => this.Html(), () => Does.Contain("Session Storage: Session"));
+                // Assert from bottom to  top to ensure the page has been fully rendered on the client
                 this.AssertPoll(() => this.Html(), () => Does.Contain("Session Storage: Database"));
+                this.AssertPoll(() => this.Html(), () => Does.Contain("Session Storage: Session"));
+                this.AssertPoll(() => this.Html(), () => Does.Contain("Session Storage: ViewState"));
             });
         }
 
-        [Ignore("Inconsistently implemented C#/F#, SessionStorage assertion doesn't work")]
         [Test]
         public void CircumambulateStorageTypes()
         {
-            this.Click("storageLink");
+            this.Click(Id(CalculatorDoc.StorageLink));
             this.AssertTriptychHtml();
-            this.Click("storageLinkViewState");
-            this.AssertPoll(() => this.Html(), () => Does.Contain("Session Storage: ViewState"));
-            this.AssertPoll(() => this.State, () => Is.EqualTo(CalculatorContext.Map1.Splash));
-            this.AssertPoll(() => this.ViewModel.SessionStorage, () => Is.EqualTo(Storage.ViewState));
-
-            this.Click("storageLink");
-            this.AssertTriptychHtml();
-            this.Click("storageLinkSession");
-            this.AssertPoll(() => this.Html(), () => Does.Contain("Session Storage: Session"));
-            this.AssertPoll(() => this.State, () => Is.EqualTo(CalculatorContext.Map1.Splash));
-            this.AssertPoll(() => this.ViewModel.SessionStorage, () => Is.EqualTo(Storage.Session));
-
-            this.Click("storageLink");
-            this.AssertTriptychHtml();
-            this.Click("storageLinkDatabase");
-            this.AssertPoll(() => this.Html(), () => Does.Contain("Session Storage: Database"));
-            this.AssertPoll(() => this.State, () => Is.EqualTo(CalculatorContext.Map1.Splash));
+            this.Click(Id(TriptychDoc.DatabaseDoc, CalculatorDoc.StorageLink));
+            this.Navigate("/"); // Reload, as static StorageImplementation.SessionStorage is set too late in F#
             this.AssertPoll(() => this.ViewModel.SessionStorage, () => Is.EqualTo(Storage.Database));
+            this.AssertPoll(() => this.Html(), () => Does.Contain("Session Storage: Database"));
+
+            this.Click(Id(CalculatorDoc.StorageLink));
+            this.AssertTriptychHtml();
+            this.Click(Id(TriptychDoc.SessionDoc, CalculatorDoc.StorageLink));
+            this.Navigate("/");
+            this.AssertPoll(() => this.ViewModel.SessionStorage, () => Is.EqualTo(Storage.Session));
+            this.AssertPoll(() => this.Html(), () => Does.Contain("Session Storage: Session"));
+
+            this.Click(Id(CalculatorDoc.StorageLink));
+            this.AssertTriptychHtml();
+            this.Click(Id(TriptychDoc.ViewStateDoc, CalculatorDoc.StorageLink));
+            this.Navigate("/");
+            this.AssertPoll(() => this.ViewModel.SessionStorage, () => Is.EqualTo(Storage.ViewState));
+            this.AssertPoll(() => this.Html(), () => Does.Contain("Session Storage: ViewState"));
         }
     }
 }

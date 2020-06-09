@@ -23,6 +23,8 @@ module CalculatorDoc =
     type Footer = Template<"wwwroot/calculator/footer.html">
 
     [<Literal>]
+    let StorageLink = "StorageLink"
+    [<Literal>]
     let OperandTextbox = "OperandTextbox"
     [<Literal>]
     let AddButton = "AddButton"
@@ -44,16 +46,17 @@ module CalculatorDoc =
     let EnterButton = "EnterButton";
 
     let HeaderDoc (viewCalculator : View<CalculatorViewModel>,
-                    page : Var<string>) =
+                    page : Var<string>, idParent: string ) =
         V(viewCalculator.V.SessionStorage).Map(fun thisStorage ->
             Header.Main()
+                .IdStorageLink(TagHelper.Id(idParent, StorageLink))
                 .Storage(V(viewCalculator.V.VSessionStorage))
                 .StorageLink(fun _ ->
                     async {
                         match page.Value with
                         | Pagename.Single -> page.Set(Pagename.Triptych)
                         | Pagename.Triptych ->
-                            StorageServer.SetStorage(thisStorage) |> ignore
+                            StorageServer.SetStorage(thisStorage) |> Async.AwaitTask |> ignore
                             page.Set(Pagename.Single)
                         | _ -> raise (new Exception(String.Format("Page {0}", page.Value)))
                     } |> Async.Start
@@ -200,7 +203,7 @@ module CalculatorDoc =
                     id : string) =
         let varOperand = Var.Create("")
         WebSharper.UI.Doc.ConcatMixed(
-            HeaderDoc(viewCalculator, page),
+            HeaderDoc(viewCalculator, page, id),
             TitleDoc(viewCalculator),
             SplashDoc(viewCalculator),
             EnterDoc(viewCalculator, varOperand, id),

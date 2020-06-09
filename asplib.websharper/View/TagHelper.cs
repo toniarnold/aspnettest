@@ -11,7 +11,7 @@ namespace asplib.View
         /// Generate a dot separated unique client ID for an element nested
         /// within a sub-application.
         /// </summary>
-        /// <param name="idHierarchy">The identifier hierarchy.</param>
+        /// <param name="idHierarchy">The identifier hierarchy as a string array.</param>
         /// <returns></returns>
         public static string Id(params string[] idHierarchy)
         {

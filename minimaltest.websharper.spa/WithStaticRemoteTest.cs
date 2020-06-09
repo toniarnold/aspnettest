@@ -41,7 +41,7 @@ namespace minimaltest
             this.Click("withstatic-link");
             this.Write("contentTextBox", "a first content line");
             this.Click("submitButton");
-            // Lambda with return outer NullReferenceException, which would disable polling, simpler assert below
+            // Lambda with caught NullReferenceException, more idiomatic assert below
             this.AssertPoll(() => { return this.Content.Count; }, () => Is.EqualTo(1));
             var firstString = this.Content[0];
             Assert.That(firstString, Is.EqualTo("a first content line"));

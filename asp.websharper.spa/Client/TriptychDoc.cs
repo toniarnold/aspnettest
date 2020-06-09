@@ -15,8 +15,8 @@ namespace asp.websharper.spa.Client
     {
         // Prefixes for constructing the unique client id (mimicking the
         // ASP.NET WebForms UserControl hierarchy) to be referenced in tests.
-        public const string ViewStateDoc = "ViewStateDoc";
 
+        public const string ViewStateDoc = "ViewStateDoc";
         public const string SessionDoc = "SessionDoc";
         public const string DatabaseDoc = "DatabaseDoc";
 

@@ -18,28 +18,48 @@ namespace test.iselenium
         [OneTimeSetUp]
         public void AssignTestResult()
         {
-            TestRunnerBase.Result = ReadTestResult();
+            TestRunnerBase.Result = ReadTestResult("TestResult-failed.xml");
         }
 
         /// <summary>
         /// Also used by TestServerIPCTest
         /// </summary>
         /// <returns></returns>
-        public static XmlNode ReadTestResult()
+        public static XmlNode ReadTestResult(string name)
         {
             var filename = Path.GetFullPath(
                             Path.Join(TestContext.CurrentContext.WorkDirectory,
-                                    @"..\..\..\iselenium",
-                                    "TestResult-example.xml"));
+                                        "..", "..", "..", "iselenium", "TestResult", name));
             var doc = new XmlDocument();
             doc.Load(filename);
             return doc.LastChild;
         }
 
         [Test]
-        public void OnlyFailedTest()
+        public static void TestStatusPassedTest()
         {
-            var failures = TestRunnerBase.OnlyFailed(TestRunnerBase.Result);
+            TestRunnerBase.Result = ReadTestResult("TestResult-passed.xml");
+            Assert.That(TestRunnerBase.TestStatus, Is.EqualTo(TestStatus.Passed));
+        }
+
+        [Test]
+        public static void TestStatusFailedTest()
+        {
+            TestRunnerBase.Result = ReadTestResult("TestResult-failed.xml");
+            Assert.That(TestRunnerBase.TestStatus, Is.EqualTo(TestStatus.Failed));
+        }
+
+        [Test]
+        public static void TestStatusSkippedTest()
+        {
+            TestRunnerBase.Result = ReadTestResult("TestResult-skipped.xml");
+            Assert.That(TestRunnerBase.TestStatus, Is.EqualTo(TestStatus.Skipped));
+        }
+
+        [Test]
+        public void TestResultFilteredFailedTest()
+        {
+            var failures = TestRunnerBase.TestResultFiltered(TestRunnerBase.Result, TestStatus.Failed);
             var all = Flat(TestRunnerBase.Result);
             var allFailures = Flat(failures);
             Assert.That(all.Count(), Is.GreaterThan(allFailures.Count()));
@@ -50,6 +70,9 @@ namespace test.iselenium
             var failureXml = allFailures.First().ToString();
             Assert.That(failureXml, Does.Contain("<message>"));
             Assert.That(failureXml, Does.Contain("<stack-trace>"));
+
+            Assert.That(failureXml, Does.Contain("result=\"Failed\""));
+            Assert.That(failureXml, Does.Not.Contain("result=\"Passed\""));
         }
 
         private IEnumerable<XNode> Flat(XmlNode node)

@@ -9,13 +9,13 @@ namespace minimal
         {
             var testRunner = new TestRunner(this.Request.Url.Port);
             testRunner.Run("minimaltest.webforms");
-            if (testRunner.Passed)
+            if (TestRunner.Passed)
             {
                 this.testResult.Text = testRunner.SummaryHtml;
             }
             else
             {
-                this.testResult.RenderTestResult(TestRunner.ResultFailedXml);
+                this.testResult.RenderTestResult(TestRunner.ResultXml);
             }
         }
     }

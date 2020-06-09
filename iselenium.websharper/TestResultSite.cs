@@ -5,12 +5,11 @@ namespace iselenium
 {
     public class TestResultSite
     {
-        public const string PathFailed = "/testresult/failed";  // used in JS.Window.Location.Assign
+        public const string ResultXmlPath = "/testresult";  // used in JS.Window.Location.Assign
 
-        [EndPoint("/testresult/{failed}")]
+        [EndPoint(ResultXmlPath)]
         public class ResultEndpoint
         {
-            public string failed;
         }
 
         [Website]
@@ -24,14 +23,7 @@ namespace iselenium
                         {
                             using (var w = new System.IO.StreamWriter(stream))
                             {
-                                if (endpoint.failed == "failed")
-                                {
-                                    w.Write(TestRunner.ResultFailedXml);
-                                }
-                                else
-                                {
-                                    w.Write(TestRunner.ResultXml);
-                                }
+                                w.Write(TestRunner.ResultXml);
                             }
                         }
                     )

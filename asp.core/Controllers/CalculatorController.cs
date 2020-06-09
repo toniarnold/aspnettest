@@ -53,13 +53,13 @@ namespace asp.Controllers
             var testRunner = new TestRunner(Configuration, Environment, (int)this.Request.Host.Port);
             testRunner.Run("asptest.core");
 
-            if (testRunner.Passed)
+            if (TestRunner.Passed)
             {
                 ViewBag.TestResult = testRunner.SummaryHtml;
             }
             else
             {
-                return this.ResultFailed();
+                return this.Result();
             }
 
             model.State = this.State;
@@ -68,16 +68,7 @@ namespace asp.Controllers
         }
 
         /// <summary>
-        /// View only the failed test results as XML page
-        /// </summary>
-        /// <returns></returns>
-        public IActionResult ResultFailed()
-        {
-            return Content(TestRunner.ResultFailedXml, "application/xml; charset=UTF-8");
-        }
-
-        /// <summary>
-        /// View the whole test result as XML page after clicking on the test summary
+        /// View the  test result as XML page after clicking on the test summary or the tests didn't pass
         /// </summary>
         /// <returns></returns>
         public IActionResult Result()

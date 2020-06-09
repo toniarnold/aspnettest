@@ -3,17 +3,20 @@ using asplib.Model;
 using iselenium;
 using NUnit.Framework;
 using OpenQA.Selenium;
+using OpenQA.Selenium.IE;
 using static asplib.View.TagHelper;
 
 namespace asptest.Calculator
 {
+    [TestFixture(typeof(InternetExplorerDriver))]
     public class WithSessionTest<TWebDriver> : CalculatorTestBase<TWebDriver>
         where TWebDriver : IWebDriver, new()
     {
-        [OneTimeSetUp]
-        public void SetUpStorage()
+        public override void OneTimeSetUpBrowser()
         {
+            // Set overriding storage before the browser gets started
             StorageImplementation.SessionStorage = Storage.Session;
+            base.OneTimeSetUpBrowser();
         }
 
         [OneTimeTearDown]

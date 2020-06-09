@@ -1,0 +1,40 @@
+<test-run id="0" name="asptest.websharper.spa.fs.dll" fullname="C:\Users\tarnold\Documents\aspnettest\wwwroot\bin\asptest.websharper.spa.fs.dll" runstate="Runnable" testcasecount="8" result="Skipped" label="Ignored" total="2" passed="1" failed="0" inconclusive="0" skipped="1" asserts="7" engine-version="3.11.1.0" clr-version="3.1.4" start-time="2020-06-07 11:38:51Z" end-time="2020-06-07 11:38:59Z" duration="7.447921">
+  <command-line><![CDATA[C:\Users\tarnold\Documents\aspnettest\wwwroot\asp.websharper.spa.fs\bin\Debug\netcoreapp3.1\asp.websharper.spa.fs.dll]]></command-line>
+  <filter>
+    <class>asptest.TriptychTest</class>
+  </filter>
+  <test-suite type="Assembly" id="0-1019" name="asptest.websharper.spa.fs.dll" fullname="C:/Users/tarnold/Documents/aspnettest/wwwroot/asp.websharper.spa.fs/bin/Debug/netcoreapp3.1/asptest.websharper.spa.fs.dll" runstate="Runnable" testcasecount="8" result="Skipped" label="Ignored" site="Child" start-time="2020-06-07 11:38:51Z" end-time="2020-06-07 11:38:59Z" duration="7.210456" total="2" passed="1" failed="0" warnings="0" inconclusive="0" skipped="1" asserts="7">
+    <environment framework-version="3.12.0.0" clr-version="3.1.4" os-version="Microsoft Windows 10.0.18363" platform="Win32NT" cwd="C:\Users\tarnold\Documents\aspnettest\wwwroot\asp.websharper.spa.fs" machine-name="HP" user="tarnold" user-domain="HP" culture="de-CH" uiculture="de-DE" os-architecture="x64" />
+    <settings>
+      <setting name="ProcessModel" value="Single" />
+      <setting name="DomainUsage" value="None" />
+      <setting name="NumberOfTestWorkers" value="4" />
+    </settings>
+    <properties>
+      <property name="_PID" value="3256" />
+      <property name="_APPDOMAIN" value="asp.websharper.spa.fs" />
+    </properties>
+    <reason>
+      <message><![CDATA[One or more child tests were ignored]]></message>
+    </reason>
+    <test-suite type="TestSuite" id="0-1020" name="asptest" fullname="asptest" runstate="Runnable" testcasecount="8" result="Skipped" label="Ignored" site="Child" start-time="2020-06-07 11:38:51Z" end-time="2020-06-07 11:38:59Z" duration="7.199999" total="2" passed="1" failed="0" warnings="0" inconclusive="0" skipped="1" asserts="7">
+      <reason>
+        <message><![CDATA[One or more child tests were ignored]]></message>
+      </reason>
+      <test-suite type="TestFixture" id="0-1000" name="TriptychTest" fullname="asptest.TriptychTest" classname="asptest.TriptychTest" runstate="Runnable" testcasecount="2" result="Skipped" label="Ignored" site="Child" start-time="2020-06-07 11:38:51Z" end-time="2020-06-07 11:38:59Z" duration="7.196242" total="2" passed="1" failed="0" warnings="0" inconclusive="0" skipped="1" asserts="7">
+        <reason>
+          <message><![CDATA[One or more child tests were ignored]]></message>
+        </reason>
+        <test-case id="0-1002" name="CircumambulateStorageTypes" fullname="asptest.TriptychTest.CircumambulateStorageTypes" methodname="CircumambulateStorageTypes" classname="asptest.TriptychTest" runstate="Ignored" seed="1038887430" result="Skipped" label="Ignored" start-time="2020-06-07 11:38:53Z" end-time="2020-06-07 11:38:53Z" duration="0.005214" asserts="0">
+          <properties>
+            <property name="_SKIPREASON" value="Inconsistently implemented C#/F#, SessionStorage assertion doesn't work" />
+          </properties>
+          <reason>
+            <message><![CDATA[Inconsistently implemented C#/F#, SessionStorage assertion doesn't work]]></message>
+          </reason>
+        </test-case>
+        <test-case id="0-1001" name="NavigateTriptychTest" fullname="asptest.TriptychTest.NavigateTriptychTest" methodname="NavigateTriptychTest" classname="asptest.TriptychTest" runstate="Runnable" seed="42536597" result="Passed" start-time="2020-06-07 11:38:53Z" end-time="2020-06-07 11:38:58Z" duration="4.909403" asserts="7" />
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

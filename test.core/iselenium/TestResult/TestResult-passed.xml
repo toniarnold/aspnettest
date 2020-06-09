@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<test-run id="0" duration="61.060663" end-time="2020-06-07 14:25:40Z" start-time="2020-06-07 14:24:39Z" clr-version="3.1.4" engine-version="3.11.1.0" asserts="128" skipped="0" inconclusive="0" failed="0" passed="11" total="11" result="Passed" testcasecount="11" runstate="Runnable" fullname="C:\Users\tarnold\Documents\aspnettest\wwwroot\bin\minimaltest.core.dll" name="minimaltest.core.dll">
+  <command-line>
+    <![CDATA[
+C:\Users\tarnold\Documents\aspnettest\wwwroot\minimal.core\bin\Debug\netcoreapp3.1\minimal.core.dll
+]]>
+  </command-line>
+  <test-suite id="0-1015" duration="60.596418" end-time="2020-06-07 14:25:40Z" start-time="2020-06-07 14:24:40Z" asserts="128" skipped="0" inconclusive="0" failed="0" passed="11" total="11" result="Passed" testcasecount="11" runstate="Runnable" fullname="C:/Users/tarnold/Documents/aspnettest/wwwroot/minimal.core/bin/Debug/netcoreapp3.1/minimaltest.core.dll" name="minimaltest.core.dll" warnings="0" type="Assembly">
+    <environment clr-version="3.1.4" os-architecture="x64" uiculture="de-DE" culture="de-CH" user-domain="HP" user="tarnold" machine-name="HP" cwd="C:\Users\tarnold\Documents\aspnettest\wwwroot\minimal.core" platform="Win32NT" os-version="Microsoft Windows 10.0.18363" framework-version="3.12.0.0" />
+    <settings>
+      <setting name="ProcessModel" value="Single" />
+      <setting name="DomainUsage" value="None" />
+      <setting name="NumberOfTestWorkers" value="4" />
+    </settings>
+    <properties>
+      <property name="_PID" value="15824" />
+      <property name="_APPDOMAIN" value="minimal.core" />
+    </properties>
+    <test-suite id="0-1016" duration="60.586266" end-time="2020-06-07 14:25:40Z" start-time="2020-06-07 14:24:40Z" asserts="128" skipped="0" inconclusive="0" failed="0" passed="11" total="11" result="Passed" testcasecount="11" runstate="Runnable" fullname="minimaltest" name="minimaltest" warnings="0" type="TestSuite">
+      <test-suite id="0-1000" duration="5.276091" end-time="2020-06-07 14:24:45Z" start-time="2020-06-07 14:24:40Z" asserts="11" skipped="0" inconclusive="0" failed="0" passed="3" total="3" result="Passed" testcasecount="3" runstate="Runnable" fullname="minimaltest.DefaultTest" name="DefaultTest" warnings="0" type="TestFixture" classname="minimaltest.DefaultTest">
+        <test-case id="0-1002" duration="1.571477" end-time="2020-06-07 14:24:43Z" start-time="2020-06-07 14:24:42Z" asserts="5" result="Passed" runstate="Runnable" fullname="minimaltest.DefaultTest.ClickWithStaticControllerTest" name="ClickWithStaticControllerTest" classname="minimaltest.DefaultTest" seed="247524810" methodname="ClickWithStaticControllerTest" />
+        <test-case id="0-1003" duration="1.125116" end-time="2020-06-07 14:24:44Z" start-time="2020-06-07 14:24:43Z" asserts="4" result="Passed" runstate="Runnable" fullname="minimaltest.DefaultTest.ClickWithStorageControllerTest" name="ClickWithStorageControllerTest" classname="minimaltest.DefaultTest" seed="424503154" methodname="ClickWithStorageControllerTest" />
+        <test-case id="0-1001" duration="0.346856" end-time="2020-06-07 14:24:45Z" start-time="2020-06-07 14:24:44Z" asserts="2" result="Passed" runstate="Runnable" fullname="minimaltest.DefaultTest.NavigateDefaultTest" name="NavigateDefaultTest" classname="minimaltest.DefaultTest" seed="1799307131" methodname="NavigateDefaultTest" />
+      </test-suite>
+      <test-suite id="0-1004" duration="12.441206" end-time="2020-06-07 14:24:58Z" start-time="2020-06-07 14:24:45Z" asserts="21" skipped="0" inconclusive="0" failed="0" passed="1" total="1" result="Passed" testcasecount="1" runstate="Runnable" fullname="minimaltest.ExceptionDumpTest" name="ExceptionDumpTest" warnings="0" type="TestFixture" classname="minimaltest.ExceptionDumpTest">
+        <test-case id="0-1005" duration="10.242223" end-time="2020-06-07 14:24:57Z" start-time="2020-06-07 14:24:47Z" asserts="21" result="Passed" runstate="Runnable" fullname="minimaltest.ExceptionDumpTest.ThrowRetrieveDumpTest" name="ThrowRetrieveDumpTest" classname="minimaltest.ExceptionDumpTest" seed="1257707128" methodname="ThrowRetrieveDumpTest" />
+      </test-suite>
+      <test-suite id="0-1006" duration="7.563304" end-time="2020-06-07 14:25:05Z" start-time="2020-06-07 14:24:58Z" asserts="14" skipped="0" inconclusive="0" failed="0" passed="2" total="2" result="Passed" testcasecount="2" runstate="Runnable" fullname="minimaltest.WithStaticControllerTest" name="WithStaticControllerTest" warnings="0" type="TestFixture" classname="minimaltest.WithStaticControllerTest">
+        <test-case id="0-1007" duration="1.411636" end-time="2020-06-07 14:25:00Z" start-time="2020-06-07 14:24:59Z" asserts="2" result="Passed" runstate="Runnable" fullname="minimaltest.WithStaticControllerTest.NavigateWithStaticControllerTest" name="NavigateWithStaticControllerTest" classname="minimaltest.WithStaticControllerTest" seed="1341034104" methodname="NavigateWithStaticControllerTest" />
+        <test-case id="0-1008" duration="4.426026" end-time="2020-06-07 14:25:05Z" start-time="2020-06-07 14:25:00Z" asserts="12" result="Passed" runstate="Runnable" fullname="minimaltest.WithStaticControllerTest.WriteContentTest" name="WriteContentTest" classname="minimaltest.WithStaticControllerTest" seed="292017901" methodname="WriteContentTest" />
+      </test-suite>
+      <test-suite id="0-1009" duration="35.295882" end-time="2020-06-07 14:25:40Z" start-time="2020-06-07 14:25:05Z" asserts="82" skipped="0" inconclusive="0" failed="0" passed="5" total="5" result="Passed" testcasecount="5" runstate="Runnable" fullname="minimaltest.WithStorageControllerTest" name="WithStorageControllerTest" warnings="0" type="TestFixture" classname="minimaltest.WithStorageControllerTest">
+        <test-case id="0-1014" duration="11.489809" end-time="2020-06-07 14:25:19Z" start-time="2020-06-07 14:25:07Z" asserts="17" result="Passed" runstate="Runnable" fullname="minimaltest.WithStorageControllerTest.ClearStorageTest" name="ClearStorageTest" classname="minimaltest.WithStorageControllerTest" seed="1878242493" methodname="ClearStorageTest" />
+        <test-case id="0-1010" duration="1.485899" end-time="2020-06-07 14:25:20Z" start-time="2020-06-07 14:25:19Z" asserts="2" result="Passed" runstate="Runnable" fullname="minimaltest.WithStorageControllerTest.NavigateWithStorageControllerTest" name="NavigateWithStorageControllerTest" classname="minimaltest.WithStorageControllerTest" seed="1759770800" methodname="NavigateWithStorageControllerTest" />
+        <test-case id="0-1013" duration="9.486289" end-time="2020-06-07 14:25:30Z" start-time="2020-06-07 14:25:20Z" asserts="22" result="Passed" runstate="Runnable" fullname="minimaltest.WithStorageControllerTest.StorageDatabaseTest" name="StorageDatabaseTest" classname="minimaltest.WithStorageControllerTest" seed="501060024" methodname="StorageDatabaseTest" />
+        <test-case id="0-1012" duration="6.512495" end-time="2020-06-07 14:25:36Z" start-time="2020-06-07 14:25:30Z" asserts="22" result="Passed" runstate="Runnable" fullname="minimaltest.WithStorageControllerTest.StorageSessionTest" name="StorageSessionTest" classname="minimaltest.WithStorageControllerTest" seed="89939539" methodname="StorageSessionTest" />
+        <test-case id="0-1011" duration="3.962517" end-time="2020-06-07 14:25:40Z" start-time="2020-06-07 14:25:36Z" asserts="18" result="Passed" runstate="Runnable" fullname="minimaltest.WithStorageControllerTest.StorageViewStateTest" name="StorageViewStateTest" classname="minimaltest.WithStorageControllerTest" seed="312947690" methodname="StorageViewStateTest" />
+      </test-suite>
+    </test-suite>
+  </test-suite>
+</test-run>

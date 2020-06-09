@@ -63,7 +63,7 @@ namespace minimal
             app.UseRouting();
             app.UseEndpoints(endpoints =>
             {
-                endpoints.MapControllerRoute("default", "{controller=Minimal}/{action=Index}/{id?}");
+                endpoints.MapControllerRoute("default", "{controller=Minimal}/{action=Index}");
             });
         }
     }
