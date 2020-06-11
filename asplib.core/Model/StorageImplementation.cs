@@ -179,51 +179,61 @@ namespace asplib.Model
         /// Hook to clear the storage for that control with ?clear=true
         /// ViewState is reset anyway on GET requests, therefore NOP in that case.
         /// GET-arguments:
-        /// clear=[true|false]          triggers clearing the storage
+        /// clear=[true|false]          a valid bool triggers clearing the storage
         /// storage=[Session|Database]  clears the selected storage type regardless of config
         /// </summary>
+        /// <param name="sessionStorage">the configured session storage</param>
         /// <param name="storageID"></param>
-        internal static void ClearIfRequested(HttpContext httpContext, Storage sessionstorage, string storageID)
+        internal static void ClearIfRequested(HttpContext httpContext, Storage sessionStorage, string storageID)
         {
-            bool clear = false;
             if (httpContext.Request.Method == WebRequestMethods.Http.Get &&
-                bool.TryParse(httpContext.Request.Query["clear"], out clear))
+                bool.TryParse(httpContext.Request.Query["clear"], out bool _))
             {
-                Storage storage;
-                Enum.TryParse<Storage>(httpContext.Request.Query["storage"], true, out storage);
-                if (storage == Storage.ViewState)   // no meaningful override given
-                {
-                    storage = sessionstorage;
-                }
+                Enum.TryParse<Storage>(httpContext.Request.Query["storage"], true, out Storage clearstorage);
+                Clear(httpContext, clearstorage, sessionStorage, storageID);
+            }
+        }
 
-                switch (storage)
-                {
-                    case Storage.ViewState:
-                        break;
+        /// <summary>
+        ///
+        /// </summary>
+        /// <param name="httpContext"></param>
+        /// <param name="clearStorage">the storage to clear by GET argument</param>
+        /// <param name="sessionStorage">the configured session storage</param>
+        /// <param name="storageID"></param>
+        internal static void Clear(HttpContext httpContext, Storage clearStorage, Storage sessionStorage, string storageID)
+        {
+            if (clearStorage == Storage.ViewState)   // no meaningful override given
+            {
+                clearStorage = sessionStorage;
+            }
+            switch (clearStorage)
+            {
+                case Storage.ViewState:
+                    break;
 
-                    case Storage.Session:
-                        httpContext.Session.Remove(storageID);
-                        break;
+                case Storage.Session:
+                    httpContext.Session.Remove(storageID);
+                    break;
 
-                    case Storage.Database:
-                        // delete from the database and expire the cookie
-                        Guid session;
-                        if (Guid.TryParse(httpContext.Request.Cookies[storageID].FromCookieString()["session"], out session))
+                case Storage.Database:
+                    // delete from the database and expire the cookie
+                    Guid session;
+                    if (Guid.TryParse(httpContext.Request.Cookies[storageID].FromCookieString()["session"], out session))
+                    {
+                        using (var db = new ASP_DBEntities())
                         {
-                            using (var db = new ASP_DBEntities())
-                            {
-                                db.Database.ExecuteSqlInterpolated($@"
+                            db.Database.ExecuteSqlInterpolated($@"
                                     DELETE FROM Main
                                     WHERE session = {session}
                                     ");
-                            }
                         }
-                        break;
+                    }
+                    break;
 
-                    default:
-                        throw new NotImplementedException(String.Format(
-                            "Storage {0}", storage));
-                }
+                default:
+                    throw new NotImplementedException(String.Format(
+                        "Storage {0}", clearStorage));
             }
         }
 

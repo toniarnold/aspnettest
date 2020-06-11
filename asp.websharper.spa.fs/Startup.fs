@@ -31,23 +31,21 @@ type Startup private () =
         services.AddSitelet(TestResultSite.Main) |> ignore
 
     member this.Configure(app: IApplicationBuilder, env: IWebHostEnvironment) =
-
         if (env.IsDevelopment()) then
-            app.UseDeveloperExceptionPage() |> ignore
             WebSharper.Web.Remoting.DisableCsrfProtection() |> ignore   // Prevent HTTP 403 errors in GUI tests
+            app.UseDeveloperExceptionPage() |> ignore
         else
-            app.UseHsts() |> ignore
-
-        app.UseMiddleware<ISeleniumMiddleware>() |> ignore
-        app.UseDefaultFiles() |> ignore
-        app.UseHttpsRedirection() |> ignore
-        app.UseStaticFiles() |> ignore
-        app.UseSession() |> ignore
-        app.UseWebSharper() |> ignore
-
-        app.Run(fun context ->
-            context.Response.StatusCode <- 404
-            context.Response.WriteAsync("Page not found")) |> ignore
+            app.UseHttpsRedirection()
+                .UseHsts() |> ignore
+        app.UseMiddleware<ISeleniumMiddleware>()
+            .UseSession()
+            .UseMiddleware<RequestQuerySessionMiddleware>()
+            .UseDefaultFiles()
+            .UseStaticFiles()
+            .UseWebSharper()
+            .Run(fun context ->
+                context.Response.StatusCode <- 404
+                context.Response.WriteAsync("Page not found"))
 
     member val Configuration : IConfiguration = null with get, set
     member val Environment : IWebHostEnvironment = null with get, set

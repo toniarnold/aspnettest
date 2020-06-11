@@ -47,7 +47,7 @@ namespace minimal.websharper.spa
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
-            //WebSharper.Web.Remoting.DisableCsrfProtection();    // Prevent HTTP 403 errors in GUI tests
+            //WebSharper.Web.Remoting.DisableCsrfProtection();    // HTTP 403 prevention not needed here
             app.UseDeveloperExceptionPage()
                 .UseMiddleware<ISeleniumMiddleware>()
                 // https://support.microsoft.com/en-us/help/234067/how-to-prevent-caching-in-internet-explorer
@@ -59,14 +59,11 @@ namespace minimal.websharper.spa
                     httpContext.Response.Headers[HeaderNames.Expires] = "-1";
                     await next();
                 })
-                // From WebSharper:
                 .UseDefaultFiles()
-                .UseStaticFiles()
-                // Ordering unclear, can cause "System.Security.Cryptography.CryptographicException: The payload was invalid."
-                // https://docs.microsoft.com/en-us/aspnet/core/fundamentals/middleware/index?view=aspnetcore-2.2#order
-                // suggests something like "as late as possible", there immediately before .UseMvc();
                 .UseSession()
-                .UseWebSharper()    //.UseWebSharper(builder => builder.UseSitelets(false))"
+                .UseMiddleware<RequestQuerySessionMiddleware>()
+                .UseStaticFiles()
+                .UseWebSharper()
                 .Run(context =>
                 {
                     HttpContext = context;

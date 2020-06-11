@@ -3,6 +3,10 @@ using System.Threading.Tasks;
 
 namespace iselenium
 {
+    /// <summary>
+    /// Store the response StatusCode in leniumExtensionBase.StatusCode if it is
+    /// not from /favicon.ico
+    /// </summary>
     public class ISeleniumMiddleware
     {
         protected readonly RequestDelegate _next;

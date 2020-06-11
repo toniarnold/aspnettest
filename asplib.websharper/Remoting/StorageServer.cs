@@ -3,9 +3,10 @@ using asplib.Model;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using System;
-using System.Net;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using WebSharper;
+using static asplib.Remoting.RequestQuerySessionMiddleware;
 
 namespace asplib.Remoting
 {
@@ -51,18 +52,32 @@ namespace asplib.Remoting
             where M : class, IStored<M>, new()
             where V : ViewModel<M>, new()
         {
+            var storage = sessionStorage ?? StorageImplementation.GetStorage(Configuration, HttpContext);
+            var storageID = StorageImplementation.GetStorageID(typeof(M).Name);
+            var getQuery = RequestQuerySessionMiddleware.Query(HttpContext);
+
+            // Implements StorageImplementation.ClearIfRequested(HttpContext, storage, storageID)
+            // for WebSharper Ajax POST requests
+            if (getQuery != null &&
+                getQuery.TryGetValue("clear", out string getClear) &&
+                bool.TryParse(getClear, out bool _) &&
+                Once(OnceAction.Clear, storageID))
+            {
+                getQuery.TryGetValue("storage", out string getStorage);
+                Enum.TryParse<Storage>(getStorage, true, out Storage clearStorage);
+                StorageImplementation.Clear(HttpContext, clearStorage, storage, storageID);
+            }
+
             V viewModel;
             Guid sessionOverride;
             Guid session;
             byte[] bytes;
             Func<byte[], byte[]> filter;
 
-            var storage = sessionStorage ?? StorageImplementation.GetStorage(Configuration, HttpContext);
-            var storageID = StorageImplementation.GetStorageID(typeof(M).Name);
-            StorageImplementation.ClearIfRequested(HttpContext, storage, storageID);
-
-            if (HttpContext.Request.Method == WebRequestMethods.Http.Get &&
-                Guid.TryParse(HttpContext.Request.Query["session"], out sessionOverride))
+            if (getQuery != null &&
+                getQuery.TryGetValue("session", out string getSession) &&
+                Guid.TryParse(getSession, out sessionOverride) &&
+                Once(OnceAction.Load, storageID))
             {
                 // ---------- Direct Load Database ----------
                 viewModel = new V();
@@ -152,6 +167,40 @@ namespace asplib.Remoting
                     throw new NotImplementedException(String.Format(
                         "Storage {0}", stored.SessionStorage));
             }
+        }
+
+        /// <summary>
+        /// Load/Clear each class and session only once.
+        /// </summary>
+        /// <param name="action">Load or Clear</param>
+        /// <param name="storageID">Class identifier (there can be multiple
+        /// persistent classes to load on a page)</param>
+        /// <returns>true when called the first time for that storageID, false afterwards</returns>
+        private static bool Once(OnceAction action, string storageID)
+        {
+            var onceKey = RequestQuerySessionMiddleware.SessionOnceKey(action);
+            HashSet<string> done;
+            bool isDone;
+            if (HttpContext.Session.TryGetValue(onceKey, out byte[] bytes))
+            {
+                done = (HashSet<string>)Serialization.Deserialize(bytes);
+                if (done.Contains(storageID))
+                {
+                    isDone = true;
+                }
+                else
+                {
+                    done.Add(storageID);
+                    isDone = false;
+                }
+            }
+            else // first time call
+            {
+                done = new HashSet<string> { storageID };
+                isDone = false;
+            }
+            HttpContext.Session.Set(onceKey, Serialization.Serialize(done));
+            return !isDone;
         }
     }
 }

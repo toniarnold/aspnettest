@@ -3,6 +3,9 @@ using asplib.Remoting;
 using iselenium;
 using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.IE;
 using System;
 using System.Linq;
@@ -10,9 +13,11 @@ using static asplib.View.TagHelper;
 
 namespace asptest.Calculator
 {
-    [Ignore("Can't work yet, original GET argument gets lost in POST Load() request for /?session={0}")]
-    [TestFixture]
-    public class FibonacciTest : CalculatorTestBase<InternetExplorerDriver>
+    [TestFixture(typeof(InternetExplorerDriver))]
+    [TestFixture(typeof(ChromeDriver))]
+    [TestFixture(typeof(FirefoxDriver))]
+    public class FibonacciTest<TWebDriver> : CalculatorTestBase<TWebDriver>
+        where TWebDriver : IWebDriver, new()
     {
         [Test]
         public void VerifyFibonacciSums()
@@ -47,11 +52,11 @@ namespace asptest.Calculator
 
                 // Put the original summands onto the stack again
                 this.Click(Id(CalculatorDoc.EnterButton));
-                this.Write("Operand", summand2);
+                this.Write(Id(CalculatorDoc.OperandTextbox), summand2);
                 this.Click(Id(CalculatorDoc.EnterButton));
 
                 this.Click(Id(CalculatorDoc.EnterButton));
-                this.Write("Operand", summand1);
+                this.Write(Id(CalculatorDoc.OperandTextbox), summand1);
                 this.Click(Id(CalculatorDoc.EnterButton));
 
                 // Check that the loop will terminate by continuing with N-1 elements
