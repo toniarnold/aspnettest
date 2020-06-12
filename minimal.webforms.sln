@@ -3,21 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.30011.22
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "minimal.webforms", "minimal.webforms\minimal.webforms.csproj", "{D276FFA5-0E92-4ED0-82D9-D5FE08AC69A8}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "minimal.webforms", "src\minimal.webforms\minimal.webforms.csproj", "{D276FFA5-0E92-4ED0-82D9-D5FE08AC69A8}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "minimaltest.webforms", "minimaltest.webforms\minimaltest.webforms.csproj", "{11F715DE-1C48-4503-AD49-31EC4BAD7045}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "minimaltest.webforms", "src\minimaltest.webforms\minimaltest.webforms.csproj", "{11F715DE-1C48-4503-AD49-31EC4BAD7045}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "asplib.webforms", "asplib.webforms\asplib.webforms.csproj", "{776E3032-BFD5-4C20-9867-942F045A8B0F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "asplib.webforms", "src\asplib.webforms\asplib.webforms.csproj", "{776E3032-BFD5-4C20-9867-942F045A8B0F}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "asplib", "asplib\asplib.csproj", "{3D85354C-5D55-4684-A3BD-8B4F75BFADB4}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "asplib", "src\asplib\asplib.csproj", "{4650D3FB-5C5F-40AE-B28B-5A53D6D45D29}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "smc", "smc\smc.csproj", "{0AA4C9A5-10D6-4BB0-9149-4A089EA76E72}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "smc", "src\smc\smc.csproj", "{EDC1F4BB-98D7-4755-9CC0-E7CB61A63989}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iselenium", "iselenium\iselenium.csproj", "{47062059-6FE3-432C-BFB2-FA09D1C8B5ED}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iselenium", "src\iselenium\iselenium.csproj", "{579678B7-DAEC-4038-9AE5-9423AAB4B8C6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iselenium.webforms", "iselenium.webforms\iselenium.webforms.csproj", "{F3BEDB25-A002-4EB5-B951-4A5E3E2EC477}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "iselenium.webforms", "src\iselenium.webforms\iselenium.webforms.csproj", "{F3BEDB25-A002-4EB5-B951-4A5E3E2EC477}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "minimaltestrunner.webforms", "minimaltestrunner.webforms\minimaltestrunner.webforms.csproj", "{4E6A82CF-8D05-4555-84B9-98EB10176880}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "minimaltestrunner.webforms", "src\minimaltestrunner.webforms\minimaltestrunner.webforms.csproj", "{4E6A82CF-8D05-4555-84B9-98EB10176880}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -37,18 +37,18 @@ Global
 		{776E3032-BFD5-4C20-9867-942F045A8B0F}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{776E3032-BFD5-4C20-9867-942F045A8B0F}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{776E3032-BFD5-4C20-9867-942F045A8B0F}.Release|Any CPU.Build.0 = Release|Any CPU
-		{3D85354C-5D55-4684-A3BD-8B4F75BFADB4}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{3D85354C-5D55-4684-A3BD-8B4F75BFADB4}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{3D85354C-5D55-4684-A3BD-8B4F75BFADB4}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{3D85354C-5D55-4684-A3BD-8B4F75BFADB4}.Release|Any CPU.Build.0 = Release|Any CPU
-		{0AA4C9A5-10D6-4BB0-9149-4A089EA76E72}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{0AA4C9A5-10D6-4BB0-9149-4A089EA76E72}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{0AA4C9A5-10D6-4BB0-9149-4A089EA76E72}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{0AA4C9A5-10D6-4BB0-9149-4A089EA76E72}.Release|Any CPU.Build.0 = Release|Any CPU
-		{47062059-6FE3-432C-BFB2-FA09D1C8B5ED}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{47062059-6FE3-432C-BFB2-FA09D1C8B5ED}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{47062059-6FE3-432C-BFB2-FA09D1C8B5ED}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{47062059-6FE3-432C-BFB2-FA09D1C8B5ED}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4650D3FB-5C5F-40AE-B28B-5A53D6D45D29}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4650D3FB-5C5F-40AE-B28B-5A53D6D45D29}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4650D3FB-5C5F-40AE-B28B-5A53D6D45D29}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4650D3FB-5C5F-40AE-B28B-5A53D6D45D29}.Release|Any CPU.Build.0 = Release|Any CPU
+		{EDC1F4BB-98D7-4755-9CC0-E7CB61A63989}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{EDC1F4BB-98D7-4755-9CC0-E7CB61A63989}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{EDC1F4BB-98D7-4755-9CC0-E7CB61A63989}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{EDC1F4BB-98D7-4755-9CC0-E7CB61A63989}.Release|Any CPU.Build.0 = Release|Any CPU
+		{579678B7-DAEC-4038-9AE5-9423AAB4B8C6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{579678B7-DAEC-4038-9AE5-9423AAB4B8C6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{579678B7-DAEC-4038-9AE5-9423AAB4B8C6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{579678B7-DAEC-4038-9AE5-9423AAB4B8C6}.Release|Any CPU.Build.0 = Release|Any CPU
 		{F3BEDB25-A002-4EB5-B951-4A5E3E2EC477}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{F3BEDB25-A002-4EB5-B951-4A5E3E2EC477}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F3BEDB25-A002-4EB5-B951-4A5E3E2EC477}.Release|Any CPU.ActiveCfg = Release|Any CPU

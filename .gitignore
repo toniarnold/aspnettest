@@ -54,7 +54,7 @@ BenchmarkDotNet.Artifacts/
 project.lock.json
 project.fragment.lock.json
 artifacts/
-**/Properties/launchSettings.json
+# **/Properties/launchSettings.json	# needed for GUI testing setup
 
 # StyleCop
 StyleCopReport.xml
@@ -338,17 +338,17 @@ ASALocalRun/
 !nuget/**
 
 # dlls fetched by nuget
-minimal.webforms/*.dll
-minimaltest.webforms/*.dll
+src/minimal.webforms/*.dll
+src/minimaltest.webforms/*.dll
 
 # websharper generated files
-minimal.websharper.spa/wwwroot/Content/*
-minimal.websharper.spa/WebSharper.UI.Templates/*
+src/minimal.websharper.spa/wwwroot/Content/*
+src/minimal.websharper.spa/WebSharper.UI.Templates/*
 
-minimal.websharper.web/WebSharper.UI.Templates/*
-minimal.websharper.web/wwwroot/Scripts/WebSharper/*
+src/minimal.websharper.web/WebSharper.UI.Templates/*
+src/minimal.websharper.web/wwwroot/Scripts/WebSharper/*
 
-asp.websharper.spa/wwwroot/Content/*
-asp.websharper.spa/WebSharper.UI.Templates/*
+src/asp.websharper.spa/wwwroot/Content/*
+src/asp.websharper.spa/WebSharper.UI.Templates/*
 
-asp.websharper.spa.fs/wwwroot/Content/*
+src/asp.websharper.spa.fs/wwwroot/Content/*
