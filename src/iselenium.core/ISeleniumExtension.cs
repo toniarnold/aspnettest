@@ -10,18 +10,19 @@
         /// Click the HTML element (usually a Button) with the given id and
         /// index and wait for the response when expectPostBack is true (default).
         /// </summary>
-        /// <param id="id">HTML id attribute of the element to click on</param>
-        /// <param id="expectRequest">Whether to expect a GET/POST request to the server from the click</param>
-        /// <param id="samePage">Whether to expect a WebForms style PostBack to the same page with the same HTML element</param>
-        /// <param id="expectedStatusCode">Expected StatusCofe of the response</param>
-        /// <param id="delay">Optional delay time in milliseconds before clicking the element</param>
-        /// <param id="pause">Optional pause time in milliseconds after IE claims DocumentComplete</param>
+        /// <param name="id">HTML id attribute of the element to click on</param>
+        /// <param name="expectRequest">Whether to expect a GET/POST request to the server from the click</param>
+        /// <param name="samePage">Whether to expect a WebForms style PostBack to the same page with the same HTML element</param>
+        /// <param name="awaitRemoved">Whether to wait for the HTML element to disappear (in an SPA)</param>
+        /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>
+        /// <param name="delay">Optional delay time in milliseconds before clicking the element</param>
+        /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete</param>
         public static void Click(this ISelenium inst, string id, int index = 0,
-                                bool expectRequest = true, bool samePage = false,
+                                bool expectRequest = true, bool samePage = false, bool awaitRemoved = false,
                                 int expectedStatusCode = 200, int delay = 0, int pause = 0)
         {
             SeleniumExtensionBase.ClickID(inst, id, index,
-                                            expectRequest: expectRequest, samePage: samePage,
+                                            expectRequest: expectRequest, samePage: samePage, awaitRemoved: awaitRemoved,
                                             expectedStatusCode: expectedStatusCode, delay: delay, pause: pause);
         }
 

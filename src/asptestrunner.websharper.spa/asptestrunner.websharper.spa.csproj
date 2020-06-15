@@ -22,6 +22,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\asp.websharper.spa.fs\asp.websharper.spa.fs.fsproj" />
+    <ProjectReference Include="..\asp.websharper.spa\asp.websharper.spa.csproj" />
+    <ProjectReference Include="..\asptest.websharper.spa.fs\asptest.websharper.spa.fs.csproj" />
+    <ProjectReference Include="..\asptest.websharper.spa\asptest.websharper.spa.csproj" />
     <ProjectReference Include="..\iselenium.websharper\iselenium.websharper.csproj" />
   </ItemGroup>
 

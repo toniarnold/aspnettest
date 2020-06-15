@@ -17,10 +17,23 @@ namespace asptest
     public class TriptychTest<TWebDriver> : CalculatorTestBase<TWebDriver>
         where TWebDriver : IWebDriver, new()
     {
-        [SetUp]
-        public void UnsetStorage()
+        public override void OneTimeSetUpBrowser()
         {
-            StorageImplementation.SessionStorage = null;
+            base.OneTimeSetUpBrowser();
+            driver.Manage().Window.Size = new System.Drawing.Size(1450, 1000);
+        }
+
+        [OneTimeSetUp]
+        public void DistinctPages()
+        {
+            this.samePageDefault = false;
+        }
+
+        [SetUp]
+        public void ReloadUnsetStorage()
+        {
+            this.Navigate("/");
+            StorageImplementation.SessionStorage = null;    // defaults to ViewState (DOM)
         }
 
         [TearDown]
@@ -36,8 +49,36 @@ namespace asptest
         [Test]
         public void NavigateTriptychTest()
         {
+            this.AssertPoll(() => this.Html(), () => Does.Contain("Session Storage: ViewState"));   // init view
             this.Click(Id(CalculatorDoc.StorageLink));
             this.AssertTriptychHtml();
+        }
+
+        [Test]
+        public void CircumambulateStorageTypes()
+        {
+            this.AssertPoll(() => this.Html(), () => Does.Contain("Session Storage: ViewState"));   // init view
+            this.Click(Id(CalculatorDoc.StorageLink));
+            this.AssertTriptychHtml();
+            this.Click(Id(TriptychDoc.DatabaseDoc, CalculatorDoc.StorageLink));
+            this.driver.Navigate().Refresh(); // only in the F# port
+            // Poll SessionStorage first, this.Html() is ambiguous and succeeds too early (still on the triptych)
+            this.AssertPoll(() => this.ViewModel.SessionStorage, () => Is.EqualTo(Storage.Database));
+            this.AssertPoll(() => this.Html(), () => Does.Contain("Session Storage: Database"));
+
+            this.Click(Id(CalculatorDoc.StorageLink));
+            this.AssertTriptychHtml();
+            this.Click(Id(TriptychDoc.SessionDoc, CalculatorDoc.StorageLink));
+            this.driver.Navigate().Refresh();
+            this.AssertPoll(() => this.ViewModel.SessionStorage, () => Is.EqualTo(Storage.Session));
+            this.AssertPoll(() => this.Html(), () => Does.Contain("Session Storage: Session"));
+
+            this.Click(Id(CalculatorDoc.StorageLink));
+            this.AssertTriptychHtml();
+            this.Click(Id(TriptychDoc.ViewStateDoc, CalculatorDoc.StorageLink));
+            this.driver.Navigate().Refresh();
+            this.AssertPoll(() => this.ViewModel.SessionStorage, () => Is.EqualTo(Storage.ViewState));
+            this.AssertPoll(() => this.Html(), () => Does.Contain("Session Storage: ViewState"));
         }
 
         /// <summary>
@@ -47,36 +88,11 @@ namespace asptest
         {
             Assert.Multiple(() =>
             {
-                // Assert from bottom to  top to ensure the page has been fully rendered on the client
+                // Assert from bottom to top to ensure the page has been fully rendered on the client
                 this.AssertPoll(() => this.Html(), () => Does.Contain("Session Storage: Database"));
                 this.AssertPoll(() => this.Html(), () => Does.Contain("Session Storage: Session"));
                 this.AssertPoll(() => this.Html(), () => Does.Contain("Session Storage: ViewState"));
             });
-        }
-
-        [Test]
-        public void CircumambulateStorageTypes()
-        {
-            this.Click(Id(CalculatorDoc.StorageLink));
-            this.AssertTriptychHtml();
-            this.Click(Id(TriptychDoc.DatabaseDoc, CalculatorDoc.StorageLink));
-            this.Navigate("/"); // Reload, as static StorageImplementation.SessionStorage is set too late in F#
-            this.AssertPoll(() => this.ViewModel.SessionStorage, () => Is.EqualTo(Storage.Database));
-            this.AssertPoll(() => this.Html(), () => Does.Contain("Session Storage: Database"));
-
-            this.Click(Id(CalculatorDoc.StorageLink));
-            this.AssertTriptychHtml();
-            this.Click(Id(TriptychDoc.SessionDoc, CalculatorDoc.StorageLink));
-            this.Navigate("/");
-            this.AssertPoll(() => this.ViewModel.SessionStorage, () => Is.EqualTo(Storage.Session));
-            this.AssertPoll(() => this.Html(), () => Does.Contain("Session Storage: Session"));
-
-            this.Click(Id(CalculatorDoc.StorageLink));
-            this.AssertTriptychHtml();
-            this.Click(Id(TriptychDoc.ViewStateDoc, CalculatorDoc.StorageLink));
-            this.Navigate("/");
-            this.AssertPoll(() => this.ViewModel.SessionStorage, () => Is.EqualTo(Storage.ViewState));
-            this.AssertPoll(() => this.Html(), () => Does.Contain("Session Storage: ViewState"));
         }
     }
 }

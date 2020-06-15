@@ -2,10 +2,12 @@
 using iselenium;
 using NUnit.Framework;
 using OpenQA.Selenium;
+using OpenQA.Selenium.IE;
 using static asplib.View.TagHelper;
 
 namespace asptest.Calculator
 {
+    [TestFixture(typeof(InternetExplorerDriver))]
     public class CalculateTest<TWebDriver> : CalculatorTestBase<TWebDriver>
         where TWebDriver : IWebDriver, new()
     {

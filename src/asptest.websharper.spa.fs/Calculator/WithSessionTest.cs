@@ -48,23 +48,22 @@ namespace asptest.Calculator
         [Test]
         public void AddWithPersistenceTest()
         {
-            this.Navigate("/");
-            this.Click("EnterButton");
+            this.Click(Id(CalculatorDoc.EnterButton));
             this.AssertPoll(() => this.State, () => Is.EqualTo(CalculatorContext.Map1.Enter));
             this.Reload();
             this.Write(Id(CalculatorDoc.OperandTextbox), "2");
-            this.Click("EnterButton");
+            this.Click(Id(CalculatorDoc.EnterButton));
             this.AssertPoll(() => this.State, () => Is.EqualTo(CalculatorContext.Map1.Calculate));
             this.Reload();
-            this.Click("EnterButton");
+            this.Click(Id(CalculatorDoc.EnterButton));
             this.AssertPoll(() => this.State, () => Is.EqualTo(CalculatorContext.Map1.Enter));
             this.Reload();
             this.Write(Id(CalculatorDoc.OperandTextbox), "3");
-            this.Click("EnterButton");
+            this.Click(Id(CalculatorDoc.EnterButton));
             this.AssertPoll(() => this.State, () => Is.EqualTo(CalculatorContext.Map1.Calculate));
             var before = this.Stack.Count;
             this.Reload();
-            this.Click("AddButton");
+            this.Click(Id(CalculatorDoc.AddButton));
             this.AssertAddFinalState(before);
             this.Reload();
         }

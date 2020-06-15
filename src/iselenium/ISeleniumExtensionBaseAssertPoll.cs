@@ -47,9 +47,26 @@ namespace iselenium
         /// <typeparam name="TActual">The Type being compared.</typeparam>
         /// <param name="del">An ActualValueDelegate returning the value to be tested</param>
         /// <param name="expr">A Constraint expression to be applied</param>
-        public static void AssertPoll<TActual>(this ISeleniumBase _, ActualValueDelegate<TActual> del, Func<IResolveConstraint> expr)
+        /// <param name="timeout">Time in seconds to poll for the assertion to pass, overrides RequestTimeout</param>
+        public static void AssertPoll<TActual>(this ISeleniumBase _, ActualValueDelegate<TActual> del,
+                                                Func<IResolveConstraint> expr, int? timeout = null)
         {
-            AssertPoll(del, expr, null, null);
+            AssertPoll(del, expr, null, timeout: timeout, null);
+        }
+
+        /// <summary>
+        /// Apply a constraint to a delegate. Returns without throwing an exception when inside a multiple assert block.
+        /// </summary>
+        /// <typeparam name="TActual">The Type being compared.</typeparam>
+        /// <param name="del">An ActualValueDelegate returning the value to be tested</param>
+        /// <param name="expr">A Constraint expression to be applied</param>
+        /// <param name="getExceptionMessage">Exception message delegate</param>
+        /// <param name="timeout">A Constraint expression to be applied</param>
+        public static void AssertPoll<TActual>(this ISeleniumBase _, ActualValueDelegate<TActual> del,
+                                                Func<IResolveConstraint> expr, Func<string> getExceptionMessage,
+                                                int? timeout = null)
+        {
+            AssertPoll(del, expr, getExceptionMessage, timeout: timeout);
         }
 
         /// <summary>
@@ -60,9 +77,10 @@ namespace iselenium
         /// <param name="expr">A Constraint expression to be applied</param>
         /// <param name="message">The message that will be displayed on failure</param>
         /// <param name="args">Arguments to be used in formatting the message</param>
-        public static void That<TActual>(ActualValueDelegate<TActual> del, Func<IResolveConstraint> expr, string message, params object[] args)
+        public static void That<TActual>(ActualValueDelegate<TActual> del, Func<IResolveConstraint> expr,
+                                        string message, params object[] args)
         {
-            AssertPoll(del, expr, message, args);
+            AssertPoll(del, expr, message, timeout: null, args);
         }
 
         /// <summary>
@@ -86,15 +104,17 @@ namespace iselenium
 
         #region Private AssertPoll implementations
 
-        private static void AssertPoll<TActual>(ActualValueDelegate<TActual> del, Func<IResolveConstraint> expression, string message, params object[] args)
+        private static void AssertPoll<TActual>(ActualValueDelegate<TActual> del, Func<IResolveConstraint> expression,
+                                                string message, int? timeout = null, params object[] args)
         {
-            TryAssertPoll(del, expression);
+            TryAssertPoll(del, expression, timeout);
             Assert.That(del, expression(), message, args);
         }
 
-        private static void AssertPoll<TActual>(ActualValueDelegate<TActual> del, Func<IResolveConstraint> expression, Func<string> getExceptionMessage)
+        private static void AssertPoll<TActual>(ActualValueDelegate<TActual> del, Func<IResolveConstraint> expression,
+                                                Func<string> getExceptionMessage, int? timeout = null)
         {
-            TryAssertPoll(del, expression);
+            TryAssertPoll(del, expression, timeout);
             Assert.That(del, expression(), getExceptionMessage);
         }
 
@@ -104,11 +124,15 @@ namespace iselenium
         /// <typeparam name="TActual"></typeparam>
         /// <param name="actual"></param>
         /// <param name="expression"></param>
-        /// <returns>whether the tess passed</returns>
-        private static bool TryAssertPoll<TActual>(ActualValueDelegate<TActual> del, Func<IResolveConstraint> expression)
+        /// <param name="timeout">Overrides RequestTimeout</param>
+        /// <returns>whether the test passed</returns>
+        private static bool TryAssertPoll<TActual>(ActualValueDelegate<TActual> del,
+                                                    Func<IResolveConstraint> expression,
+                                                    int? timeout)
         {
+            int pollFor = timeout ?? RequestTimeout;
             var constraint = expression().Resolve();
-            for (int i = 0; i < RequestTimeout * 1000 / FAST_POLL_MILLISECONDS; i++)
+            for (int i = 0; i < pollFor * 1000 / FAST_POLL_MILLISECONDS; i++)
             {
                 try
                 {

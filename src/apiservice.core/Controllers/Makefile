@@ -10,7 +10,7 @@ Accesscode_sm.dot: Accesscode.sm
 
 Accesscode_sm.png: Accesscode_sm.dot
 	dot -T png -o Accesscode_sm.png Accesscode_sm.dot
-	xcopy /D /F /Y Accesscode_sm.png ..\..\doc\img
+	xcopy /D /F /Y Accesscode_sm.png ..\..\..\doc\img
 
 clean:
 	-del Accesscode_sm.cs

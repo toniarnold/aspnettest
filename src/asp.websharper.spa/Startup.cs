@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Net.Http.Headers;
 using System;
 using WebSharper.AspNetCore;
 
@@ -51,7 +50,8 @@ namespace asp.websharper.spa
             if (env.IsDevelopment())
             {
                 WebSharper.Web.Remoting.DisableCsrfProtection();    // Prevent HTTP 403 errors in GUI tests
-                app.UseDeveloperExceptionPage();
+                app.UseDeveloperExceptionPage()
+                    .UseMiddleware<NoCacheMiddleware>();
             }
             else
             {

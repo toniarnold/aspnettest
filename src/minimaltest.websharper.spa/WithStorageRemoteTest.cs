@@ -11,14 +11,17 @@ using System.Collections.Generic;
 
 namespace minimaltest
 {
-    //public class WithStaticRemoteTest : SpaTest<InternetExplorerDriver>   // For TestFilter with 1 Browser
-    //public class WithStorageRemoteTest : SpaTest<FirefoxDriver>  // does not work with FireFox
     [TestFixture(typeof(ChromeDriver))]
     [TestFixture(typeof(InternetExplorerDriver))]
     public class WithStorageRemoteTest<TWebDriver> : SpaStorageTest<TWebDriver>
         where TWebDriver : IWebDriver, new()
-        //public class WithStorageRemoteTest : SpaTest<ChromeDriver>
     {
+        [OneTimeSetUp]
+        public void NoAwaitRemoved()
+        {
+            this.awaitRemovedDefault = false;
+        }
+
         /// <summary>
         /// Typed accessor to the only model object in the app
         /// </summary>

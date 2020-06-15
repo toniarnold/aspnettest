@@ -27,9 +27,10 @@ namespace asptestrunner
         [Test]
         public void RunTests()
         {
-            this.Navigate("/", delay: 7000);    // server not yet ready on 1st run
+            this.Navigate("/", delay: 7000); // server not yet ready on 1st run
+            this.driver.Navigate().Refresh(); // and the page sometimes doesn't load the 1st time
             this.AssertPoll(() => this.GetHTMLElementById("testButton").Displayed, () => Is.True);
-            this.Click("testButton");
+            this.Click("testButton", awaitRemoved: false);
             this.AssertTestsOK();
         }
     }

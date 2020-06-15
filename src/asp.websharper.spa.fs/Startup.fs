@@ -33,7 +33,8 @@ type Startup private () =
     member this.Configure(app: IApplicationBuilder, env: IWebHostEnvironment) =
         if (env.IsDevelopment()) then
             WebSharper.Web.Remoting.DisableCsrfProtection() |> ignore   // Prevent HTTP 403 errors in GUI tests
-            app.UseDeveloperExceptionPage() |> ignore
+            app.UseDeveloperExceptionPage()
+                .UseMiddleware<NoCacheMiddleware>() |> ignore
         else
             app.UseHttpsRedirection()
                 .UseHsts() |> ignore

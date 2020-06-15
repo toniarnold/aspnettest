@@ -17,10 +17,23 @@ namespace asptest
     public class TriptychTest<TWebDriver> : CalculatorTestBase<TWebDriver>
         where TWebDriver : IWebDriver, new()
     {
-        [SetUp]
-        public void UnsetStorage()
+        public override void OneTimeSetUpBrowser()
         {
-            StorageImplementation.SessionStorage = null;    // defaults to ViewState
+            base.OneTimeSetUpBrowser();
+            driver.Manage().Window.Size = new System.Drawing.Size(1450, 1000);
+        }
+
+        [OneTimeSetUp]
+        public void DistinctPages()
+        {
+            this.samePageDefault = false;
+        }
+
+        [SetUp]
+        public void ReloadUnsetStorage()
+        {
+            this.Navigate("/");
+            StorageImplementation.SessionStorage = null;    // defaults to ViewState (DOM)
         }
 
         [TearDown]
@@ -36,27 +49,15 @@ namespace asptest
         [Test]
         public void NavigateTriptychTest()
         {
+            this.AssertPoll(() => this.Html(), () => Does.Contain("Session Storage: ViewState"));   // init view
             this.Click(Id(CalculatorDoc.StorageLink));
             this.AssertTriptychHtml();
-        }
-
-        /// <summary>
-        /// Assert the presence of the three calculators superficially by text.
-        /// </summary>
-        private void AssertTriptychHtml()
-        {
-            Assert.Multiple(() =>
-            {
-                // Assert from bottom to  top to ensure the page has been fully rendered on the client
-                this.AssertPoll(() => this.Html(), () => Does.Contain("Session Storage: Database"));
-                this.AssertPoll(() => this.Html(), () => Does.Contain("Session Storage: Session"));
-                this.AssertPoll(() => this.Html(), () => Does.Contain("Session Storage: ViewState"));
-            });
         }
 
         [Test]
         public void CircumambulateStorageTypes()
         {
+            this.AssertPoll(() => this.Html(), () => Does.Contain("Session Storage: ViewState"));   // init view
             this.Click(Id(CalculatorDoc.StorageLink));
             this.AssertTriptychHtml();
             this.Click(Id(TriptychDoc.DatabaseDoc, CalculatorDoc.StorageLink));
@@ -75,6 +76,20 @@ namespace asptest
             this.Click(Id(TriptychDoc.ViewStateDoc, CalculatorDoc.StorageLink));
             this.AssertPoll(() => this.ViewModel.SessionStorage, () => Is.EqualTo(Storage.ViewState));
             this.AssertPoll(() => this.Html(), () => Does.Contain("Session Storage: ViewState"));
+        }
+
+        /// <summary>
+        /// Assert the presence of the three calculators superficially by text.
+        /// </summary>
+        private void AssertTriptychHtml()
+        {
+            Assert.Multiple(() =>
+            {
+                // Assert from bottom to top to ensure the page has been fully rendered on the client
+                this.AssertPoll(() => this.Html(), () => Does.Contain("Session Storage: Database"));
+                this.AssertPoll(() => this.Html(), () => Does.Contain("Session Storage: Session"));
+                this.AssertPoll(() => this.Html(), () => Does.Contain("Session Storage: ViewState"));
+            });
         }
     }
 }

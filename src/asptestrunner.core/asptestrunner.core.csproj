@@ -20,6 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\asp.core\asp.core.csproj" />
+    <ProjectReference Include="..\asptest.core\asptest.core.csproj" />
     <ProjectReference Include="..\iselenium.core\iselenium.core.csproj" />
   </ItemGroup>
 

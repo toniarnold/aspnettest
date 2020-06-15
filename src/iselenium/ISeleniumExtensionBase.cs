@@ -74,7 +74,7 @@ namespace iselenium
 
         /// <summary>
         /// [OneTimeTearDown]
-        /// Quit Internet Explorer
+        /// Quit the browser
         /// </summary>
         public static void TearDownBrowser(this ISeleniumBase inst)
         {
@@ -167,18 +167,19 @@ namespace iselenium
         /// </summary>
         /// <param name="name">HTML name attribute of the element to click on</param>
         /// <param name="expectRequest">Whether to expect a GET/POST request to the server from the click</param>
-        /// <param name="samePage">Whether to expect a WebForms style PostBack to the same page</param>
+        /// <param name="samePage">Whether to expect a WebForms style PostBack to the same page with the same HTML element</param>
+        /// <param name="awaitRemoved">Whether to wait for the HTML element to disappear (in an SPA)</param>
         /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>
         /// <param name="delay">Optional delay time in milliseconds before clicking the element</param>
         /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete</param>
         /// <param name="wait">Explicit WebDriverWait in seconds for the element to appear</param>
         public static void ClickName(this ISeleniumBase inst, string name, int index = 0,
-                                    bool expectRequest = true, bool samePage = false,
+                                    bool expectRequest = true, bool samePage = false, bool awaitRemoved = false,
                                     int expectedStatusCode = 200, int delay = 0, int pause = 0, int wait = 0)
         {
             var button = GetHTMLElementByName(inst, name, index, wait: wait);
-            Click(inst, button, expectRequest: expectRequest, delay: delay, pause: pause);
-            if (expectRequest && samePage)
+            Click(button, awaitRemoved, delay, pause);
+            if ((expectRequest || awaitRemoved) && samePage)
             {
                 new WebDriverWait(inst.driver, TimeSpan.FromSeconds(RequestTimeout))
                     .Until(drv => drv.FindElement(By.Name(name)).Displayed);
@@ -193,20 +194,20 @@ namespace iselenium
         /// <param name="id">HTML id attribute of the element to click on</param>
         /// <param name="index">Index of the element collection with that id, defaults to 0</param>
         /// <param name="expectRequest">Whether to expect a GET/POST request to the server from the click</param>
-        /// <param name="samePage">Whether to expect a WebForms style PostBack to the same page</param>
+        /// <param name="samePage">Whether to expect a WebForms style PostBack to the same page with the same HTML element</param>
+        /// <param name="awaitRemoved">Whether to wait for the HTML element to disappear (in an SPA)</param>
         /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>///
         /// <param name="delay">Optional delay time in milliseconds before clicking the element</param>
         /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete</param>
         /// <param name="wait">Explicit WebDriverWait in seconds for the element to appear</param>
         public static void ClickID(this ISeleniumBase inst, string id, int index = 0,
-                                    bool expectRequest = true, bool samePage = false,
+                                    bool expectRequest = true, bool samePage = false, bool awaitRemoved = false,
                                     int expectedStatusCode = 200, int delay = 0, int pause = 0,
                                     int wait = 0)
         {
             var button = GetHTMLElementById(inst, id, index, wait: wait);
-            Click(inst, button, expectRequest: expectRequest, expectedStatusCode: expectedStatusCode,
-                    delay: delay, pause: pause);
-            if (expectRequest && samePage)
+            Click(button, awaitRemoved, delay, pause);
+            if ((expectRequest || awaitRemoved) && samePage)
             {
                 new WebDriverWait(inst.driver, TimeSpan.FromSeconds(RequestTimeout))
                     .Until(drv => drv.FindElement(By.Id(id)).Displayed);
@@ -215,24 +216,22 @@ namespace iselenium
         }
 
         /// <summary>
-        /// Click on the HTML element and wait for the response when expectRequest is true.
+        /// Click on the HTML element
         /// </summary>
         /// <param name="element">The HTML element itself</param>
-        /// <param name="expectRequest">Whether to expect a GET/POST request to the server from the click</param>
+        /// <param name="awaitRemoved">Whether to wait for the HTML element to disappear (in an SPA)</param>
         /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>///
         /// <param name="delay">Optional delay time in milliseconds before clicking the element</param>
         /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete</param>
-        public static void Click(this ISeleniumBase inst, IWebElement element, bool expectRequest = true,
-                                 int expectedStatusCode = 200, int delay = 0, int pause = 0)
+        private static void Click(IWebElement element, bool awaitRemoved, int delay, int pause)
         {
             Thread.Sleep(delay);
             element.Click();
-            if (expectRequest)
+            if (awaitRemoved)
             {
-                AwaitBeginRequest(element);
+                AwaitElementRemoved(element);
             }
             Thread.Sleep(pause);
-            AssertStatusCode(inst, expectedStatusCode);
         }
 
         /// <summary>
@@ -290,7 +289,7 @@ namespace iselenium
                 }
                 else if (list[idx].GetAttribute("value") == value)
                 {
-                    ClickID(inst, id, idx, expectRequest: expectPostBack, samePage: true, expectedStatusCode: expectedStatusCode,
+                    ClickID(inst, id, idx, expectRequest: expectPostBack, samePage: !expectPostBack, expectedStatusCode: expectedStatusCode,
                             delay: delay, pause: pause);
                     if (expectPostBack)
                     {
@@ -329,7 +328,7 @@ namespace iselenium
                 }
                 else if (list[idx].GetAttribute("value") == value)
                 {
-                    ClickName(inst, name, idx, expectRequest: expectPostBack, samePage: true, expectedStatusCode: expectedStatusCode,
+                    ClickName(inst, name, idx, expectRequest: expectPostBack, samePage: !expectPostBack, expectedStatusCode: expectedStatusCode,
                             delay: delay, pause: pause);
                     if (expectPostBack)
                     {
@@ -350,8 +349,7 @@ namespace iselenium
         /// <returns></returns>
         public static IWebElement GetHTMLElementById(this ISeleniumBase inst, string id, int index = 0, int wait = 0)
         {
-            var elements = new WebDriverWait(inst.driver, TimeSpan.FromSeconds(wait))
-                                .Until(drv => drv.FindElements(By.Id(id)));
+            var elements = AwaitHTMLElements(inst, By.Id, id, wait);
             if (elements.Count <= index)
             {
                 throw new ArgumentException(String.Format(
@@ -369,8 +367,7 @@ namespace iselenium
         /// <returns></returns>
         public static ReadOnlyCollection<IWebElement> GetHTMLElementsByID(this ISeleniumBase inst, string id, int wait = 0)
         {
-            var elements = new WebDriverWait(inst.driver, TimeSpan.FromSeconds(wait))
-                                .Until(drv => drv.FindElements(By.Id(id)));
+            var elements = AwaitHTMLElements(inst, By.Id, id, wait);
             if (elements.Count == 0)
             {
                 throw new ArgumentException(String.Format("HTML input element with id='{0}' not found", id));
@@ -392,14 +389,12 @@ namespace iselenium
         /// <returns></returns>
         public static IWebElement GetHTMLElementByName(this ISeleniumBase inst, string name, int index = 0, int wait = 0)
         {
-            var elements = new WebDriverWait(inst.driver, TimeSpan.FromSeconds(wait))
-                                .Until(drv => drv.FindElements(By.Name(name)));
+            var elements = AwaitHTMLElements(inst, By.Name, name, wait);
             if (elements.Count <= index)
             {
                 if (IIECompatible(inst))
                 {
-                    elements = new WebDriverWait(inst.driver, TimeSpan.FromSeconds(wait))
-                                .Until(drv => drv.FindElements(By.Id(name)));
+                    elements = AwaitHTMLElements(inst, By.Id, name, wait);
                     if (elements.Count <= index)
                     {
                         throw new ArgumentException(String.Format(
@@ -423,8 +418,7 @@ namespace iselenium
         /// <returns></returns>
         public static ReadOnlyCollection<IWebElement> GetHTMLElementsByName(this ISeleniumBase inst, string name, int wait = 0)
         {
-            var elements = new WebDriverWait(inst.driver, TimeSpan.FromSeconds(wait))
-                                            .Until(drv => drv.FindElements(By.Name(name)));
+            var elements = AwaitHTMLElements(inst, By.Name, name, wait);
             if (elements.Count == 0)
             {
                 throw new ArgumentException(String.Format("HTML input element with name='{0}' not found", name));
@@ -436,14 +430,45 @@ namespace iselenium
         }
 
         /// <summary>
+        /// On Chrome, WebDriverWait might sometimes find an element during DOM
+        /// manipulation that has become stale. Ignore
+        /// StaleElementReferenceException and try again.
+        /// </summary>
+        /// <param name="selector">delegate for By.Name(name) or By.Id(id)</param>
+        /// <param name="nameOrId">argument for the selector</param>
+        /// <param name="wait">Explicit WebDriverWait for the elements</param>
+        /// <returns></returns>
+        public static ReadOnlyCollection<IWebElement> AwaitHTMLElements(this ISeleniumBase inst,
+                                                                        Func<string, By> selector,
+                                                                        string nameOrId, int wait)
+        {
+            var elements = new ReadOnlyCollection<IWebElement>(Array.Empty<IWebElement>());
+            for (int i = 0; i < RequestTimeout * 1000 / FAST_POLL_MILLISECONDS; i++)
+            {
+                try
+                {
+                    elements = new WebDriverWait(inst.driver, TimeSpan.FromSeconds(wait))
+                                        .Until(drv => drv.FindElements(selector(nameOrId)));
+                    if (elements.Count == 0)
+                        return elements;            // element not findable within WebDriverWait -> give up
+                    var _ = elements[0].Displayed;  // either the old one (throws) or the new one
+                    return elements;                // didn't throw -> return
+                }
+                catch (StaleElementReferenceException) { } // next try for the non-stale element
+                Thread.Sleep(FAST_POLL_MILLISECONDS);
+            }
+            return elements;
+        }
+
+        /// <summary>
         /// Explicitly wait for the element to disappear by rapidly polling
         /// its visibility until the reference has become stale or the
         /// RequestTimeout is exceeded.
         /// </summary>
-        /// <param name="element"></param>
-        private static void AwaitBeginRequest(IWebElement element)
+        /// <param name="element">The HTML element that should disappear</param>
+        private static void AwaitElementRemoved(IWebElement element)
         {
-            bool isPostBack = false;
+            bool isRemoved = false;
             for (int i = 0; i < RequestTimeout * 1000 / FAST_POLL_MILLISECONDS; i++)
             {
                 try
@@ -452,14 +477,16 @@ namespace iselenium
                 }
                 catch (StaleElementReferenceException)
                 {
-                    isPostBack = true;
+                    isRemoved = true;
                     break;
                 }
                 Thread.Sleep(FAST_POLL_MILLISECONDS);
             }
-            if (!isPostBack)
+            if (!isRemoved)
             {
-                throw new TimeoutException(String.Format("PostBack took longer than {0}s", RequestTimeout));
+                throw new TimeoutException(String.Format(
+                            "AwaitElementRemoved took longer than {0}s, if this is expected set awaitRemoved: false",
+                            RequestTimeout));
             }
         }
 

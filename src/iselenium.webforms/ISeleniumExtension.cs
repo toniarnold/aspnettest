@@ -30,13 +30,16 @@ namespace iselenium
         /// </summary>
         /// <param name="path">Member name path to the control starting at the main control</param>
         /// <param name="expectPostBack">Whether to expect a server request from the click</param>
+        /// <param name="samePage">Whether the PostBack stays on the same page with the same HTML element</param>
         /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>
         /// <param name="delay">Optional delay time in milliseconds before clicking the element</param>
         /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete</param>
-        public static void Click(this ISelenium inst, string path, bool expectPostBack = true, int expectedStatusCode = 200, int delay = 0, int pause = 0)
+        public static void Click(this ISelenium inst, string path, bool expectPostBack = true, bool samePage = false,
+                                int expectedStatusCode = 200, int delay = 0, int pause = 0)
         {
             var button = GetControl(inst, path);
-            SeleniumExtensionBase.ClickID(inst, button.ClientID, expectRequest: expectPostBack, samePage: false,
+            SeleniumExtensionBase.ClickID(inst, button.ClientID,
+                                            expectRequest: expectPostBack, samePage: samePage,
                                             expectedStatusCode: expectedStatusCode, delay: delay, pause: pause);
         }
 
@@ -46,13 +49,16 @@ namespace iselenium
         /// </summary>
         /// <param name="control">The ASP.NET control to click on</param>
         /// <param name="expectPostBack">Whether to expect a server request from the click</param>
+        /// <param name="samePage">Whether the PostBack stays on the same page with the same HTML element</param>
         /// <param name="expectedStatusCode">Expected StatusCode of the response</param>
         /// <param name="delay">Optional delay time in milliseconds before clicking the element</param>
         /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete</param>
-        public static void Click(this ISelenium inst, Control control, bool expectPostBack = true, int expectedStatusCode = 200, int delay = 0, int pause = 0)
+        public static void Click(this ISelenium inst, Control control, bool expectPostBack = true, bool samePage = false,
+                            int expectedStatusCode = 200, int delay = 0, int pause = 0)
         {
-            var button = GetHTMLElement(inst, control.ClientID);
-            SeleniumExtensionBase.Click(inst, button, expectPostBack, expectedStatusCode, delay, pause);
+            SeleniumExtensionBase.ClickID(inst, control.ClientID,
+                                            expectRequest: expectPostBack, samePage: samePage,
+                                            expectedStatusCode: expectedStatusCode, delay: delay, pause: pause);
         }
 
         /// <summary>
@@ -81,7 +87,7 @@ namespace iselenium
                 else if (list.Items[idx].Value == value)
                 {
                     string itemID = String.Format("{0}_{1}", list.ClientID, idx);
-                    SeleniumExtensionBase.ClickID(inst, itemID, expectRequest: expectPostBack, samePage: true,
+                    SeleniumExtensionBase.ClickID(inst, itemID, expectRequest: expectPostBack, samePage: !expectPostBack,
                                                 expectedStatusCode: expectedStatusCode, delay: delay, pause: pause);
                     break;
                 }

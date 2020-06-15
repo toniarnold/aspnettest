@@ -9,13 +9,18 @@ using System.Collections.Generic;
 
 namespace minimaltest
 {
-    //public class WithStaticRemoteTest : SpaTest<InternetExplorerDriver>   // For TestFilter with 1 Browser
     [TestFixture(typeof(ChromeDriver))]
     [TestFixture(typeof(FirefoxDriver))]    // at the speed of continental drift...
     [TestFixture(typeof(InternetExplorerDriver))]
     public class WithStaticRemoteTest<TWebDriver> : SpaTest<TWebDriver>
         where TWebDriver : IWebDriver, new()
     {
+        [OneTimeSetUp]
+        public void NoAwaitRemoved()
+        {
+            this.awaitRemovedDefault = false;
+        }
+
         /// <summary>
         /// Typed accessor to the only model object in the app
         /// </summary>

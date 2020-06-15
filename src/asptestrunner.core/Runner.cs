@@ -27,6 +27,7 @@ namespace asptestrunner.core
         public void RunTests()
         {
             this.Navigate("/");
+            this.driver.Navigate().Refresh();
             this.ClickID("testButton");
             this.AssertTestsOK();
         }

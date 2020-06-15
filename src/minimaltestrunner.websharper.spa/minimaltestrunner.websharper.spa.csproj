@@ -23,6 +23,7 @@
   <ItemGroup>
     <ProjectReference Include="..\iselenium.core\iselenium.core.csproj" />
     <ProjectReference Include="..\minimal.websharper.spa\minimal.websharper.spa.csproj" />
+    <ProjectReference Include="..\minimaltest.websharper.spa\minimaltest.websharper.spa.csproj" />
   </ItemGroup>
 
   <ItemGroup>

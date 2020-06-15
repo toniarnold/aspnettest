@@ -43,7 +43,7 @@ namespace asptest.Calculator
                 // Check the correctness of the Fibonacci sequence  in the calculator GUI
 
                 // Delete the current sum and recalculate it from the sequence
-                this.Click(Id(CalculatorDoc.ClrButton));
+                this.Click(Id(CalculatorDoc.ClrButton), wait: 15);
                 this.Click(Id(CalculatorDoc.AddButton));
                 this.AssertPoll(() => this.Stack.ElementAt(0), () => Is.EqualTo(sum));
 

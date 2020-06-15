@@ -52,12 +52,18 @@ namespace iselenium
             TestServerIPC.Dispose();
             try
             {
-                if (inst != null)
+                if (inst.ServerProcess != null)
                 {
                     inst.ServerProcess.Kill();
+                    inst.ServerProcess.WaitForExit();
                 }
             }
             catch { }
+            finally
+            {
+                inst.ServerProcess.Dispose();
+                inst.ServerProcess = null;
+            }
         }
     }
 }

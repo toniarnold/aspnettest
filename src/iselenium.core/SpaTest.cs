@@ -17,6 +17,21 @@ namespace iselenium
         where TWebDriver : IWebDriver, new()
     {
         /// <summary>
+        /// Globally set the awaitRemove: default for Click(), as simple SPA
+        /// pages (as the minimal one) don't require awaitRemove: true, but
+        /// complex ones on almost every clickable element.
+        /// </summary>
+        protected bool awaitRemovedDefault = true;
+
+        /// <summary>
+        /// Globally set the samePage: default for Click(). True if the
+        /// interaction with a single page with static elements is tested, false
+        /// if the test jumps around several pages.
+        /// Relevant if awaitRemovedDefault is true.
+        /// </summary>
+        protected bool samePageDefault = true;
+
+        /// <summary>
         /// Start the browser and poll the root directory to be available (SPAs
         /// are known to have a long startup time)
         /// Without explicitly WebSharper.Web.Remoting.DisableCsrfProtection()
@@ -58,6 +73,7 @@ namespace iselenium
             return SeleniumExtensionBase.Html(this, wait: (wait == 0) ? SeleniumExtensionBase.RequestTimeout : wait);
         }
 
+        /// <summary>
         /// Click the HTML element (usually a Button) with the given id and
         /// index, don't wait for a response as expectRequest defaults to false for an SPA,
         /// but wait RequestTimeout seconds for the element to appear.
@@ -66,17 +82,20 @@ namespace iselenium
         /// <param name="index">Index of the element collection with that id, defaults to 0</param>
         /// <param name="expectRequest">Whether to expect a GET/POST request to the server from the click</param>
         /// <param name="samePage">Whether to expect a WebForms style PostBack to the same page with the same HTML element</param>
+        /// <param name="awaitRemoved">Whether to wait for the HTML element to disappear (in an SPA)</param>
         /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>
         /// <param name="delay">Optional delay time in milliseconds before clicking the element</param>
         /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete</param>
         /// <param name="wait">Explicit WebDriverWait in seconds  for the element to appear</param>
         public void Click(string id, int index = 0,
-                            bool expectRequest = false, bool samePage = false,
+                            bool expectRequest = false, bool? samePage = null, bool? awaitRemoved = null,
                             int expectedStatusCode = 200, int delay = 0, int pause = 0, int wait = 0)
         {
+            var doAwaitRemoved = awaitRemoved ?? this.awaitRemovedDefault;
+            var onSamePage = samePage ?? this.samePageDefault;
             SeleniumExtensionBase.ClickID(this, id, index,
-                                            expectRequest: expectRequest, samePage: samePage,
-                                            expectedStatusCode: expectedStatusCode,
+                                            expectRequest: expectRequest, samePage: onSamePage,
+                                            awaitRemoved: doAwaitRemoved, expectedStatusCode: expectedStatusCode,
                                             delay: delay, pause: pause,
                                             wait: (wait == 0) ? SeleniumExtensionBase.RequestTimeout : wait);
         }

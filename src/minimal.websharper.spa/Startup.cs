@@ -50,15 +50,7 @@ namespace minimal.websharper.spa
             //WebSharper.Web.Remoting.DisableCsrfProtection();    // HTTP 403 prevention not needed here
             app.UseDeveloperExceptionPage()
                 .UseMiddleware<ISeleniumMiddleware>()
-                // https://support.microsoft.com/en-us/help/234067/how-to-prevent-caching-in-internet-explorer
-                // But even this does not stop IE from sending 304 responses:
-                .Use(async (httpContext, next) =>
-                {
-                    httpContext.Response.Headers[HeaderNames.CacheControl] = "no-cache";
-                    httpContext.Response.Headers[HeaderNames.Pragma] = "no-cache";
-                    httpContext.Response.Headers[HeaderNames.Expires] = "-1";
-                    await next();
-                })
+                .UseMiddleware<NoCacheMiddleware>()
                 .UseDefaultFiles()
                 .UseSession()
                 .UseMiddleware<RequestQuerySessionMiddleware>()
