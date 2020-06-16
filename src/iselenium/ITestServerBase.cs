@@ -46,24 +46,5 @@ namespace iselenium
                                                     port, servertimeout));
             }
         }
-
-        public static void StopServer(this ITestServerBase inst)
-        {
-            TestServerIPC.Dispose();
-            try
-            {
-                if (inst.ServerProcess != null)
-                {
-                    inst.ServerProcess.Kill();
-                    inst.ServerProcess.WaitForExit();
-                }
-            }
-            catch { }
-            finally
-            {
-                inst.ServerProcess.Dispose();
-                inst.ServerProcess = null;
-            }
-        }
     }
 }

@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using OpenQA.Selenium;
+using OpenQA.Selenium.IE;
 using OpenQA.Selenium.Support.UI;
 using System;
 using System.Collections.Generic;
@@ -63,7 +64,18 @@ namespace iselenium
         public static void SetUpBrowser<TWebDriver>(this ISeleniumBase inst)
             where TWebDriver : IWebDriver, new()
         {
-            inst.driver = new TWebDriver();
+            if (typeof(IWebDriver) == typeof(InternetExplorerDriver))
+            {
+                var options = new InternetExplorerOptions();
+                //options.IntroduceInstabilityByIgnoringProtectedModeSettings = true; // as the name says
+                options.EnsureCleanSession = true;
+                options.EnableNativeEvents = false;
+                inst.driver = new InternetExplorerDriver(options);
+            }
+            else
+            {
+                inst.driver = new TWebDriver();
+            }
             inst.js = (IJavaScriptExecutor)inst.driver;
             inst.vars = new Dictionary<string, object>();
             if (RequestTimeout > 0)

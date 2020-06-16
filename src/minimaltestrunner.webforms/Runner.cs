@@ -27,6 +27,7 @@ namespace minimaltestrunner
         public void RunTests()
         {
             this.Navigate("/default.aspx");
+            this.driver.Navigate().Refresh();
             this.ClickID("testButton"); // manually look up WebForms id with out of process tests
             this.AssertTestsOK();
         }

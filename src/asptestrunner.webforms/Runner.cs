@@ -26,7 +26,8 @@ namespace asptestrunner
         [Test]
         public void RunTests()
         {
-            this.Navigate("/default.aspx");
+            this.Navigate("/default.aspx", pause: 5000); // very long 1st load time after rebuild
+            this.driver.Navigate().Refresh();
             this.ClickID("ContentPlaceHolder1_testButton"); // manually look up WebForms id with out of process tests
             this.AssertTestsOK();
         }

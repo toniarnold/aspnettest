@@ -74,5 +74,28 @@ namespace iselenium
 
             TestServerIPC.CreateOrOpenMmmfs();  // Create as parent process
         }
+
+        /// <summary>
+        /// Kill the web server process
+        /// </summary>
+        /// <param name="inst"></param>
+        public static void StopServer(this ITestServer inst)
+        {
+            TestServerIPC.Dispose();
+            try
+            {
+                if (inst.ServerProcess != null)
+                {
+                    inst.ServerProcess.Kill(true); // recursive in .NET Core, unlike Framework
+                    inst.ServerProcess.WaitForExit();
+                }
+            }
+            catch { }
+            finally
+            {
+                inst.ServerProcess.Dispose();
+                inst.ServerProcess = null;
+            }
+        }
     }
 }
