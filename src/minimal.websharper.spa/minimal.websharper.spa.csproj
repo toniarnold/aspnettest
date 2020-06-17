@@ -15,20 +15,16 @@
     <PackageReference Include="Selenium.Chrome.WebDriver" Version="83.0.0" />
     <PackageReference Include="Selenium.Firefox.WebDriver" Version="0.26.0" />
     <PackageReference Include="Selenium.InternetExplorer.WebDriver" Version="3.150.1" />
-    <PackageReference Include="WebSharper" Version="4.6.3.388" />
-    <PackageReference Include="WebSharper.CSharp" Version="4.6.3.388" />
-    <PackageReference Include="WebSharper.UI" Version="4.6.3.210" />
-    <PackageReference Include="WebSharper.UI.CSharp" Version="4.6.3.210" />
-    <PackageReference Include="WebSharper.AspNetCore" Version="4.6.1.129" />
+    <PackageReference Include="WebSharper" Version="4.6.6.407" />
+    <PackageReference Include="WebSharper.CSharp" Version="4.6.6.407" />
+    <PackageReference Include="WebSharper.UI" Version="4.6.3.219" />
+    <PackageReference Include="WebSharper.UI.CSharp" Version="4.6.3.219" />
+    <PackageReference Include="WebSharper.AspNetCore" Version="4.6.2.136" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\asplib.core\asplib.core.csproj" />
     <ProjectReference Include="..\asplib.websharper\asplib.websharper.csproj" />
-    <ProjectReference Include="..\asplib\asplib.csproj" />
-    <ProjectReference Include="..\iselenium.core\iselenium.core.csproj" />
     <ProjectReference Include="..\iselenium.websharper\iselenium.websharper.csproj" />
-    <ProjectReference Include="..\iselenium\iselenium.csproj" />
   </ItemGroup>
 
   <ItemGroup>
