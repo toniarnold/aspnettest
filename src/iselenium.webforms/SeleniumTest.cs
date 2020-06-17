@@ -5,9 +5,12 @@ using OpenQA.Selenium;
 namespace iselenium
 {
     /// <summary>
-    /// Minimal base class for Selenium tests with a [OneTimeSetUp]/[OneTimeTearDown]
-    /// pair for starting/stopping the browser and a Main accessor.
+    /// Minimal base class for Selenium tests with a [OneTimeSetUp] /
+    /// [OneTimeTearDown] pair for starting/stopping the browser and a Main
+    /// accessor
     /// </summary>
+    /// <typeparam name="TWebDriver">Selenium WebDriver</typeparam>
+    /// <typeparam name="TMain">the class Main under test</typeparam>
     public abstract class SeleniumTest<TWebDriver, TMain> : SeleniumTest<TWebDriver>
         where TWebDriver : IWebDriver, new()
         where TMain : new()

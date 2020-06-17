@@ -6,11 +6,15 @@ using System;
 namespace iselenium
 {
     /// <summary>
-    /// Base class for IE tests with a [OneTimeSetUp] / [OneTimeTearDown] pair
-    /// for Storage.Database which cleans up newly added Main rows.
-    /// Call SetUpStorage() to configure the storage for that specific test suite.
-    /// Provides accessors for IStorageControl
-    public abstract class StorageTest<TWebDriver, TMain> : SeleniumTest<TWebDriver, TMain>, IDatabase
+    /// Base class for Selenium tests with a [OneTimeSetUp] / [OneTimeTearDown]
+    /// pair for starting/stopping the browser, a [OneTimeSetUp] /
+    /// [OneTimeTearDown] pair for Storage.Database which cleans up newly added
+    /// Main rows and accessors for IStorageControl
+    /// </summary>
+    /// <typeparam name="TWebDriver">Selenium WebDriver</typeparam>
+    /// <typeparam name="TMain">the class Main under test</typeparam>
+    [Category("ASP_DB")]
+    public abstract class SeleniumDbTest<TWebDriver, TMain> : SeleniumTest<TWebDriver, TMain>, IDatabase
         where TWebDriver : IWebDriver, new()
         where TMain : new()
     {
@@ -38,9 +42,9 @@ namespace iselenium
     /// for Storage.Database which cleans up newly added Main rows.
     /// Call SetUpStorage() to configure the storage for that specific test suite.
     /// Provides accessors for IStorageControl
-    [Obsolete("Replaced by StorageTest<InternetExplorerDriver, TMain>")]
+    [Obsolete("Replaced by SeleniumDbTest<InternetExplorerDriver, TMain>")]
     [TestFixture]
-    public abstract class StorageTest<TMain> : StorageTest<InternetExplorerDriver, TMain>, IIE, ISelenium, IDatabase
+    public abstract class StorageTest<TMain> : SeleniumDbTest<InternetExplorerDriver, TMain>, IIE, ISelenium, IDatabase
         where TMain : new()
     {
     }

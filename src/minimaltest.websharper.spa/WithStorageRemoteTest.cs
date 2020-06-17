@@ -13,7 +13,7 @@ namespace minimaltest
 {
     [TestFixture(typeof(ChromeDriver))]
     [TestFixture(typeof(InternetExplorerDriver))]
-    public class WithStorageRemoteTest<TWebDriver> : SpaStorageTest<TWebDriver>
+    public class WithStorageRemoteTest<TWebDriver> : SpaDbTest<TWebDriver>
         where TWebDriver : IWebDriver, new()
     {
         [OneTimeSetUp]

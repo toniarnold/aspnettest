@@ -10,7 +10,7 @@ namespace asptest.Calculator
     /// <summary>
     /// Concrete base class for the Calculator with additional specific accessors
     /// </summary>
-    public class CalculatorTestBase<TWebDriver> : SpaSmcTest<TWebDriver, CalculatorViewModel,
+    public class CalculatorTestBase<TWebDriver> : SpaSmcDbTest<TWebDriver, CalculatorViewModel,
                                                     ModelCalculator, CalculatorContext, CalculatorContext.CalculatorState>
         where TWebDriver : IWebDriver, new()
     {

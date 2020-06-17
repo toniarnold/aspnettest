@@ -16,7 +16,7 @@ namespace apitest.apiservice.Controllers
     /// </summary>
     [TestFixture]
     [Category("Async")]
-    [Category("Database")]
+    [Category("ASP_DB")]
     public class AccesscodeControllerTest : AccesscodeController, IGlobalTransaction
     {
         private const string ACCESSCODE = "123456";

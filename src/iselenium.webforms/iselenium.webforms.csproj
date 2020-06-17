@@ -82,8 +82,9 @@
     <Compile Include="ISeleniumExtension.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="SeleniumTest.cs" />
+    <Compile Include="SmcDbTest.cs" />
+    <Compile Include="SeleniumDbTest.cs" />
     <Compile Include="SmcTest.cs" />
-    <Compile Include="StorageTest.cs" />
     <Compile Include="TestResult.cs" />
     <Compile Include="TestRunner.cs" />
   </ItemGroup>

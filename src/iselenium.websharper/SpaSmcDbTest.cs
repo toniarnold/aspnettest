@@ -5,15 +5,17 @@ namespace iselenium
 {
     /// <summary>
     /// Base class for Browser tests of WebSharper SPA applications using SMC.
-    /// Provides typed accessors to the SMC model and a [OneTimeSetUp] /
-    /// [OneTimeTearDown] pair for starting/stopping the browser
+    /// Provides typed accessors to the SMC model, a [OneTimeSetUp] /
+    /// [OneTimeTearDown] pair for starting/stopping the browser and a
+    /// [OneTimeSetUp] / [OneTimeTearDown] pair for Storage.Database which
+    /// cleans up newly added Main rows
     /// </summary>
     /// <typeparam name="TWebDriver">Selenium WebDriver</typeparam>
     /// <typeparam name="TViewModel">ViewModel for the SMC model classr</typeparam>
     /// <typeparam name="TModel">the SMC model class itself</typeparam>
     /// <typeparam name="TFSMContext">SMC context class</typeparam>
     /// <typeparam name="TState">SMC state</typeparam>
-    public abstract class SpaSmcTest<TWebDriver, TViewModel, TModel, TFSMContext, TState> : SpaDbTest<TWebDriver>
+    public abstract class SpaSmcDbTest<TWebDriver, TViewModel, TModel, TFSMContext, TState> : SpaDbTest<TWebDriver>
         where TWebDriver : IWebDriver, new()
         where TViewModel : SmcViewModel<TModel, TFSMContext, TState>, new()
         where TModel : class, ISmcTask<TModel, TFSMContext, TState>, new()

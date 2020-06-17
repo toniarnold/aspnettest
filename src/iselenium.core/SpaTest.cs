@@ -10,9 +10,9 @@ namespace iselenium
     /// Base class for Browser tests of SPA applications like WebSharper.
     /// Overrides some SeleniumExtensionBase methods with default expectPostBack: false
     /// and explicit wait for RequestTimeout seconds.
-    /// No dependency on WebSharper specific, therefore in asplib.core,
+    /// No dependency on WebSharper specific, therefore in asplib.core.
     /// </summary>
-    /// <typeparam name="TWebDriver"></typeparam>
+    /// <typeparam name="TWebDriver">Selenium WebDriver</typeparam>
     public abstract class SpaTest<TWebDriver> : SeleniumTest<TWebDriver>
         where TWebDriver : IWebDriver, new()
     {

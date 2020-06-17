@@ -3,14 +3,13 @@ using minimal.websharper.spa;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.IE;
 using System.Collections.Generic;
 
 namespace minimaltest
 {
     [TestFixture(typeof(ChromeDriver))]
-    [TestFixture(typeof(FirefoxDriver))]    // at the speed of continental drift...
+    //[TestFixture(typeof(FirefoxDriver))]    // at the speed of continental drift...
     [TestFixture(typeof(InternetExplorerDriver))]
     public class WithStaticRemoteTest<TWebDriver> : SpaTest<TWebDriver>
         where TWebDriver : IWebDriver, new()

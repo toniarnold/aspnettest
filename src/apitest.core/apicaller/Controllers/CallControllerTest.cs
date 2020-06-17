@@ -20,7 +20,7 @@ namespace apitest.apicaller.Controllers
     /// </summary>
     [TestFixture]
     [Category("Async")]
-    [Category("Database")]
+    [Category("ASP_DB")]
     public class CallControllerTest : CallController, IDeleteNewRows
     {
         #region scaffolding

@@ -8,11 +8,15 @@ using System.Collections.Generic;
 namespace iselenium
 {
     /// <summary>
-    /// Base class for Browser tests with a [OneTimeSetUp] / [OneTimeTearDown] pair
-    /// for Storage.Database which cleans up newly added Main rows.
-    /// Call SetUpStorage() to configure the storage for that specific test suite.
-    /// Provides accessors for IStorageControl
-    public abstract class StorageTest<TWebDriver, TController> : SeleniumTest<TWebDriver, TController>, IDeleteNewRows
+    /// Base class for Selenium tests with a typed Controller accessor, a
+    /// [OneTimeSetUp] / [OneTimeTearDown] pair for starting/stopping the
+    /// browser and a [OneTimeSetUp] / [OneTimeTearDown]
+    /// pair for Storage.Database which cleans up newly added Main rows
+    /// </summary>
+    /// <typeparam name="TWebDriver">Selenium WebDriver</typeparam>
+    /// <typeparam name="TController">the Controller under test</typeparam>
+    [Category("ASP_DB")]
+    public abstract class SeleniumDbTest<TWebDriver, TController> : SeleniumTest<TWebDriver, TController>, IDeleteNewRows
         where TWebDriver : IWebDriver, new()
     {
         /// <summary>
@@ -44,9 +48,9 @@ namespace iselenium
     /// for Storage.Database which cleans up newly added Main rows.
     /// Call SetUpStorage() to configure the storage for that specific test suite.
     /// Provides accessors for IStorageControl
-    [Obsolete("Replaced by StorageTest<InternetExplorerDriver, TMain>")]
+    [Obsolete("Replaced by SeleniumDbTest<InternetExplorerDriver, TMain>")]
     [TestFixture]
-    public abstract class StorageTest<TController> : StorageTest<InternetExplorerDriver, TController>, IIE, ISelenium, IDeleteNewRows
+    public abstract class StorageTest<TController> : SeleniumDbTest<InternetExplorerDriver, TController>, IIE, ISelenium, IDeleteNewRows
     {
     }
 }

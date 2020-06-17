@@ -11,7 +11,7 @@ namespace apitest.apiservice.Model.Db
     /// <summary>
     /// "Learning Tests" for an EF Core DbContext
     /// </summary>
-    [Category("Database")]
+    [Category("ASP_DB")]
     [TestFixture]
     public class AspserviceDbContextTest : AspserviceDbContext
     {

@@ -5,7 +5,6 @@ using iselenium;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.Firefox;
 using OpenQA.Selenium.IE;
 using static asplib.View.TagHelper;
 
@@ -13,7 +12,7 @@ namespace asptest
 {
     [TestFixture(typeof(InternetExplorerDriver))]
     [TestFixture(typeof(ChromeDriver))]
-    [TestFixture(typeof(FirefoxDriver))]
+    //[TestFixture(typeof(FirefoxDriver))]
     public class TriptychTest<TWebDriver> : CalculatorTestBase<TWebDriver>
         where TWebDriver : IWebDriver, new()
     {

@@ -8,7 +8,7 @@ namespace minimaltest
     /// <summary>
     /// Exception dumps into the database require storage (IStorageControl), but
     /// work also when the site's storage is only ViewState, therefore
-    /// inherit from StorageTest for automatic database cleanup.
+    /// inherit from SeleniumDbTest for automatic database cleanup.
     /// </summary>
     [TestFixture]
     public class ExceptionDumpTest : StorageTest<ContentStorage>, ISelenium

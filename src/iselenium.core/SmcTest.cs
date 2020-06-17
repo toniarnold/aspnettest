@@ -1,15 +1,18 @@
 ﻿using asplib.Controllers;
-using NUnit.Framework;
 using OpenQA.Selenium;
-using OpenQA.Selenium.IE;
-using System;
 
 namespace iselenium
 {
     /// <summary>
-    /// Base class for Selenium tests with accessors for ISmcControl
+    /// Base class for Selenium SMC tests with a specific typed accessors and a
+    /// [OneTimeSetUp] / [OneTimeTearDown] pair for starting/stopping the
+    /// browser
     /// </summary>
-    public abstract class SmcTest<TWebDriver, TController, TFSMContext, TState> : StorageTest<TWebDriver, TController>
+    /// <typeparam name="TWebDriver">Selenium WebDriver</typeparam>
+    /// <typeparam name="TController">the Controller under test</typeparam>
+    /// <typeparam name="TFSMContext">SMC context class</typeparam>
+    /// <typeparam name="TState">SMC state</typeparam>
+    public abstract class SmcTest<TWebDriver, TController, TFSMContext, TState> : SeleniumDbTest<TWebDriver, TController>
         where TWebDriver : IWebDriver, new()
         where TController : SmcController<TFSMContext, TState>
         where TFSMContext : statemap.FSMContext
@@ -24,18 +27,5 @@ namespace iselenium
         {
             get { return this.Controller.State; }
         }
-    }
-
-    /// <summary>
-    /// Base class for IE tests with accessors for ISmcControl
-    /// </summary>
-    [Obsolete("Replaced by SmcTest<InternetExplorerDriver, TController, TFSMContext, TState>")]
-    [TestFixture]
-    public abstract class SmcTest<TController, TFSMContext, TState> : SmcTest<InternetExplorerDriver, TController, TFSMContext, TState>, IIE
-
-        where TController : SmcController<TFSMContext, TState>
-        where TFSMContext : statemap.FSMContext
-        where TState : statemap.State
-    {
     }
 }

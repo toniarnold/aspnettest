@@ -9,6 +9,7 @@ namespace iselenium
     /// Minimal base class for Selenium tests with a [OneTimeSetUp]/[OneTimeTearDown]
     /// pair for starting/stopping the browser
     /// </summary>
+    /// <typeparam name="TWebDriver">Selenium WebDriver</typeparam>
     public abstract class SeleniumTest<TWebDriver> : ISeleniumBase
         where TWebDriver : IWebDriver, new()
     {
