@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\asplib.websharper\asplib.websharper.csproj" />
+    <ProjectReference Include="..\FractalSharp\FractalSharp.Algorithms\FractalSharp.Algorithms.csproj" />
+    <ProjectReference Include="..\FractalSharp\FractalSharp\FractalSharp.csproj" />
+    <ProjectReference Include="..\mandelbrot.image.fs\mandelbrot.image.fs.fsproj" />
+    <ProjectReference Include="..\smc\smc.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="smc\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="SkiaSharp" Version="1.68.3" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="empty.png">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
+
+</Project>

@@ -1,5 +1,15 @@
-# SMC generated C# file
-asp/calculator/Control/Calculator_sm.cs eol=lf
+# SMC generated C# files
+src/apiservice.core/Controllers/Accesscode_sm.cs eol=lf
+src/apiservice.core/Controllers/Accesscode_sm.dot eol=lf
+src/asp.core/Controllers/Calculator_sm.cs eol=lf
+src/asp.core/Controllers/Calculator_sm.dot eol=lf
+src/asp.webforms/calculator/Control/Calculator_sm.cs eol=lf
+src/asp.webforms/calculator/Control/Calculator_sm.dot eol=lf
+src/asp.websharper.spa.Model/smc/Calculator_sm.cs eol=lf
+src/asp.websharper.spa.Model/smc/Calculator_sm.dot eol=lf
+src/mandelbrot.image/smc/Image_sm.cs eol=lf
+src/mandelbrot.image/smc/Image_sm.dot eol=lf
+
 
 # GNU Dia
 *.dia eol=lf

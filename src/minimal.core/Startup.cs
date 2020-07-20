@@ -57,7 +57,7 @@ namespace minimal
             app.UseDeveloperExceptionPage();    // always for this demo
             app.UseExceptionHandler("/Error/Error");
             app.UseMiddleware<IIEMiddleware>(); // Global.asax
-            app.UseMiddleware<NoCacheMiddleware>();
+            app.UseNoCache();
             app.UseDefaultFiles();
             app.UseStaticFiles();
             app.UseSession();

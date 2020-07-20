@@ -51,16 +51,16 @@ namespace asp.websharper.spa
             {
                 WebSharper.Web.Remoting.DisableCsrfProtection();    // Prevent HTTP 403 errors in GUI tests
                 app.UseDeveloperExceptionPage()
-                    .UseMiddleware<NoCacheMiddleware>();
+                    .UseNoCache();
             }
             else
             {
                 app.UseHttpsRedirection();
                 app.UseHsts();
             }
-            app.UseMiddleware<ISeleniumMiddleware>()
+            app.UseISelenium()
                 .UseSession()
-                .UseMiddleware<RequestQuerySessionMiddleware>()
+                .UseRequestQuerySession()
                 .UseDefaultFiles()
                 .UseStaticFiles()
                 .UseWebSharper()

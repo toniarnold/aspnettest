@@ -1,0 +1,43 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+
+    <IsPackable>false</IsPackable>
+    <GenerateProgramFile>false</GenerateProgramFile>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="nunit" Version="3.12.0" />
+    <PackageReference Include="NUnit3TestAdapter" Version="3.16.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="16.6.1" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="testsettings.json">
+      <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+    </Content>
+    <Compile Include="ServiceProvider.fs" />
+    <Compile Include="ImageServiceTest.fs" />
+    <Compile Include="ImageSocketTest.fs" />
+    <Compile Include="ImageSocketServerTest.fs" />
+    <Compile Include="SiteIndexTest.fs" />
+    <Compile Include="SiteImageTest.fs" />
+    <Compile Include="Program.fs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\asplib.websharper\asplib.websharper.csproj" />
+    <ProjectReference Include="..\iselenium.core\iselenium.core.csproj" />
+    <ProjectReference Include="..\mandelbrot.imageviewmodel.fs\mandelbrot.imageviewmodel.fs.fsproj" />
+    <ProjectReference Include="..\mandelbrot.image\mandelbrot.image.csproj" />
+    <ProjectReference Include="..\mandelbrot.renderer\mandelbrot.renderer.fsproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Update="FSharp.Core" Version="4.7.2" />
+  </ItemGroup>
+</Project>

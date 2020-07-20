@@ -15,7 +15,7 @@ namespace asplib.Services
         /// <summary>
         /// Return the anonymous Client from the underlying TestServer
         /// </summary>
-        /// <param name="name"></param>
+        /// <param name="name">ignored, interface implementation only</param>
         /// <returns></returns>
         public HttpClient CreateClient(string name) => _server.CreateClient();
     }

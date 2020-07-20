@@ -143,7 +143,7 @@ no big secret):
 
 ```xml
 <connectionStrings>
-<add name="ASP_DBEntities" connectionString="metadata=res://*/Model.Db.csdl|res://*/Model.Db.ssdl|res://*/Model.Db.msl;provider=System.Data.SqlClient;provider connection string=&quot;data source=HP;initial catalog=ASP_DB;persist security info=True;user id=iis;password=pass;multipleactiveresultsets=True;application name=EntityFramework&quot;" providerName="System.Data.EntityClient" />
+<add name="ASP_DBEntities" connectionString="metadata=res://*/Model.Db.csdl|res://*/Model.Db.ssdl|res://*/Model.Db.msl;provider=System.Data.SqlClient;provider connection string=&quot;Data Source=WORK;initial catalog=ASP_DB;persist security info=True;user id=iis;password=pass;multipleactiveresultsets=True;application name=EntityFramework&quot;" providerName="System.Data.EntityClient" />
 </connectionStrings>
 ```
 ...in these three .config files:

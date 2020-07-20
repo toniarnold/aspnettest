@@ -1,0 +1,69 @@
+digraph Image {
+
+    node
+        [shape=Mrecord width=1.5];
+
+    subgraph cluster_RenderMap {
+
+        label="RenderMap";
+
+        //
+        // States (Nodes)
+        //
+
+        "RenderMap::Empty"
+            [label="{Empty}"];
+
+        "RenderMap::Parameters"
+            [label="{Parameters}"];
+
+        "RenderMap::Fractal"
+            [label="{Fractal}"];
+
+        "RenderMap::InnerColors"
+            [label="{InnerColors}"];
+
+        "RenderMap::OuterColors"
+            [label="{OuterColors}"];
+
+        "RenderMap::Image"
+            [label="{Image}"];
+
+        "RenderMap::Rendered"
+            [label="{Rendered}"];
+
+        "RenderMap::Ready"
+            [label="{Ready}"];
+
+        "%start"
+            [label="" shape=circle style=filled fillcolor=black width=0.25];
+
+        //
+        // Transitions (Edges)
+        //
+
+        "RenderMap::Empty" -> "RenderMap::Parameters"
+            [label="ComputeParams/\lComputeParams;\l"];
+
+        "RenderMap::Parameters" -> "RenderMap::Fractal"
+            [label="Process/\lRenderer.ComputeFractal;\l"];
+
+        "RenderMap::Fractal" -> "RenderMap::InnerColors"
+            [label="Process/\lRenderer.ComputeInnerColors;\l"];
+
+        "RenderMap::InnerColors" -> "RenderMap::OuterColors"
+            [label="Process/\lRenderer.ComputeOuterColors;\l"];
+
+        "RenderMap::OuterColors" -> "RenderMap::Image"
+            [label="Process/\lRenderer.CreateImage;\l"];
+
+        "RenderMap::Image" -> "RenderMap::Rendered"
+            [label="Process/\lRenderer.EncodeImage;\l"];
+
+        "RenderMap::Rendered" -> "RenderMap::Ready"
+            [label="Process/\l"];
+
+        "%start" -> "RenderMap::Empty"
+    }
+
+}

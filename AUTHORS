@@ -1,11 +1,16 @@
-Copyright (C) 2018-2020 Toni Arnold <toni__arnold@bluewin.ch>
-See the COPYING file in the same directory as this file for the license.
+Copyright © 2018-2020 Toni Arnold <toni__arnold@bluewin.ch>
+See the file ./LICENSE for the license (AGPL).
 
 
 Dependencies:
 
-SMC: Copyright (C) 2004-2020 Charles W. Rapp.
+SMC: Copyright © 2004-2020 Charles W. Rapp.
+See the file src/smc/LICENSE.txt for the license (MPL)
 
 #region NUnit Assert.That signatures in SeleniumExtensionBase from:
-Copyright (c) 2011 Charlie Poole, Rob Prouse
-See the file .iselenium/SeleniumExtensionBaseAssertPoll.cs for the license.
+Copyright © 2011 Charlie Poole, Rob Prouse
+See the file .src/iselenium/SeleniumExtensionBaseAssertPoll.cs for the license (MIT).
+
+FractalSharp: 
+Copyright © 2020 Chosen Few Software
+See the file ./src/FractalSharp/COPYING for the license (GPL).

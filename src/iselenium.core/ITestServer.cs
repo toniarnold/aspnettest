@@ -1,6 +1,7 @@
 ﻿using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 
@@ -12,11 +13,25 @@ namespace iselenium
 
     public static class TestServerExtension
     {
+        /// <summary>
+        /// Get the configuration with name "appsettings.json"
+        /// </summary>
+        /// <returns></returns>
         public static IConfiguration GetConfig(this ITestServer inst)
+        {
+            return GetConfig(inst, "appsettings.json");
+        }
+
+        /// <summary>
+        /// Get the configuration with the given name
+        /// </summary>
+        /// <param name="jsonFile"></param>
+        /// <returns></returns>
+        public static IConfiguration GetConfig(this ITestServer inst, string jsonFile)
         {
             return new ConfigurationBuilder()
                 .SetBasePath(TestContext.CurrentContext.WorkDirectory)
-                .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddJsonFile(jsonFile, optional: false, reloadOnChange: true)
                 .AddEnvironmentVariables()
                 .Build();
         }
@@ -43,6 +58,7 @@ namespace iselenium
         /// Port: port to listen on
         /// RequestTimeout: expected duration of all tests in sec
         /// ServerStartTimeout: expected start time of the server in sec
+        /// Can be called multiple times to start auxiliary service processes.
         /// </summary>
         /// <param name="config">default configuration</param>
         /// <param name="server">explicit path to the server.exe (the .NET Core binary)</param>
@@ -65,36 +81,43 @@ namespace iselenium
             info.Arguments = String.Format("--urls=http://localhost:{0}/", cport);
             info.WorkingDirectory = Path.GetFullPath(Path.Join(TestContext.CurrentContext.WorkDirectory, croot));
             info.UseShellExecute = true;
-            inst.ServerProcess = Process.Start(info);
+            if (inst.ServerProcesses == null)
+                inst.ServerProcesses = new List<Process>();
+            inst.ServerProcesses.Add(Process.Start(info));
             TestServerExtensionBase.WaitForServerPort(cport, cservertimeout);
             SeleniumExtensionBase.OutOfProcess = true;
             SeleniumExtensionBase.Port = cport;
             SeleniumExtensionBase.RequestTimeout = ctimeout;
-            inst.driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(ctimeout); // too late after OneTimeSetUBrowser()
-
-            TestServerIPC.CreateOrOpenMmmfs();  // Create as parent process
+            if (inst.driver != null) // SeleniumTest
+            {
+                inst.driver.Manage().Timeouts().PageLoad = TimeSpan.FromSeconds(ctimeout); // too late after OneTimeSetUBrowser()
+                TestServerIPC.CreateOrOpenMmmfs();  // Create as parent process
+            }
         }
 
         /// <summary>
-        /// Kill the web server process
+        /// Kill the web server process and eventual auxiliary processes
         /// </summary>
         /// <param name="inst"></param>
         public static void StopServer(this ITestServer inst)
         {
             TestServerIPC.Dispose();
-            try
+            if (inst.ServerProcesses != null)
             {
-                if (inst.ServerProcess != null)
+                foreach (var process in inst.ServerProcesses)
                 {
-                    inst.ServerProcess.Kill(true); // recursive in .NET Core, unlike Framework
-                    inst.ServerProcess.WaitForExit();
+                    try
+                    {
+                        process.Kill();
+                        process.WaitForExit();
+                    }
+                    catch { }
+                    finally
+                    {
+                        process.Dispose();
+                    }
                 }
-            }
-            catch { }
-            finally
-            {
-                inst.ServerProcess.Dispose();
-                inst.ServerProcess = null;
+                inst.ServerProcesses = null;
             }
         }
     }

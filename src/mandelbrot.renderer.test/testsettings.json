@@ -1,0 +1,6 @@
+{
+  "Server": "..\\..\\..\\..\\mandelbrot.renderer\\bin\\Debug\\netcoreapp3.1\\mandelbrot.renderer.exe",
+  "Root": "..\\..\\..\\..\\mandelbrot.renderer",
+  "Port": "8081",
+  "RendererHost": "ws://localhost:8081"
+}

@@ -139,8 +139,8 @@ namespace apitest.apicaller
         {
             using (var client = GetHttpClient())
             {
-                var response = client.PostAsync("/api/call/authenticate", Json.Serialize(DbTestData.PHONENUMBER)).Result;
-                var result = Json.Deserialize<string>(response.Content);
+                var response = client.PostAsync("/api/call/authenticate", JsonContent.Serialize(DbTestData.PHONENUMBER)).Result;
+                var result = JsonContent.Deserialize<string>(response.Content);
                 Assert.That(result, Does.StartWith("Sent an SMS"));
                 Assert.That(result, Does.Contain(DbTestData.PHONENUMBER));
             }
@@ -151,23 +151,23 @@ namespace apitest.apicaller
         {
             using (var client = GetHttpClient())
             {
-                var responseAuth = client.PostAsync("/api/call/authenticate", Json.Serialize(DbTestData.PHONENUMBER)).Result;
+                var responseAuth = client.PostAsync("/api/call/authenticate", JsonContent.Serialize(DbTestData.PHONENUMBER)).Result;
                 StorageImplementation.SetViewStateHeader(responseAuth, client);
-                var resultAuth = Json.Deserialize<string>(responseAuth.Content);
+                var resultAuth = JsonContent.Deserialize<string>(responseAuth.Content);
                 Assert.That(resultAuth, Does.StartWith("Sent an SMS"));
                 Assert.That(resultAuth, Does.Contain(DbTestData.PHONENUMBER));
 
                 for (int i = 0; i < 3; i++)
                 {
-                    var responseWrong = client.PostAsync("/api/call/verify", Json.Serialize("wrong code")).Result;
+                    var responseWrong = client.PostAsync("/api/call/verify", JsonContent.Serialize("wrong code")).Result;
                     StorageImplementation.SetViewStateHeader(responseWrong, client);
-                    var resultWrong = Json.Deserialize<string>(responseWrong.Content);
+                    var resultWrong = JsonContent.Deserialize<string>(responseWrong.Content);
                     Assert.That(resultWrong, Does.StartWith("Wrong access code"));
                 }
 
-                var responseDenied = client.PostAsync("/api/call/verify", Json.Serialize("wrong code")).Result;
+                var responseDenied = client.PostAsync("/api/call/verify", JsonContent.Serialize("wrong code")).Result;
                 StorageImplementation.SetViewStateHeader(responseDenied, client);
-                var resultDeniedh = Json.Deserialize<string>(responseDenied.Content);
+                var resultDeniedh = JsonContent.Deserialize<string>(responseDenied.Content);
                 Assert.That(resultDeniedh, Does.StartWith("Access denied"));
             }
         }

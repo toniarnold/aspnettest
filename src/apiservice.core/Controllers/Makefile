@@ -1,4 +1,4 @@
-# Makefile to build the Accesscode context and the diagram fron 
+# Makefile to build the Accesscode context and the diagram
 
 all: Accesscode_sm.cs Accesscode_sm.png
 

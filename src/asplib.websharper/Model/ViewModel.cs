@@ -35,10 +35,83 @@ namespace asplib.Model
         public string VSessionStorage { get; set; }
 
         /// <summary>
+        /// Client side JSON serialization of the flat ViewModel (without Main)
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <returns></returns>
+        [JavaScript]
+        [Inline]
+        public string JSToJson<T>()
+        {
+            return TypedJson.Serialize(this);
+        }
+
+        /// <summary>
+        /// Server Side JSON serialization of the whole ViewModel
+        /// </summary>
+        /// <returns></returns>
+        public string ToJson(Func<byte[], byte[]> filter = null)
+        {
+            if (this.Main != null) // no "flat" instance from the client
+            {
+                this.SaveMembers();
+                this.SerializeMain(filter);
+            }
+            return Json.Serialize(this);
+        }
+
+        /// <summary>
+        /// Server Side JSON ViewModel factory
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="json"></param>
+        /// <returns></returns>
+        public static T FromJson<T>(string json, Func<byte[], byte[]> filter = null)
+            where T : ViewModel<TModel>
+        {
+            var viewModel = Json.Deserialize<T>(json);
+            viewModel.DeserializeMain(filter);
+            viewModel.LoadMembers();
+            return viewModel;
+        }
+
+        /// <summary>
+        /// ArraySegment serialization to be used in WebSocket
+        /// </summary>
+        /// <returns></returns>
+        public ArraySegment<byte> ToArraySegment(Func<byte[], byte[]> filter = null)
+        {
+            if (Main != null) // no "flat" instance without FSM
+            {
+                SaveMembers(); // Captures members directly mutable on the client side.
+                LoadMembers(); // Mirrors side effects of methods on the FSM in the ViewModel.
+            }
+            //var bytes = JsonSerializer.SerializeToUtf8Bytes(this); // omits member class properties
+            var json = this.ToJson(filter);
+            var bytes = System.Text.Encoding.UTF8.GetBytes(json);
+            return new ArraySegment<byte>(bytes);
+        }
+
+        /// <summary>
+        /// Server Side ArraySegment ViewModel factory
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="bytes"></param>
+        /// <param name="filter"></param>
+        /// <returns></returns>
+        public static T FromArraySegment<T>(ArraySegment<byte> bytes, Func<byte[], byte[]> filter = null)
+            where T : ViewModel<TModel>
+        {
+            var json = System.Text.Encoding.UTF8.GetString(bytes);
+            return FromJson<T>(json, filter);
+        }
+
+        /// <summary>
         /// The Base64-encoded serialization of Main to be transferred between
         /// client and server.
         /// </summary>
-        public string ViewState;
+        [JavaScript]
+        public string ViewState { get; set; }
 
         /// <summary>
         /// For [SPAEntryPoint] in F# to distinct an uninitialized instance yet to be retrieved from the server
@@ -77,6 +150,8 @@ namespace asplib.Model
         /// <param name="filter">The filter.</param>
         public void SerializeMain(Func<byte[], byte[]> filter = null)
         {
+            if (this.Main == null)
+                throw new NullReferenceException("Called SerializeMain() with Main == null");
             this.ViewState = StorageImplementation.ViewState(this.Main, filter);
         }
 

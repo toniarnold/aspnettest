@@ -1,4 +1,5 @@
-﻿using WebSharper;
+﻿using System.IO;
+using WebSharper;
 using WebSharper.Sitelets;
 
 namespace iselenium
@@ -21,9 +22,9 @@ namespace iselenium
                         Headers: new[] { Http.Header.Custom("Content-Type", "application/xml; charset=UTF-8") },
                         WriteBody: stream =>
                         {
-                            using (var w = new System.IO.StreamWriter(stream))
+                            using (var writer = new StreamWriter(stream))
                             {
-                                w.Write(TestRunner.ResultXml);
+                                writer.Write(TestRunner.ResultXml);
                             }
                         }
                     )

@@ -1,0 +1,3 @@
+[submodule "src/FractalSharp"]
+	path = src/FractalSharp
+	url = https://github.com/yodadude2003/FractalSharp.git

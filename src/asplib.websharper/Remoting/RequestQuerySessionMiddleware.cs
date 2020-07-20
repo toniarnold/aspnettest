@@ -1,4 +1,5 @@
 ﻿using asplib.Model;
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Http;
 using System;
 using System.Collections.Generic;
@@ -7,15 +8,24 @@ using System.Threading.Tasks;
 
 namespace asplib.Remoting
 {
-    /// <summary>
-    /// Enables WebSharper remote methods to handle HTTP GET query strings.
-    /// Stores the Request.Query in the current session to make it accessible to
-    /// Ajax POST requests - therefore insert after .UseSession().
-    /// On GET requests also deletes the SessionOnceKey(OnceAction) session
-    /// variables used by StorageServer to enable F5 reloads of a stored page.
-    /// Consecutive Ajax GET requests containing query strings will thus overwrite
-    /// the original request from the browser URL and should therefore be omitted.
-    /// </summary>
+    public static class RequestQuerySessionMiddlewareExtension
+    {
+        /// <summary>
+        /// Enables WebSharper remote methods to handle HTTP GET query strings.
+        /// Stores the Request.Query in the current session to make it accessible to
+        /// Ajax POST requests - therefore insert after .UseSession().
+        /// On GET requests also deletes the SessionOnceKey(OnceAction) session
+        /// variables used by StorageServer to enable F5 reloads of a stored page.
+        /// Consecutive Ajax GET requests containing query strings will thus overwrite
+        /// the original request from the browser URL and should therefore be omitted.
+        /// </summary>
+        public static IApplicationBuilder UseRequestQuerySession(this IApplicationBuilder builder)
+
+        {
+            return builder.UseMiddleware<RequestQuerySessionMiddleware>();
+        }
+    }
+
     public class RequestQuerySessionMiddleware
     {
         public const string SESSION_QUERY_KEY = "_SESSION_QUERY_KEY";

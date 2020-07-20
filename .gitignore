@@ -352,3 +352,9 @@ src/asp.websharper.spa/wwwroot/Content/*
 src/asp.websharper.spa/WebSharper.UI.Templates/*
 
 src/asp.websharper.spa.fs/wwwroot/Content/*
+
+src/mandelbrot.frontend/wwwroot/Content/*
+src/mandelbrot.loadbalancer/wwwroot/Content/*
+src/mandelbrot.loadbalancer/wwwroot/Scripts/WebSharper/*
+src/mandelbrot.renderer/wwwroot/Content/*
+src/mandelbrot.renderer/wwwroot/Scripts/WebSharper/*

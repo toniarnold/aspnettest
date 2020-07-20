@@ -1,6 +1,7 @@
 ﻿using iselenium;
 using NUnit.Framework;
 using OpenQA.Selenium.Edge;
+using System.Collections.Generic;
 using System.Diagnostics;
 
 namespace minimaltestrunner
@@ -9,7 +10,7 @@ namespace minimaltestrunner
     [Category("ITestServer")]
     public class Runner : SpaTest<EdgeDriver>, ITestServer
     {
-        public Process ServerProcess { get; set; }
+        public List<Process> ServerProcesses { get; set; }
 
         [SetUp]
         public void SetUp()

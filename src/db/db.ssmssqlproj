@@ -3,10 +3,10 @@
   <Items>
     <LogicalFolder Name="Verbindungen" Type="2" Sorted="true">
       <Items>
-        <ConnectionNode Name="HP:HP\tarnold">
+        <ConnectionNode Name="WORK:WORK\tarnold">
           <Created>2018-05-27T09:19:25.3246884+02:00</Created>
           <Type>SQL</Type>
-          <Server>HP</Server>
+          <Server>WORK</Server>
           <UserName />
           <Authentication>Windows-Authentifizierung</Authentication>
           <InitialDB />
@@ -20,14 +20,14 @@
     <LogicalFolder Name="Abfragen" Type="0" Sorted="true">
       <Items>
         <FileNode Name="APISERVICE_DB.create-tables.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:HP:True</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>HP</AssociatedConnSrvName>
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:WORK:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>WORK</AssociatedConnSrvName>
           <AssociatedConnUserName />
           <FullPath>APISERVICE_DB.create-tables.sql</FullPath>
         </FileNode>
         <FileNode Name="APISERVICE_DB.populate-tables.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:HP:True</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>HP</AssociatedConnSrvName>
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:WORK:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>WORK</AssociatedConnSrvName>
           <AssociatedConnUserName />
           <FullPath>APISERVICE_DB.populate-tables.sql</FullPath>
         </FileNode>
@@ -38,14 +38,14 @@
           <FullPath>ASP_DB.clean.sql</FullPath>
         </FileNode>
         <FileNode Name="ASP_DB.FibonacciTest.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:HP:True</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>HP</AssociatedConnSrvName>
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:WORK:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>WORK</AssociatedConnSrvName>
           <AssociatedConnUserName />
           <FullPath>ASP_DB.FibonacciTest.sql</FullPath>
         </FileNode>
         <FileNode Name="ASP_DB.Main.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:HP:True</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>HP</AssociatedConnSrvName>
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:WORK:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>WORK</AssociatedConnSrvName>
           <AssociatedConnUserName />
           <FullPath>ASP_DB.Main.sql</FullPath>
         </FileNode>

@@ -1,4 +1,4 @@
-// SM for the AccesscodeController
+// State Machine for the AccesscodeController
 
 %import apiservice.Controllers
 

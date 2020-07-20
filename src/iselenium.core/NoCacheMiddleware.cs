@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Net.Http.Headers;
 using System.Threading.Tasks;
 
@@ -7,9 +8,17 @@ namespace iselenium
     // https://support.microsoft.com/en-us/help/234067/how-to-prevent-caching-in-internet-explorer
     // But even this does not stop IE from getting 304 responses and the test runner still requires two loads.
 
-    /// <summary>
-    /// Send no-cache and expires headers
-    /// </summary>
+    public static class NoCacheMiddlewareExtension
+    {
+        /// <summary>
+        /// Send no-cache and expires headers to avoid caching
+        /// </summary>
+        public static IApplicationBuilder UseNoCache(this IApplicationBuilder builder)
+        {
+            return builder.UseMiddleware<NoCacheMiddleware>();
+        }
+    }
+
     public class NoCacheMiddleware
     {
         protected readonly RequestDelegate _next;

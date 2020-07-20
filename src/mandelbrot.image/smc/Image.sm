@@ -1,0 +1,58 @@
+// State Maschine for the the Fractal Image
+
+%import mandelbrot.image
+%import FractalSharp.Algorithms
+%import FractalSharp.Imaging
+%import SkiaSharp
+
+%start RenderMap::Empty
+%class Image
+
+%map RenderMap
+%%
+// State	Transition		End State		Action(s)
+//				Transition Guard
+
+
+Empty // ...image is specified by Coordinates and Resolution.
+{
+			ComputeParams(res: Resolution)	
+							Parameters			{ ComputeParams(res); }
+}
+
+Parameters // ...for calculating the image are computed out of the Coordinates.
+{
+			Process()		Fractal			{ Renderer.ComputeFractal(); }
+}
+
+Fractal	// ...is calculated from the Parameters.
+{
+			Process()		InnerColors		{ Renderer.ComputeInnerColors(); }
+}
+
+InnerColors // ...are computed first.
+{
+			Process()		OuterColors		{ Renderer.ComputeOuterColors(); }
+}
+
+OuterColors // ...are computed second.
+{
+			Process()		Image			{ Renderer.CreateImage(); }
+}
+
+Image // ...is encoded as Byte array.
+{
+			Process()		Rendered		{ Renderer.EncodeImage(); }
+}
+
+Rendered // ...image is ready. Interim stage to get the now immutable data in the context class.
+{
+			Process()		Ready			{}
+}
+
+// The image is ready, immutable and all data has been read by the consumer.
+Ready
+{
+}
+
+%%

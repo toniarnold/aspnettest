@@ -135,11 +135,11 @@ namespace asplib.Remoting
         }
 
         /// <summary>
-        /// Saves the after having been loaded within the same remote method.
+        /// Saves the ViewModel after having been loaded within the same remote method.
         /// Reloads potentially modified members in the M object to make
         /// changes visible in WebSharper.
         /// </summary>
-        /// <typeparam name="M"></typeparam>
+        /// <typeparam name="M">ViewModel type</typeparam>
         /// <param name="stored">The stored.</param>
         /// <returns>The VIewState string</returns>
         public static string Save<M>(ViewModel<M> stored)

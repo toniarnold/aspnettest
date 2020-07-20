@@ -60,10 +60,10 @@ namespace apicaller.Services
             using (var client = GetHttpClient())
             {
                 var request = new AuthenticateRequest() { Phonenumber = phonenumber };
-                var response = await client.PostAsync(ResouceUri("authenticate"), Json.Serialize(request));
+                var response = await client.PostAsync(ResouceUri("authenticate"), JsonContent.Serialize(request));
                 if (response.StatusCode != HttpStatusCode.OK) return new StatusCodeResult((int)HttpStatusCode.ServiceUnavailable);
                 this.Cookies = response.Headers.GetValues(SetCookie).ToArray();
-                var result = Json.Deserialize<MessageResponseDto>(response.Content);
+                var result = JsonContent.Deserialize<MessageResponseDto>(response.Content);
                 return result.Message;
             }
         }
@@ -73,9 +73,9 @@ namespace apicaller.Services
             using (var client = GetHttpClient())
             {
                 var request = new VerifyRequest() { Accesscode = accesscode };
-                var response = await client.PostAsync(ResouceUri("verify"), Json.Serialize(request));
+                var response = await client.PostAsync(ResouceUri("verify"), JsonContent.Serialize(request));
                 if (response.StatusCode != HttpStatusCode.OK) return new StatusCodeResult((int)HttpStatusCode.ServiceUnavailable);
-                var result = Json.Deserialize<MessageResponseDto>(response.Content);
+                var result = JsonContent.Deserialize<MessageResponseDto>(response.Content);
                 return result.Message;
             }
         }

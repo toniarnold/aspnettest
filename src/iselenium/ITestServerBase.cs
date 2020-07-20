@@ -1,5 +1,6 @@
 ﻿using OpenQA.Selenium;
 using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Net.Sockets;
 
@@ -7,7 +8,7 @@ namespace iselenium
 {
     public interface ITestServerBase
     {
-        Process ServerProcess { get; set; }
+        List<Process> ServerProcesses { get; set; }
         IWebDriver driver { get; set; }
     }
 
