@@ -34,6 +34,12 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Reference Include="mandelbrot.frontend.guitest">
+      <HintPath>..\bin\mandelbrot.frontend.guitest.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+  <ItemGroup>
     <PackageReference Update="FSharp.Core" Version="4.7.2" />
   </ItemGroup>
 </Project>

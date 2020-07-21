@@ -1,5 +1,6 @@
 ﻿using System;
 using WebSharper;
+using WebSharper.JavaScript;
 
 namespace asplib.Model
 {
@@ -43,7 +44,7 @@ namespace asplib.Model
         [Inline]
         public string JSToJson<T>()
         {
-            return TypedJson.Serialize(this);
+            return JSON.Stringify(this);
         }
 
         /// <summary>

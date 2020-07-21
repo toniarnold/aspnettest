@@ -27,12 +27,7 @@ namespace asplib.Model
         /// <returns></returns>
         public static string Serialize(object obj)
         {
-            return JsonSerializer.Serialize(obj,
-                    new JsonSerializerOptions()
-                    {
-                        PropertyNamingPolicy = JsonNamingPolicy.CamelCase
-                    }
-                );
+            return JsonSerializer.Serialize(obj);
         }
 
         /// <summary>
@@ -43,11 +38,7 @@ namespace asplib.Model
         /// <returns></returns>
         public static T Deserialize<T>(string json)
         {
-            return JsonSerializer.Deserialize<T>(json,
-                new JsonSerializerOptions()
-                {
-                    PropertyNameCaseInsensitive = true
-                });
+            return JsonSerializer.Deserialize<T>(json);
         }
     }
 }

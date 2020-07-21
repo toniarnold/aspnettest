@@ -29,4 +29,8 @@
     <PackageReference Update="FSharp.Core" Version="4.7.2" />
   </ItemGroup>
 
+  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
+    <Exec Command="diff --binary $(TargetPath) $(SolutionDir)\src\bin&#xD;&#xA;if errorlevel 1 xcopy /d /f /y $(TargetDir)\$(TargetName).* $(SolutionDir)\src\bin" />
+  </Target>
+
 </Project>

@@ -31,29 +31,22 @@ type RenderMap = {
 type ImageViewModel(coordinates: Coordinates, resolution: Resolution) =
     inherit SmcViewModel<Image, ImageContext, ImageContext.ImageState>()
 
-    let mutable _coordinates = coordinates
-    let mutable _resolution = resolution
-    let mutable _params = Params()
     [<DefaultValue>] val mutable RenderMap : RenderMap
-    let mutable _guid = "00000000-0000-0000-0000-000000000000"
-    let mutable _isReady = false
 
-    member this.Coordinates
-        with get() = _coordinates
-        and set(value) = _coordinates <- value
-    member this.Resolution
-        with get() = _resolution
-        and set(value) = _resolution <- value
-    member this.Params
-        with get() = _params
-        and set(value) = _params <- value
-    member this.Guid
-        with get() = _guid
-        and set(value) = _guid <- value
-    member this.IsReady
-        with get() = _isReady
-        and set(value) = _isReady <- value
-    member this.ImgSrc = "/Img/" + this.Guid
+    member val State = "" with get, set // C# state is not accessible by F# JS
+    member val Coordinates = coordinates with get, set
+    member val Resolution = resolution with get, set
+    member val Params = Params() with get, set
+    member val Guid  = "00000000-0000-0000-0000-000000000000" with get, set
+    member val IsReady = false with get, set
+    // Nested objects not available in F# JS -> flatten
+    member val Magnification = "" with get, set
+    member val Real = "" with get, set
+    member val Imag = "" with get, set
+    member val EscapeRadius = "" with get, set
+    member val MaxIterations = "" with get, set
+
+    member this.ImgSrc() = "/Img/" + this.Guid // Site.Endpoints.Img
 
     /// <summary>
     /// Constructor for WebSocket echo messages
@@ -74,12 +67,6 @@ type ImageViewModel(coordinates: Coordinates, resolution: Resolution) =
         ImageViewModel(Coordinates(), Resolution())
 
     /// <summary>
-    /// Serialize to JSON in the front end JS
-    /// </summary>
-    member this.ToJson() =
-        JSON.Stringify(this)
-
-    /// <summary>
     /// Deserialize from JSON in the front end JS
     /// </summary>
     static member FromJson(json) =
@@ -91,18 +78,24 @@ type ImageViewModel(coordinates: Coordinates, resolution: Resolution) =
     [<JavaScript false>]
     override this.SaveMembers() =
         base.SaveMembers()
-        this.Main.Coordinates <- _coordinates // set on the JS client
+        this.Main.Coordinates <- this.Coordinates // set on the JS client
 
     [<JavaScript false>]
     override this.LoadMembers() =
         base.LoadMembers()
+        this.State <- this.Main.State.ToString() // overrides base.State
         if (box this.Main.Coordinates) <> null then
-             _coordinates <- this.Main.Coordinates
+             this.Coordinates <- this.Main.Coordinates
         if (box this.Main.Specification) <> null then
-            _params <- this.Main.Specification.Params
-            _resolution <- this.Main.Specification.Resolution
-        _guid <- string this.Main.Guid
-        _isReady <- this.Main.IsReady
+            this.Params <- this.Main.Specification.Params
+            this.Resolution <- this.Main.Specification.Resolution
+        this.Guid <- string this.Main.Guid
+        this.IsReady <- this.Main.IsReady
+        this.Magnification <- this.Params.Magnification.ToString()
+        this.Real <- this.Params.Location.Real.ToString()
+        this.Imag <- this.Params.Location.Imag.ToString()
+        this.EscapeRadius <- this.Params.EscapeRadius.ToString()
+        this.MaxIterations <- this.Params.MaxIterations.ToString()
 
     [<JavaScript false>]
     override this.LoadStateNames() =

@@ -34,7 +34,7 @@ namespace mandelbrot.image.test
         {
             var param = new Params(1, new Complex(2, 3), 4);
             var json = Json.Serialize(param);
-            Assert.That(json, Does.Contain("magnification"));
+            Assert.That(json, Does.Contain("Magnification"));
             var copy = Json.Deserialize<Params>(json);
             Assert.That(copy.Magnification, Is.EqualTo(1.0));
             Assert.That(copy.Location.Real, Is.EqualTo(2.0));

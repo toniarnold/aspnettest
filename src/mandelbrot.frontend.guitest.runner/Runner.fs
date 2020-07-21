@@ -12,7 +12,7 @@ type Runner() =
         member val ServerProcesses = null with get, set
         member val driver = null with get, set
 
-    member this.Config = this.GetConfig("testsettings.json")
+    member this.Config = this.GetConfig()
 
     [<SetUp>]
     member this.SetUp() =

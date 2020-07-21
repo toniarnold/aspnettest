@@ -20,7 +20,7 @@ namespace asplib.Services
         /// <returns></returns>
         public static StringContent Serialize(object obj)
         {
-            var json = Json.Serialize(obj);
+            var json = JsonSerializer.Serialize(obj);
             return new StringContent(json, Encoding.UTF8, Application.Json);
         }
 

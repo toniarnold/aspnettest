@@ -39,21 +39,24 @@ module Site =
                         writer.Write(image.Bytes)
                 )
             | Test ->
-                let testSummary = new ListModel<string, string>(fun s -> s)
-                async {
-                    let! result = RemoteTestRunner.Run("mandelbrot.frontend.guitest") |> Async.AwaitTask
-                    testSummary.Clear()
-                    testSummary.AppendMany(result.Summary)
-                    if not result.Passed then
-                        JS.Window.Location.Assign("/testresult")
-                }
-                |> Async.Start
-                Content.Page(
-                    Title = "Passed",
-                    Body = [
-                        h1 [] [text "Summary klappt nicht"]
-                    ]
-                )
+
+                let result = RemoteTestRunner.Run("mandelbrot.frontend.guitest", ctx.RequestUri.Port)
+                if not result.Passed then
+                    Content.Custom(
+                        Status = Http.Status.Ok,
+                        Headers =[Http.Header.Custom "Content-Type" "image/png"],
+                        WriteBody = fun stream ->
+                           use writer = new StreamWriter(stream)
+                           writer.Write(TestRunner.ResultXml)
+                    )
+                else
+                    let summary = String.Join("\n", result.Summary)
+                    Content.Page(
+                        Title = "Passed",
+                        Body = [
+                            p [] [ text summary ]
+                        ]
+                    )
 
             | TestResult ->
                 Content.Custom(
