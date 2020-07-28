@@ -51,7 +51,10 @@ type ImageSocketHandler(socket: WebSocket,
     /// </summary>
     member this.ImageStateChanged(sender: obj , args: StateChangeEventArgs ) =
         let currentImage = (sender :?> ImageContext).Owner
-        logger.LogDebug(String.Format("Image rendering progress changed State to {0}",
+        logger.LogDebug(String.Format("Image {0}/{1}/{2} progress to {3}",
+                                currentImage.Coordinates.X,
+                                currentImage.Coordinates.Y,
+                                currentImage.Coordinates.Z,
                                 currentImage.State))
         let currentViewModel = new ImageViewModel(currentImage);
         socket.SendAsync(currentViewModel.ToArraySegment(), WebSocketMessageType.Text, true, CancellationToken.None)

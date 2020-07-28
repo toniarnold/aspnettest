@@ -1,0 +1,37 @@
+﻿/* Static CSS */
+
+/* Don't show the not-yet-loaded templates */
+[ws-template], [ws-children-template] {
+    display: none;
+}
+
+.image {
+    image-rendering: pixelated; /* for empty.png */
+}
+
+.gridcell {
+    position: relative; /* closest positioned ancestor of state and params */
+}
+
+.state {
+    position: absolute;
+    top: 10%;
+    left: 5%;
+    z-index: 1;
+    font-size: larger;
+    font-weight: bolder;
+    background-color: #D3D3D3BB;
+}
+
+.params {
+    position: absolute;
+    top: 20%;
+    left: 5%;
+    z-index: 1;
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+    font-size: smaller;
+    font-weight: bolder;
+    background-color: #D3D3D3BB;
+}

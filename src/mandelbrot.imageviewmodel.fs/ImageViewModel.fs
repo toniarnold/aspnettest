@@ -39,14 +39,31 @@ type ImageViewModel(coordinates: Coordinates, resolution: Resolution) =
     member val Params = Params() with get, set
     member val Guid  = "00000000-0000-0000-0000-000000000000" with get, set
     member val IsReady = false with get, set
-    // Nested objects not available in F# JS -> flatten
+    // Nested objects not available in F# JS and WebSharper lensing too much boilerplate -> flatten image parameters
     member val Magnification = "" with get, set
     member val Real = "" with get, set
     member val Imag = "" with get, set
     member val EscapeRadius = "" with get, set
     member val MaxIterations = "" with get, set
 
+    /// <summary>
+    /// Value for img src=
+    /// </summary>
     member this.ImgSrc() = "/Img/" + this.Guid // Site.Endpoints.Img
+
+    /// <summary>
+    /// CSS id for the given Coordinates
+    /// </summary>
+    static member Id(coordinates: Coordinates) =
+        "c-" + string coordinates.X +
+        "-" + string coordinates.Y +
+        "-" + string coordinates.Z
+
+    /// <summary>
+    /// Value for the CSS id=
+    /// </summary>
+    member this.Id() =
+        ImageViewModel.Id(this.Coordinates)
 
     /// <summary>
     /// Constructor for WebSocket echo messages

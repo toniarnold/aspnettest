@@ -26,7 +26,7 @@ type Startup(env: IWebHostEnvironment, configuration: IConfiguration) =
             .AddImageCache()    // by Image.Coordinates
             .AddMemoryCache()   // by Image.Gid
             .AddImageService()  // Singleton for static access
-            .AddSingleton<IWebSocketClient>(fun _ ->
+            .AddScoped<IWebSocketClient>(fun _ -> // scoped, as 1 client can only open 1 connection at a time
                 new ServerWebSocketClient(new Uri(configuration.GetValue<string>("RendererHost") +
                                             mandelbrot.renderer.Site.RendererWebSocket))
                 :> IWebSocketClient

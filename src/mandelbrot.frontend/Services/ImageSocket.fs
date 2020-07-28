@@ -85,7 +85,11 @@ type ImageSocketHandler(frontendSocket: WebSocket,
                 nextImage.Bytes <- bytes
             imageService.ReplaceInCache(nextImage)
             do! frontendSocket.SendAsync(buffer.Slice(0, rendererResult.Count), WebSocketMessageType.Text, true, CancellationToken.None)
-            logger.LogDebug(String.Format("Echoed progress State={0}", nextImage.State))
+            logger.LogDebug(String.Format("Echoed {0}/{1}/{2} progress to {3}",
+                                            nextImage.Coordinates.X,
+                                            nextImage.Coordinates.Y,
+                                            nextImage.Coordinates.Z,
+                                            nextImage.State))
             if not nextImage.IsReady then // continue echoing until ready
                 do! this.EchoProgress(buffer, frontendSocket, rendererSocket)
         }
@@ -142,7 +146,6 @@ type ImageSocketHandler(frontendSocket: WebSocket,
 type ImageSocketMiddleware(next: RequestDelegate,
                         imageEndpoint: PathString,
                         imageService: ImageService,
-                        rendererClient: IWebSocketClient,
                         rendererImageClientFactory: IHttpClientFactory,
                         config: IConfiguration,
                         loggerFactory : ILoggerFactory) =
@@ -151,7 +154,7 @@ type ImageSocketMiddleware(next: RequestDelegate,
     member this.LogRequest(pathstring: string) =
         Logger.LogInformation(String.Format("Received WebSocket Request to {0}", pathstring))
 
-    member this.Invoke (ctx : HttpContext) =
+    member this.Invoke (ctx : HttpContext, rendererClient: IWebSocketClient) =
         task {
             if ctx.WebSockets.IsWebSocketRequest then
                 let path = ctx.Request.Path

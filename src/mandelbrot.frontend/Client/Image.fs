@@ -10,10 +10,11 @@ open mandelbrot.image
 [<JavaScript>]
 module Image =
 
-    let Main(config: ConfigServer.Configuration, coordinates: Coordinates) =
+    let Main(config: ConfigServer.Configuration, coordinates: Coordinates, row: int64, column: int64) =
         let resolution = Resolution(config.ImageWith, config.ImageHeigth)
         let varImage = Var.Create(new ImageViewModel(coordinates, resolution))
         let varImageSrc = Var.Create(varImage.Value.ImgSrc())
+        let varImageStyle = Var.Create("image-rendering: pixelated; opacity: 0.3;") // empty.pnng
         let varStateDisplay = Var.Create("display: inline;")
 
         let HandleMessage (socket: WebSocket) (msg: MessageEvent) =
@@ -26,6 +27,7 @@ module Image =
                 socket.Close()
                 varImageSrc.Set(varImage.Value.ImgSrc()) // explicitly set to enforce reload
                 varStateDisplay.Set("display: none;")
+                varImageStyle.Set(""); // remove opacity and pixelated
 
         let socketAddr = config.FrontendWebSocket
         Console.Log("Connecting to WebSocket " + socketAddr)
@@ -35,12 +37,18 @@ module Image =
         socket.Onopen <- fun () ->
             socket.Send(varImage.Value.JSToJson()) // query this server for the image
 
-        div [] [
+        div [ Attr.Concat [
+                attr.``class`` "gridcell"
+                attr.idDyn (V(varImage.Value.Id()))
+                attr.styleDyn (V("grid-row: " + string row + "; grid-column: " + string column + ";"))
+                ]
+            ] [
             img [ Attr.Concat [
                 attr.``class`` "image"
-                attr.width config.sImageWith
-                attr.height config.sImageHeigth
+                attr.width (string config.ImageWith)
+                attr.height (string config.ImageHeigth)
                 attr.srcDyn (V(varImageSrc.V))
+                attr.styleDyn (V(varImageStyle.V))
                 ]
             ] []
             p [ Attr.Concat [

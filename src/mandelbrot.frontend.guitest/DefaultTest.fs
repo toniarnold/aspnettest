@@ -11,5 +11,5 @@ type DefaultTest() =
     [<Test>]
     member this.NavigateDefaultTest() =
         this.Navigate("/") // to be calculated
-        Thread.Sleep(2000) // to be gazed at
-        this.driver.Navigate().Refresh() // from the cache
+        Thread.Sleep(60 * 1000) // image rendering to be gazed at
+        this.Navigate("/") // from the cache

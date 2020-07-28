@@ -14,30 +14,44 @@ module Main =
 
     type IndexTemplate = Template<"wwwroot/index.html", ClientLoad.FromDocument>
 
-    let Cell config =
-        IndexTemplate.CellTemplate()
-            .Id("cell-id")
-            .Image(Image.Main(config, Coordinates()))
-            .Doc()
+    let HaveImage coordinates =
+        let id = ImageViewModel.Id coordinates
+        JS.Document.GetElementById(id) <> null
 
-    let Row =
-        IndexTemplate.RowTemplate()
-            .Id("row-id")
-            .Doc()
-
-    let Grid config =
-        IndexTemplate.GridTemplate()
-            .Row(
-                Cell config
-            )
-            .Doc()
+    let Render (config: ConfigServer.Configuration) (xOffset: int64) (yOffset: int64) (z: int64) =
+        async {
+            for x = 1L to config.Tiles do
+                for y = 1L to config.Tiles do
+                    let coordinates = Coordinates(x  - xOffset, y - yOffset, z)
+                    if not (HaveImage coordinates) then
+                        let img = Image.Main(config, coordinates, x, y)
+                        img.RunAppend("grid")
+        } |> Async.Start
 
     [<SPAEntryPoint>]
     let Main () =
+        let config = ConfigServer.GetConfiguration()
+        let initialOffset = int64 (Math.Ceil(float config.Tiles / 2.0))
+        let varXOffset = Var.Create(initialOffset)
+        let varYOffset = Var.Create(initialOffset)
+        let varZ = Var.Create(2L)
         IndexTemplate
             .Main()
-            .Grid(
-                Grid(ConfigServer.GetConfiguration())
-            )
+            .Tiles(string config.Tiles)
+            .ImageWidth(string config.ImageWith)
+            .ImageHeight(string config.ImageHeigth)
             .Doc()
         |> Doc.RunById "main"
+
+        // Mouse Wheel Zoom
+        let grid = JS.Document.GetElementById("grid")
+        grid.AddEventListener("wheel", fun (evt: Dom.Event) ->
+            let evt = evt :?> Dom.WheelEvent
+            let delta = - int64(evt.DeltaY / 100)
+            Console.Log("Wheel event zoom delta: " + string delta)
+            varZ.Set(varZ.Value + delta)
+            Render config varXOffset.Value varYOffset.Value varZ.Value
+        )
+
+        // Reactively render after anything is set up
+        Render config varXOffset.Value varYOffset.Value varZ.Value

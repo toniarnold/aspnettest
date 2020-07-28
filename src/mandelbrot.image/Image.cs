@@ -232,15 +232,18 @@ namespace mandelbrot.image
         {
             var zoom = Coordinates.Z >= 0 ? 2.0 * (double)Coordinates.Z + 1 :
                                             1 / -(2.0 * (double)Coordinates.Z - 1);
+            // WRONG ASSUMPTIONS:
             // zoom 1 denotes a Zero grid -1 .. +1 with 1 tile of size 2
             // zoom 3 denotes a Zero grid -1 .. +1 with 3 tiles of size 2/3
             // zoom 5 denotes a Zero grid -1 .. +1 with 5 tiles of size 2/5
             // zoom 0.3333 denotes a grid with tiles of size 6 (2*3)
             // zoom 0.2 denotes a grid width tiles of size 10 (2*5)
-            var tilesize = 2.0 / zoom;
             // (real, imag) denote the center position of the tile
-            var real = (double)Coordinates.X * tilesize;
-            var imag = (double)Coordinates.Y * tilesize;
+
+            // EMPIRICALLY CORRECTED:
+            var tilesize = 4.0 / zoom;
+            var real = (double)Coordinates.Y * tilesize * (double)resolution.Width / (double)resolution.Height;
+            var imag = -(double)Coordinates.X * tilesize;
             Params = new Params(zoom, new Complex(real, imag), 4.0); // EscapeRadius constant
             Specification = new Specification(Params, resolution);
             Resolution = resolution;
