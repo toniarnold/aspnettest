@@ -41,15 +41,11 @@ type ImageSocketHandler(socket: WebSocket,
                         config: IConfiguration,
                         loggerFactory : ILoggerFactory) =
     let logger = loggerFactory.CreateLogger<ImageSocketHandler>()
-    static let endRequestEvent = new AutoResetEvent(false)
-    interface IDisposable with
-        member this.Dispose() =
-            endRequestEvent.Dispose()
 
     /// <summary>
     /// The SMC StateChangeEventHandler itself
     /// </summary>
-    member this.ImageStateChanged(sender: obj , args: StateChangeEventArgs ) =
+    member this.SendImageStateChanged(sender: obj , args: StateChangeEventArgs ) =
         let currentImage = (sender :?> ImageContext).Owner
         logger.LogDebug(String.Format("Image {0}/{1}/{2} progress to {3}",
                                 currentImage.Coordinates.X,
@@ -57,18 +53,17 @@ type ImageSocketHandler(socket: WebSocket,
                                 currentImage.Coordinates.Z,
                                 currentImage.State))
         let currentViewModel = new ImageViewModel(currentImage);
-        socket.SendAsync(currentViewModel.ToArraySegment(), WebSocketMessageType.Text, true, CancellationToken.None)
-        |> Async.AwaitTask |> Async.RunSynchronously
-        if currentViewModel.IsReady then // end of rendering progress echoing
-            socket.CloseAsync(WebSocketCloseStatus.NormalClosure , "Image.IsReady", CancellationToken.None)
+        if not currentViewModel.IsReady then // send back the image in progress
+            socket.SendAsync(currentViewModel.ToArraySegment(), WebSocketMessageType.Text, true, CancellationToken.None)
             |> Async.AwaitTask |> Async.RunSynchronously
-            endRequestEvent.Set() |> ignore
 
     /// <summary>
     /// Gets an Image query in state Parameters from the mandelbrot.frontend.ImageSocket.
-    /// Returns the Image on the socket, either ready or in progress.
+    /// If the image is not in the cache, adds the ImageStateChanged handler and waits for
+    /// the endRequestEvent AutoResetEvent.
+    /// I any case expects the client to close the connection after having received the ready image.
     /// </summary>
-    member this.DoRequest () =
+    member this.DoRequest() =
         task {
             let buffer = WebSocket.CreateClientBuffer(1024 * 4, 1024 * 4)
             let! imageQuery = socket.ReceiveAsync(buffer, CancellationToken.None)
@@ -76,11 +71,23 @@ type ImageSocketHandler(socket: WebSocket,
             logger.LogInformation(
                 String.Format("Received Image query with coordinates X={0} Y={1} Z={2}",
                     queryModel.Coordinates.X, queryModel.Coordinates.Y, queryModel.Coordinates.Z))
-            let image = service.Get(queryModel.Main.Specification) // implicitly starts rendering
-            image.Coordinates <- queryModel.Coordinates // unavailable to Service.Get itself
-            if not image.IsReady then // not directly from the cache -> echo back rendering progress
-                image.AddStateChangedHandler(fun sender args -> this.ImageStateChanged(sender, args))
-            endRequestEvent.WaitOne(TimeSpan.FromSeconds(config.GetValue<float>("ImageSocketTimeout"))) |> ignore
+            let image = service.Get(queryModel.Main.Specification) // implicitly starts rendering in a task
+            if not image.IsReady then // not ready in the cache -> echo back the rendering progress
+                image.Coordinates <- queryModel.Coordinates // unavailable to Service.Get itself
+                image.AddStateChangedHandler(fun sender args -> this.SendImageStateChanged(sender, args))
+                image.AwaitReady()
+            // Send the ready image back to the client and expect it to close the socket
+            let imageyModel = new ImageViewModel(image)
+            do! socket.SendAsync(imageyModel.ToArraySegment(), WebSocketMessageType.Text, true, CancellationToken.None)
+            let! close = socket.ReceiveAsync(buffer, CancellationToken.None)
+            let status = if close.CloseStatus.HasValue then Some close.CloseStatus.Value else None
+            match status with
+            | Some closeStatus ->
+                match closeStatus with
+                | WebSocketCloseStatus.NormalClosure -> ()  // OK
+                | _ -> logger.LogError(String.Format("Expected NormalClosure, but was {0}", closeStatus))
+            | None -> logger.LogError("Expected close message after image.IsReady")
+            do! socket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, "ack client close", CancellationToken.None)
             logger.LogInformation("End of WebSocket request")
         }
 
@@ -100,12 +107,12 @@ type ImageSocketMiddleware(imageEndpoint: PathString, next: RequestDelegate,
                 match path with
                 | _ when path = EchoSocket.Endpoint ->
                     this.LogRequest(path.Value)
-                    let! echoScoket = ctx.WebSockets.AcceptWebSocketAsync()
+                    use! echoScoket = ctx.WebSockets.AcceptWebSocketAsync()
                     do! EchoSocket.Echo(ctx, echoScoket)
                 | _ when path = imageEndpoint ->
                     this.LogRequest(path.Value)
                     use! imageSocket = ctx.WebSockets.AcceptWebSocketAsync()
-                    use handler = new ImageSocketHandler(imageSocket, imageService, config, loggerFactory)
+                    let handler = new ImageSocketHandler(imageSocket, imageService, config, loggerFactory)
                     do! handler.DoRequest()
                 | _ -> return! next.Invoke ctx
             else

@@ -38,7 +38,7 @@ type ImageService(imageCache: ImageCache, indexCache: IMemoryCache) =
             )
 
     /// <summary>
-    /// Also delete the image from the index cache when it is removed from the imageCache
+    /// Also delete the image from the indexCache when it is removed from the imageCache
     /// </summary>
     member this.PostEviction(key: obj, value: obj, reason: EvictionReason, state: obj) =
         let guid = (value :?> Image).Guid

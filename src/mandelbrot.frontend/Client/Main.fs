@@ -43,7 +43,7 @@ module Main =
             .Doc()
         |> Doc.RunById "main"
 
-        // Mouse Wheel Zoom
+        // Mouse wheel zoom replaces browser zoom
         let grid = JS.Document.GetElementById("grid")
         grid.AddEventListener("wheel", fun (evt: Dom.Event) ->
             let evt = evt :?> Dom.WheelEvent
@@ -51,6 +51,7 @@ module Main =
             Console.Log("Wheel event zoom delta: " + string delta)
             varZ.Set(varZ.Value + delta)
             Render config varXOffset.Value varYOffset.Value varZ.Value
+            evt.PreventDefault()
         )
 
         // Reactively render after anything is set up

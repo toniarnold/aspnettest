@@ -4,6 +4,7 @@
 * [ASP.NET WebForms and MVC Core](webforms-core.md)
 * [WebSharper with SMC](websharper.md)
 * [REST API with SMC](restapi.md)
+* [WebSocket for Mandelbrot](mandelbrot.md)
 * [Initial Setup](setup.md)
 * [Writing GUI Tests](writing.md)
 * [Architecture](architecture.md)

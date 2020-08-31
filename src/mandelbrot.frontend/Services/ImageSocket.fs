@@ -53,11 +53,6 @@ type ImageSocketHandler(frontendSocket: WebSocket,
                         config: IConfiguration,
                         loggerFactory : ILoggerFactory) =
     let logger = loggerFactory.CreateLogger<ImageSocketHandler>()
-    static let create = new obj() // MutEx lock
-    static let endRequestEvent = new AutoResetEvent(false)
-    interface IDisposable with
-        member this.Dispose() =
-            endRequestEvent.Dispose()
 
     /// <summary>
     /// Fetch the binary image from the remote server to cache it locally
@@ -81,16 +76,16 @@ type ImageSocketHandler(frontendSocket: WebSocket,
             let nextImage = ImageViewModel.FromArraySegment<ImageViewModel>(buffer.Slice(0, rendererResult.Count)).Main
             logger.LogDebug(String.Format("Received progress State={0}", nextImage.State))
             if nextImage.IsReady then
-                let! bytes = this.GetImage(nextImage.Guid)
+                let! bytes = this.GetImage(nextImage.Guid) // from the remote cache
                 nextImage.Bytes <- bytes
             imageService.ReplaceInCache(nextImage)
-            do! frontendSocket.SendAsync(buffer.Slice(0, rendererResult.Count), WebSocketMessageType.Text, true, CancellationToken.None)
-            logger.LogDebug(String.Format("Echoed {0}/{1}/{2} progress to {3}",
-                                            nextImage.Coordinates.X,
-                                            nextImage.Coordinates.Y,
-                                            nextImage.Coordinates.Z,
-                                            nextImage.State))
-            if not nextImage.IsReady then // continue echoing until ready
+            if not nextImage.IsReady then // continue forwarding progress until ready
+                do! frontendSocket.SendAsync(buffer.Slice(0, rendererResult.Count), WebSocketMessageType.Text, true, CancellationToken.None)
+                logger.LogDebug(String.Format("Forwarded {0}/{1}/{2} progress to {3}",
+                                                nextImage.Coordinates.X,
+                                                nextImage.Coordinates.Y,
+                                                nextImage.Coordinates.Z,
+                                                nextImage.State))
                 do! this.EchoProgress(buffer, frontendSocket, rendererSocket)
         }
 
@@ -108,39 +103,35 @@ type ImageSocketHandler(frontendSocket: WebSocket,
             logger.LogInformation(
                 String.Format("Received Image query with coordinates X={0} Y={1} Z={2}",
                     queryModel.Coordinates.X, queryModel.Coordinates.Y, queryModel.Coordinates.Z))
-            // Mutable/Option/IDisposable/Task hodgepodge to minimize the create lock
-            let mutable rendererSocket = Option<WebSocket>.None
-            let image = lock create (fun () ->
-                let image = imageService.Get(queryModel.Coordinates)
-                if not image.IsReady then
-                    // Get the image from the renderer service through rendererSocket from the
-                    // concrete rendererClient received through DI
-                    let socket = rendererClient.ConnectAsync() |> Async.AwaitTask |> Async.RunSynchronously
-                    rendererSocket <- Some socket
-                    if image.IsEmpty then
-                        // Image never seen by the renderer -> compute the parameters...
-                        let configuration = ConfigServer.GetConfig(config)
-                        let resolution = Resolution(Width = configuration.ImageWith, Height = configuration.ImageHeigth)
-                        image.ComputeParams(resolution)
-                        // ...and kick off the rendering by sending the parametrized ViewModel to the renderer
-                        let imageyModel = ImageViewModel(image)
-                        socket.SendAsync(imageyModel.ToArraySegment(), WebSocketMessageType.Text, true, CancellationToken.None)
-                        |> Async.AwaitTask |> Async.RunSynchronously
-                    // else rendering is already in progress on the remote server, but not yet ready
-                image
-            )
-            match rendererSocket with
-            | Some rendererSocket  ->
-                // Rendering in progress, either from this request itself or from another one
-                do! this.EchoProgress(buffer, frontendSocket, rendererSocket)
-                do! rendererSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Image.IsReady", CancellationToken.None)
-                logger.LogDebug("End of renderer WebSocket request")
-            | None ->
-                // Got the ready image from the cache -> immediately send it to the JS front end
+            let image = imageService.Get(queryModel.Coordinates)
+            if not image.IsReady then
+                // Get the image from the renderer service through rendererSocket from the
+                // concrete rendererClient received through DI
+                use! rendererSocket = rendererClient.ConnectAsync()
+                if image.IsEmpty then
+                    // Image never seen by the renderer -> compute the parameters...
+                    let configuration = ConfigServer.GetConfig(config)
+                    let resolution = Resolution(Width = configuration.ImageWith, Height = configuration.ImageHeigth)
+                    image.ComputeParams(resolution)
+                // Kick off a new rendering or attach to the current rendering by sending the
+                // parametrized ViewModel (as key for its cache) to the renderer
                 let imageyModel = ImageViewModel(image)
-                do! frontendSocket.SendAsync(imageyModel.ToArraySegment(), WebSocketMessageType.Text, true, CancellationToken.None)
-                logger.LogDebug("Got image from the cache")
-            do! frontendSocket.CloseAsync(WebSocketCloseStatus.NormalClosure, "Image.IsReady", CancellationToken.None)
+                do! rendererSocket.SendAsync(imageyModel.ToArraySegment(), WebSocketMessageType.Text, true, CancellationToken.None)
+                do! this.EchoProgress(buffer, frontendSocket, rendererSocket) // loop until Image.IsReady
+                do! rendererSocket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, "init close", CancellationToken.None)
+            // Send the ready image back to the client and expect it to close the socket
+            let imageyModel = ImageViewModel(imageService.Get(queryModel.Coordinates)) // from our cache
+            do! frontendSocket.SendAsync(imageyModel.ToArraySegment(), WebSocketMessageType.Text, true, CancellationToken.None)
+            let! close = frontendSocket.ReceiveAsync(buffer, CancellationToken.None)
+            let status = if close.CloseStatus.HasValue then Some close.CloseStatus.Value else None
+            match status with
+            | Some closeStatus ->
+                match closeStatus with
+                | WebSocketCloseStatus.NormalClosure -> ()  // OK
+                | _ -> logger.LogError(String.Format("Expected NormalClosure, but was {0}", closeStatus))
+            | None -> logger.LogError("Expected close message after image.IsReady")
+            do! frontendSocket.CloseOutputAsync(WebSocketCloseStatus.NormalClosure, "ack client close", CancellationToken.None)
+            logger.LogInformation("End of WebSocket request")
         }
 
 type ImageSocketMiddleware(next: RequestDelegate,
@@ -166,7 +157,7 @@ type ImageSocketMiddleware(next: RequestDelegate,
                 | _ when path = imageEndpoint ->
                     this.LogRequest(path.Value)
                     use! frontendSocket = ctx.WebSockets.AcceptWebSocketAsync()
-                    use handler = new ImageSocketHandler(frontendSocket, imageService,
+                    let handler = new ImageSocketHandler(frontendSocket, imageService,
                                     rendererClient, rendererImageClientFactory, config, loggerFactory)
                     do! handler.DoRequest() // await EchoProgress recursion to finish
                 | _ -> return! next.Invoke ctx // another WebSocket Request
@@ -177,7 +168,7 @@ type ImageSocketMiddleware(next: RequestDelegate,
 [<Extension>]
 type ImageSocketExtension =
     /// <summary>
-    /// Adds the ImageSocket WebSocket at the path /ws-imag
+    /// Adds the ImageSocket WebSocket at the path Site.FrontendWebSocket = /ws-image
     /// </summary>
     [<Extension>]
     static member inline UseImageSocket(app: IApplicationBuilder, endpoint: PathString) =

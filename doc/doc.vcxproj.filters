@@ -45,6 +45,10 @@
       <Filter>Sources</Filter>
     </None>
     <None Include="migrate-iie-iselenium.md" />
+    <None Include="mandelbrot.md" />
+    <None Include="mandelbrot-sequence.dia">
+      <Filter>Sources</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="components.png">
@@ -69,6 +73,9 @@
       <Filter>Targets</Filter>
     </Image>
     <Image Include="apicaller-apiservice.png">
+      <Filter>Targets</Filter>
+    </Image>
+    <Image Include="mandelbrot-sequence.png">
       <Filter>Targets</Filter>
     </Image>
   </ItemGroup>

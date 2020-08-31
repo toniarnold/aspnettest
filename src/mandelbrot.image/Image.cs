@@ -113,7 +113,10 @@ namespace mandelbrot.image
         }
 
         [NonSerialized]
-        internal Renderer Renderer;
+        private TaskCompletionSource<bool> _readyTcs;
+
+        [NonSerialized]
+        internal Renderer Renderer; // accessed from the FSM
 
         // ---------- Public accessors:
 
@@ -203,7 +206,7 @@ namespace mandelbrot.image
         }
 
         /// <summary>
-        /// Called after each state change
+        /// Add a handler which gets called after each state change
         /// </summary>
         /// <param name="handler">Handler(object sender, StateChangeEventArgs args)</param>
         public void AddStateChangedHandler(StateChangeEventHandler handler)
@@ -250,11 +253,32 @@ namespace mandelbrot.image
         }
 
         /// <summary>
-        /// Asynchronously render the image atomically
+        /// Start asynchronous rendering of the image and return immediately
         /// </summary>
-        public Task RenderAsync()
+        public void RenderAsync()
         {
-            return Task.Run(() => Render());
+            _readyTcs = new TaskCompletionSource<bool>();
+            Task.Run(() =>
+             {
+                 try
+                 {
+                     Render();
+                     _readyTcs.SetResult(true);
+                 }
+                 catch (Exception e)
+                 {
+                     _readyTcs.SetException(e);
+                     throw;
+                 }
+             });
+        }
+
+        /// <summary>
+        /// Block after RenderAsync() has been called until the image is ready
+        /// </summary>
+        public void AwaitReady()
+        {
+            var _ = _readyTcs.Task.Result;
         }
 
         /// <summary>

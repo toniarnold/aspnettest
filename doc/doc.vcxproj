@@ -28,6 +28,8 @@
     <None Include="internet-explorer.dia" />
     <None Include="Makefile" />
     <None Include="django-selenium.md" />
+    <None Include="mandelbrot-sequence.dia" />
+    <None Include="mandelbrot.md" />
     <None Include="migrate-iie-iselenium.md" />
     <None Include="recordings.md" />
     <None Include="restapi.md" />
@@ -46,6 +48,7 @@
     <Image Include="iie-page.png" />
     <Image Include="iie-test.png" />
     <Image Include="internet-explorer.png" />
+    <Image Include="mandelbrot-sequence.png" />
     <Image Include="test-with-storage.png" />
     <Image Include="test-without-storage.png" />
   </ItemGroup>

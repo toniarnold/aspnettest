@@ -10,8 +10,8 @@ DIA = components.dia \
 	interaction-default.dia \
 	interaction-withroot.dia \
 	webforms-core.dia \
-	apicaller-apiservice.dia
-
+	apicaller-apiservice.dia \
+	mandelbrot-sequence.dia
 
 .SUFFIXES: .dia .png
 PNG = $(DIA:.dia=.png)
