@@ -1,17 +1,17 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+	<TargetFramework>net5.0</TargetFramework>
     <WebSharperProject>Library</WebSharperProject>
     <RootNamespace>iie</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FSharp.Core" Version="4.7.2" />
-    <PackageReference Include="WebSharper" Version="4.6.6.407" />
-    <PackageReference Include="WebSharper.CSharp" Version="4.6.6.407" />
-    <PackageReference Include="WebSharper.UI" Version="4.6.3.219" />
-    <PackageReference Include="WebSharper.UI.CSharp" Version="4.6.3.219" />
+    <PackageReference Include="FSharp.Core" Version="5.0.2" />
+    <PackageReference Include="WebSharper" Version="5.0.0.120" />
+    <PackageReference Include="WebSharper.CSharp" Version="5.0.0.120" />
+    <PackageReference Include="WebSharper.UI" Version="5.0.0.120" />
+    <PackageReference Include="WebSharper.UI.CSharp" Version="5.0.0.120" />
   </ItemGroup>
 
   <ItemGroup>

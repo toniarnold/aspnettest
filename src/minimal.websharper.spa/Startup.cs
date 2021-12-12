@@ -48,11 +48,11 @@ namespace minimal.websharper.spa
         {
             //WebSharper.Web.Remoting.DisableCsrfProtection();    // HTTP 403 prevention not needed here
             app.UseDeveloperExceptionPage()
-                .UseMiddleware<ISeleniumMiddleware>()
-                .UseMiddleware<NoCacheMiddleware>()
+                .UseISelenium()
+                .UseNoCache()
                 .UseDefaultFiles()
                 .UseSession()
-                .UseMiddleware<RequestQuerySessionMiddleware>()
+                .UseRequestQuerySession()
                 .UseStaticFiles()
                 .UseWebSharper()
                 .Run(context =>

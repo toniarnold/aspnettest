@@ -46,7 +46,10 @@ namespace test.asplib.Model
 
             public override void SaveMembers()
             {
-                this.Main.Embedded = this.Exposed;
+                if (this.Exposed != null) // called as part of ToJson()
+                { 
+                    this.Main.Embedded = this.Exposed;
+                }
             }
         }
 
@@ -63,7 +66,7 @@ namespace test.asplib.Model
         }
 
         [Test]
-        public void SerializeDeserializeTest()
+        public void SerializeMainDeserializeMainTest()
         {
             var obj = new StoredObj();
             Assert.That(obj.Main, Is.Null);
@@ -77,7 +80,7 @@ namespace test.asplib.Model
         }
 
         [Test]
-        public void SerializeDeserializeModifyTest()
+        public void SerializeMainDeserializeMainModifyTest()
         {
             const string NEWVALUE = "<some new string>";
 
@@ -92,6 +95,29 @@ namespace test.asplib.Model
             Assert.That(obj.Main, Is.Not.Null);
             Assert.That(obj.Exposed, Is.EqualTo(NEWVALUE));         // set
             Assert.That(obj.Main.Embedded, Is.EqualTo(NEWVALUE));   // mirrored
+        }
+
+        // Non-JavaScript-Versions:
+
+        [Test]
+        public void JsonRoundTripTest()
+        {
+            var obj = new StoredObj();
+            obj.Main = new TestObj();
+            var json = obj.ToJson();
+            Assert.That(json, Does.Not.Contain(TESTVALUE));     // binary serialized, hidden
+            var copy = StoredObj.FromJson<StoredObj>(json);
+            Assert.That(copy.Exposed, Is.EqualTo(TESTVALUE));   // restored
+        }
+
+        [Test]
+        public void ArraySegmentRoundTripTest()
+        {
+            var obj = new StoredObj();
+            obj.Main = new TestObj();
+            var array = obj.ToArraySegment();
+            var copy = ViewModel<TestObj>.FromArraySegment<StoredObj>(array);
+            Assert.That(copy.Exposed, Is.EqualTo(TESTVALUE));
         }
     }
 }

@@ -28,7 +28,7 @@ namespace asplib.Model
         /// for whatever reason (wrong key, old version...)
         /// </summary>
         /// <param name="bytes"></param>
-        /// <returns></returns>
+        /// <returns>the deserialized object as object</returns>
         [SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
         public static object Deserialize(byte[] bytes, Func<byte[], byte[]> filter = null)
         {
@@ -45,6 +45,20 @@ namespace asplib.Model
                     return null;
                 }
             }
+        }
+
+        /// <summary>
+        /// Deserializes a byte array into an object and apply the crypto
+        /// filter if given Silently returns null if the deserialization fails
+        /// for whatever reason (wrong key, old version...)
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="bytes"></param>
+        /// <param name="filter"></param>
+        /// <returns>the deserialized object as T</returns>
+        public static T Deserialize<T>(byte[] bytes, Func<byte[], byte[]> filter = null)
+        {
+            return (T)Deserialize(bytes, filter);
         }
     }
 }

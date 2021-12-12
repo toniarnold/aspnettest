@@ -1,7 +1,7 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>iie</RootNamespace>
     <PackageId>aspnettest.core</PackageId>
     <Version>1.0.0</Version>
@@ -17,7 +17,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="NUnit" Version="3.12.0" />
+    <PackageReference Include="NUnit" Version="3.13.2" />
     <PackageReference Include="nunit.engine.netstandard" Version="3.11.1" />
   </ItemGroup>
 

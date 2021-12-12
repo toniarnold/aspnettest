@@ -1,4 +1,4 @@
-﻿using asplib.Services;
+﻿using asplib.Model;
 using NUnit.Framework;
 
 namespace test.asplib.Services
@@ -31,6 +31,22 @@ namespace test.asplib.Services
 
             Assert.That(dst.Common, Is.EqualTo("Gets mapped"));
             Assert.That(dst.OnlyB, Is.Null);
+        }
+
+        [Test]
+        public void SerializeDeserializeSameTest()
+        {
+            var src = new ObjectA()
+            {
+                OnlyA = "unmapped",
+                Common = "Gets mapped"
+            };
+
+            var json = Json.Serialize(src);
+            var copy = Json.Deserialize<ObjectA>(json);
+
+            Assert.That(copy.OnlyA, Is.EqualTo("unmapped"));
+            Assert.That(copy.Common, Is.EqualTo("Gets mapped"));
         }
     }
 }

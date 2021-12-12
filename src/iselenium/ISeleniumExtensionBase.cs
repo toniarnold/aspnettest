@@ -14,7 +14,7 @@ namespace iselenium
     /// <summary>
     /// Extension interface for a test fixture running in a web server process
     /// </summary>
-    public interface ISeleniumBase
+    public interface ISeleniumBase : IAssertPoll
     {
 #pragma warning disable IDE1006 // non-public members in Selenium-generated C# code
         IDictionary<string, object> vars { get; set; }

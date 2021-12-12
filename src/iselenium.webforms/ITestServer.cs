@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using System;
+using System.Collections.Generic;
 using System.Configuration;
 using System.Diagnostics;
 using System.IO;
@@ -13,13 +14,14 @@ namespace iselenium
     public static class TestServerExtension
     {
         /// <summary>
-        /// Start IIS Express according with optional parameters
+        /// Start IIS Express application with optional parameters
         /// overriding the default configuration in App.config
         /// Server: IIS Express, optionally overrides %PROGRAMFILES%\IIS Express\iisexpress.exe
         /// Root: server application root directory
         /// Port: port to listen on
         /// RequestTimeout: expected duration of all tests in sec
         /// ServerStartTimeout: expected start time of the server in sec
+        /// Can be called multiple times to start auxiliary service processes.
         /// </summary>
         /// <param name="server">IIS Express, usually %PROGRAMFILES%\IIS Express\iisexpress.exe</param>
         /// <param name="root">server application root directory</param>
@@ -42,7 +44,9 @@ namespace iselenium
             var path = Path.GetFullPath(Path.Combine(TestContext.CurrentContext.WorkDirectory, croot));
             info.Arguments = String.Format("/path:{0} /port:{1} /trace:error", path, cport);
             info.UseShellExecute = true;
-            inst.ServerProcess = Process.Start(info);
+            if (inst.ServerProcesses == null)
+                inst.ServerProcesses = new List<Process>();
+            inst.ServerProcesses.Add(Process.Start(info));
             TestServerExtensionBase.WaitForServerPort(cport, cservertimeout);
             SeleniumExtensionBase.OutOfProcess = true;
             SeleniumExtensionBase.Port = cport;
@@ -53,25 +57,28 @@ namespace iselenium
         }
 
         /// <summary>
-        /// Kill the web server process
+        /// Kill the web server process and eventual auxiliary processes
         /// </summary>
         /// <param name="inst"></param>
         public static void StopServer(this ITestServer inst)
         {
             TestServerIPC.Dispose();
-            try
+            if (inst.ServerProcesses != null)
             {
-                if (inst.ServerProcess != null)
+                foreach (var process in inst.ServerProcesses)
                 {
-                    inst.ServerProcess.Kill(); // parent process only in .NET Framework, unlike Core
-                    inst.ServerProcess.WaitForExit();
+                    try
+                    {
+                        process.Kill();
+                        process.WaitForExit();
+                    }
+                    catch { }
+                    finally
+                    {
+                        process.Dispose();
+                    }
                 }
-            }
-            catch { }
-            finally
-            {
-                inst.ServerProcess.Dispose();
-                inst.ServerProcess = null;
+                inst.ServerProcesses = null;
             }
         }
     }

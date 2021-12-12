@@ -17,7 +17,8 @@ namespace asplib.Model
         where TFSMContext : statemap.FSMContext
         where TState : statemap.State
     {
-        public string State;
+        [JavaScript]
+        public string State { get; set; }
 
         [JavaScript]
         public SmcViewModel() : base()

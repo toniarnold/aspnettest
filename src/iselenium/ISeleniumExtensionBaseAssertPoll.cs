@@ -6,6 +6,11 @@ using System.Threading;
 namespace iselenium
 {
     /// <summary>
+    /// Extension Marker interface just for AssertPoll
+    /// </summary>
+    public interface IAssertPoll { }
+
+    /// <summary>
     /// AssertPoll corresponds to Assert.That, but quickly polls for
     /// RequestTimeout seconds until the assertion passes.
     /// </summary>
@@ -48,7 +53,7 @@ namespace iselenium
         /// <param name="del">An ActualValueDelegate returning the value to be tested</param>
         /// <param name="expr">A Constraint expression to be applied</param>
         /// <param name="timeout">Time in seconds to poll for the assertion to pass, overrides RequestTimeout</param>
-        public static void AssertPoll<TActual>(this ISeleniumBase _, ActualValueDelegate<TActual> del,
+        public static void AssertPoll<TActual>(this IAssertPoll _, ActualValueDelegate<TActual> del,
                                                 Func<IResolveConstraint> expr, int? timeout = null)
         {
             AssertPoll(del, expr, null, timeout: timeout, null);
@@ -62,7 +67,7 @@ namespace iselenium
         /// <param name="expr">A Constraint expression to be applied</param>
         /// <param name="getExceptionMessage">Exception message delegate</param>
         /// <param name="timeout">A Constraint expression to be applied</param>
-        public static void AssertPoll<TActual>(this ISeleniumBase _, ActualValueDelegate<TActual> del,
+        public static void AssertPoll<TActual>(this IAssertPoll _, ActualValueDelegate<TActual> del,
                                                 Func<IResolveConstraint> expr, Func<string> getExceptionMessage,
                                                 int? timeout = null)
         {
