@@ -1,0 +1,13 @@
+﻿@page "/"
+
+<PageTitle>minimal</PageTitle>
+
+<h1>minimalist test setup</h1>
+<ul>
+    <li><a href="Withstatic" id="withstatic-link">with static Main</a></li>
+    <li><a href="Withstorage" id="withstorage-link">with persistent storage</a></li>
+</ul>
+<a asp-controller="Minimal" asp-action="Test" id="testButton" class="nunibutton">
+    <img src="/nunit.png" class="nunitimg" />
+</a>
+<a class="testresult" asp-controller="Minimal" asp-action="Result">TestResult TBD</a>

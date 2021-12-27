@@ -5,6 +5,7 @@
     <WebSharperProject>Bundle</WebSharperProject>
     <WebSharperBundleOutputDir>wwwroot/Content</WebSharperBundleOutputDir>
     <WebProjectOutputDir>$(MSBuildThisFileDirectory)/wwwroot</WebProjectOutputDir>
+    <EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>	  
   </PropertyGroup>
 
   <ItemGroup>

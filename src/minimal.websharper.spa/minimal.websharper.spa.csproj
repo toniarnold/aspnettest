@@ -7,6 +7,7 @@
     <WebProjectOutputDir>$(MSBuildThisFileDirectory)/wwwroot</WebProjectOutputDir>
     <RootNamespace>minimal.websharper.spa</RootNamespace>
     <AssemblyName>minimal.websharper.spa</AssemblyName>
+	<EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
   </PropertyGroup>
 
   <ItemGroup>

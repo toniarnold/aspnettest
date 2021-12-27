@@ -86,14 +86,17 @@ namespace asplib.Model
                 newCookie["session"] = savedSession.ToString();
             }
 
-            var days = configuration.GetValue<int>("DatabaseStorageExpires");
-            var options = new CookieOptions()
+            if (!httpContext.Response.HasStarted)    // Blazor
             {
-                Expires = DateTime.Now.AddDays(days),
-                HttpOnly = true,
-                SameSite = SameSiteMode.Strict
-            };
-            httpContext.Response.Cookies.Append(storageID, newCookie.ToCookieString(), options);
+                var days = configuration.GetValue<int>("DatabaseStorageExpires");
+                var options = new CookieOptions()
+                {
+                    Expires = DateTime.Now.AddDays(days),
+                    HttpOnly = true,
+                    SameSite = SameSiteMode.Strict
+                };
+                httpContext.Response.Cookies.Append(storageID, newCookie.ToCookieString(), options);
+            }
         }
 
         /// <summary>
@@ -110,7 +113,7 @@ namespace asplib.Model
         }
 
         /// <summary>
-        /// Return the filter to encrypt the ViewState  with if configured so.
+        /// Return the filter to encrypt the ViewState with if configured so.
         /// </summary>
         /// <param name="configuration">The configuration.</param>
         /// <returns></returns>

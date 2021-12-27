@@ -1,0 +1,52 @@
+﻿@page "/withstorage"
+
+@using asplib.Components
+@using asplib.Model
+
+@inherits PersistentComponentBase<Models.Main>
+
+@inject NavigationManager uriHelper;
+
+<h1>minimalist test setup with storage</h1>
+<EditForm Model="@Storage">
+    Session Storage:<br />
+    <InputRadioGroup Name="Storage" @bind-Value="Storage">
+        <InputRadio name="Storage" value="@Storage.ViewState" TValue="Storage" /> Blazor
+        <InputRadio name="Storage" value="@Storage.Session" TValue="Storage" /> Session
+        <InputRadio name="Storage" value="@Storage.Database" TValue="Storage" /> Database
+    </InputRadioGroup>
+    <br />
+
+    <input @bind="Input" />
+    <button type="submit" id="SubmitButton" @onclick="@Submit">Submit</button>
+    <ul>
+        @foreach (var item in Main)
+        {
+            <li>@item</li>
+        }
+    </ul>
+</EditForm>
+
+@code {
+    private String? Input;
+    // Set the static storage override globally, as no instance is available during DI construction
+    // in the PersistentMainActivatorExtension
+    private Storage Storage 
+    {
+        get => StorageImplementation.SessionStorage ?? Storage.ViewState;
+        set
+        {
+            StorageImplementation.SessionStorage = value; 
+            uriHelper.NavigateTo(uriHelper.Uri, forceLoad: true);   // force reload
+        }
+    }
+
+    private void Submit()
+    {
+        if (Input != null)
+        {
+            Main.Add(Input);
+            Input = null;
+        }
+    }
+}
