@@ -8,38 +8,42 @@
 @inject NavigationManager uriHelper;
 
 <h1>minimalist test setup with storage</h1>
+
 <EditForm Model="@Storage">
     Session Storage:<br />
     <InputRadioGroup Name="Storage" @bind-Value="Storage">
         <InputRadio name="Storage" value="@Storage.ViewState" TValue="Storage" /> Blazor
-        <InputRadio name="Storage" value="@Storage.Session" TValue="Storage" /> Session
         <InputRadio name="Storage" value="@Storage.Database" TValue="Storage" /> Database
+        <InputRadio name="Storage" value="@Storage.SessionStorage" TValue="Storage" /> Window.sessionStorage
+        <InputRadio name="Storage" value="@Storage.LocalStorage" TValue="Storage" /> Window.localStorage
     </InputRadioGroup>
-    <br />
-
-    <input @bind="Input" />
-    <button type="submit" id="SubmitButton" @onclick="@Submit">Submit</button>
-    <ul>
-        @foreach (var item in Main)
-        {
-            <li>@item</li>
-        }
-    </ul>
 </EditForm>
+<br />
+
+<input @bind="Input" />
+<button type="submit" id="SubmitButton" @onclick="@Submit">Submit</button>
+<ul>
+    @foreach (var item in Main)
+    {
+        <li>@item</li>
+    }
+</ul>
+
 
 @code {
-    private String? Input;
     // Set the static storage override globally, as no instance is available during DI construction
-    // in the PersistentMainActivatorExtension
+    // in the PersistentMainFactoryExtension
     private Storage Storage 
     {
         get => StorageImplementation.SessionStorage ?? Storage.ViewState;
         set
         {
             StorageImplementation.SessionStorage = value; 
-            uriHelper.NavigateTo(uriHelper.Uri, forceLoad: true);   // force reload
+            uriHelper.NavigateTo(uriHelper.Uri, forceLoad: true);   // also disposes the component instance on the server
         }
     }
+
+    private String? Input;
 
     private void Submit()
     {

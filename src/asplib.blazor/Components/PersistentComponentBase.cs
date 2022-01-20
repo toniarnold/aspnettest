@@ -1,12 +1,13 @@
 ﻿using asplib.Model;
-using asplib.Model.Db;
+using asplib.Services;
 using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.Extensions.Configuration;
+using System.Diagnostics;
 
 namespace asplib.Components
 {
-    public class PersistentComponentBase<T> : OwningComponentBase<T> where T : notnull
+    public class PersistentComponentBase<T> : OwningComponentBase<T> where T : class, new()
     {
         [Inject]
         public T Main { get; private set; }
@@ -15,32 +16,67 @@ namespace asplib.Components
         private IConfiguration Configuration { get; set; }
 
         [Inject]
-        private IHttpContextAccessor HttpContextAccessor { get; set; }
+        private ProtectedSessionStorage ProtectedSessionStore { get; set; }
 
-        private HttpContext HttpContext => HttpContextAccessor.HttpContext;
+        [Inject]
+        private ProtectedLocalStorage ProtectedLocalStore { get; set; }
 
         /// <summary>
-        /// Always persist Main after it might have been changed
+        /// Instantiate the Main instance received from the browser,
+        /// then always persist Main after it might have been changed
+        /// on re-render.
         /// </summary>
         /// <param name="firstRender"></param>
-        protected override void OnAfterRender(bool firstRender)
+        protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            switch (this.GetStorage())
+            if (firstRender)
             {
-                case Storage.ViewState:
-                    break;  // implied in Blazor Server
+                switch (this.GetStorage())
+                {
+                    case Storage.ViewState:
+                    case Storage.Database:
+                        Trace.Assert(Main != null);  // Provided by Direct Injection from PersistentMainFactoryExtension
+                        break;
 
-                case Storage.Session:
-                    this.SaveSession();
-                    break;
+                    case Storage.SessionStorage:
+                        Main = await this.LoadFromBrowser(k => ProtectedSessionStore.GetAsync<string>(k));
+                        this.StateHasChanged();
+                        break;
 
-                case Storage.Database:
-                    this.SaveDatabase();
-                    break;
+                    case Storage.LocalStorage:
+                        Main = await this.LoadFromBrowser(k => ProtectedLocalStore.GetAsync<string>(k));
+                        this.StateHasChanged();
+                        break;
 
-                default:
-                    throw new NotImplementedException(String.Format(
-                        "Storage {0}", this.GetStorage()));
+                    default:
+                        throw new NotImplementedException(String.Format(
+                            "Storage {0}", this.GetStorage()));
+                }
+                MainAccessor<T>.Instance = Main;
+            }
+            else
+            {
+                switch (this.GetStorage())
+                {
+                    case Storage.ViewState:
+                        break;  // Default instance lifetime in Blazor Server
+
+                    case Storage.Database:
+                        this.SaveDatabase();
+                        break;
+
+                    case Storage.SessionStorage:
+                        await this.SaveToBrowser((k, v) => ProtectedSessionStore.SetAsync(k, v));
+                        break;
+
+                    case Storage.LocalStorage:
+                        await this.SaveToBrowser((k, v) => ProtectedLocalStore.SetAsync(k, v));
+                        break;
+
+                    default:
+                        throw new NotImplementedException(String.Format(
+                            "Storage {0}", this.GetStorage()));
+                }
             }
         }
 
@@ -62,26 +98,38 @@ namespace asplib.Components
             return (Storage)storage;
         }
 
-        /// <summary>
-        /// Add the serialized Main to the session
-        /// </summary>
-        private void SaveSession()
+        private async Task<T> LoadFromBrowser(Func<string, ValueTask<ProtectedBrowserStorageResult<string>>> storeGetAsync)
         {
-            var mainType = typeof(T);
-            var storageID = StorageImplementation.GetStorageID(mainType.Name);
-            if (HttpContext.Session.IsAvailable)
+            var storageId = StorageImplementation.GetStorageID(Main.GetType().Name);
+            var result = await storeGetAsync(storageId);
+            if (result.Success)
             {
-                HttpContext.Session.Set(storageID, StorageImplementation.Bytes(Main));
+                var viewState = result.Value;
+                var filter = StorageImplementation.DecryptViewState(Configuration);
+                var main = StorageImplementation.LoadFromViewstate(() => new T(), viewState, filter);
+                return main;
+            }
+            else
+            {
+                return new T();
             }
         }
 
         /// <summary>
         /// Store the serialized Main to the database. Reference to it is
-        /// kept in a persistent cookie.
+        /// kept in a persistent cookie set in PersistentMainFactoryExtension.
         /// </summary>
         private void SaveDatabase()
         {
-            StorageImplementation.SaveDatabase(Configuration, HttpContext, Main);
+            StorageImplementation.SaveDatabase(Configuration, Main);
+        }
+
+        private async Task SaveToBrowser(Func<string, object, ValueTask> storeSetAsync)
+        {
+            var storageId = StorageImplementation.GetStorageID(Main.GetType().Name);
+            var filter = StorageImplementation.EncryptViewState(Configuration);
+            var viewState = StorageImplementation.ViewState(Main, filter);
+            await storeSetAsync(storageId, viewState);
         }
     }
 }

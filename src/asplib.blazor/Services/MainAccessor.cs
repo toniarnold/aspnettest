@@ -1,11 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace asplib.Services
+﻿namespace asplib.Services
 {
+    /// <summary>
+    /// Global static accessor for the current T Main object for white box unit tests
+    /// </summary>
+    /// <typeparam name="T"></typeparam>
     public static class MainAccessor<T>
     {
         public static T? Instance { get; set; }

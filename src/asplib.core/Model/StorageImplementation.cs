@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Specialized;
+using System.ComponentModel;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -45,7 +46,7 @@ namespace asplib.Model
         }
 
         /// <summary>
-        /// Saves the M main object into the session.
+        /// Save the main object into the session
         /// </summary>
         /// <param name="configuration">The configuration.</param>
         /// <param name="httpContext">The HTTP context.</param>
@@ -57,7 +58,7 @@ namespace asplib.Model
         }
 
         /// <summary>
-        /// Saves  the M main object into the database.
+        /// Save the main object into the database and store session ID / encryption key in a cookie.
         /// </summary>
         /// <param name="configuration">The configuration.</param>
         /// <param name="httpContext">The HTTP context.</param>
@@ -78,24 +79,64 @@ namespace asplib.Model
                 var key = (cookie["key"] != null) ? Convert.FromBase64String(cookie["key"]) : null;
                 var secret = StorageImplementation.GetSecret(key);
                 filter = x => Crypt.Encrypt(secret, x);
+                TypeDescriptor.AddAttributes(main, new DatabaseKeyAttribute(key));
                 newCookie["key"] = Convert.ToBase64String(secret.Key);
             }
             using (var db = new ASP_DBEntities())
             {
                 var savedSession = db.SaveMain(main.GetType(), StorageImplementation.Bytes(main, filter), session);
+                TypeDescriptor.AddAttributes(main, new DatabaseSessionAttribute(savedSession));
                 newCookie["session"] = savedSession.ToString();
             }
-
-            if (!httpContext.Response.HasStarted)    // Blazor
+            var days = configuration.GetValue<int>("DatabaseStorageExpires");
+            var options = new CookieOptions()
             {
-                var days = configuration.GetValue<int>("DatabaseStorageExpires");
-                var options = new CookieOptions()
-                {
-                    Expires = DateTime.Now.AddDays(days),
-                    HttpOnly = true,
-                    SameSite = SameSiteMode.Strict
-                };
-                httpContext.Response.Cookies.Append(storageID, newCookie.ToCookieString(), options);
+                Expires = DateTime.Now.AddDays(days),
+                HttpOnly = true,
+                SameSite = SameSiteMode.Strict
+            };
+            httpContext.Response.Cookies.Append(storageID, newCookie.ToCookieString(), options);
+        }
+
+        /// <summary>
+        /// Save the main object into the database and store session ID / encryption key as attributes
+        /// in the object itself (Blazor).
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <param name="main"></param>
+        public static void SaveDatabase(IConfiguration configuration, object main)
+        {
+            var storageID = GetStorageID(main.GetType().Name);
+            Guid session = Guid.NewGuid();  // initially cannot exist in the database
+            byte[] key = null;
+            var attributes = TypeDescriptor.GetAttributes(main);
+            var sessionAttribute = (DatabaseSessionAttribute)
+                (from Attribute a in attributes
+                 where a is DatabaseSessionAttribute
+                 select a).FirstOrDefault();
+            if (sessionAttribute != null)
+            {
+                session = sessionAttribute.Session; // override with the session attribute programmatically set
+            }
+            var keyAttribute = (DatabaseKeyAttribute)
+                (from Attribute a in attributes
+                 where a is DatabaseKeyAttribute
+                 select a).FirstOrDefault();
+            if (keyAttribute != null)
+            {
+                key = keyAttribute.Key;
+            }
+            Func<byte[], byte[]> filter = null;
+            if (StorageImplementation.GetEncryptDatabaseStorage(configuration))
+            {
+                var secret = StorageImplementation.GetSecret(key);
+                filter = x => Crypt.Encrypt(secret, x);
+                TypeDescriptor.AddAttributes(main, new DatabaseKeyAttribute(key));
+            }
+            using (var db = new ASP_DBEntities())
+            {
+                var savedSession = db.SaveMain(main.GetType(), StorageImplementation.Bytes(main, filter), session);
+                TypeDescriptor.AddAttributes(main, new DatabaseSessionAttribute(savedSession));
             }
         }
 

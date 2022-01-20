@@ -8,13 +8,16 @@ using System.Net;
 
 namespace asplib.Services
 {
-    public static class PersistentMainActivatorExtension
+    public static class PersistentMainFactoryExtension
     {
         public static void AddPersistent<T>(this IServiceCollection services) where T : class, new()
         {
             services.AddScoped<T>(provider =>
             {
-                // Implemented after PersistentControllerActivator
+                // Implemented after PersistentControllerActivator for ASP.NET Core MVC
+                // In ASP.NET Core Blazor, HttpContext is only available on page initialization
+                // and cookies can only be set before the response has been started -  which is
+                // the case for DI instantiation.
                 var httpContextAccessor = provider.GetService<IHttpContextAccessor>();
                 var httpContext = httpContextAccessor.HttpContext;
                 var configuration = provider.GetService<IConfiguration>();
@@ -44,21 +47,8 @@ namespace asplib.Services
                 }
                 else
                 {
-                    // ---------- Load from Session ----------
-                    if (storage == Storage.Session)
-                    {
-                        if (httpContext.Session.TryGetValue(storageID, out bytes))  // existing session
-                        {
-                            main = DeserializeMain<T>(bytes);
-                        }
-                        else
-                        {
-                            httpContext.Session.Set(storageID, new byte[0]);    // immediately establish the new session
-                        }
-                    }
-
                     // ---------- Load from Database ----------
-                    else if (storage == Storage.Database)
+                    if (storage == Storage.Database)
                     {
                         if (Guid.TryParse(httpContext.Request.Cookies[storageID].FromCookieString()["session"], out session))   // existing session
                         {
@@ -67,31 +57,17 @@ namespace asplib.Services
                         }
                         else
                         {
-                            StorageImplementation.SaveDatabase(configuration, httpContext, new T());    // immediately save the cookie
+                            main = new T();
+                            // Immediately save the new instance to obtain a cookie and instance attributes before the initial request is disposed
+                            StorageImplementation.SaveDatabase(configuration, httpContext, main);
                         }
                     }
 
-                    // ---------- Load from X-ViewState Header ----------
-                    else if (storage == Storage.Header &&
-                                httpContext.Request.Headers.ContainsKey(StorageImplementation.HeaderName))
+                    if (main == null)   // Instance required by PersistentComponentBase
                     {
-                        // input type=hidden from <input viewstate="@ViewBag.ViewState" />
-                        var controllerString = httpContext.Request.Headers[StorageImplementation.HeaderName];
-                        if (!String.IsNullOrEmpty(controllerString))
-                        {
-                            (bytes, filter) = StorageImplementation.ViewStateBytes(configuration, controllerString);
-                            main = DeserializeMain<T>(bytes, filter);
-                        }
-                    }
-
-                    if (main == null)
-                    {
-                        // ASP.NET Core implementation, no persistence, just return the new controller
                         main = new T();
                     }
                 }
-
-                MainAccessor<T>.Instance = main;
                 return main;
             });
         }

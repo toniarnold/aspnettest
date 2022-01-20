@@ -25,5 +25,15 @@
         /// clients without any dependency on session or database storage
         /// </summary>
         Header,
+
+        /// <summary>
+        /// Browser JavaScript Window.sessionStorage via ProtectedSessionStorage
+        /// </summary>
+        SessionStorage,
+
+        /// <summary>
+        /// Browser JavaScript Window.localStorage via ProtectedLocalStorage
+        /// </summary>
+        LocalStorage,
     }
 }
