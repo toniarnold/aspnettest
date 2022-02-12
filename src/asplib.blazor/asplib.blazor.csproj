@@ -18,6 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\asplib.core\asplib.core.csproj" />
+    <ProjectReference Include="..\iselenium.core\iselenium.core.csproj" />
   </ItemGroup>
 
 </Project>

@@ -15,7 +15,8 @@ namespace asplib.Controllers
     /// </summary>
     public class PersistentController : Controller, IPersistentController
     {
-        public IConfiguration Configuration { get { return this.configuration; } }
+        public IConfiguration Configuration
+        { get { return this.configuration; } }
 
         [NonSerialized]
         protected IConfiguration configuration;
@@ -25,7 +26,8 @@ namespace asplib.Controllers
         [NonSerialized]
         private object model;
 
-        public object Model { get { return this.model; } }
+        public object Model
+        { get { return this.model; } }
 
         public Guid? Session { get; set; }
 

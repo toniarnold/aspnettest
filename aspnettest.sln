@@ -116,7 +116,9 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "asptest.websharper.spa.fs",
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "minimal.blazor", "src\minimal.blazor\minimal.blazor.csproj", "{799F822E-7149-473D-99A3-7C506C41453B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "asplib.blazor", "src\asplib.blazor\asplib.blazor.csproj", "{5E892B55-3FC5-4525-B438-E57BCDCC3998}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "asplib.blazor", "src\asplib.blazor\asplib.blazor.csproj", "{5E892B55-3FC5-4525-B438-E57BCDCC3998}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "minimaltest.blazor", "src\minimaltest.blazor\minimaltest.blazor.csproj", "{96950933-279B-4700-8C47-6B8030FD8A55}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -1238,6 +1240,30 @@ Global
 		{5E892B55-3FC5-4525-B438-E57BCDCC3998}.ReleaseNoTrace|x64.Build.0 = Release|Any CPU
 		{5E892B55-3FC5-4525-B438-E57BCDCC3998}.ReleaseNoTrace|x86.ActiveCfg = Release|Any CPU
 		{5E892B55-3FC5-4525-B438-E57BCDCC3998}.ReleaseNoTrace|x86.Build.0 = Release|Any CPU
+		{96950933-279B-4700-8C47-6B8030FD8A55}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{96950933-279B-4700-8C47-6B8030FD8A55}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{96950933-279B-4700-8C47-6B8030FD8A55}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{96950933-279B-4700-8C47-6B8030FD8A55}.Debug|x64.Build.0 = Debug|Any CPU
+		{96950933-279B-4700-8C47-6B8030FD8A55}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{96950933-279B-4700-8C47-6B8030FD8A55}.Debug|x86.Build.0 = Debug|Any CPU
+		{96950933-279B-4700-8C47-6B8030FD8A55}.DebugNoTrace|Any CPU.ActiveCfg = Debug|Any CPU
+		{96950933-279B-4700-8C47-6B8030FD8A55}.DebugNoTrace|Any CPU.Build.0 = Debug|Any CPU
+		{96950933-279B-4700-8C47-6B8030FD8A55}.DebugNoTrace|x64.ActiveCfg = Debug|Any CPU
+		{96950933-279B-4700-8C47-6B8030FD8A55}.DebugNoTrace|x64.Build.0 = Debug|Any CPU
+		{96950933-279B-4700-8C47-6B8030FD8A55}.DebugNoTrace|x86.ActiveCfg = Debug|Any CPU
+		{96950933-279B-4700-8C47-6B8030FD8A55}.DebugNoTrace|x86.Build.0 = Debug|Any CPU
+		{96950933-279B-4700-8C47-6B8030FD8A55}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{96950933-279B-4700-8C47-6B8030FD8A55}.Release|Any CPU.Build.0 = Release|Any CPU
+		{96950933-279B-4700-8C47-6B8030FD8A55}.Release|x64.ActiveCfg = Release|Any CPU
+		{96950933-279B-4700-8C47-6B8030FD8A55}.Release|x64.Build.0 = Release|Any CPU
+		{96950933-279B-4700-8C47-6B8030FD8A55}.Release|x86.ActiveCfg = Release|Any CPU
+		{96950933-279B-4700-8C47-6B8030FD8A55}.Release|x86.Build.0 = Release|Any CPU
+		{96950933-279B-4700-8C47-6B8030FD8A55}.ReleaseNoTrace|Any CPU.ActiveCfg = Release|Any CPU
+		{96950933-279B-4700-8C47-6B8030FD8A55}.ReleaseNoTrace|Any CPU.Build.0 = Release|Any CPU
+		{96950933-279B-4700-8C47-6B8030FD8A55}.ReleaseNoTrace|x64.ActiveCfg = Release|Any CPU
+		{96950933-279B-4700-8C47-6B8030FD8A55}.ReleaseNoTrace|x64.Build.0 = Release|Any CPU
+		{96950933-279B-4700-8C47-6B8030FD8A55}.ReleaseNoTrace|x86.ActiveCfg = Release|Any CPU
+		{96950933-279B-4700-8C47-6B8030FD8A55}.ReleaseNoTrace|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

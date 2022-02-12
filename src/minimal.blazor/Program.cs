@@ -1,11 +1,12 @@
 using asplib.Services;
+using iselenium;
 using minimal.blazor.Models;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
+builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 
 // Main persistence
 builder.Services.AddDistributedMemoryCache();
@@ -19,12 +20,11 @@ builder.Services.AddPersistent<Main>();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
 }
-
+app.UseMiddleware<ISeleniumMiddleware>();
 app.UseStaticFiles();
 app.UseSession();
 app.UseRouting();

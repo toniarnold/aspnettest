@@ -8,7 +8,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="98.0.4758.8000" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\asplib.blazor\asplib.blazor.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="minimaltest.blazor">
+      <HintPath>..\bin\minimaltest.blazor.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
 </Project>

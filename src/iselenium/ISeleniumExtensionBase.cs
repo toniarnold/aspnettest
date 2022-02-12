@@ -59,7 +59,7 @@ namespace iselenium
 
         /// <summary>
         /// [OneTimeSetUp]
-        /// Start Internet Explorer and set up events
+        /// Start the Browser and set up events
         /// </summary>
         public static void SetUpBrowser<TWebDriver>(this ISeleniumBase inst)
             where TWebDriver : IWebDriver, new()

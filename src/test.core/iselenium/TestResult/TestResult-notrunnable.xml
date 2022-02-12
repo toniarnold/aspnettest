@@ -1,0 +1,21 @@
+<test-run id="0" name="minimaltest.blazor.dll" fullname="C:\Users\tarnold\Documents\AspNetTest\dev\wwwroot\src\bin\minimaltest.blazor.dll" runstate="Runnable" testcasecount="0" result="Failed" label="Invalid" total="0" passed="0" failed="0" warnings="0" inconclusive="0" skipped="0" asserts="0" engine-version="3.13.0.0" clr-version="6.0.2" start-time="2022-02-11 19:47:45Z" end-time="2022-02-11 19:47:45Z" duration="0.185983">
+	<command-line>
+		<![CDATA[ C:\Users\tarnold\Documents\AspNetTest\dev\wwwroot\src\minimal.blazor\bin\Debug\net6.0\minimal.blazor.dll ]]>
+	</command-line>
+	<test-suite type="Assembly" id="0-1000" name="minimaltest.blazor.dll" fullname="C:/Users/tarnold/Documents/AspNetTest/dev/wwwroot/src/bin/minimaltest.blazor.dll" runstate="NotRunnable" testcasecount="0" result="Failed" label="Invalid" site="SetUp" start-time="2022-02-11T19:47:45.5350787Z" end-time="2022-02-11T19:47:45.5530750Z" duration="0.018024" total="0" passed="0" failed="0" warnings="0" inconclusive="0" skipped="0" asserts="0">
+		<environment framework-version="3.13.2.0" clr-version="6.0.2" os-version="Microsoft Windows 10.0.19043" platform="Win32NT" cwd="C:\Users\tarnold\Documents\AspNetTest\dev\wwwroot\src\minimal.blazor" machine-name="WORK" user="tarnold" user-domain="WORK" culture="de-CH" uiculture="de-DE" os-architecture="x64" />
+		<settings>
+			<setting name="ProcessModel" value="Single" />
+			<setting name="DomainUsage" value="None" />
+			<setting name="NumberOfTestWorkers" value="8" />
+		</settings>
+		<properties>
+			<property name="_SKIPREASON" value="Could not load file or assembly 'Microsoft.VisualStudio.TestPlatform.ObjectModel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'. Das System kann die angegebene Datei nicht finden." />
+		</properties>
+		<failure>
+			<message>
+				<![CDATA[ Could not load file or assembly 'Microsoft.VisualStudio.TestPlatform.ObjectModel, Version=15.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a'. Das System kann die angegebene Datei nicht finden. ]]>
+			</message>
+		</failure>
+	</test-suite>
+</test-run>

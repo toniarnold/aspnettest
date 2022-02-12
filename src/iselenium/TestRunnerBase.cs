@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Xml;
 
 namespace iselenium
@@ -66,7 +67,7 @@ namespace iselenium
         /// <summary>
         /// Return the test results as XML string
         /// static for later retrieval after the tests ran
-        /// Filtered if the tests didnt pass
+        /// Filtered if the tests didn't pass
         /// </summary>
         public static string ResultXml
         {
@@ -79,7 +80,7 @@ namespace iselenium
                     {
                         Result.WriteTo(xmlwriter);
                     }
-                    else
+                    else if (IsRunnable)
                     {
                         switch (TestStatus)
                         {
@@ -95,6 +96,10 @@ namespace iselenium
                                 Result.WriteTo(xmlwriter);
                                 break;
                         }
+                    }
+                    else    // unfiltered when tests could not be run
+                    {
+                        Result.WriteTo(xmlwriter);
                     }
                     xmlwriter.Flush();
                     return stringwriter.ToString();
@@ -131,6 +136,28 @@ namespace iselenium
                 TestStatus status;
                 TestStatus.TryParse(result, out status);
                 return status;
+            }
+        }
+
+        /// <summary>
+        /// Used to avoid filtering when the test-suite runstate="NotRunnable"
+        /// </summary>
+        internal static bool IsRunnable
+        {
+            get
+            {
+                var isRunnable = false;
+                var testSuite = from XmlNode c in Result.ChildNodes
+                                where c.Name == "test-suite"
+                                select c;
+                if (testSuite.Any())
+                {
+                    var runstate = from XmlAttribute a in testSuite.FirstOrDefault().Attributes
+                                   where a.Name == "runstate"
+                                   select a;
+                    isRunnable = runstate.Any() ? runstate.FirstOrDefault().Value != "NotRunnable" : false;
+                }
+                return isRunnable;
             }
         }
 

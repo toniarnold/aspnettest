@@ -88,5 +88,12 @@ namespace test.iselenium
             Assert.That(!String.IsNullOrEmpty(xml));
             Assert.Pass(xml);
         }
+
+        [Test]
+        public void IsRunnableTest()
+        {
+            TestRunnerBase.Result = ReadTestResult("TestResult-notrunnable.xml");
+            Assert.That(TestRunnerBase.IsRunnable, Is.False);
+        }
     }
 }

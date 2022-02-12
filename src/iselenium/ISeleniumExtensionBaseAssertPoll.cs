@@ -8,7 +8,8 @@ namespace iselenium
     /// <summary>
     /// Extension Marker interface just for AssertPoll
     /// </summary>
-    public interface IAssertPoll { }
+    public interface IAssertPoll
+    { }
 
     /// <summary>
     /// AssertPoll corresponds to Assert.That, but quickly polls for

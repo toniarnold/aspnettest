@@ -20,5 +20,5 @@
 </style>
 <div>
     <input type="image" id="testButton" alt="Test" class="nunitbutton" src="@src" @onclick="Test"/>
-    <a class="testresult" >@TestResult</a>
+    <a class="testresult" @onclick="ShowResultXml">@((MarkupString)TestResult)</a>
 </div>
