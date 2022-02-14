@@ -43,7 +43,7 @@ namespace iselenium
         public static int StatusCode { get; set; }
 
         /// <summary>
-        /// Timeout in seconds to wait for a HTTP response.
+        /// Timeout in seconds to wait for a HTTP response, set by configuration "RequestTimeout"
         /// </summary>
         public static int RequestTimeout { get; set; }
 
@@ -522,7 +522,8 @@ namespace iselenium
 
         /// <summary>
         /// Asserts the status code while blindly accepting responses in the
-        /// AnyOf list, currently 304 ("Not Modified")
+        /// AnyOf list, currently 304 ("Not Modified") and 101 ("Switching
+        /// Protocols") for Server Side Blazor SignalR
         /// </summary>
         /// <param name="expectedStatusCode">The expected status code.</param>
         private static void AssertStatusCode(this ISeleniumBase inst, int expectedStatusCode)
@@ -530,7 +531,8 @@ namespace iselenium
             if (!SeleniumExtensionBase.OutOfProcess)
             {
                 AssertPoll(inst, () => StatusCode, () => Is.AnyOf(expectedStatusCode,
-                    (int)HttpStatusCode.NotModified));
+                    (int)HttpStatusCode.NotModified,
+                    (int)HttpStatusCode.SwitchingProtocols));
             }
         }
 

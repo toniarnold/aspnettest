@@ -15,6 +15,9 @@ namespace asplib.Components
         [Parameter]
         public string testproject { get; set; } = "";
 
+        [Parameter]
+        public string tabindex { get; set; } = "9999";
+
         public string TestResult { get; set; } = "";
 
         [Inject]
