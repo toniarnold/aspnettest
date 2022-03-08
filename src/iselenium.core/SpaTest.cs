@@ -19,7 +19,8 @@ namespace iselenium
         /// <summary>
         /// Globally set the awaitRemove: default for Click(), as simple SPA
         /// pages (as the minimal one) don't require awaitRemove: true, but
-        /// complex ones on almost every clickable element.
+        /// complex ones on almost every clickable element which leads to
+        /// another view without that element.
         /// </summary>
         protected bool awaitRemovedDefault = true;
 

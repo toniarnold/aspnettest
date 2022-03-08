@@ -1,11 +1,11 @@
 ﻿@page "/withstatic"
-@inherits OwningComponentBase<Models.Main>
-@inject Models.Main Main
+@using asplib.Components
+@inherits StaticComponentBase<Models.Main>
 
 <h1>minimalist test setup with static main</h1>
 
-<input @bind="input" />
-<button type="submit" id="SubmitButton" @onclick="Submit">Submit</button>
+<input @bind="input" id="contentTextBox" />
+<button type="submit" id="submitButton" @onclick="Submit">Submit</button>
 <ul>
     @foreach (var item in Main)
     {

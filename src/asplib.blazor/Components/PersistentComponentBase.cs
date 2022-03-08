@@ -81,6 +81,17 @@ namespace asplib.Components
         }
 
         /// <summary>
+        /// Delete the Main instance from the current ProtectedLocalStore,
+        /// regardless of the current Storage mechanism active.
+        /// </summary>
+        /// <returns></returns>
+        protected async Task DeleteLocalStorage()
+        {
+            var storageId = StorageImplementation.GetStorageID(Main.GetType().Name);
+            await ProtectedLocalStore.DeleteAsync(storageId);
+        }
+
+        /// <summary>
         /// Get the actual storage type to use in this precedence:
         /// 1. Global config override in StorageImplementation.SessionStorage e.g. from unit tests
         /// 2. Configured storage in key="SessionStorage" value="Database"

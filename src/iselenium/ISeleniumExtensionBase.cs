@@ -123,6 +123,15 @@ namespace iselenium
         }
 
         /// <summary>
+        /// Reloads the page at the current URL
+        /// </summary>
+        /// <param name="inst"></param>
+        public static void Refresh(this ISeleniumBase inst)
+        {
+            inst.driver.Navigate().Refresh();
+        }
+
+        /// <summary>
         /// Get the HTML source of the page
         /// </summary>
         /// <param name="wait">Explicit WebDriverWait for the HTML to be rendered</param>

@@ -12,16 +12,17 @@
 <EditForm Model="@Storage">
     Session Storage:<br />
     <InputRadioGroup Name="Storage" @bind-Value="Storage">
-        <InputRadio name="Storage" value="@Storage.ViewState" TValue="Storage" /> Blazor
-        <InputRadio name="Storage" value="@Storage.Database" TValue="Storage" /> Database
-        <InputRadio name="Storage" value="@Storage.SessionStorage" TValue="Storage" /> Window.sessionStorage
-        <InputRadio name="Storage" value="@Storage.LocalStorage" TValue="Storage" /> Window.localStorage
+        <InputRadio id="storageViewState" name="Storage" value="@Storage.ViewState" TValue="Storage" /> Blazor
+        <InputRadio id="storageDatabase" name="Storage" value="@Storage.Database" TValue="Storage" /> Database
+        <InputRadio id="storageSessionStorage" name="Storage" value="@Storage.SessionStorage" TValue="Storage" /> Window.sessionStorage
+        <InputRadio id="storageLocalStorage" name="Storage" value="@Storage.LocalStorage" TValue="Storage" /> Window.localStorage
+            <button type="button" id="clearButton" @onclick="@Clear">Clear</button>
     </InputRadioGroup>
 </EditForm>
 <br />
 
-<input @bind="Input" />
-<button type="submit" id="SubmitButton" @onclick="@Submit">Submit</button>
+<input @bind="Input" id="contentTextBox" />
+<button type="submit" id="submitButton" @onclick="@Submit">Submit</button>
 <ul>
     @foreach (var item in Main)
     {
@@ -52,5 +53,10 @@
             Main.Add(Input);
             Input = null;
         }
+    }
+
+    private async Task Clear()
+    {
+        await this.DeleteLocalStorage();
     }
 }
