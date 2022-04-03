@@ -45,6 +45,7 @@
       <Filter>Sources</Filter>
     </None>
     <None Include="migrate-iie-iselenium.md" />
+    <None Include="blazor.md" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="components.png">

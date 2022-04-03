@@ -21,6 +21,7 @@
   <ItemGroup>
     <None Include="apicaller-apiservice.dia" />
     <None Include="architecture.md" />
+    <None Include="blazor.md" />
     <None Include="components.dia" />
     <None Include="iie-component.dia" />
     <None Include="iie-page.dia" />
