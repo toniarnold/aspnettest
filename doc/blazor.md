@@ -1,7 +1,7 @@
 # ASP.NET Blazor Server
 
 * [Summary](#summary)
-* [Scaffolding of ```minimal.blazor```](#scaffolding-of-minimal.blazor)
+* [Scaffolding of ```minimal.blazor```](#scaffolding-of-minimalblazor)
 
 ## Summary
 
@@ -55,4 +55,55 @@ member was common practice in the .NET Framework days, before DI.
 which serializes/deserializes the central ```Main``` state object.
 
 
+### Using the static main accessor
 
+To be able to statically access the main state object, inherit from the generic
+```StaticComponentBase``` as this in the Razor page:
+```
+@using asplib.Components
+@inherits StaticComponentBase<Models.Main>
+```
+This base class injects that central state object as a property ```Main```. In
+NUnit tests run from within the browser and thus the ASP.NET core process, the
+state object can be accessed as ```MainAccessor<Main>.Instance```.
+
+
+### Persistence of the main state object
+
+To make the main state object persistent, inherit from the
+```PersistentComponentBase``` instead:
+```
+@using asplib.Components
+@inherits PersistentComponentBase<Models.Main>
+```
+This also injects a property ```Main```, but makes it persistent according to
+the storage type configured in the calue ```"SessionStorage"``` in
+```aspsettongs.json```. The value is parsed as the global ```Storage``` enum
+from the global ```asplib``` .NET Standard project shared by all frameworks.
+
+Valid values in ASP.NET Blazor Server are (the last two are exclusive for Blazor
+and not availiable in .NET Core MVC ore WebForms):
+
+ * ```ViewState```
+   - Disables persistence, state will not survive a SignalR reconnection.
+ * ```Database```
+   - Serializes the main state into the database which makes a
+     ```"ASP_DBEntities"``` connection string in ```aspsettongs.json```
+     mandatory. State will be available as many days as configured in
+     ```"DatabaseStorageExpires"```.
+ * ```SessionStorage```
+   - Serializes the main state into the browser JavaScript Window.sessionStorage
+     via ProtectedSessionStorage. This makes the state local to the browser tab,
+     and it will survive SignalR reconnections.
+ * ```LocalStorage```
+   - Serializes the main state into the browser JavaScript Window.localStorage
+     via ProtectedLocalStorage. It is up to the browser how long it will
+     retain the data.
+
+The binary serialization in the browser is (additionally to the built-in
+Protected*Storage mechanism) encrypted by the server-side secret
+```"EncryptViewStateKey"``` and thus not manipulable by the client. This should
+be enough to justify re-enabling the otherwise newly by .NET per default as
+"unsafe" declared binary serialization by setting
+```EnableUnsafeBinaryFormatterSerialization``` to ```true``` in the .csproj
+file.
