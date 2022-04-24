@@ -2,4 +2,4 @@
 
 [assembly: InternalsVisibleTo("asplib.websharper")]
 [assembly: InternalsVisibleTo("asplib.blazor")]
-[assembly: InternalsVisibleTo("test.core")]
+[assembly: InternalsVisibleTo("test.core")] 

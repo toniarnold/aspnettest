@@ -1,0 +1,12 @@
+﻿@using asp.blazor.CalculatorSmc
+@using asp.blazor.Components.CalculatorParts
+
+@inherits PersistentComponentBase<Calculator>
+
+<CascadingValue Name="Main" Value="@Main">
+    <Title/>
+    <hr/>
+    <DynamicComponent Type="@pageType" Parameters="@errorParams"/>
+    <hr/>
+    <Footer/>
+</CascadingValue>

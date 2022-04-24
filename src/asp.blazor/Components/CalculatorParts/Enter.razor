@@ -1,0 +1,17 @@
+﻿@using asp.blazor.CalculatorSmc
+
+<p>
+    <input @bind-value=Operand />
+</p>
+
+@code {
+    [CascadingParameter(Name="Main")]
+    private Calculator Main{ get; set; }
+
+    // Store the operand in the global state object
+    private string Operand
+    {
+        get { return Main.Operand; }
+        set { Main.Operand = value; }
+    }
+}

@@ -2,6 +2,7 @@
 
 * [Summary](#summary)
 * [Scaffolding of ```minimal.blazor```](#scaffolding-of-minimalblazor)
+* [```asp.blazor``` with SMC](#aspblazor-with-smc)
 
 ## Summary
 
@@ -107,3 +108,33 @@ be enough to justify re-enabling the otherwise newly by .NET per default as
 "unsafe" declared binary serialization by setting
 ```EnableUnsafeBinaryFormatterSerialization``` to ```true``` in the .csproj
 file.
+
+### Using the test project
+
+Adding an NUnit test button from the ```asplib.core``` project is as simple as
+adding
+```
+@using asplib.Components
+<TestButton testproject="minimaltest.blazor" tabindex="1000" />
+```
+
+The ```minimaltest.blazor``` test project can't directly be referenced by the
+Blazor application, as this would create a circular reference. The pattern used
+in the solution is to add this post-build event which will copy the DLL to the
+bin directory:
+```
+diff --binary $(TargetPath) $(SolutionDir)\src\bin
+if errorlevel 1 xcopy /d /f /y $(TargetDir)\$(TargetName).* $(SolutionDir)\src\bin
+```
+and then reference the DLL created directly in the Blazor application under test.
+
+
+
+## ```asp.blazor``` with SMC
+
+Unlike ASP.NET Core MVC or WebSharper, there is no additional ViewModel-like
+wrapper necessary for the SMC class. The ```Calculator.razor``` component
+directly inherits persistence generically with the type of the SMC model class:
+```
+@inherits PersistentComponentBase<Calculator>
+```

@@ -1,0 +1,68 @@
+﻿@using asp.blazor.CalculatorSmc
+
+<style>
+    .button {
+        height: 30px;
+        width: 35px;
+    }
+</style>
+
+<p>
+    <button @onclick="Add" id="AddButton" class="button"> + </button>
+    <button @onclick="Sub" id="SubButton" class="button"> - </button>
+    <button @onclick="Mul" id="MulButton" class="button"> * </button>
+    <button @onclick="Div" id="DivButton" class="button"> / </button>
+    <button @onclick="Pow" id="PowButton" class="button">x<sup>2</sup></button>
+    <button @onclick="Sqrt" id="SqrtButton" class="button">&radic;<span style='text-decoration: overline'>x</span></button>
+    <button @onclick="Clr" id="ClrButton" class="button"> C </button>
+    <button @onclick="ClrAll" id="ClrAllButton" class="button">CA</button>
+</p>
+
+<p>
+    @((MarkupString)Main.StackHtmlString)
+</p>
+
+@code {
+    [CascadingParameter(Name="Main")]
+    private Calculator Main{ get; set; }
+
+    private void Add()
+    {
+        Main.Fsm.Add(Main.Stack);
+    }
+
+    private void Sub()
+    {
+        Main.Fsm.Sub(Main.Stack);
+    }
+
+    private void Mul()
+    {
+        Main.Fsm.Mul(Main.Stack);
+    }
+
+    private void Div()
+    {
+        Main.Fsm.Div(Main.Stack);
+    }
+
+    private void Pow()
+    {
+        Main.Fsm.Pow(Main.Stack);
+    }
+
+    private void Sqrt()
+    {
+        Main.Fsm.Sqrt(Main.Stack);
+    }
+
+    private void Clr()
+    {
+        Main.Fsm.Clr(Main.Stack);
+    }
+
+    private void ClrAll()
+    {
+        Main.Fsm.ClrAll(Main.Stack);
+    }
+}
