@@ -1,5 +1,8 @@
 ﻿using asp.blazor.Components.CalculatorParts;
+using asplib.Model;
+using Microsoft.AspNetCore.Components;
 using statemap;
+using StorageEnum = asplib.Model.Storage;
 
 namespace asp.blazor.Components
 {
@@ -9,24 +12,29 @@ namespace asp.blazor.Components
         private string? errorMsg;
         private Dictionary<string, object>? errorParams => errorMsg != null ? new() { { "ErrorMsg", errorMsg } } : null;
 
-        // Blazor State Container / SMC event notification pattern
-        public void StateChanged(object sender, StateChangeEventArgs args)
+        [Parameter]
+        public string StorageLinkUrl { get; set; }
+
+        [Parameter]
+        public string StorageLinkClientID { get; set; }
+
+        [Parameter]
+        public string Storage
         {
-            ReRender();
-            StateHasChanged();
+            get { return this.GetStorage().ToString(); }
+            set { this.SetStorage(value); }
         }
 
-        protected override void OnInitialized()
+        public string Encrypted
         {
-            Main.Fsm.StateChange += StateChanged;
+            get
+            {
+                return (this.GetStorage() == StorageEnum.Database && StorageImplementation.GetEncryptDatabaseStorage(this.Configuration)) ?
+                    "&#x1f512;" : String.Empty;
+            }
         }
 
-        public void Dispose()
-        {
-            Main.Fsm.StateChange -= StateChanged;
-        }
-
-        private void ReRender()
+        protected override void ReRender()
         {
             errorMsg = null;
             switch (Main.State)

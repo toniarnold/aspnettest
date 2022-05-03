@@ -1,4 +1,5 @@
-﻿using asplib.Model;
+﻿using asplib.Components;
+using asplib.Model;
 
 namespace asp.blazor.CalculatorSmc
 {
@@ -7,7 +8,7 @@ namespace asp.blazor.CalculatorSmc
     /// </summary>
     [Serializable]
     [Clsid("F39F40BA-4152-4BE0-8907-70F4B135E29D")]
-    public class Calculator
+    public class Calculator : IAppClass<CalculatorContext, CalculatorContext.CalculatorState>
     {
         protected CalculatorContext _fsm;
         protected Stack<string> _stack;

@@ -46,6 +46,9 @@
     </None>
     <None Include="migrate-iie-iselenium.md" />
     <None Include="blazor.md" />
+    <None Include="blazor-database.dia">
+      <Filter>Sources</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="components.png">
@@ -70,6 +73,9 @@
       <Filter>Targets</Filter>
     </Image>
     <Image Include="apicaller-apiservice.png">
+      <Filter>Targets</Filter>
+    </Image>
+    <Image Include="blazor-database.png">
       <Filter>Targets</Filter>
     </Image>
   </ItemGroup>

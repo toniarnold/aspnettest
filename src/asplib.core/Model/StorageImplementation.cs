@@ -46,6 +46,16 @@ namespace asplib.Model
         }
 
         /// <summary>
+        /// Sets the storage to override configuration storage.
+        /// A null value restores configuration.
+        /// </summary>
+        /// <param name="storage"></param>
+        public static void SetStorage(string storage)
+        {
+            SessionStorage = (storage != null) ? (Storage)Enum.Parse(typeof(Storage), storage, true) : null;
+        }
+
+        /// <summary>
         /// Save the main object into the session
         /// </summary>
         /// <param name="configuration">The configuration.</param>
@@ -66,12 +76,16 @@ namespace asplib.Model
         public static void SaveDatabase(IConfiguration configuration, HttpContext httpContext, object main)
         {
             var storageID = GetStorageID(main.GetType().Name);
-            Guid session = Guid.NewGuid();  // cannot exist in the database
+            Guid session;
             var newCookie = new NameValueCollection();
             var cookie = httpContext.Request.Cookies[storageID].FromCookieString();
-            if (cookie != null)
+            if (cookie["session"] != null)
             {
                 Guid.TryParse(cookie["session"], out session);
+            }
+            else
+            {
+                session = Guid.NewGuid();  // cannot exist in the database
             }
             Func<byte[], byte[]> filter = null;
             if (StorageImplementation.GetEncryptDatabaseStorage(configuration))
@@ -79,14 +93,14 @@ namespace asplib.Model
                 var key = (cookie["key"] != null) ? Convert.FromBase64String(cookie["key"]) : null;
                 var secret = StorageImplementation.GetSecret(key);
                 filter = x => Crypt.Encrypt(secret, x);
-                TypeDescriptor.AddAttributes(main, new DatabaseKeyAttribute(key));
                 newCookie["key"] = Convert.ToBase64String(secret.Key);
+                TypeDescriptor.AddAttributes(main, new DatabaseKeyAttribute(secret.Key));
             }
             using (var db = new ASP_DBEntities())
             {
                 var savedSession = db.SaveMain(main.GetType(), StorageImplementation.Bytes(main, filter), session);
-                TypeDescriptor.AddAttributes(main, new DatabaseSessionAttribute(savedSession));
                 newCookie["session"] = savedSession.ToString();
+                TypeDescriptor.AddAttributes(main, new DatabaseSessionAttribute(savedSession));
             }
             var days = configuration.GetValue<int>("DatabaseStorageExpires");
             var options = new CookieOptions()
@@ -131,12 +145,10 @@ namespace asplib.Model
             {
                 var secret = StorageImplementation.GetSecret(key);
                 filter = x => Crypt.Encrypt(secret, x);
-                TypeDescriptor.AddAttributes(main, new DatabaseKeyAttribute(key));
             }
             using (var db = new ASP_DBEntities())
             {
                 var savedSession = db.SaveMain(main.GetType(), StorageImplementation.Bytes(main, filter), session);
-                TypeDescriptor.AddAttributes(main, new DatabaseSessionAttribute(savedSession));
             }
         }
 
@@ -474,7 +486,8 @@ namespace asplib.Model
         }
 
         /// <summary>
-        /// Get the Key/IV secret from the key byte[]
+        /// Get the Key/IV secret from the key byte[] or generate a new one when
+        /// the key is null.
         /// </summary>
         /// <returns></returns>
         internal static Crypt.Secret GetSecret(byte[] key)

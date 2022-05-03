@@ -21,6 +21,7 @@
   <ItemGroup>
     <None Include="apicaller-apiservice.dia" />
     <None Include="architecture.md" />
+    <None Include="blazor-database.dia" />
     <None Include="blazor.md" />
     <None Include="components.dia" />
     <None Include="iie-component.dia" />
@@ -42,6 +43,7 @@
   </ItemGroup>
   <ItemGroup>
     <Image Include="apicaller-apiservice.png" />
+    <Image Include="blazor-database.png" />
     <Image Include="components.png" />
     <Image Include="iie-component.png" />
     <Image Include="iie-page.png" />
@@ -104,8 +106,12 @@
     <NMakeCleanCommandLine>nmake clean</NMakeCleanCommandLine>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
-    <NMakeOutput>doc.exe</NMakeOutput>
+    <NMakeOutput>
+    </NMakeOutput>
     <NMakePreprocessorDefinitions>_DEBUG;$(NMakePreprocessorDefinitions)</NMakePreprocessorDefinitions>
+    <NMakeBuildCommandLine>nmake</NMakeBuildCommandLine>
+    <NMakeReBuildCommandLine>nmake clean &amp;&amp; nmake</NMakeReBuildCommandLine>
+    <NMakeCleanCommandLine>nmake clean</NMakeCleanCommandLine>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <NMakeOutput>doc.exe</NMakeOutput>

@@ -4,6 +4,7 @@ using asplib.Model.Db;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using System.ComponentModel;
 using System.Net;
 
 namespace asplib.Services
@@ -12,7 +13,7 @@ namespace asplib.Services
     {
         public static void AddPersistent<T>(this IServiceCollection services) where T : class, new()
         {
-            services.AddScoped<T>(provider =>
+            services.AddTransient<T>(provider =>
             {
                 // Implemented after PersistentControllerActivator for ASP.NET Core MVC
                 // In ASP.NET Core Blazor, HttpContext is only available on page initialization
@@ -54,6 +55,13 @@ namespace asplib.Services
                         {
                             (bytes, filter) = StorageImplementation.DatabaseBytes(configuration, httpContext, storageID, session);
                             main = DeserializeMain<T>(bytes, filter);
+                            TypeDescriptor.AddAttributes(main, new DatabaseSessionAttribute(session));  // remember the session Guid
+                            if (StorageImplementation.GetEncryptDatabaseStorage(configuration))
+                            {
+                                var cookie = httpContext.Request.Cookies[storageID].FromCookieString();
+                                var key = (cookie["key"] != null) ? Convert.FromBase64String(cookie["key"]) : null;
+                                TypeDescriptor.AddAttributes(main, new DatabaseKeyAttribute(key));
+                            }
                         }
                         else
                         {

@@ -1,17 +1,17 @@
 # nmake needs a manually created list of all GNU .dia files
 
-DIA = components.dia \
-	internet-explorer.dia \
+DIA = apicaller-apiservice.dia \
+	blazor-database.dia \
+	components.dia \
 	iie-component.dia \
-	iie-test.dia \
 	iie-page.dia \
-	test-without-storage.dia \
-	test-with-storage.dia \
+	iie-test.dia \
 	interaction-default.dia \
 	interaction-withroot.dia \
-	webforms-core.dia \
-	apicaller-apiservice.dia
-
+	internet-explorer.dia \
+	test-without-storage.dia \
+	test-with-storage.dia \
+	webforms-core.dia
 
 .SUFFIXES: .dia .png
 PNG = $(DIA:.dia=.png)

@@ -1,8 +1,20 @@
 ﻿@page "/"
+@page "/storage/{storage}"
+
+@using asplib.Model
 
 <PageTitle>asp.blazor Server Side SMC Calculator</PageTitle>
 
-<CalculatorComponent/>
+<CalculatorComponent StorageLinkUrl="triptych" />
 
 <TestButton testproject="asptest.blazor" tabindex="1000" />
 
+@code {
+    [Parameter]
+    public string? Storage { get; set; }
+
+    protected override void OnParametersSet()
+    {
+        StorageImplementation.SetStorage(Storage);
+    }
+}

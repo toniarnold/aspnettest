@@ -9,8 +9,8 @@
 
   <ItemGroup>
     <PackageReference Include="Selenium.Firefox.WebDriver" Version="0.27.0" />
-    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="99.0.4844.5100" />
-    <PackageReference Include="Selenium.WebDriver.MSEdgeDriver" Version="99.0.1150.25" />
+    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="101.0.4951.4100" />
+    <PackageReference Include="Selenium.WebDriver.MSEdgeDriver" Version="100.0.1185.50" />
   </ItemGroup>
 
   <ItemGroup>

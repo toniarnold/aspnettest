@@ -1,0 +1,46 @@
+﻿@page "/triptych"
+
+<style>
+    .calc-container {
+        display: inline-grid;
+        grid-template-columns: auto auto auto;
+        grid-gap: 10px;
+    }
+
+    .calc-box {
+        border: 1px solid black;
+        border-radius: 10px;
+        padding: 30px;
+    }
+</style>
+
+<div class="calc-container">
+    <div class="calc-box">
+        <CalculatorComponent
+            @key="Guid.NewGuid()"
+            Storage="SessionStorage"
+            StorageLinkUrl="/storage/sessionstorage"
+            StorageLinkClientID="StorageLinkSessionStorage"
+        />
+    </div>
+    <div class="calc-box">
+        <CalculatorComponent
+            @key="Guid.NewGuid()"
+            Storage="LocalStorage"
+            StorageLinkUrl="/storage/localstorage"
+            StorageLinkClientID="StorageLinkLocalStorage"
+        />
+    </div>
+    <div class="calc-box">
+        <CalculatorComponent
+            @key="Guid.NewGuid()"
+            Storage="Database"
+            StorageLinkUrl="/storage/database"
+            StorageLinkClientID="StorageLinkDatabase"
+        />
+    </div>
+</div>
+
+@code {
+
+}

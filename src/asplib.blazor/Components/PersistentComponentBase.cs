@@ -3,23 +3,53 @@ using asplib.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 
 namespace asplib.Components
 {
-    public class PersistentComponentBase<T> : OwningComponentBase<T> where T : class, new()
+    public abstract class PersistentComponentBase<T> : OwningComponentBase<T> where T : class, new()
     {
+        /// <summary>
+        /// Main state objecet to be persisted
+        /// </summary>
         [Inject]
         public T Main { get; private set; }
 
         [Inject]
-        private IConfiguration Configuration { get; set; }
+        protected IConfiguration Configuration { get; set; }
 
         [Inject]
         private ProtectedSessionStorage ProtectedSessionStore { get; set; }
 
         [Inject]
         private ProtectedLocalStorage ProtectedLocalStore { get; set; }
+
+        [Inject]
+        private ILogger<PersistentComponentBase<T>> Logger { get; set; }
+
+        /// <summary>
+        /// Local type of the session storage to override AppSettings["SessionStorage"]
+        /// </summary>
+        public Storage? SessionStorage { get; set; }
+
+        /// <summary>
+        /// Set the instance-local storage type
+        /// </summary>
+        /// <param name="storage"></param>
+        protected void SetStorage(Storage storage)
+        {
+            this.SessionStorage = storage;
+        }
+
+        /// <summary>
+        /// Set the instance-local storage type from a string parameter
+        /// </summary>
+        /// <param name="storage"></param>
+        protected void SetStorage(string storage)
+        {
+            this.SessionStorage = (Storage)Enum.Parse(typeof(Storage), storage, true);
+        }
 
         /// <summary>
         /// Instantiate the Main instance received from the browser,
@@ -31,6 +61,8 @@ namespace asplib.Components
         {
             if (firstRender)
             {
+                Logger.LogInformation("Load Storage {0}", this.GetStorage());
+
                 switch (this.GetStorage())
                 {
                     case Storage.ViewState:
@@ -52,10 +84,13 @@ namespace asplib.Components
                         throw new NotImplementedException(String.Format(
                             "Storage {0}", this.GetStorage()));
                 }
+                this.StateHasChanged();
                 MainAccessor<T>.Instance = Main;
             }
             else
             {
+                Logger.LogInformation("Save Storage {0}", this.GetStorage());
+
                 switch (this.GetStorage())
                 {
                     case Storage.ViewState:
@@ -98,9 +133,17 @@ namespace asplib.Components
         /// 3. Defaults to ViewState
         /// </summary>
         /// <returns></returns>
-        private Storage GetStorage()
+        protected Storage GetStorage()
         {
-            var storage = StorageImplementation.SessionStorage;       // static and global override
+            var storage = this.SessionStorage;    // Instance property
+            if (storage == null)
+            {
+                storage = SessionStorage;   // overrides all
+            }
+            if (storage == null)
+            {
+                storage = StorageImplementation.SessionStorage;       // static and global override
+            }
             if (storage == null)                // configuration or default
             {
                 var configStorage = this.Configuration.GetValue<string>("SessionStorage");
