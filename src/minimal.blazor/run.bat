@@ -1,3 +1,5 @@
+ECHO %ASPNETCORE_ENVIRONMENT%
 :Start
-.\bin\Debug\net6.0\minimal.blazor.exe
+CD .\bin\Release\net6.0\publish\
+minimal.blazor.exe
 GOTO Start

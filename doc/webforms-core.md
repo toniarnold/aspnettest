@@ -1,4 +1,4 @@
-# ASP.NET WebForms and MVC Core
+# ASP.NET WebForms and MVC Core (legacy)
 
 * [Dependencies](#Dependencies)
    * [Identical Namespaces](#identical-namespaces)
@@ -16,6 +16,11 @@
    * [Running the Tests](#running-the-tests)
      * [Test Performance](#test-performance) 
 
+*ASP.NET WebForms was discontinued by Microsoft a long time ago, and MVC Core
+with legacy actions and views (as used here) never was on equal terms with
+WebForms, as it never was compositional (never possible to implement the
+triptych example of the other Frameworks). It is discontinued here in facor of
+Blazor Server.*
 
 
 ## Dependencies

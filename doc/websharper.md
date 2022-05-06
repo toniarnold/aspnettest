@@ -1,8 +1,12 @@
-# WebSharper with SMC
+# WebSharper with SMC (defunct)
 
 * [Summary](#summary)
 * [Controller persistence](#controller-persistence)
 * [State driven document part visibility](#state-driven-document-part-visibility)
+
+*IntellyFactory seems to have abandoned WebShaprer in favor of Bolero (Blazor
+Server in F#, see the [WebSharper Blog](https://forums.websharper.com/blogs)),
+and asp.websharper.spa.fs now even crashes wsfsc.exe ([Bug #5](/../../issues/5)).*
 
 ## Summary
 

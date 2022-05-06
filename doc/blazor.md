@@ -144,6 +144,13 @@ if errorlevel 1 xcopy /d /f /y $(TargetDir)\$(TargetName).* $(SolutionDir)\src\b
 ```
 and then reference the DLL created directly in the Blazor application under test.
 
+The TestRunnerBase will load the DLL from the `bin` path parent to the
+`Environment.ContentRootPath` which only works when run from VisualStudio
+itself, but not from a release directory. However, the various Selenium Driver
+.exe are not in the path anyway when running a published Blazor application via
+run.bat - which, unlike .NET Core MVC, is required in Blazor for the `_content`
+directoy from `asplib.blazor`.
+
 
 
 ## `asp.blazor` with the SMC

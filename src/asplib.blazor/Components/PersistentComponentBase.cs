@@ -116,14 +116,17 @@ namespace asplib.Components
         }
 
         /// <summary>
-        /// Delete the Main instance from the current ProtectedLocalStore,
+        /// Delete the Main instance from the current browser stores,
         /// regardless of the current Storage mechanism active.
         /// </summary>
         /// <returns></returns>
-        protected async Task DeleteLocalStorage()
+        protected async Task DeleteBrowserStore()
         {
             var storageId = StorageImplementation.GetStorageID(Main.GetType().Name);
             await ProtectedLocalStore.DeleteAsync(storageId);
+            await ProtectedSessionStore.DeleteAsync(storageId);
+            this.Main = new T();
+            this.StateHasChanged();
         }
 
         /// <summary>

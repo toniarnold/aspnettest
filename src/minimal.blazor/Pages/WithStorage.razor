@@ -57,6 +57,7 @@
 
     private async Task Clear()
     {
-        await this.DeleteLocalStorage();
+        await this.DeleteBrowserStore();
+        uriHelper.NavigateTo(uriHelper.Uri, forceLoad: true); 
     }
 }

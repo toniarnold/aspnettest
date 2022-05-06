@@ -11,10 +11,9 @@ using System.Collections.Generic;
 
 namespace minimaltest.blazor
 {
-    //[TestFixture(typeof(ChromeDriver))]
-    //[TestFixture(typeof(FirefoxDriver))]
-    //[TestFixture(typeof(EdgeDriver))]
+    [TestFixture(typeof(ChromeDriver))]
     [TestFixture(typeof(EdgeDriver))]
+    [TestFixture(typeof(FirefoxDriver))]
     public class WithStorageTest<TWebDriver> : SpaDbTest<TWebDriver>
         where TWebDriver : IWebDriver, new()
     {
@@ -60,36 +59,40 @@ namespace minimaltest.blazor
         {
             this.Navigate("/Withstorage");
             this.Click("storageSessionStorage");
+            this.Click("clearButton");
             this.WriteContentTest(() => this.Reload());
         }
 
-        [Test]
-        [Ignore("Firefox WebDriver broken")]
-        public void StorageDatabaseTest()
-        {
-            // Chrome is "user friendly", no persistent cookies in selenium remote  mode
-            if (this.driver is FirefoxDriver)
-            {
-                this.Navigate("/Withstorage");
-                this.Click("storageDatabase");
-                this.WriteContentTest(() => this.RestartBrowser());
-            }
-            else Assert.Ignore("No persistence in Chrome");
-        }
+        // As (at least) of FireFox 101, there seems to be also no persistence
+        // no more when run by Selenium, thus these persistence tests can no
+        // more be executed at all.
 
-        [Test]
-        [Ignore("Firefox WebDriver broken")]
-        public void StorageLocalStorageTest()
-        {
-            if (this.driver is FirefoxDriver)
-            {
-                this.Navigate("/Withstorage");
-                this.Click("storageLocalStorage");
-                this.Click("clearButton");
-                this.WriteContentTest(() => this.RestartBrowser());
-            }
-            else Assert.Ignore("No persistence in Chrome");
-        }
+        //[Test]
+        //public void StorageDatabaseTest()
+        //{
+        //    // Chrome is "user friendly", no persistent cookies in selenium remote mode
+        //    if (this.driver is FirefoxDriver)
+        //    {
+        //        this.Navigate("/Withstorage");
+        //        this.Click("storageDatabase");
+        //        this.Click("clearButton");
+        //        this.WriteContentTest(() => this.RestartBrowser());
+        //    }
+        //    else Assert.Inconclusive("No persistence in Chrome");
+        //}
+
+        //[Test]
+        //public void StorageLocalStorageTest()
+        //{
+        //    if (this.driver is FirefoxDriver)
+        //    {
+        //        this.Navigate("/Withstorage");
+        //        this.Click("storageLocalStorage");
+        //        this.Click("clearButton");
+        //        this.WriteContentTest(() => this.RestartBrowser());
+        //    }
+        //    else Assert.Inconclusive("No persistence in Chrome");
+        //}
 
         /// <summary>
         /// Basically the same test as WithStaticTest.WriteContentTest(),
@@ -112,7 +115,7 @@ namespace minimaltest.blazor
             Assert.That(this.Content[0], Is.EqualTo("a first content line"));
             Assert.That(this.Content[1], Is.EqualTo("a second content line"));
 
-            survives(); // Reload() or RestartIE()
+            survives(); // Reload() or RestartBrowser()
             Assert.That(this.Content[0], Is.EqualTo("a first content line"));
             Assert.That(this.Content[1], Is.EqualTo("a second content line"));
         }
