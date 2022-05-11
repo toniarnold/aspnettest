@@ -1,4 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Console;
 using System;
 using System.Data.SqlClient;
 using System.Linq;
@@ -14,9 +16,14 @@ namespace asplib.Model.Db
 
         public DbSet<Main> Main { get; set; }
 
+        public ASP_DBEntities() : base()
+        { }
+
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer(ConnectionString);
+            optionsBuilder.UseLoggerFactory(LoggerFactory.Create(builder => { builder.AddConsole(); }))
+                .EnableSensitiveDataLogging()
+                .UseSqlServer(ConnectionString);
         }
 
         /// <summary>

@@ -123,7 +123,7 @@ namespace iselenium
         /// <returns></returns>
         public static IWebElement GetHTMLElement(this ISelenium inst, string clientID)
         {
-            return SeleniumExtensionBase.GetHTMLElementById(inst, clientID);
+            return SeleniumExtensionBase.GetHTMLElement(inst, By.Id, clientID);
         }
 
         /// <summary>

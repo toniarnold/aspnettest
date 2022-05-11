@@ -1,4 +1,6 @@
+using asplib.Components;
 using iselenium;
+using minimal.blazor.Pages;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
@@ -17,15 +19,19 @@ namespace minimaltest.blazor
         public IWebDriver driver { get; set; }
 #pragma warning restore IDE1006, CS8618
 
+        public Index? Index => (Index?)TestFocus.Component;
+
         [OneTimeSetUp]
-        public void OneTimeSetUpBrowser()
+        public void OneTimeSetUp()
         {
             this.SetUpBrowser<ChromeDriver>();
+            TestFocus.SetFocus(typeof(Index));
         }
 
         [OneTimeTearDown]
-        public void OneTimeTearDownBrowser()
+        public void OneTimeTearDown()
         {
+            TestFocus.RemoveFocus();
             this.TearDownBrowser();
         }
 
@@ -43,7 +49,7 @@ namespace minimaltest.blazor
         {
             this.Navigate("/");
             Assert.That(this.Html(), Does.Contain(">minimalist test setup</h1>"));
-            this.ClickID("withstatic-link", expectRequest: false, wait: SeleniumExtensionBase.RequestTimeout);
+            this.Click(By.CssSelector, $"*[_bl_{Index.withstaticLink.Id}]", expectRequest: false, wait: SeleniumExtensionBase.RequestTimeout);
             this.AssertPoll(() => this.Html(), () => Does.Contain(">minimalist test setup with static main</h1>"));
         }
 
@@ -52,7 +58,7 @@ namespace minimaltest.blazor
         {
             this.Navigate("/");
             Assert.That(this.Html(), Does.Contain(">minimalist test setup</h1>"));
-            this.ClickID("withstorage-link", expectRequest: false, wait: SeleniumExtensionBase.RequestTimeout);
+            this.Click(By.CssSelector, $"*[_bl_{Index.withstorageLink.Id}]", expectRequest: false, wait: SeleniumExtensionBase.RequestTimeout);
             this.AssertPoll(() => this.Html(), () => Does.Contain(">minimalist test setup with storage</h1>"));
         }
     }

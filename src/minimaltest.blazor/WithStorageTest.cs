@@ -1,6 +1,9 @@
-﻿using asplib.Services;
+﻿using asplib.Components;
+using asplib.Model.Db;
+using asplib.Services;
 using iselenium;
 using minimal.blazor.Models;
+using minimal.blazor.Pages;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
@@ -11,10 +14,11 @@ using System.Collections.Generic;
 
 namespace minimaltest.blazor
 {
-    [TestFixture(typeof(ChromeDriver))]
-    [TestFixture(typeof(EdgeDriver))]
+    //[TestFixture(typeof(ChromeDriver))]
+    //[TestFixture(typeof(EdgeDriver))]
+    //[TestFixture(typeof(FirefoxDriver))]
     [TestFixture(typeof(FirefoxDriver))]
-    public class WithStorageTest<TWebDriver> : SpaDbTest<TWebDriver>
+    public class WithStorageTest<TWebDriver> : StaticComponentDbTest<TWebDriver, WithStorage, Main>
         where TWebDriver : IWebDriver, new()
     {
         /// <summary>
@@ -29,9 +33,9 @@ namespace minimaltest.blazor
         /// <summary>
         /// Typed accessor to the only model object in the app
         /// </summary>
-        public List<string> Content
+        public List<string>? Content
         {
-            get { return MainAccessor<Main>.Instance; }
+            get { return ((WithStorage?)TestFocus.Component)?.Main; }
         }
 
         [Test]
@@ -58,8 +62,8 @@ namespace minimaltest.blazor
         public void StorageSessionStorageTest()
         {
             this.Navigate("/Withstorage");
-            this.Click("storageSessionStorage");
-            this.Click("clearButton");
+            this.Click(By.Id, "storageSessionStorage");
+            this.Click(C.clearButton);
             this.WriteContentTest(() => this.Reload());
         }
 
@@ -101,16 +105,16 @@ namespace minimaltest.blazor
         /// </summary>
         public void WriteContentTest(Action survives)
         {
-            this.Write("contentTextBox", "a first content line");
-            this.Click("submitButton");
+            this.Write(C.contentTextBox, "a first content line");
+            this.Click(C.submitButton);
             this.AssertPoll(() => this.Content, () => Has.Exactly(1).Items);
             Assert.That(this.Content[0], Is.EqualTo("a first content line"));
 
             survives();
             this.AssertPoll(() => this.Html(), () => Does.Contain("a first content line"));
 
-            this.Write("contentTextBox", "a second content line");
-            this.Click("submitButton");
+            this.Write(C.contentTextBox, "a second content line");
+            this.Click(C.submitButton);
             this.AssertPoll(() => this.Content, () => Has.Exactly(2).Items);
             Assert.That(this.Content[0], Is.EqualTo("a first content line"));
             Assert.That(this.Content[1], Is.EqualTo("a second content line"));
@@ -148,7 +152,7 @@ namespace minimaltest.blazor
 
         private void ClearLocalStorage()
         {
-            this.Click("clearButton");
+            this.Click(C.clearButton);
         }
     }
 }

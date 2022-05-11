@@ -99,17 +99,25 @@ namespace iselenium
 
         /// <summary>
         /// Asynchronously issue a GET request for the specified absolute path at localhost
-        /// <param name="delay">Optional delay time in seconds beforen navigating to the url</param>
+        /// <param name="path">Path part of the URL (without Domain)</param>
+        /// <param name="expectedStatusCode">Expected StatusCode of the response</param>
+        /// <param name="delay">Optional delay time in seconds before navigating to the url</param>
         /// <param name="pause">Optional pause time in seconds after Selenium claims DocumentComplete</param>
         /// </summary>
-        /// <param name="url"></param>
-        /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>
         public static void Navigate(this ISeleniumBase inst, string path, int expectedStatusCode = 200, int delay = 0, int pause = 0)
         {
             Trace.Assert(path.StartsWith("/"), "path must be absolute");
             NavigateURL(inst, String.Format("http://localhost:{0}{1}", Port, path), expectedStatusCode, delay, pause);
         }
 
+        /// <summary>
+        /// Asynchronously issue a GET request for the specified URL
+        /// </summary>
+        /// <param name="url">URL inclusive domain</param>
+        /// <param name="expectedStatusCode">Expected StatusCode of the response</param>
+        /// <param name="delay">Optional delay time in seconds before navigating to the url</param>
+        /// <param name="pause">Optional pause time in seconds after Selenium claims DocumentComplete</param>
+        /// <exception cref="InvalidOperationException"></exception>
         public static void NavigateURL(this ISeleniumBase inst, string url, int expectedStatusCode = (int)HttpStatusCode.OK, int delay = 0, int pause = 0)
         {
             if (inst.driver == null)
@@ -198,14 +206,7 @@ namespace iselenium
                                     bool expectRequest = true, bool samePage = false, bool awaitRemoved = false,
                                     int expectedStatusCode = 200, int delay = 0, int pause = 0, int wait = 0)
         {
-            var button = GetHTMLElementByName(inst, name, index, wait: wait);
-            Click(button, awaitRemoved, delay, pause);
-            if ((expectRequest || awaitRemoved) && samePage)
-            {
-                new WebDriverWait(inst.driver, TimeSpan.FromSeconds(RequestTimeout))
-                    .Until(drv => drv.FindElement(By.Name(name)).Displayed);
-            }
-            AssertStatusCode(inst, expectedStatusCode);
+            Click(inst, By.Name, name, index, expectRequest, samePage, awaitRemoved, expectedStatusCode, delay, pause, wait);
         }
 
         /// <summary>
@@ -226,12 +227,34 @@ namespace iselenium
                                     int expectedStatusCode = 200, int delay = 0, int pause = 0,
                                     int wait = 0)
         {
-            var button = GetHTMLElementById(inst, id, index, wait: wait);
+            Click(inst, By.Id, id, index, expectRequest, samePage, awaitRemoved, expectedStatusCode, delay, pause, wait);
+        }
+
+        /// <summary>
+        /// Click the HTML element (usually a Button) with the given id
+        /// and wait for the response when expectRequest is true.
+        /// </summary>
+        /// <param name="selector">Selenium By.* selector</param>
+        /// <param name="nameOrId">HTML id attribute of the element to click on</param>
+        /// <param name="index">Index of the element collection with that id, defaults to 0</param>
+        /// <param name="expectRequest">Whether to expect a GET/POST request to the server from the click</param>
+        /// <param name="samePage">Whether to expect a WebForms style PostBack to the same page with the same HTML element</param>
+        /// <param name="awaitRemoved">Whether to wait for the HTML element to disappear (in an SPA)</param>
+        /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>///
+        /// <param name="delay">Optional delay time in milliseconds before clicking the element</param>
+        /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete</param>
+        /// <param name="wait">Explicit WebDriverWait in seconds for the element to appear</param>
+        public static void Click(this ISeleniumBase inst, Func<string, By> selector, string nameOrId, int index = 0,
+                                    bool expectRequest = true, bool samePage = false, bool awaitRemoved = false,
+                                    int expectedStatusCode = 200, int delay = 0, int pause = 0,
+                                    int wait = 0)
+        {
+            var button = GetHTMLElement(inst, selector, nameOrId, index, wait: wait);
             Click(button, awaitRemoved, delay, pause);
             if ((expectRequest || awaitRemoved) && samePage)
             {
                 new WebDriverWait(inst.driver, TimeSpan.FromSeconds(RequestTimeout))
-                    .Until(drv => drv.FindElement(By.Id(id)).Displayed);
+                    .Until(drv => drv.FindElement(selector(nameOrId)).Displayed);
             }
             AssertStatusCode(inst, expectedStatusCode);
         }
@@ -265,7 +288,22 @@ namespace iselenium
         public static void Write(this ISeleniumBase inst, string name, string text, int index = 0,
                                 int wait = 0, int throttle = 0)
         {
-            var textinput = GetHTMLElementByName(inst, name, index, wait: wait);
+            Write(inst, By.Name, name, text, index, wait: wait);
+        }
+
+        /// <summary>
+        /// Write into the HTML element (usually a text input) with the given name
+        /// </summary>
+        /// <param name="selector"></param>
+        /// <param name="nameOrId"></param>
+        /// <param name="text">Text to write</param>
+        /// <param name="index"></param>
+        /// <param name="wait">Explicit WebDriverWait in seconds for the element to appear</param>
+        /// <param name="throttle">Time interval in milliseconds between sending chars to a text input when > 0</param>
+        public static void Write(this ISeleniumBase inst, Func<string, By> selector, string nameOrId, string text, int index = 0,
+                                int wait = 0, int throttle = 0)
+        {
+            var textinput = GetHTMLElement(inst, selector, nameOrId, index, wait: wait);
             SendKeys(textinput, text, throttle);
         }
 
@@ -279,7 +317,7 @@ namespace iselenium
         public static void WriteID(this ISeleniumBase inst, string id, string text,
                                     int wait = 0, int throttle = 0)
         {
-            var textinput = GetHTMLElementById(inst, id, wait: wait);
+            var textinput = GetHTMLElement(inst, By.Id, id, wait: wait);
             SendKeys(textinput, text, throttle);
         }
 
@@ -297,7 +335,7 @@ namespace iselenium
         public static void SelectID(this ISeleniumBase inst, string id, string value, bool expectPostBack = false,
                                     int expectedStatusCode = 200, int delay = 0, int pause = 0, int wait = 0)
         {
-            var list = GetHTMLElementsByID(inst, id, wait: wait);
+            var list = GetHTMLElements(inst, By.Id, id, wait: wait);
             if (list == null)
             {
                 throw new ArgumentException(String.Format("No HTML input elements with id='{0}' found", id));
@@ -336,7 +374,7 @@ namespace iselenium
         public static void SelectName(this ISeleniumBase inst, string name, string value, bool expectPostBack = false,
                                     int expectedStatusCode = 200, int delay = 0, int pause = 0, int wait = 0)
         {
-            var list = GetHTMLElementsByName(inst, name, wait: wait);
+            var list = GetHTMLElements(inst, By.Name, name, wait: wait);
             if (list == null)
             {
                 throw new ArgumentException(String.Format("No HTML input elements with name='{0}' found", name));
@@ -362,87 +400,35 @@ namespace iselenium
         }
 
         /// <summary>
-        /// Get the element with the given id
+        /// Get the element with the given selector and nameOrId string
         /// </summary>
         /// <param name="id">id resp. HTML id attribute of the element</param>
         /// <param name="index">Index of the element collection with that name, defaults to 0</param>
         /// <param name="wait">Explicit WebDriverWait in seconds for the element to appear</param>
         /// <returns></returns>
-        public static IWebElement GetHTMLElementById(this ISeleniumBase inst, string id, int index = 0, int wait = 0)
+        public static IWebElement GetHTMLElement(this ISeleniumBase inst, Func<string, By> selector, string nameOrId, int index = 0, int wait = 0)
         {
-            var elements = AwaitHTMLElements(inst, By.Id, id, wait);
+            var elements = AwaitHTMLElements(inst, selector, nameOrId, wait);
             if (elements.Count <= index)
             {
-                throw new ArgumentException(String.Format(
-                   "HTML input element with id='{0}'{1} not found",
-                        id, ((index) > 0) ? String.Format(" at index={0}", index) : ""));
+                var indexString = index > 0 ? $" at index={index}" : String.Empty;
+                throw new ArgumentException($"HTML input element with nameOrId='{nameOrId}'{indexString} not found");
             }
             return elements[index];
         }
 
         /// <summary>
-        /// Get all input elements with the given id
+        /// Get all input elements with the given selector and nameOrId string
         /// </summary>
         /// <param name="id">HTML id attribute of the elements</param>
         /// <param name="wait">Explicit WebDriverWait for the elements</param>
         /// <returns></returns>
-        public static ReadOnlyCollection<IWebElement> GetHTMLElementsByID(this ISeleniumBase inst, string id, int wait = 0)
+        public static ReadOnlyCollection<IWebElement> GetHTMLElements(this ISeleniumBase inst, Func<string, By> selector, string nameOrId, int wait = 0)
         {
-            var elements = AwaitHTMLElements(inst, By.Id, id, wait);
+            var elements = AwaitHTMLElements(inst, selector, nameOrId, wait);
             if (elements.Count == 0)
             {
-                throw new ArgumentException(String.Format("HTML input element with id='{0}' not found", id));
-            }
-            else
-            {
-                return elements;
-            }
-        }
-
-        /// <summary>
-        /// Get the element with the given name at the given index
-        /// When in IECompatible mode, name *or* id behavior mimics that of SHDocVw.InternetExplorer
-        /// for backwards compatibility
-        /// </summary>
-        /// <param name="name">HTML name attribute of the element</param>
-        /// <param name="index">Index of the element collection with that name, defaults to 0</param>
-        /// <param name="wait">Explicit WebDriverWait in seconds for the element to appear</param>
-        /// <returns></returns>
-        public static IWebElement GetHTMLElementByName(this ISeleniumBase inst, string name, int index = 0, int wait = 0)
-        {
-            var elements = AwaitHTMLElements(inst, By.Name, name, wait);
-            if (elements.Count <= index)
-            {
-                if (IIECompatible(inst))
-                {
-                    elements = AwaitHTMLElements(inst, By.Id, name, wait);
-                    if (elements.Count <= index)
-                    {
-                        throw new ArgumentException(String.Format(
-                            "HTML input element with name='{0}' or id='{0}'{1} not found",
-                                name, ((index) > 0) ? String.Format(" at index={0}", index) : ""));
-                    }
-                    return elements[index];
-                }
-                throw new ArgumentException(String.Format(
-                    "HTML input element with name='{0}'{1} not found",
-                        name, ((index) > 0) ? String.Format(" at index={0}", index) : ""));
-            }
-            return elements[index];
-        }
-
-        /// <summary>
-        /// Get all input elements with the given name
-        /// </summary>
-        /// <param name="name">name attribute of the elements</param>
-        /// <param name="wait">Explicit WebDriverWait for the elements</param>
-        /// <returns></returns>
-        public static ReadOnlyCollection<IWebElement> GetHTMLElementsByName(this ISeleniumBase inst, string name, int wait = 0)
-        {
-            var elements = AwaitHTMLElements(inst, By.Name, name, wait);
-            if (elements.Count == 0)
-            {
-                throw new ArgumentException(String.Format("HTML input element with name='{0}' not found", name));
+                throw new ArgumentException($"HTML input element with nameOrId='{nameOrId}' not found");
             }
             else
             {

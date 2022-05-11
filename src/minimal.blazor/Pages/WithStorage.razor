@@ -11,18 +11,20 @@
 
 <EditForm Model="@Storage">
     Session Storage:<br />
-    <InputRadioGroup Name="Storage" @bind-Value="Storage">
-        <InputRadio id="storageViewState" name="Storage" value="@Storage.ViewState" TValue="Storage" /> Blazor
-        <InputRadio id="storageDatabase" name="Storage" value="@Storage.Database" TValue="Storage" /> Database
-        <InputRadio id="storageSessionStorage" name="Storage" value="@Storage.SessionStorage" TValue="Storage" /> Window.sessionStorage
-        <InputRadio id="storageLocalStorage" name="Storage" value="@Storage.LocalStorage" TValue="Storage" /> Window.localStorage
-            <button type="button" id="clearButton" @onclick="@Clear">Clear</button>
+    <InputRadioGroup @ref="storageRadio" Name="Storage" @bind-Value="Storage">
+        <!-- InputRadio does not produce an id attribute in Blazor 6.0.4 yet, therefore use the manual Ids for now -->
+        <InputRadio @ref="storageViewState" id="storageViewState" name="Storage" value="@Storage.ViewState" TValue="Storage" /> Blazor
+        <InputRadio @ref="storageDatabase" id="storageDatabase" name="Storage" value="@Storage.Database" TValue="Storage" /> Database
+        <InputRadio @ref="storageSessionStorage" id="storageSessionStorage" name="Storage" value="@Storage.SessionStorage" TValue="Storage" /> Window.sessionStorage
+        <InputRadio @ref="storageLocalStorage" id="storageLocalStorage" name="Storage" value="@Storage.LocalStorage" TValue="Storage" /> Window.localStorage
+        <button type="button" @ref="clearButton" @onclick="@Clear">Clear</button>
     </InputRadioGroup>
+    <InputText @ref="textInput" id="name" @bind-Value="text" />
 </EditForm>
 <br />
 
-<input @bind="Input" id="contentTextBox" />
-<button type="submit" id="submitButton" @onclick="@Submit">Submit</button>
+<input @bind="Input" @ref="contentTextBox" />
+<button type="submit" @ref="submitButton" @onclick="@Submit">Submit</button>
 <ul>
     @foreach (var item in Main)
     {
@@ -32,6 +34,17 @@
 
 
 @code {
+    private string text;
+    private InputText? textInput;
+    public InputRadioGroup<Storage>? storageRadio;
+    public InputRadio<Storage>? storageViewState;
+    public InputRadio<Storage>? storageDatabase;
+    public InputRadio<Storage>? storageSessionStorage;
+    public InputRadio<Storage>? storageLocalStorage;
+    public ElementReference clearButton;
+    public ElementReference contentTextBox;
+    public ElementReference submitButton;
+
     // Set the static storage override globally, as no instance is available during DI construction
     // in the PersistentMainFactoryExtension
     private Storage Storage 

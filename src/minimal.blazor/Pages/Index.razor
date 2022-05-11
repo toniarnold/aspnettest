@@ -6,7 +6,18 @@
 
 <h1>minimalist test setup</h1>
 <ul>
-    <li><a href="Withstatic" id="withstatic-link" tabindex="10">with static main</a></li>
-    <li><a href="Withstorage" id="withstorage-link" tabindex="20">with persistent storage</a></li>
+    <li><a href="Withstatic" @ref="withstaticLink" tabindex="10">with static main</a></li>
+    <li><a href="Withstorage" @ref="withstorageLink" tabindex="20">with persistent storage</a></li>
 </ul>
 <TestButton testproject="minimaltest.blazor" tabindex="1000" />
+
+@code
+{
+    public ElementReference withstaticLink;
+    public ElementReference withstorageLink;
+
+    protected override void OnAfterRender(bool _)
+    {
+        TestFocus.Expose(this);
+    }
+}

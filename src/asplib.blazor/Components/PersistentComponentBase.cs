@@ -1,5 +1,4 @@
 ﻿using asplib.Model;
-using asplib.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.Extensions.Configuration;
@@ -8,14 +7,8 @@ using System.Diagnostics;
 
 namespace asplib.Components
 {
-    public abstract class PersistentComponentBase<T> : OwningComponentBase<T> where T : class, new()
+    public abstract class PersistentComponentBase<T> : StaticComponentBase<T> where T : class, new()
     {
-        /// <summary>
-        /// Main state objecet to be persisted
-        /// </summary>
-        [Inject]
-        public T Main { get; private set; }
-
         [Inject]
         protected IConfiguration Configuration { get; set; }
 
@@ -85,7 +78,6 @@ namespace asplib.Components
                             "Storage {0}", this.GetStorage()));
                 }
                 this.StateHasChanged();
-                MainAccessor<T>.Instance = Main;
             }
             else
             {
@@ -113,6 +105,7 @@ namespace asplib.Components
                             "Storage {0}", this.GetStorage()));
                 }
             }
+            await base.OnAfterRenderAsync(firstRender);
         }
 
         /// <summary>

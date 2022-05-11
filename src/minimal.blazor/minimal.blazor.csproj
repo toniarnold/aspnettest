@@ -15,6 +15,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\asplib.blazor\asplib.blazor.csproj" />
+    <ProjectReference Include="..\iselenium.blazor\iselenium.blazor.csproj" />
   </ItemGroup>
 
   <ItemGroup>

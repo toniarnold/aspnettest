@@ -33,7 +33,6 @@ namespace asplib.Components
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            await base.OnAfterRenderAsync(firstRender);
             if (firstRender)
             {
                 Main.Fsm.StateChange += StateChanged;
@@ -43,11 +42,13 @@ namespace asplib.Components
                 ReRender();
                 StateHasChanged();
             }
+            await base.OnAfterRenderAsync(firstRender);
         }
 
         /// <summary>
-        /// Remove the handlers from the Main object (rather pro forma, as the
-        /// lifetime of Main and the containing component should be the same).
+        /// Remove the handlers from the Main object in case there is some
+        /// static reference to it left from the test such that the component
+        /// can be disposed.
         /// </summary>
         /// <param name="disposing"></param>
         protected override void Dispose(bool disposing)
@@ -60,6 +61,8 @@ namespace asplib.Components
             {
                 Main.Fsm.StateChange -= handler;
             }
+            _stateChangedHandlers.Clear();
+            TestFocus.RemoveFocus();    // finally removes the reference
             _isDisposed = true;
         }
     }

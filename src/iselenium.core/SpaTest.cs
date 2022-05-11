@@ -127,7 +127,7 @@ namespace iselenium
         /// <returns></returns>
         public IWebElement GetHTMLElementById(string id, int index = 0, int wait = 0)
         {
-            return SeleniumExtensionBase.GetHTMLElementById(this, id, index,
+            return SeleniumExtensionBase.GetHTMLElement(this, By.Id, id, index,
                                             wait: (wait == 0) ? SeleniumExtensionBase.RequestTimeout : wait);
         }
     }
