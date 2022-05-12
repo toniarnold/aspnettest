@@ -27,12 +27,26 @@ namespace asplib.Components
         public Storage? SessionStorage { get; set; }
 
         /// <summary>
+        /// Set to true to avoid storing the old state in the new storage after
+        /// changing the storage. Will be reinitialized to false after
+        /// reinstantiating the component on reload after a storage change,
+        /// </summary>
+        public bool StorageHasChanged { get; set; } = false;
+
+        // OnParametersSetAsync double rendering prevention:
+
+        private bool _firstRender = true;
+
+        private bool _shouldRender = true;
+
+        /// <summary>
         /// Set the instance-local storage type
         /// </summary>
         /// <param name="storage"></param>
         protected void SetStorage(Storage storage)
         {
             this.SessionStorage = storage;
+            StorageHasChanged = true;
         }
 
         /// <summary>
@@ -42,6 +56,35 @@ namespace asplib.Components
         protected void SetStorage(string storage)
         {
             this.SessionStorage = (Storage)Enum.Parse(typeof(Storage), storage, true);
+            StorageHasChanged = true;
+        }
+
+        /// <summary>
+        /// In case of browser persistence, postpone full rendering as the
+        /// object can only be loaded after initially rendering (without the
+        /// persistent object). _shouldRender is reset to true in
+        /// OnAfterRenderAsync after the loading of Main.
+        /// </summary>
+        /// <returns></returns>
+        protected override async Task OnParametersSetAsync()
+        {
+            await base.OnParametersSetAsync();
+            if (_firstRender)
+            {
+                switch (this.GetStorage())
+                {
+                    case Storage.SessionStorage:
+                    case Storage.LocalStorage:
+                        _shouldRender = false;
+                        break;
+                }
+                _firstRender = false;
+            }
+        }
+
+        protected override bool ShouldRender()
+        {
+            return _shouldRender;
         }
 
         /// <summary>
@@ -65,11 +108,13 @@ namespace asplib.Components
 
                     case Storage.SessionStorage:
                         Main = await this.LoadFromBrowser(k => ProtectedSessionStore.GetAsync<string>(k));
+                        _shouldRender = true;
                         this.StateHasChanged();
                         break;
 
                     case Storage.LocalStorage:
                         Main = await this.LoadFromBrowser(k => ProtectedLocalStore.GetAsync<string>(k));
+                        _shouldRender = true;
                         this.StateHasChanged();
                         break;
 
@@ -77,9 +122,8 @@ namespace asplib.Components
                         throw new NotImplementedException(String.Format(
                             "Storage {0}", this.GetStorage()));
                 }
-                this.StateHasChanged();
             }
-            else
+            else if (!StorageHasChanged)
             {
                 Logger.LogInformation("Save Storage {0}", this.GetStorage());
 

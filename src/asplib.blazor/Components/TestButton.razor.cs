@@ -34,6 +34,8 @@ namespace asplib.Components
 
         private int Port { get; set; } = 0;
 
+        protected string spin { get; set; } = "";
+
         protected override void OnInitialized()
         {
             Port = (int)Http.HttpContext.Request.Host.Port;
@@ -42,6 +44,13 @@ namespace asplib.Components
         public async Task Test()
         {
             TestResult = "Running...";
+            spin = "spin";
+            await Task.Run(() => RunTests()); // to immediately show the "Running..."
+            spin = "";
+        }
+
+        public async Task RunTests()
+        {
             var testRunner = new TestRunner(Configuration, Environment, Port);
             testRunner.Run(testproject);
             if (TestRunner.Passed)

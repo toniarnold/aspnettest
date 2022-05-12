@@ -1,6 +1,4 @@
 ﻿using asplib.Components;
-using asplib.Model.Db;
-using asplib.Services;
 using iselenium;
 using minimal.blazor.Models;
 using minimal.blazor.Pages;
@@ -11,6 +9,7 @@ using OpenQA.Selenium.Edge;
 using OpenQA.Selenium.Firefox;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace minimaltest.blazor
 {
@@ -21,15 +20,6 @@ namespace minimaltest.blazor
     public class WithStorageTest<TWebDriver> : StaticComponentDbTest<TWebDriver, WithStorage, Main>
         where TWebDriver : IWebDriver, new()
     {
-        /// <summary>
-        /// The submit button stays on the same page
-        /// </summary>
-        [OneTimeSetUp]
-        public void NoAwaitRemoved()
-        {
-            this.awaitRemovedDefault = false;
-        }
-
         /// <summary>
         /// Typed accessor to the only model object in the app
         /// </summary>
@@ -62,41 +52,36 @@ namespace minimaltest.blazor
         public void StorageSessionStorageTest()
         {
             this.Navigate("/Withstorage");
-            this.Click(By.Id, "storageSessionStorage");
-            this.Click(C.clearButton);
+            // The InputRadios and the clearButton reload the page to reinitialize
+            this.Click(By.Id, "storageSessionStorage", expectRequest: true);    // temporary by id
+            this.Click(Component.clearButton, expectRequest: true);
             this.WriteContentTest(() => this.Reload());
         }
 
         // As (at least) of FireFox 101, there seems to be also no persistence
         // no more when run by Selenium, thus these persistence tests can no
-        // more be executed at all.
+        // more be executed over browser restarts with:
+        // this.WriteContentTest(() => this.RestartBrowser());
 
-        //[Test]
-        //public void StorageDatabaseTest()
-        //{
-        //    // Chrome is "user friendly", no persistent cookies in selenium remote mode
-        //    if (this.driver is FirefoxDriver)
-        //    {
-        //        this.Navigate("/Withstorage");
-        //        this.Click("storageDatabase");
-        //        this.Click("clearButton");
-        //        this.WriteContentTest(() => this.RestartBrowser());
-        //    }
-        //    else Assert.Inconclusive("No persistence in Chrome");
-        //}
+        [Test]
+        public void StorageDatabaseTest()
+        {
+            {
+                this.Navigate("/Withstorage");
+                this.Click(By.Id, "storageDatabase", expectRequest: true);
+                this.Click(Component.clearButton, expectRequest: true);
+                this.WriteContentTest(() => this.Reload());
+            }
+        }
 
-        //[Test]
-        //public void StorageLocalStorageTest()
-        //{
-        //    if (this.driver is FirefoxDriver)
-        //    {
-        //        this.Navigate("/Withstorage");
-        //        this.Click("storageLocalStorage");
-        //        this.Click("clearButton");
-        //        this.WriteContentTest(() => this.RestartBrowser());
-        //    }
-        //    else Assert.Inconclusive("No persistence in Chrome");
-        //}
+        [Test]
+        public void StorageLocalStorageTest()
+        {
+            this.Navigate("/Withstorage");
+            this.Click("storageLocalStorage", expectRequest: true);
+            this.Click(Component.clearButton, expectRequest: true);
+            this.WriteContentTest(() => this.Reload());
+        }
 
         /// <summary>
         /// Basically the same test as WithStaticTest.WriteContentTest(),
@@ -105,23 +90,23 @@ namespace minimaltest.blazor
         /// </summary>
         public void WriteContentTest(Action survives)
         {
-            this.Write(C.contentTextBox, "a first content line");
-            this.Click(C.submitButton);
-            this.AssertPoll(() => this.Content, () => Has.Exactly(1).Items);
-            Assert.That(this.Content[0], Is.EqualTo("a first content line"));
+            this.Write(Component.contentTextBox, "a first content line");
+            this.Click(Component.submitButton);
+            Assert.That(Content, Has.Exactly(1).Items);
+            Assert.That(Content[0], Is.EqualTo("a first content line"));
 
             survives();
             this.AssertPoll(() => this.Html(), () => Does.Contain("a first content line"));
 
-            this.Write(C.contentTextBox, "a second content line");
-            this.Click(C.submitButton);
-            this.AssertPoll(() => this.Content, () => Has.Exactly(2).Items);
-            Assert.That(this.Content[0], Is.EqualTo("a first content line"));
-            Assert.That(this.Content[1], Is.EqualTo("a second content line"));
+            this.Write(Component.contentTextBox, "a second content line");
+            this.Click(Component.submitButton);
+            Assert.That(Content, Has.Exactly(2).Items);
+            Assert.That(Content[0], Is.EqualTo("a first content line"));
+            Assert.That(Content[1], Is.EqualTo("a second content line"));
 
             survives(); // Reload() or RestartBrowser()
-            Assert.That(this.Content[0], Is.EqualTo("a first content line"));
-            Assert.That(this.Content[1], Is.EqualTo("a second content line"));
+            Assert.That(Content[0], Is.EqualTo("a first content line"));
+            Assert.That(Content[1], Is.EqualTo("a second content line"));
         }
 
         /// <summary>
@@ -152,7 +137,7 @@ namespace minimaltest.blazor
 
         private void ClearLocalStorage()
         {
-            this.Click(C.clearButton);
+            this.Click(Component.clearButton);
         }
     }
 }

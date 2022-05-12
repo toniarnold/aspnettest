@@ -9,7 +9,7 @@ namespace asplib.Components
         public T Main { get; protected set; }
 
         /// <summary>
-        /// Set the static reference to the injected main on each Render,
+        /// Set the static reference to the component in focus on each Render,
         /// as the ElementReference.Id can change.
         /// Signals the TestFocus.Event if the component has focus.
         /// </summary>

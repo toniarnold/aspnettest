@@ -14,7 +14,7 @@ namespace asplib.Components
 
         public static object? Component { get; private set; }
 
-        public static AutoResetEvent Event { get; private set; } = new AutoResetEvent(false);   // for Navigate()
+        public static AutoResetEvent Event { get; private set; } = new(false);
 
         [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
         private class TestFocusAttribute : Attribute
@@ -73,7 +73,7 @@ namespace asplib.Components
                     TypeDescriptor.RemoveProvider(_attributeProvider, _focussedCommponentType);
                     _focussedCommponentType = null;
                     _attributeProvider = null;
-                    Component = null;
+                    Component = null;   // finally allow the component to be garbage collected
                 }
             }
         }

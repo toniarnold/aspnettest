@@ -1,0 +1,15 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <RootNamespace>iselenium</RootNamespace>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\asplib.blazor\asplib.blazor.csproj" />
+    <ProjectReference Include="..\iselenium.core\iselenium.core.csproj" />
+  </ItemGroup>
+
+</Project>

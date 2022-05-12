@@ -4,8 +4,11 @@
 
 <h1>minimalist test setup with static main</h1>
 
-<input @bind="input" @ref="contentTextBox" />
-<button type="submit" @ref="submitButton" @onclick="Submit">Submit</button>
+<p>
+    <input @bind="input" @ref="contentTextBox" class="textBox" />
+    <button type="submit" @ref="submitButton" @onclick="Submit">Submit</button>
+</p>
+
 <ul>
     @foreach (var item in Main)
     {
