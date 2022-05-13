@@ -20,6 +20,7 @@ if (!app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
 }
+
 app.UseMiddleware<ISeleniumMiddleware>();   // iselenium
 app.UseStaticFiles();
 app.UseRouting();

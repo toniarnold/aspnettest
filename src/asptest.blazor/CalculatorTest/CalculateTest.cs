@@ -5,13 +5,13 @@ using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Edge;
 using OpenQA.Selenium.Firefox;
 
-namespace asptest.Calculator
+namespace asptest.CalculatorTest
 {
     //[TestFixture(typeof(ChromeDriver))]
     //[TestFixture(typeof(FirefoxDriver))]
     //[TestFixture(typeof(EdgeDriver))]
     [TestFixture(typeof(EdgeDriver))]
-    public class CalculateTest<TWebDriver> : CalculatorTestBaset<TWebDriver>
+    public class CalculateTest<TWebDriver> : CalculatorTestBase<TWebDriver>
         where TWebDriver : IWebDriver, new()
     {
         [Test]
@@ -20,8 +20,8 @@ namespace asptest.Calculator
             this.Navigate("/");
             Assert.Multiple(() =>
             {
-                this.AssertPoll(() => this.Html(), () => Does.Contain("RPN calculator"));
-                this.AssertPoll(() => this.Html(), () => Does.Contain("Map1.Splash"));          // even later than "late binding"
+                Assert.That(Html(), Does.Contain("RPN calculator"));
+                Assert.That(Html(), Does.Contain("Map1.Splash"));          // even later than "late binding"
             });
         }
     }

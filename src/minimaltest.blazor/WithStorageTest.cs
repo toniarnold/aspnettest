@@ -17,7 +17,7 @@ namespace minimaltest.blazor
     //[TestFixture(typeof(EdgeDriver))]
     //[TestFixture(typeof(FirefoxDriver))]
     [TestFixture(typeof(FirefoxDriver))]
-    public class WithStorageTest<TWebDriver> : StaticComponentDbTest<TWebDriver, WithStorage, Main>
+    public class WithStorageTest<TWebDriver> : StaticOwningComponentDbTest<TWebDriver, WithStorage, Main>
         where TWebDriver : IWebDriver, new()
     {
         /// <summary>

@@ -12,7 +12,7 @@ namespace minimaltest.blazor
     [TestFixture(typeof(ChromeDriver))]
     [TestFixture(typeof(EdgeDriver))]
     [TestFixture(typeof(FirefoxDriver))]
-    public class WithStaticTest<TWebDriver> : StaticComponentTest<TWebDriver, WithStatic, Main>
+    public class WithStaticTest<TWebDriver> : StaticOwningComponentTest<TWebDriver, WithStatic, Main>
         where TWebDriver : IWebDriver, new()
     {
         [Test]

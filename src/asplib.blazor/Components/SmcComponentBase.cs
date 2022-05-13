@@ -3,6 +3,10 @@ using statemap;
 
 namespace asplib.Components
 {
+    /// Testable Blazor OwningComponent which sets a static reference to its
+    /// instance on TestFocus.Component, injects a public Main instance of an
+    /// SMC AppClass with accessors (the owned service) and sets up the
+    /// configured persistence for that service.
     public abstract class SmcComponentBase<T, F, S> : PersistentComponentBase<T>
         where T : class, IAppClass<F, S>, new()
         where F : statemap.FSMContext
@@ -33,6 +37,7 @@ namespace asplib.Components
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
+            await base.OnAfterRenderAsync(firstRender); // re-instantiates Main when not from the database
             if (firstRender)
             {
                 Main.Fsm.StateChange += StateChanged;
@@ -42,7 +47,6 @@ namespace asplib.Components
                 ReRender();
                 StateHasChanged();
             }
-            await base.OnAfterRenderAsync(firstRender);
         }
 
         /// <summary>
@@ -62,7 +66,10 @@ namespace asplib.Components
                 Main.Fsm.StateChange -= handler;
             }
             _stateChangedHandlers.Clear();
-            TestFocus.RemoveFocus();    // finally removes the reference
+            // Must not remove an eventual stalled reference with
+            // TestFocus.RemoveFocus();
+            // The component in focus must remain there for test assertions. In
+            // production, there will never be a component in focus.
             _isDisposed = true;
         }
     }

@@ -18,7 +18,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\asp.blazor\asp.blazor.csproj" />
-    <ProjectReference Include="..\iselenium.core\iselenium.core.csproj" />
+    <ProjectReference Include="..\iselenium.blazor\iselenium.blazor.csproj" />
   </ItemGroup>
 
   <Target Name="PostBuild" AfterTargets="PostBuildEvent">

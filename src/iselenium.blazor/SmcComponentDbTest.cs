@@ -4,7 +4,7 @@ using OpenQA.Selenium;
 
 namespace iselenium
 {
-    public class SmcComponentDbTestt<TWebDriver, TComponent, TAppClass, TFSMContext, TState> : StaticComponentDbTest<TWebDriver, TComponent, TAppClass>
+    public class SmcComponentDbTest<TWebDriver, TComponent, TAppClass, TFSMContext, TState> : StaticOwningComponentDbTest<TWebDriver, TComponent, TAppClass>
         where TWebDriver : IWebDriver, new()
         where TComponent : SmcComponentBase<TAppClass, TFSMContext, TState>
         where TAppClass : class, IAppClass<TFSMContext, TState>, new()

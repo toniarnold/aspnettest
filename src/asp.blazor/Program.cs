@@ -1,6 +1,7 @@
 using asp.blazor.CalculatorSmc;
 using asplib.Model.Db;
 using asplib.Services;
+using iselenium;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -22,8 +23,8 @@ if (!app.Environment.IsDevelopment())
     app.UseExceptionHandler("/Error");
 }
 
+app.UseMiddleware<ISeleniumMiddleware>();   // iselenium
 app.UseStaticFiles();
-
 app.UseRouting();
 
 app.MapBlazorHub();

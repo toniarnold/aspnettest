@@ -4,6 +4,13 @@ using OpenQA.Selenium;
 
 namespace iselenium
 {
+    /// <summary>
+    /// Test fixture for any Blazor Component which is expected to write
+    /// persistent Main objects to the database. New entries are cleaned up
+    /// afterwards.
+    /// </summary>
+    /// <typeparam name="TWebDriver"></typeparam>
+    /// <typeparam name="TComponent"></typeparam>
     public class ComponentDbTest<TWebDriver, TComponent> : ComponentTest<TWebDriver, TComponent>, IDeleteNewRows
         where TWebDriver : IWebDriver, new()
     {

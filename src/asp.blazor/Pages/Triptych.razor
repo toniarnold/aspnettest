@@ -1,22 +1,11 @@
 ﻿@page "/triptych"
+@using asp.blazor.CalculatorSmc
 
-<style>
-    .calc-container {
-        display: inline-grid;
-        grid-template-columns: auto auto auto;
-        grid-gap: 10px;
-    }
-
-    .calc-box {
-        border: 1px solid black;
-        border-radius: 10px;
-        padding: 30px;
-    }
-</style>
+@inherits StaticComponentBase
 
 <div class="calc-container">
     <div class="calc-box">
-        <CalculatorComponent
+        <CalculatorComponent @ref="calculatorSessionStorage"
             @key="Guid.NewGuid()"
             Storage="SessionStorage"
             StorageLinkUrl="/storage/sessionstorage"
@@ -24,7 +13,7 @@
         />
     </div>
     <div class="calc-box">
-        <CalculatorComponent
+        <CalculatorComponent @ref="calculatorLocalStorage"
             @key="Guid.NewGuid()"
             Storage="LocalStorage"
             StorageLinkUrl="/storage/localstorage"
@@ -32,7 +21,7 @@
         />
     </div>
     <div class="calc-box">
-        <CalculatorComponent
+        <CalculatorComponent @ref="calculatorDatabase"
             @key="Guid.NewGuid()"
             Storage="Database"
             StorageLinkUrl="/storage/database"
@@ -42,5 +31,7 @@
 </div>
 
 @code {
-
+    public CalculatorComponent? calculatorSessionStorage;
+    public CalculatorComponent? calculatorLocalStorage;
+    public CalculatorComponent? calculatorDatabase;
 }

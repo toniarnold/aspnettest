@@ -3,12 +3,16 @@
 namespace asplib.Components
 {
     /// <summary>
-    /// Testable Blazor Component which sets a static reference to its instance
-    /// on TestFocus.Component.
+    /// Testable Blazor OwningComponent which sets a static reference to its
+    /// instance on TestFocus.Component and injects a public Main instance.
+    /// (the owned service).
     /// </summary>
-    public class StaticComponentBase : ComponentBase, IStaticComponent
-
+    public abstract class StaticOwningComponentBase<T> : OwningComponentBase<T>, IStaticComponent
+        where T : class, new()
     {
+        [Inject]
+        public T Main { get; protected set; }
+
         /// <summary>
         /// Set the static reference to the component in focus on each Render,
         /// as the ElementReference.Id can change.

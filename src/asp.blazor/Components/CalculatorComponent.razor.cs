@@ -8,6 +8,9 @@ namespace asp.blazor.Components
 {
     public partial class CalculatorComponent
     {
+        public ElementReference storageLink;
+        public DynamicComponent? calculatorPart;
+
         private Type pageType = typeof(Splash);
         private string? errorMsg;
         private Dictionary<string, object>? errorParams => errorMsg != null ? new() { { "ErrorMsg", errorMsg } } : null;

@@ -3,44 +3,16 @@
 
 @inherits SmcComponentBase<Calculator, CalculatorContext, CalculatorContext.CalculatorState>
 
-<style>
-    .header-container {
-        display: inline-grid;
-        grid-template-columns: auto auto auto;
-        width: 100%;
-    }
-
-    .hamburger-box {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
-
-    .hamburger {
-        border: 1px solid black;
-        padding: 2px;
-        display: block;
-    }
-
-    .grid {
-        background-color: rgba(255, 255, 255, 1);
-        font-size: small;
-    }
-
-    .link {
-        text-decoration: none;
-    }
-</style>
-
 <div class="header-container">
-    <a href="@StorageLinkUrl" id="<%= this.StorageLinkClientID %>" class="hamburger-box">Session Storage: @Storage @((MarkupString)Encrypted)
+    <a href="@StorageLinkUrl" @ref="storageLink" id="<%= this.StorageLinkClientID %>" class="hamburger-box">
+        Session Storage: @Storage @((MarkupString)Encrypted)
     </a>
 </div>
 
 <CascadingValue Name="Main" Value="@Main">
     <Title/>
     <hr/>
-    <DynamicComponent Type="@pageType" Parameters="@errorParams"/>
+    <DynamicComponent @ref="calculatorPart" Type="@pageType" Parameters="@errorParams"/>
     <hr/>
     <Footer/>
 </CascadingValue>

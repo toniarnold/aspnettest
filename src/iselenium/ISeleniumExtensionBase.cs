@@ -525,6 +525,8 @@ namespace iselenium
         {
             if (!SeleniumExtensionBase.OutOfProcess)
             {
+                Trace.Assert(StatusCode > 0,
+                    $"StatusCode {StatusCode}, maybe ISeleniumMiddleware is missing");
                 AssertPoll(inst, () => StatusCode, () => Is.AnyOf(expectedStatusCode,
                     (int)HttpStatusCode.NotModified,
                     (int)HttpStatusCode.SwitchingProtocols));

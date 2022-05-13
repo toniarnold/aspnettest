@@ -23,6 +23,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "doc", "doc\doc.vcxproj", "{
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "calculator.blazor", "src\asp.blazor\CalculatorSmc\calculator.blazor.vcxproj", "{69EB69AB-0D24-4974-8D7D-2D2CDB62DCFA}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iselenium.blazor", "src\iselenium.blazor\iselenium.blazor.csproj", "{C42178F0-41FC-4631-8EEF-A50C4020E83C}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -153,6 +155,18 @@ Global
 		{69EB69AB-0D24-4974-8D7D-2D2CDB62DCFA}.Release|x64.Build.0 = Release|x64
 		{69EB69AB-0D24-4974-8D7D-2D2CDB62DCFA}.Release|x86.ActiveCfg = Release|Win32
 		{69EB69AB-0D24-4974-8D7D-2D2CDB62DCFA}.Release|x86.Build.0 = Release|Win32
+		{C42178F0-41FC-4631-8EEF-A50C4020E83C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C42178F0-41FC-4631-8EEF-A50C4020E83C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C42178F0-41FC-4631-8EEF-A50C4020E83C}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{C42178F0-41FC-4631-8EEF-A50C4020E83C}.Debug|x64.Build.0 = Debug|Any CPU
+		{C42178F0-41FC-4631-8EEF-A50C4020E83C}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{C42178F0-41FC-4631-8EEF-A50C4020E83C}.Debug|x86.Build.0 = Debug|Any CPU
+		{C42178F0-41FC-4631-8EEF-A50C4020E83C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C42178F0-41FC-4631-8EEF-A50C4020E83C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C42178F0-41FC-4631-8EEF-A50C4020E83C}.Release|x64.ActiveCfg = Release|Any CPU
+		{C42178F0-41FC-4631-8EEF-A50C4020E83C}.Release|x64.Build.0 = Release|Any CPU
+		{C42178F0-41FC-4631-8EEF-A50C4020E83C}.Release|x86.ActiveCfg = Release|Any CPU
+		{C42178F0-41FC-4631-8EEF-A50C4020E83C}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

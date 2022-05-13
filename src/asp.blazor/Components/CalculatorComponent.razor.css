@@ -1,0 +1,26 @@
+﻿::deep .header-container {
+    display: inline-grid;
+    grid-template-columns: auto auto auto;
+    width: 100%;
+}
+
+::deep .hamburger-box {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+::deep .hamburger {
+    border: 1px solid black;
+    padding: 2px;
+    display: block;
+}
+
+::deep .grid {
+    background-color: rgba(255, 255, 255, 1);
+    font-size: small;
+}
+
+::deep .link {
+    text-decoration: none;
+}

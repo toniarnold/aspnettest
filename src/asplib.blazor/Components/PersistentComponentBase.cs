@@ -7,7 +7,14 @@ using System.Diagnostics;
 
 namespace asplib.Components
 {
-    public abstract class PersistentComponentBase<T> : StaticComponentBase<T> where T : class, new()
+    /// <summary>
+    /// Testable Blazor OwningComponent which sets a static reference to its
+    /// instance on TestFocus.Component, injects a public Main instance.
+    /// (the owned service) end sets up the configured persistence for
+    /// that service.
+    /// </summary>
+    public abstract class PersistentComponentBase<T> : StaticOwningComponentBase<T>
+        where T : class, new()
     {
         [Inject]
         protected IConfiguration Configuration { get; set; }
@@ -170,7 +177,7 @@ namespace asplib.Components
         /// Get the actual storage type to use in this precedence:
         /// 1. Global config override in StorageImplementation.SessionStorage e.g. from unit tests
         /// 2. Configured storage in key="SessionStorage" value="Database"
-        /// 3. Defaults to ViewState
+        /// 3. Defaults to SessionStorage (persistence over reload)
         /// </summary>
         /// <returns></returns>
         protected Storage GetStorage()
@@ -187,7 +194,7 @@ namespace asplib.Components
             if (storage == null)                // configuration or default
             {
                 var configStorage = this.Configuration.GetValue<string>("SessionStorage");
-                storage = String.IsNullOrWhiteSpace(configStorage) ? Storage.ViewState : (Storage)Enum.Parse(typeof(Storage), configStorage);
+                storage = String.IsNullOrWhiteSpace(configStorage) ? Storage.SessionStorage : (Storage)Enum.Parse(typeof(Storage), configStorage);
             }
             return (Storage)storage;
         }
