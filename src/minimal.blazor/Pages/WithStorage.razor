@@ -36,7 +36,6 @@
 
 
 @code {
-    private string text;
     public InputRadioGroup<Storage>? storageRadio;
     public InputRadio<Storage>? storageViewState;
     public InputRadio<Storage>? storageDatabase;
@@ -50,7 +49,7 @@
     // in the PersistentMainFactoryExtension
     private Storage Storage 
     {
-        get => StorageImplementation.SessionStorage ?? Storage.ViewState;
+        get => GetStorage();
         set
         {
             StorageImplementation.SessionStorage = value;

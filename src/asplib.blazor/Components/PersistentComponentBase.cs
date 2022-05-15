@@ -17,16 +17,16 @@ namespace asplib.Components
         where T : class, new()
     {
         [Inject]
-        protected IConfiguration Configuration { get; set; }
+        protected IConfiguration Configuration { get; set; } = default!;
 
         [Inject]
-        private ProtectedSessionStorage ProtectedSessionStore { get; set; }
+        private ProtectedSessionStorage ProtectedSessionStore { get; set; } = default!;
 
         [Inject]
-        private ProtectedLocalStorage ProtectedLocalStore { get; set; }
+        private ProtectedLocalStorage ProtectedLocalStore { get; set; } = default!;
 
         [Inject]
-        private ILogger<PersistentComponentBase<T>> Logger { get; set; }
+        private ILogger<PersistentComponentBase<T>> Logger { get; set; } = default!;
 
         /// <summary>
         /// Local type of the session storage to override AppSettings["SessionStorage"]
@@ -95,16 +95,27 @@ namespace asplib.Components
         }
 
         /// <summary>
-        /// Instantiate the Main instance received from the browser,
-        /// then always persist Main after it might have been changed
+        /// Instantiate the Main instance and signal TestFocus.Event
         /// on re-render.
         /// </summary>
         /// <param name="firstRender"></param>
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
+            await CreateMain(firstRender);
+            await base.OnAfterRenderAsync(firstRender);
+        }
+
+        /// <summary>
+        /// Instantiate the Main instance received from the browser and
+        /// re-render, then always persist Main after it might have been changed
+        /// on re-render.
+        /// </summary>
+        /// <param name="firstRender"></param>
+        protected async Task CreateMain(bool firstRender)
+        {
             if (firstRender)
             {
-                Logger.LogInformation("Load Storage {0}", this.GetStorage());
+                Logger.LogInformation(0, "Load Storage {storage}", this.GetStorage());
 
                 switch (this.GetStorage())
                 {
@@ -132,7 +143,7 @@ namespace asplib.Components
             }
             else if (!StorageHasChanged)
             {
-                Logger.LogInformation("Save Storage {0}", this.GetStorage());
+                Logger.LogInformation(0, "Save Storage {storage}", this.GetStorage());
 
                 switch (this.GetStorage())
                 {
@@ -156,7 +167,6 @@ namespace asplib.Components
                             "Storage {0}", this.GetStorage()));
                 }
             }
-            await base.OnAfterRenderAsync(firstRender);
         }
 
         /// <summary>

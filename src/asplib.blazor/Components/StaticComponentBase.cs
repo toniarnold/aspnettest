@@ -6,7 +6,7 @@ namespace asplib.Components
     /// Testable Blazor Component which sets a static reference to its instance
     /// on TestFocus.Component.
     /// </summary>
-    public class StaticComponentBase : ComponentBase, IStaticComponent
+    public class StaticComponentBase : ComponentBase, ITestFocus
 
     {
         /// <summary>
@@ -16,12 +16,9 @@ namespace asplib.Components
         /// </summary>
         /// <param name="firstRender"></param>
         /// <returns></returns>
-        protected override async Task OnAfterRenderAsync(bool _)
+        protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            if (TestFocus.Expose(this))
-            {
-                TestFocus.Event.Set();  // allow the calling test method to continue
-            }
+            await this.ExposeSetEventAsync(firstRender);
         }
     }
 }

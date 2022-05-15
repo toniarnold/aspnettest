@@ -16,10 +16,10 @@ namespace asp.blazor.Components
         private Dictionary<string, object>? errorParams => errorMsg != null ? new() { { "ErrorMsg", errorMsg } } : null;
 
         [Parameter]
-        public string StorageLinkUrl { get; set; }
+        public string StorageLinkUrl { get; set; } = default!;
 
         [Parameter]
-        public string StorageLinkClientID { get; set; }
+        public string StorageLinkClientID { get; set; } = default!;
 
         [Parameter]
         public string Storage

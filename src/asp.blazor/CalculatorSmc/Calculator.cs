@@ -10,8 +10,8 @@ namespace asp.blazor.CalculatorSmc
     [Clsid("F39F40BA-4152-4BE0-8907-70F4B135E29D")]
     public class Calculator : IAppClass<CalculatorContext, CalculatorContext.CalculatorState>
     {
-        protected CalculatorContext _fsm;
-        protected Stack<string> _stack;
+        protected CalculatorContext _fsm = default!;
+        protected Stack<string> _stack = default!;
 
         public Calculator()
         {

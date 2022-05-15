@@ -88,7 +88,7 @@ namespace iselenium
         /// <param name="delay">Optional delay time in milliseconds before clicking the element</param>
         /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete</param>
         /// <param name="wait">Explicit WebDriverWait in seconds  for the element to appear</param>
-        public void Click(string id, int index = 0,
+        public virtual void Click(string id, int index = 0,
                             bool expectRequest = false, bool? samePage = null, bool? awaitRemoved = null,
                             int expectedStatusCode = 200, int delay = 0, int pause = 0, int wait = 0)
         {

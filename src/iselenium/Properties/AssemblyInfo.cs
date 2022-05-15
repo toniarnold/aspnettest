@@ -2,4 +2,4 @@
 
 [assembly: InternalsVisibleTo("iselenium.core")]
 [assembly: InternalsVisibleTo("iselenium.webforms")]
-[assembly: InternalsVisibleTo("test.core")]
+[assembly: InternalsVisibleTo("test.core")] 

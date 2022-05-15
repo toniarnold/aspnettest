@@ -20,7 +20,7 @@ namespace asplib.Components
             get { return Main.GetState(); }
         }
 
-        private List<statemap.StateChangeEventHandler> _stateChangedHandlers = new();
+        private readonly List<statemap.StateChangeEventHandler> _stateChangedHandlers = new();
         private bool _isDisposed = false;
 
         // Blazor State Container / SMC event notification handler pattern
@@ -37,16 +37,18 @@ namespace asplib.Components
 
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            await base.OnAfterRenderAsync(firstRender); // re-instantiates Main when not from the database
+            await CreateMain(firstRender);
             if (firstRender)
             {
+                // Scaffold the SMC state machine
                 Main.Fsm.StateChange += StateChanged;
                 _stateChangedHandlers.Add(StateChanged);
                 Main.SetOwner();
-                // React to the loaded state:
+                // React to the loaded state
                 ReRender();
                 StateHasChanged();
             }
+            await base.OnAfterRenderAsync(firstRender);
         }
 
         /// <summary>

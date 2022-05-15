@@ -20,24 +20,24 @@ namespace asplib.Services
                 // and cookies can only be set before the response has been started -  which is
                 // the case for DI instantiation.
                 var httpContextAccessor = provider.GetService<IHttpContextAccessor>();
-                var httpContext = httpContextAccessor.HttpContext;
+                var httpContext = httpContextAccessor?.HttpContext;
                 var configuration = provider.GetService<IConfiguration>();
                 var mainType = typeof(T);
                 var storageID = StorageImplementation.GetStorageID(mainType.Name);
                 var sessionStorageID = StorageImplementation.GetSessionStorageID(mainType.Name);
 
-                ASP_DBEntities.ConnectionString = configuration["ASP_DBEntities"];  // globally
+                ASP_DBEntities.ConnectionString = configuration?["ASP_DBEntities"];  // globally
                 var storage = StorageImplementation.GetStorage(configuration, httpContext, sessionStorageID);
                 StorageImplementation.ClearIfRequested(httpContext, storage, storageID);
 
                 Guid sessionOverride;
                 Guid session;
                 byte[] bytes;
-                Func<byte[], byte[]> filter = null;
-                T main = null;
+                Func<byte[], byte[]>? filter = null;
+                T? main = null;
 
                 // ---------- Direct GET request ?session= from the Database ----------
-                if (httpContext.Request.Method == WebRequestMethods.Http.Get &&
+                if (httpContext?.Request.Method == WebRequestMethods.Http.Get &&
                     Guid.TryParse(httpContext.Request.Query["session"], out sessionOverride))
                 {
                     using (var db = new ASP_DBEntities())
@@ -51,7 +51,7 @@ namespace asplib.Services
                     // ---------- Load from Database ----------
                     if (storage == Storage.Database)
                     {
-                        if (Guid.TryParse(httpContext.Request.Cookies[storageID].FromCookieString()["session"], out session))   // existing session
+                        if (Guid.TryParse(httpContext?.Request.Cookies[storageID].FromCookieString()["session"], out session))   // existing session
                         {
                             (bytes, filter) = StorageImplementation.DatabaseBytes(configuration, httpContext, storageID, session);
                             main = DeserializeMain<T>(bytes, filter);
@@ -59,7 +59,7 @@ namespace asplib.Services
                             if (StorageImplementation.GetEncryptDatabaseStorage(configuration))
                             {
                                 var cookie = httpContext.Request.Cookies[storageID].FromCookieString();
-                                var key = (cookie["key"] != null) ? Convert.FromBase64String(cookie["key"]) : null;
+                                var key = (cookie?["key"] != null) ? Convert.FromBase64String(cookie?["key"] ?? "") : null;
                                 TypeDescriptor.AddAttributes(main, new DatabaseKeyAttribute(key));
                             }
                         }
@@ -80,7 +80,7 @@ namespace asplib.Services
             });
         }
 
-        private static T DeserializeMain<T>(byte[] bytes, Func<byte[], byte[]> filter = null)
+        private static T DeserializeMain<T>(byte[] bytes, Func<byte[], byte[]>? filter = null)
         {
             return (T)Serialization.Deserialize(bytes, filter);
         }

@@ -19,7 +19,7 @@ namespace minimaltest.blazor
         public IWebDriver driver { get; set; }
 #pragma warning restore IDE1006, CS8618
 
-        public Index? Index => (Index?)TestFocus.Component;
+        public Index Index => (Index)TestFocus.Component;
 
         [OneTimeSetUp]
         public void OneTimeSetUp()

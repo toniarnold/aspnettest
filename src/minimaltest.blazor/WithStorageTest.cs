@@ -9,30 +9,34 @@ using OpenQA.Selenium.Edge;
 using OpenQA.Selenium.Firefox;
 using System;
 using System.Collections.Generic;
-using System.Threading;
 
 namespace minimaltest.blazor
 {
-    //[TestFixture(typeof(ChromeDriver))]
-    //[TestFixture(typeof(EdgeDriver))]
-    //[TestFixture(typeof(FirefoxDriver))]
+    [TestFixture(typeof(ChromeDriver))]
+    [TestFixture(typeof(EdgeDriver))]
     [TestFixture(typeof(FirefoxDriver))]
     public class WithStorageTest<TWebDriver> : StaticOwningComponentDbTest<TWebDriver, WithStorage, Main>
         where TWebDriver : IWebDriver, new()
     {
+        [SetUp]
+        public void SetUpNoStorage()
+        {
+            asplib.Model.StorageImplementation.SessionStorage = asplib.Model.Storage.ViewState;
+        }
+
         /// <summary>
         /// Typed accessor to the only model object in the app
         /// </summary>
-        public List<string>? Content
+        public List<string> Content
         {
-            get { return ((WithStorage?)TestFocus.Component)?.Main; }
+            get { return ((WithStorage)TestFocus.Component).Main; }
         }
 
         [Test]
         public void NavigatekWithStorageTest()
         {
             this.Navigate("/Withstorage");
-            this.AssertPoll(() => this.Html(), () => Does.Contain(">minimalist test setup with storage</h1>"));
+            Assert.That(Html(), Does.Contain(">minimalist test setup with storage</h1>"));
         }
 
         // Assert that all three storage methods behave as expected with respect to surviving certain actions:
@@ -40,6 +44,7 @@ namespace minimaltest.blazor
         // Database: Survives restarting the browser
         // SessionStorage: Survives reload, but not restart
         // LocalStorage: Survives restarting
+        // As modern browsers start in an isolated private profile, persistency over browser restarts is no more testable.
 
         [Test]
         public void StorageBlazorTest()
@@ -48,11 +53,13 @@ namespace minimaltest.blazor
             this.WriteContentTest(() => this.Nop());
         }
 
+        // The InputRadios and the clearButton reload the page to reinitialize
+        // They doe not produce an id attribute in Blazor 6.0.4 yet, therefore use the manual Ids for now
+
         [Test]
         public void StorageSessionStorageTest()
         {
             this.Navigate("/Withstorage");
-            // The InputRadios and the clearButton reload the page to reinitialize
             this.Click(By.Id, "storageSessionStorage", expectRequest: true);    // temporary by id
             this.Click(Component.clearButton, expectRequest: true);
             this.WriteContentTest(() => this.Reload());
@@ -78,7 +85,7 @@ namespace minimaltest.blazor
         public void StorageLocalStorageTest()
         {
             this.Navigate("/Withstorage");
-            this.Click("storageLocalStorage", expectRequest: true);
+            this.Click(By.Id, "storageLocalStorage", expectRequest: true);
             this.Click(Component.clearButton, expectRequest: true);
             this.WriteContentTest(() => this.Reload());
         }
@@ -133,11 +140,6 @@ namespace minimaltest.blazor
             this.OneTimeTearDownBrowser();
             this.OneTimeSetUpBrowser();
             this.Navigate("/Withstorage");
-        }
-
-        private void ClearLocalStorage()
-        {
-            this.Click(Component.clearButton);
         }
     }
 }

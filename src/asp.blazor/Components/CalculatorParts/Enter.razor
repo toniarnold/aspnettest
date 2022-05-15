@@ -6,7 +6,7 @@
 
 @code {
     [CascadingParameter(Name="Main")]
-    private Calculator Main{ get; set; }
+    private Calculator Main{ get; set; } = default!;
 
     // Store the operand in the global state object
     private string Operand

@@ -1,5 +1,7 @@
 ﻿@using asplib.Components
 
+@implements ITestFocus
+
 @page "/"
 
 <PageTitle>minimal</PageTitle>
@@ -18,8 +20,8 @@
     public ElementReference withstaticLink;
     public ElementReference withstorageLink;
 
-    protected override void OnAfterRender(bool _)
+    protected override void OnAfterRender(bool firstRender)
     {
-        TestFocus.Expose(this);
+        this.ExposeSetEvent(firstRender);
     }
 }

@@ -17,6 +17,6 @@ namespace iselenium
         where TComponent : StaticOwningComponentBase<TMain>
         where TMain : class, new()
     {
-        public TMain? Main => ((StaticOwningComponentBase<TMain>?)TestFocus.Component)?.Main;
+        public TMain Main => ((StaticOwningComponentBase<TMain>)TestFocus.Component).Main;
     }
 }

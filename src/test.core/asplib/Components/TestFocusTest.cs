@@ -4,7 +4,7 @@ using NUnit.Framework;
 
 namespace test.asplib.Components
 {
-    internal class FocussedCompoent : ComponentBase
+    internal class FocussedCompoent : ComponentBase, ITestFocus
     {
         protected override void OnAfterRender(bool firstRender)
         {

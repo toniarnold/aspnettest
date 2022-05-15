@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-
-namespace asplib.Components
+﻿namespace asplib.Components
 {
     /// <summary>
     /// Static class to obtain a reference to a Component which has currently
@@ -8,18 +6,18 @@ namespace asplib.Components
     /// </summary>
     public static class TestFocus
     {
-        private static object _lockObj = new object();  // there should be no concurrent tests running anyway...
         private static Type? _focussedCommponentType;
-        private static TypeDescriptionProvider? _attributeProvider;
 
-        public static object? Component { get; private set; }
-
+        public static ITestFocus Component { get; private set; } = default!;
         public static AutoResetEvent Event { get; private set; } = new(false);
+        internal static object LockObj { get; private set; } = new object();
 
-        [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
-        private class TestFocusAttribute : Attribute
-        {
-        }
+        /// <summary>
+        /// Set to true when a new page load is expected such that the test
+        /// waits for the firstRender OnAfterRenderAsync instead of continuing
+        /// still on the page that caused the reload.
+        /// </summary>
+        public static bool AwaitingFirstRender { get; set; } = false;
 
         /// <summary>
         /// Assign the calling component to the Component field. Unconditionally
@@ -28,7 +26,7 @@ namespace asplib.Components
         /// Returns true if the component has focus and was assigned.
         /// </summary>
         /// <param name="component"></param>
-        public static bool Expose(object component)
+        public static bool Expose(ITestFocus component)
         {
             if (HasFocus(component.GetType()))
             {
@@ -52,11 +50,14 @@ namespace asplib.Components
         /// <param name="componentType"></param>
         public static void SetFocus(Type componentType)
         {
-            lock (_lockObj)
+            if (!typeof(ITestFocus).IsAssignableFrom(componentType))
+            {
+                throw new ArgumentException($"The componentType {componentType} must implement IStaticComponent");
+            }
+            lock (LockObj)
             {
                 RemoveFocus();
                 _focussedCommponentType = componentType;
-                _attributeProvider = TypeDescriptor.AddAttributes(componentType, new TestFocusAttribute());
             }
         }
 
@@ -66,15 +67,11 @@ namespace asplib.Components
         /// </summary>
         public static void RemoveFocus()
         {
-            lock (_lockObj)
+            lock (LockObj)
             {
-                if (_focussedCommponentType != null && _attributeProvider != null)
-                {
-                    TypeDescriptor.RemoveProvider(_attributeProvider, _focussedCommponentType);
-                    _focussedCommponentType = null;
-                    _attributeProvider = null;
-                    Component = null;   // finally allow the component to be garbage collected
-                }
+                _focussedCommponentType = null;
+                AwaitingFirstRender = false;
+                Component = default!;
             }
         }
 
@@ -85,9 +82,7 @@ namespace asplib.Components
         /// <returns></returns>
         internal static bool HasFocus(Type componentType)
         {
-            return (from Attribute a in TypeDescriptor.GetAttributes(componentType)
-                    where a is TestFocusAttribute
-                    select a).Any();
+            return componentType.Equals(_focussedCommponentType);
         }
     }
 }

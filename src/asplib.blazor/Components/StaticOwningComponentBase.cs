@@ -7,11 +7,11 @@ namespace asplib.Components
     /// instance on TestFocus.Component and injects a public Main instance.
     /// (the owned service).
     /// </summary>
-    public abstract class StaticOwningComponentBase<T> : OwningComponentBase<T>, IStaticComponent
+    public abstract class StaticOwningComponentBase<T> : OwningComponentBase<T>, ITestFocus
         where T : class, new()
     {
         [Inject]
-        public T Main { get; protected set; }
+        public T Main { get; protected set; } = default!;
 
         /// <summary>
         /// Set the static reference to the component in focus on each Render,
@@ -20,12 +20,9 @@ namespace asplib.Components
         /// </summary>
         /// <param name="firstRender"></param>
         /// <returns></returns>
-        protected override async Task OnAfterRenderAsync(bool _)
+        protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            if (TestFocus.Expose(this))
-            {
-                TestFocus.Event.Set();  // allow the calling test method to continue
-            }
+            await this.ExposeSetEventAsync(firstRender);
         }
     }
 }

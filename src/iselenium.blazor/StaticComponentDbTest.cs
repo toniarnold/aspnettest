@@ -15,7 +15,7 @@ namespace iselenium
     /// <typeparam name="TComponent"></typeparam>
     public class StaticComponentDbTest<TWebDriver, TComponent> : StaticComponentTest<TWebDriver, TComponent>, IDeleteNewRows
         where TWebDriver : IWebDriver, new()
-        where TComponent : IStaticComponent
+        where TComponent : ITestFocus
     {
         /// <summary>
         /// IDeleteNewRows

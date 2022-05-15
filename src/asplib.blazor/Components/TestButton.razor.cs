@@ -21,16 +21,16 @@ namespace asplib.Components
         public string TestResult { get; set; } = "";
 
         [Inject]
-        private IConfiguration Configuration { get; set; }
+        private IConfiguration Configuration { get; set; } = default!;
 
         [Inject]
-        private IWebHostEnvironment Environment { get; set; }
+        private IWebHostEnvironment Environment { get; set; } = default!;
 
         [Inject]
-        private IHttpContextAccessor Http { get; set; }
+        private IHttpContextAccessor Http { get; set; } = default!;
 
         [Inject]
-        private IJSRuntime JS { get; set; }
+        private IJSRuntime JS { get; set; } = default!;
 
         private int Port { get; set; } = 0;
 
@@ -38,7 +38,7 @@ namespace asplib.Components
 
         protected override void OnInitialized()
         {
-            Port = (int)Http.HttpContext.Request.Host.Port;
+            Port = (int)(Http.HttpContext?.Request.Host.Port ?? 0);
         }
 
         public async Task Test()

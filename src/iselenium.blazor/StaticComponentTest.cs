@@ -13,12 +13,12 @@ namespace iselenium
     /// <typeparam name="TComponent"></typeparam>
     public class StaticComponentTest<TWebDriver, TComponent> : ComponentTest<TWebDriver, TComponent>
         where TWebDriver : IWebDriver, new()
-        where TComponent : IStaticComponent
+        where TComponent : ITestFocus
     {
         /// <summary>
         /// Accessor for the Component in focus
         /// </summary>
-        public TComponent? Component => (TComponent?)TestFocus.Component;
+        public TComponent Component => (TComponent?)TestFocus.Component ?? default!;
 
         [SetUp]
         public void SetFocus()
@@ -33,31 +33,33 @@ namespace iselenium
         }
 
         /// <summary>
-        /// Navigate to a StaticComponentBase<T> which signals TestFocus.Event
-        /// on OnAfterRenderAsync to continue
+        /// Navigate to a StaticComponentBase<T> and signal TestFocus.Event to
+        /// continue OnAfterRenderAsync if expectRender is true.
         /// </summary>
         /// <param name="path">Path part of the URL (without Domain)</param>
         /// <param name="expectedStatusCode">Expected StatusCode of the response</param>
         /// <param name="delay">Optional delay time in seconds before navigating to the url</param>
         /// <param name="pause">Optional pause time in seconds after Selenium claims DocumentComplete when expectRender is false</param>
-        /// <param name="expectRender">Set to false if TestFocus.Event is not set on OnAfterRenderAsync</param>
+        /// <param name="expectRender">Set to false if TestFocus.Event is not set OnAfterRenderAsync</param>
         public override void Navigate(string path, int expectedStatusCode = 200, int delay = 0, int pause = 0, bool expectRender = true)
         {
             if (expectRender)
             {
-                TestFocus.Event.Reset();    // Reset to "block" state after unrelated renders
+                TestFocus.Event.Reset();
             }
             SeleniumExtensionBase.Navigate(this, path, expectedStatusCode, delay, pause);
             if (expectRender)
             {
-                // Navigate returns (possibly) before the page is fully rendered.
-                // If not, the Event is already in signaled state and lets the Wait pass.
-                TestFocus.Event.WaitOne(SeleniumExtensionBase.RequestTimeout * 1000);
+                if (!TestFocus.Event.WaitOne(SeleniumExtensionBase.RequestTimeout * 1000))
+                {
+                    throw new TimeoutException($"Navigate({path}): TestFocus.Event not signaled");
+                }
             }
         }
 
         /// <summary>
-        /// Click the HTML element and wait for the response when expectRender
+        /// Synchronized click on the HTML element, waits for a response when expectRequest is true and
+        /// for TestFocus.Event getting signaled OnAfterRenderAsync when expectRender is true.
         /// is true.
         /// </summary>
         /// <param name="selector">Selenium By selector function</param>
@@ -68,7 +70,7 @@ namespace iselenium
         /// <param name="delay">Optional delay time in milliseconds before clicking the element</param>
         /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete (set to 0 if expectRender)</param>
         /// <param name="wait">Explicit WebDriverWait in seconds for the element to appear. 0 when expectRender is true</param>
-        /// <param name="expectRender">Set to false if TestFocus.Event is not set onOnAfterRenderAsync</param>
+        /// <param name="expectRender">Set to false if TestFocus.Event is not set OnAfterRenderAsync</param>
         public override void Click(Func<string, By> selector, string selectString, int index = 0,
                             bool expectRequest = false, bool? awaitRemoved = null,
                             int expectedStatusCode = 200, int delay = 0, int pause = 0, int wait = 0, bool expectRender = true)
@@ -76,17 +78,54 @@ namespace iselenium
             var doAwaitRemoved = awaitRemoved ?? this.awaitRemovedDefault;
             if (expectRender)
             {
-                TestFocus.Event.Reset();    // Reset to "block" state after unrelated renders
+                if (expectRequest)
+                {
+                    TestFocus.AwaitingFirstRender = true;
+                }
+                TestFocus.Event.Reset();
             }
             SeleniumExtensionBase.Click(this, selector, selectString, index: 0,
                                             expectRequest: expectRequest, samePage: false, // In Blazor the "same" page receives new Ids
                                             awaitRemoved: doAwaitRemoved, expectedStatusCode: expectedStatusCode,
                                             delay: delay, pause: pause,
                                             wait: (wait == 0) ? SeleniumExtensionBase.RequestTimeout : wait);
-            if (expectRender && !expectRequest)
+            if (expectRender)
             {
-                TestFocus.Event.WaitOne(SeleniumExtensionBase.RequestTimeout * 1000);
+                if (!TestFocus.Event.WaitOne(SeleniumExtensionBase.RequestTimeout * 1000))
+                {
+                    throw new TimeoutException($"Click({selectString}): TestFocus.Event not signaled");
+                }
             }
+        }
+
+        /// <summary>
+        /// Synchronized page reload, waits for TestFocus.Event getting signaled
+        /// OnAfterRenderAsync when expectRender is true.
+        /// </summary>
+        /// <param name="expectRender">Set to false if TestFocus.Event is not set OnAfterRenderAsync</param>
+        public void Refresh(bool expectRender = true)
+        {
+            if (expectRender)
+            {
+                TestFocus.AwaitingFirstRender = true;
+                TestFocus.Event.Reset();
+            }
+            SeleniumExtensionBase.Refresh(this);
+            if (expectRender)
+            {
+                if (!TestFocus.Event.WaitOne(SeleniumExtensionBase.RequestTimeout * 1000))
+                {
+                    throw new TimeoutException("Refresh(): TestFocus.Event not signaled");
+                }
+            }
+        }
+
+        [Obsolete("For Blazor, you probably want synchronized Click(By.Id, someId), if intended asynchronously use it with expectRender: false", true)]
+        public override void Click(string id, int index = 0,
+                            bool expectRequest = false, bool? samePage = null, bool? awaitRemoved = null,
+                            int expectedStatusCode = 200, int delay = 0, int pause = 0, int wait = 0)
+        {
+            base.Click(id, index, expectRequest, samePage, awaitRemoved, expectedStatusCode, delay, wait);
         }
     }
 }
