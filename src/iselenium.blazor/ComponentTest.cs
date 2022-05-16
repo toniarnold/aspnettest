@@ -72,49 +72,49 @@ namespace iselenium
 
         public void Click(ElementReference element, bool expectRequest = false, int expectedStatusCode = 200, bool expectRender = true)
         {
-            Click(By.CssSelector, $"*[_bl_{element.Id}]", index: 0, expectRequest, awaitRemoved: null, expectedStatusCode, delay: 0, pause: 0, wait: 0, expectRender: expectRender);
+            Click(By.CssSelector, $"*[{element.IdAttr()}]", index: 0, expectRequest, awaitRemoved: null, expectedStatusCode, delay: 0, pause: 0, wait: 0, expectRender: expectRender);
         }
 
         // The built-in components with an .Element property don't expose that as interface or by inheritance -> enumerate them explicitly:
 
         public void Click(InputCheckbox component, bool expectRequest = false, int expectedStatusCode = 200, bool expectRender = true)
         {
-            Click(By.CssSelector, $"*[_bl_{component.Element?.Id}]", index: 0, expectRequest, awaitRemoved: null, expectedStatusCode, delay: 0, pause: 0, wait: 0, expectRender: expectRender);
+            Click(By.CssSelector, $"*[{component.Element?.IdAttr()}]", index: 0, expectRequest, awaitRemoved: null, expectedStatusCode, delay: 0, pause: 0, wait: 0, expectRender: expectRender);
         }
 
         public void Click<T>(InputDate<T> component, bool expectRequest = false, int expectedStatusCode = 200, bool expectRender = true)
         {
-            Click(By.CssSelector, $"*[_bl_{component.Element?.Id}]", index: 0, expectRequest, awaitRemoved: null, expectedStatusCode, delay: 0, pause: 0, wait: 0, expectRender: expectRender);
+            Click(By.CssSelector, $"*[{component.Element?.IdAttr()}]", index: 0, expectRequest, awaitRemoved: null, expectedStatusCode, delay: 0, pause: 0, wait: 0, expectRender: expectRender);
         }
 
         public void Click(InputFile component, bool expectRequest = false, int expectedStatusCode = 200, bool expectRender = true)
         {
-            Click(By.CssSelector, $"*[_bl_{component.Element?.Id}]", index: 0, expectRequest, awaitRemoved: null, expectedStatusCode, delay: 0, pause: 0, wait: 0, expectRender: expectRender);
+            Click(By.CssSelector, $"*[{component.Element?.IdAttr()}]", index: 0, expectRequest, awaitRemoved: null, expectedStatusCode, delay: 0, pause: 0, wait: 0, expectRender: expectRender);
         }
 
         public void Click<T>(InputNumber<T> component, bool expectRequest = false, int expectedStatusCode = 200, bool expectRender = true)
         {
-            Click(By.CssSelector, $"*[_bl_{component.Element?.Id}]", index: 0, expectRequest, awaitRemoved: null, expectedStatusCode, delay: 0, pause: 0, wait: 0, expectRender: expectRender);
+            Click(By.CssSelector, $"*[{component.Element?.IdAttr()}]", index: 0, expectRequest, awaitRemoved: null, expectedStatusCode, delay: 0, pause: 0, wait: 0, expectRender: expectRender);
         }
 
         //public void Click<T>(InputRadio<T> component,bool expectRequest = false, int expectedStatusCode = 200, bool expectRender = true)
         //{
-        //    Click(By.CssSelector, $"*[_bl_{component.Element?.Id}]", index: 0, expectRequest,awaitRemoved: null, expectedStatusCode, delay: 0, pause: 0, wait: 0, expectRender: expectRender);
+        //    Click(By.CssSelector, $"*[{component.Element?.IdAttr()}]", index: 0, expectRequest,awaitRemoved: null, expectedStatusCode, delay: 0, pause: 0, wait: 0, expectRender: expectRender);
         //}
 
         public void Click<T>(InputSelect<T> component, bool expectRequest = false, int expectedStatusCode = 200, bool expectRender = true)
         {
-            Click(By.CssSelector, $"*[_bl_{component.Element?.Id}]", index: 0, expectRequest, awaitRemoved: null, expectedStatusCode, delay: 0, pause: 0, wait: 0, expectRender: expectRender);
+            Click(By.CssSelector, $"*[{component.Element?.IdAttr()}]", index: 0, expectRequest, awaitRemoved: null, expectedStatusCode, delay: 0, pause: 0, wait: 0, expectRender: expectRender);
         }
 
         public void Click(InputText component, bool expectRequest = false, int expectedStatusCode = 200, bool expectRender = true)
         {
-            Click(By.CssSelector, $"*[_bl_{component.Element?.Id}]", index: 0, expectRequest, awaitRemoved: null, expectedStatusCode, delay: 0, pause: 0, wait: 0, expectRender: expectRender);
+            Click(By.CssSelector, $"*[{component.Element?.IdAttr()}]", index: 0, expectRequest, awaitRemoved: null, expectedStatusCode, delay: 0, pause: 0, wait: 0, expectRender: expectRender);
         }
 
         public void Click(InputTextArea component, bool expectRequest = false, int expectedStatusCode = 200, bool expectRender = true)
         {
-            Click(By.CssSelector, $"*[_bl_{component.Element?.Id}]", index: 0, expectRequest, awaitRemoved: null, expectedStatusCode, delay: 0, pause: 0, wait: 0, expectRender: expectRender);
+            Click(By.CssSelector, $"*[{component.Element?.IdAttr()}]", index: 0, expectRequest, awaitRemoved: null, expectedStatusCode, delay: 0, pause: 0, wait: 0, expectRender: expectRender);
         }
 
         /// <summary>
@@ -125,22 +125,22 @@ namespace iselenium
         /// <param name="throttle"></param>
         public void Write(ElementReference element, string text, int throttle = 0)
         {
-            SeleniumExtensionBase.Write(this, By.CssSelector, $"*[_bl_{element.Id}]", text, index: 0, wait: 0, throttle);
+            SeleniumExtensionBase.Write(this, By.CssSelector, $"*[{element.IdAttr()}]", text, index: 0, wait: 0, throttle);
         }
 
         public void Write<T>(InputNumber<T> component, string text, int throttle = 0)
         {
-            SeleniumExtensionBase.Write(this, By.CssSelector, $"*[_bl_{component.Element?.Id}]", text, index: 0, wait: 0, throttle);
+            SeleniumExtensionBase.Write(this, By.CssSelector, $"*[{component.Element?.IdAttr()}]", text, index: 0, wait: 0, throttle);
         }
 
-        public void Write<T>(InputText component, string text, int throttle = 0)
+        public void Write(InputText component, string text, int throttle = 0)
         {
-            SeleniumExtensionBase.Write(this, By.CssSelector, $"*[_bl_{component.Element?.Id}]", text, index: 0, wait: 0, throttle);
+            SeleniumExtensionBase.Write(this, By.CssSelector, $"*[{component.Element?.IdAttr()}]", text, index: 0, wait: 0, throttle);
         }
 
-        public void Write<T>(InputTextArea component, string text, int throttle = 0)
+        public void Write(InputTextArea component, string text, int throttle = 0)
         {
-            SeleniumExtensionBase.Write(this, By.CssSelector, $"*[_bl_{component.Element?.Id}]", text, index: 0, wait: 0, throttle);
+            SeleniumExtensionBase.Write(this, By.CssSelector, $"*[{component.Element?.IdAttr()}]", text, index: 0, wait: 0, throttle);
         }
     }
 }

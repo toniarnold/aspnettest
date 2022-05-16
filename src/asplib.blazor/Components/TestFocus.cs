@@ -17,7 +17,7 @@
         /// waits for the firstRender OnAfterRenderAsync instead of continuing
         /// still on the page that caused the reload.
         /// </summary>
-        public static bool AwaitingFirstRender { get; set; } = false;
+        public static bool AwaitingRerender { get; set; } = false;
 
         /// <summary>
         /// Assign the calling component to the Component field. Unconditionally
@@ -70,19 +70,14 @@
             lock (LockObj)
             {
                 _focussedCommponentType = null;
-                AwaitingFirstRender = false;
+                AwaitingRerender = false;
                 Component = default!;
             }
         }
 
-        /// <summary>
-        /// True if the component type has the TestFocusAttribute.
-        /// </summary>
-        /// <param name="componentType"></param>
-        /// <returns></returns>
         internal static bool HasFocus(Type componentType)
         {
-            return componentType.Equals(_focussedCommponentType);
+            return componentType == _focussedCommponentType;
         }
     }
 }

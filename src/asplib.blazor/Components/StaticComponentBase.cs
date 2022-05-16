@@ -18,7 +18,7 @@ namespace asplib.Components
         /// <returns></returns>
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            await this.ExposeSetEventAsync(firstRender);
+            await this.EndRenderAsync(firstRender);
         }
     }
 }

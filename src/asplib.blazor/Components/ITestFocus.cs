@@ -12,17 +12,17 @@
     {
         /// <summary>
         /// To be called in OnAfterRenderAsync(bool firstRender):
-        /// Set the static reference to the component in focus on each Render,
-        /// as the ElementReference.Id can change.
+        /// Sets the static reference to the component in focus on each Render,
+        /// as the ElementReference.Id changes on reinstantiation.
         /// Signals the TestFocus.Event if the component has focus.
         /// </summary>
         /// <param name="focussableComponent"></param>
         /// <param name="firstRender"></param>
         /// <returns></returns>
-        public static async Task ExposeSetEventAsync(this ITestFocus focussableComponent, bool firstRender)
+        public static async Task EndRenderAsync(this ITestFocus focussableComponent, bool firstRender)
         {
             await Task.CompletedTask;
-            ExposeSetEvent(focussableComponent, firstRender);
+            EndRender(focussableComponent, firstRender);
         }
 
         /// <summary>
@@ -33,17 +33,17 @@
         /// </summary>
         /// <param name="focussableComponent"></param>
         /// <param name="firstRender"></param>
-        public static void ExposeSetEvent(this ITestFocus focussableComponent, bool firstRender)
+        public static void EndRender(this ITestFocus focussableComponent, bool firstRender)
         {
             lock (TestFocus.LockObj)
             {
                 if (TestFocus.Expose(focussableComponent))
                 {
-                    if (firstRender && TestFocus.AwaitingFirstRender)
+                    if (firstRender && TestFocus.AwaitingRerender)
                     {
-                        TestFocus.AwaitingFirstRender = false;
+                        TestFocus.AwaitingRerender = false;
                     }
-                    if (!TestFocus.AwaitingFirstRender)
+                    if (!TestFocus.AwaitingRerender)
                     {
                         TestFocus.Event.Set();  // allow the calling test method to continue
                     }

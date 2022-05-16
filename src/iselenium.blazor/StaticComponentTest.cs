@@ -80,7 +80,7 @@ namespace iselenium
             {
                 if (expectRequest)
                 {
-                    TestFocus.AwaitingFirstRender = true;
+                    TestFocus.AwaitingRerender = true;
                 }
                 TestFocus.Event.Reset();
             }
@@ -107,7 +107,7 @@ namespace iselenium
         {
             if (expectRender)
             {
-                TestFocus.AwaitingFirstRender = true;
+                TestFocus.AwaitingRerender = true;
                 TestFocus.Event.Reset();
             }
             SeleniumExtensionBase.Refresh(this);

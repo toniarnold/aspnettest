@@ -3,12 +3,12 @@ using iselenium;
 using minimal.blazor.Pages;
 using NUnit.Framework;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
+using OpenQA.Selenium.Edge;
 using System.Collections.Generic;
 
 namespace minimaltest.blazor
 {
-    // Uses the generic ISelenium extension, therefore SPA-specific wait:
+    // Uses the blank ISelenium extension, therefore SPA-specific wait:
     // SeleniumExtensionBase.RequestTimeout has to be set explicitly.
     public class IndexTest : ISelenium
     {
@@ -24,7 +24,7 @@ namespace minimaltest.blazor
         [OneTimeSetUp]
         public void OneTimeSetUp()
         {
-            this.SetUpBrowser<ChromeDriver>();
+            this.SetUpBrowser<EdgeDriver>();
             TestFocus.SetFocus(typeof(Index));
         }
 
@@ -41,15 +41,15 @@ namespace minimaltest.blazor
             this.Navigate("/");
             var html = this.Html();
             // Blazor adds tabindex: <h1 tabindex="-1">minimalist test setup</h1>
-            Assert.That(html, Does.Contain(">minimalist test setup</h1>"));
+            this.AssertPoll(() => html, () => Does.Contain(">minimalist test setup</h1>"));
         }
 
         [Test]
         public void ClickWithStaticTest()
         {
             this.Navigate("/");
-            Assert.That(this.Html(), Does.Contain(">minimalist test setup</h1>"));
-            this.Click(By.CssSelector, $"*[_bl_{Index.withstaticLink.Id}]", expectRequest: false, wait: SeleniumExtensionBase.RequestTimeout);
+            this.AssertPoll(() => this.Html(), () => Does.Contain(">minimalist test setup</h1>"));
+            this.Click(By.CssSelector, $"*[_bl_{Index.withstaticLink.Id}]", expectRequest: true, wait: SeleniumExtensionBase.RequestTimeout);
             this.AssertPoll(() => this.Html(), () => Does.Contain(">minimalist test setup with static main</h1>"));
         }
 
@@ -57,8 +57,8 @@ namespace minimaltest.blazor
         public void ClickWithStorageTest()
         {
             this.Navigate("/");
-            Assert.That(this.Html(), Does.Contain(">minimalist test setup</h1>"));
-            this.Click(By.CssSelector, $"*[_bl_{Index.withstorageLink.Id}]", expectRequest: false, wait: SeleniumExtensionBase.RequestTimeout);
+            this.AssertPoll(() => this.Html(), () => Does.Contain(">minimalist test setup</h1>"));
+            this.Click(By.CssSelector, $"*[_bl_{Index.withstorageLink.Id}]", expectRequest: true, wait: SeleniumExtensionBase.RequestTimeout);
             this.AssertPoll(() => this.Html(), () => Does.Contain(">minimalist test setup with storage</h1>"));
         }
     }
