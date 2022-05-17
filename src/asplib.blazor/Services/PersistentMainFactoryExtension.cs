@@ -11,7 +11,8 @@ namespace asplib.Services
 {
     public static class PersistentMainFactoryExtension
     {
-        public static void AddPersistent<T>(this IServiceCollection services) where T : class, new()
+        public static void AddPersistent<T>(this IServiceCollection services)
+            where T : class, new()  // for serialization
         {
             services.AddTransient<T>(provider =>
             {
@@ -65,7 +66,7 @@ namespace asplib.Services
                         }
                         else
                         {
-                            main = new T();
+                            main = (T)ActivatorUtilities.CreateInstance(provider, typeof(T));
                             // Immediately save the new instance to obtain a cookie and instance attributes before the initial request is disposed
                             StorageImplementation.SaveDatabase(configuration, httpContext, main);
                         }
@@ -73,7 +74,7 @@ namespace asplib.Services
 
                     if (main == null)   // Instance required by PersistentComponentBase
                     {
-                        main = new T();
+                        main = (T)ActivatorUtilities.CreateInstance(provider, typeof(T));
                     }
                 }
                 return main;

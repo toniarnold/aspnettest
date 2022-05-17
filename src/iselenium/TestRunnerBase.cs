@@ -185,7 +185,7 @@ namespace iselenium
             get => string.Join("<br />", this.Summary);
         }
 
-        public void Run(string testproject, string approot, string testFilterWhere)
+        public void Run(string testproject, string approot, string testFilterWhere, ITestEventListener listener = null)
         {
             try
             {
@@ -234,7 +234,7 @@ namespace iselenium
         /// Event raised by the NUnit test runner
         /// </summary>
         /// <param name="report"></param>
-        public void OnTestEvent(string report)
+        public virtual void OnTestEvent(string report)
         {
             Reports.Add(report);
         }

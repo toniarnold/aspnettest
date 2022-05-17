@@ -13,11 +13,19 @@ namespace asplib.Components
         where S : statemap.State
     {
         /// <summary>
-        /// The state of the FSM class
+        /// The state of the FSMContext class
         /// </summary>
         public S State
         {
             get { return Main.GetState(); }
+        }
+
+        /// <summary>
+        /// The FSMContext class itself
+        /// </summary>
+        public F Fsm
+        {
+            get { return Main.Fsm; }
         }
 
         private readonly List<statemap.StateChangeEventHandler> _stateChangedHandlers = new();
@@ -27,7 +35,7 @@ namespace asplib.Components
         public void StateChanged(object sender, StateChangeEventArgs args)
         {
             ReRender();
-            StateHasChanged();
+            InvokeAsync(StateHasChanged); // in case we're called not from the UI thread
         }
 
         /// <summary>
@@ -40,10 +48,7 @@ namespace asplib.Components
             await CreateMain(firstRender);
             if (firstRender)
             {
-                // Scaffold the SMC state machine
-                Main.Fsm.StateChange += StateChanged;
-                _stateChangedHandlers.Add(StateChanged);
-                Main.SetOwner();
+                ScaffoldFsm();
                 // React to the loaded state
                 ReRender();
                 StateHasChanged();
@@ -63,16 +68,34 @@ namespace asplib.Components
             {
                 return;
             }
-            foreach (var handler in _stateChangedHandlers)
-            {
-                Main.Fsm.StateChange -= handler;
-            }
-            _stateChangedHandlers.Clear();
+            DisposeFsm();
             // Must not remove an eventual stalled reference with
             // TestFocus.RemoveFocus();
             // The component in focus must remain there for test assertions. In
             // production, there will never be a component in focus.
             _isDisposed = true;
+        }
+
+        /// <summary>
+        /// Set the StateChanged handlers and the Owner
+        /// </summary>
+        private void ScaffoldFsm()
+        {
+            Main.Fsm.StateChange += StateChanged;
+            _stateChangedHandlers.Add(StateChanged);
+            Main.SetOwner();
+        }
+
+        /// <summary>
+        /// Remove the StateChanged handlers
+        /// </summary>
+        private void DisposeFsm()
+        {
+            foreach (var handler in _stateChangedHandlers)
+            {
+                Main.Fsm.StateChange -= handler;
+            }
+            _stateChangedHandlers.Clear();
         }
     }
 }

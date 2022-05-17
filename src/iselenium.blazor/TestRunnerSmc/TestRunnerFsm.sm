@@ -1,0 +1,98 @@
+// -*- tab-width: 4; -*-//
+//
+// TestRunner State Machine
+
+%import iselenium
+
+%start Map1::New
+%class TestRunnerFsm
+
+%map Map1
+%%
+
+New
+{
+	RunTests	
+		RunningOk
+		{
+		}
+}
+
+RunningOk
+{
+	OnTestEvent(result: TestStatus)
+		[result == TestStatus.Passed]				
+			RunningOk
+			{
+			}
+	OnTestEvent(result: TestStatus)
+		[result == TestStatus.Warning]	
+			RunningWarning
+			{
+			}
+	OnTestEvent(result: TestStatus)
+		[result == TestStatus.Failed]	
+			RunningError
+			{
+			}
+	Complete
+			Completed
+			{
+			}
+}
+
+RunningWarning
+{
+	OnTestEvent(result: TestStatus)
+		[result ==  TestStatus.Failed]	
+			RunningError
+			{
+			}
+	Complete
+			Completed
+			{
+			}
+}
+
+RunningError
+{
+	OnTestEvent(result: TestStatus)
+		RunningError
+		{
+		}
+	Complete
+		Completed
+		{
+		}
+}
+
+Completed
+{
+	Report
+		[TestRunner.Passed]	
+			Passed
+			{
+			}
+	Report
+		ResultXml		
+		{
+		}
+}
+
+Passed
+{
+	RunTests
+		RunningOk
+		{
+		}
+}
+
+ResultXml
+{
+	RunTests		
+		RunningOk
+		{
+		}
+}
+
+%%

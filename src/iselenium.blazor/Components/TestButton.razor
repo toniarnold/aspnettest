@@ -1,0 +1,8 @@
+﻿@using asplib.Components
+@namespace iselenium.Components
+@inherits SmcComponentBase<TestRunnerFsm, TestRunnerFsmContext, TestRunnerFsmContext.TestRunnerFsmState>
+
+<div>
+    <input type="image" id="testButton" alt="@imageText" class="nunitbutton @spin" src="@NUnitImgSrc" @onclick="Test" tabindex="@tabindex" />
+    <a class="testresult" @onclick="ShowResultXml">@((MarkupString)TestResult)</a>
+</div>

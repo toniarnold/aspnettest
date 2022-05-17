@@ -7,8 +7,8 @@ namespace iselenium
 {
     public class TestRunner : TestRunnerBase, ITestEventListener
     {
-        private IConfiguration Configuration { get; }
-        private IWebHostEnvironment Environment { get; }
+        protected IConfiguration Configuration { get; }
+        protected IWebHostEnvironment Environment { get; }
 
         public TestRunner(IConfiguration config, IWebHostEnvironment env, int port) : base(port)
         {
@@ -30,9 +30,9 @@ namespace iselenium
         /// NUnit.Engine.TestSelectionParser.ParseFilterElement()
         /// </summary>
         /// <param name="testproject"></param>
-        public void Run(string testproject)
+        public void Run(string testproject, ITestEventListener? listener = null)
         {
-            base.Run(testproject, Environment.ContentRootPath, Configuration["TestFilterWhere"]);
+            base.Run(testproject, Environment.ContentRootPath, Configuration["TestFilterWhere"], listener);
         }
     }
 }

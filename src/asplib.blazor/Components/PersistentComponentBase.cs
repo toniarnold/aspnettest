@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 
@@ -18,6 +19,9 @@ namespace asplib.Components
     {
         [Inject]
         protected IConfiguration Configuration { get; set; } = default!;
+
+        [Inject]
+        public IServiceProvider ServiceProvider { get; set; } = default!;
 
         [Inject]
         private ProtectedSessionStorage ProtectedSessionStore { get; set; } = default!;
@@ -179,7 +183,7 @@ namespace asplib.Components
             var storageId = StorageImplementation.GetStorageID(Main.GetType().Name);
             await ProtectedLocalStore.DeleteAsync(storageId);
             await ProtectedSessionStore.DeleteAsync(storageId);
-            this.Main = new T();
+            this.Main = (T)ActivatorUtilities.CreateInstance(ServiceProvider, typeof(T));
             this.StateHasChanged();
         }
 
@@ -217,12 +221,13 @@ namespace asplib.Components
             {
                 var viewState = result.Value;
                 var filter = StorageImplementation.DecryptViewState(Configuration);
-                var main = StorageImplementation.LoadFromViewstate(() => new T(), viewState, filter);
+                var main = StorageImplementation.LoadFromViewstate(
+                    () => (T)ActivatorUtilities.CreateInstance(ServiceProvider, typeof(T)), viewState, filter);
                 return main;
             }
             else
             {
-                return new T();
+                return (T)ActivatorUtilities.CreateInstance(ServiceProvider, typeof(T));
             }
         }
 

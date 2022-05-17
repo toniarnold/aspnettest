@@ -1,0 +1,35 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Sources">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>sm</Extensions>
+    </Filter>
+    <Filter Include="Targets">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Makefile" />
+    <None Include="TestRunner.sm">
+      <Filter>Sources</Filter>
+    </None>
+    <None Include="TestRunner_sm.cs" />
+    <None Include="TestRunner_sm.dot" />
+    <None Include="TestRunnerFsm_sm.cs">
+      <Filter>Targets</Filter>
+    </None>
+    <None Include="TestRunnerFsm_sm.dot">
+      <Filter>Targets</Filter>
+    </None>
+    <None Include="TestRunnerFsm.sm">
+      <Filter>Sources</Filter>
+    </None>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="TestRunner_sm.png" />
+    <Image Include="TestRunnerFsm_sm.png">
+      <Filter>Targets</Filter>
+    </Image>
+  </ItemGroup>
+</Project>

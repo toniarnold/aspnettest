@@ -1,31 +1,37 @@
-/* Custom global minimal css */
-h1 {
-    font-size: 1.25em;
+html, body {
+    font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
 }
 
-    h1:focus {
-        outline: none;
-    }
-
-a {
-    text-decoration: none;
+h1:focus {
+    outline: none;
 }
 
-ul {
-    list-style-type: none;
-    margin: 0;
-    padding: 0;
+a, .btn-link {
+    color: #0071c1;
 }
 
-button {
-    width: fit-content;
+.btn-primary {
+    color: #fff;
+    background-color: #1b6ec2;
+    border-color: #1861ac;
 }
 
-.textBox {
-    width: 25em;
+.content {
+    padding-top: 1.1rem;
 }
 
-/* Blazor specific */
+.valid.modified:not([type=checkbox]) {
+    outline: 1px solid #26b050;
+}
+
+.invalid {
+    outline: 1px solid red;
+}
+
+.validation-message {
+    color: red;
+}
+
 #blazor-error-ui {
     background: lightyellow;
     bottom: 0;

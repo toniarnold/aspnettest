@@ -1,5 +1,4 @@
-﻿/* not applied from isolated css */
-.nunitbutton {
+﻿.nunitbutton {
     position: absolute;
     top: 8px;
     right: 8px;
@@ -11,8 +10,8 @@
     position: absolute;
     right: 0px;
     top: 59px;
-    width: 140px;
-    background-color: rgba(255, 255, 255, 1);
+    text-align: right;
+    background-color: rgba(255, 255, 255, 0.5);
 }
 
 @keyframes spinning {
@@ -29,6 +28,5 @@
     animation-name: spinning;
     animation-duration: 3s;
     animation-iteration-count: infinite;
-    /* linear | ease | ease-in | ease-out | ease-in-out */
     animation-timing-function: linear;
 }

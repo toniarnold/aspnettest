@@ -1,0 +1,20 @@
+<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>net6.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\asplib.blazor\asplib.blazor.csproj" />
+    <ProjectReference Include="..\iselenium.blazor\iselenium.blazor.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="testbuttontest.blazor">
+      <HintPath>..\bin\testbuttontest.blazor.dll</HintPath>
+    </Reference>
+  </ItemGroup>
+
+</Project>

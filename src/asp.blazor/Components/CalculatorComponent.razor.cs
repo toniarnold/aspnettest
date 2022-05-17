@@ -40,7 +40,7 @@ namespace asp.blazor.Components
         protected override void ReRender()
         {
             errorMsg = null;
-            switch (Main.State)
+            switch (State)
             {
                 case var s when s == CalculatorContext.Map1.Splash:
                     pageType = typeof(Splash);
