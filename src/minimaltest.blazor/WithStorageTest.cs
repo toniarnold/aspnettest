@@ -35,7 +35,7 @@ namespace minimaltest.blazor
         [Test]
         public void NavigatekWithStorageTest()
         {
-            this.Navigate("/Withstorage");
+            Navigate("/Withstorage");
             Assert.That(Html(), Does.Contain(">minimalist test setup with storage</h1>"));
         }
 
@@ -49,8 +49,8 @@ namespace minimaltest.blazor
         [Test]
         public void StorageBlazorTest()
         {
-            this.Navigate("/Withstorage");
-            this.WriteContentTest(() => this.Nop());
+            Navigate("/Withstorage");
+            WriteContentTest(() => Nop());
         }
 
         // The InputRadios and the clearButton reload the page to reinitialize
@@ -59,35 +59,35 @@ namespace minimaltest.blazor
         [Test]
         public void StorageSessionStorageTest()
         {
-            this.Navigate("/Withstorage");
-            this.Click(By.Id, "storageSessionStorage", expectRequest: true);    // temporary by id
-            this.Click(Component.clearButton, expectRequest: true);
-            this.WriteContentTest(() => this.Reload());
+            Navigate("/Withstorage");
+            Click(By.Id, "storageSessionStorage", expectRequest: true);    // temporary by id
+            Click(Component.clearButton, expectRequest: true);
+            WriteContentTest(() => Reload());
         }
 
         // As (at least) of FireFox 101, there seems to be also no persistence
         // no more when run by Selenium, thus these persistence tests can no
         // more be executed over browser restarts with:
-        // this.WriteContentTest(() => this.RestartBrowser());
+        // WriteContentTest(() => RestartBrowser());
 
         [Test]
         public void StorageDatabaseTest()
         {
             {
-                this.Navigate("/Withstorage");
-                this.Click(By.Id, "storageDatabase", expectRequest: true);
-                this.Click(Component.clearButton, expectRequest: true);
-                this.WriteContentTest(() => this.Reload());
+                Navigate("/Withstorage");
+                Click(By.Id, "storageDatabase", expectRequest: true);
+                Click(Component.clearButton, expectRequest: true);
+                WriteContentTest(() => Reload());
             }
         }
 
         [Test]
         public void StorageLocalStorageTest()
         {
-            this.Navigate("/Withstorage");
-            this.Click(By.Id, "storageLocalStorage", expectRequest: true);
-            this.Click(Component.clearButton, expectRequest: true);
-            this.WriteContentTest(() => this.Reload());
+            Navigate("/Withstorage");
+            Click(By.Id, "storageLocalStorage", expectRequest: true);
+            Click(Component.clearButton, expectRequest: true);
+            WriteContentTest(() => Reload());
         }
 
         /// <summary>
@@ -97,16 +97,16 @@ namespace minimaltest.blazor
         /// </summary>
         public void WriteContentTest(Action survives)
         {
-            this.Write(Component.contentTextBox, "a first content line");
-            this.Click(Component.submitButton);
+            Write(Component.contentTextBox, "a first content line");
+            Click(Component.submitButton);
             Assert.That(Content, Has.Exactly(1).Items);
             Assert.That(Content[0], Is.EqualTo("a first content line"));
 
             survives();
-            this.AssertPoll(() => this.Html(), () => Does.Contain("a first content line"));
+            Assert.That(Html(), Does.Contain("a first content line"));
 
-            this.Write(Component.contentTextBox, "a second content line");
-            this.Click(Component.submitButton);
+            Write(Component.contentTextBox, "a second content line");
+            Click(Component.submitButton);
             Assert.That(Content, Has.Exactly(2).Items);
             Assert.That(Content[0], Is.EqualTo("a first content line"));
             Assert.That(Content[1], Is.EqualTo("a second content line"));
@@ -129,7 +129,7 @@ namespace minimaltest.blazor
         /// </summary>
         private void Reload()
         {
-            this.Refresh();
+            Refresh();
         }
 
         /// <summary>
@@ -137,9 +137,9 @@ namespace minimaltest.blazor
         /// </summary>
         private void RestartBrowser()
         {
-            this.OneTimeTearDownBrowser();
-            this.OneTimeSetUpBrowser();
-            this.Navigate("/Withstorage");
+            OneTimeTearDownBrowser();
+            OneTimeSetUpBrowser();
+            Navigate("/Withstorage");
         }
     }
 }

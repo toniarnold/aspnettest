@@ -4,6 +4,8 @@
 
 [Technical Documentation](./doc/toc.md)
 
+[Most recent development: Blazor Server](./doc/blazor.md)
+
 *While* reading above article on Dr. Dobb's, I immediately knew: 
 "This is it!" - even more so on the ASP.NET stack. Quote from  the article:
 
@@ -27,35 +29,75 @@ For-free transparent persistence allows programming just like a desktop
 application where the class with `static void Main(string[] args)` naturally
 provides static state memory that gets manipulated by GUI events.
 
+The React/Redux combo implements a similar idea solely in Frontend-JS in a much
+more elaborated, but also more "opinionated" way: It provides a central
+monolithic state store (optionally persisted with the redux-localstorage npm
+package) which gets manipulated by the state-changing "Reducer" in response to
+"Actions" emitted by the GUI. The GUI updates itself reactively according to
+global state changes. The core difference: Redux conceives global state as
+*immutable* (the Reducer creates new state instances) while here, state is
+conceived as *mutable*:
+
 Persistence across requests is the precondition for implementing the application
 as an SMC state machine as the third idea where button clicks perform state
-transitions and distinct states correspond to pages or parts  displayed in the
-browser. The SMC part just decorates the application and imposes no further
-restrictions on it - calling formal state transitions from GUI events instead of
-class methods directly is just a matter of convention. Automatically generating
-state diagrams as self-documentation is not the least virtue provided by the SMC
-compiler.
+transitions (mutating the object) and distinct states correspond to pages or
+parts  displayed in the browser. The SMC part just decorates the application and
+imposes no further restrictions on it - calling formal state transitions from
+GUI events instead of class methods directly is just a matter of convention.
+Automatically generating state diagrams as self-documentation is not the least
+virtue provided by the SMC compiler. Concrete states can be viewed as short
+names for a given set of (serialized) field values of the Main/state object.
 
 When GUI events execute state transitions on a persistent SMC class statically
 accessible to the testing class, test case assertions can observe the expected
 model state directly and explicitly instead of guessing correctness indirectly
-and thus roughly by observing the GUI state change triggered by the model state
-change.
+(and thus roughly) by observing the GUI state change triggered by the model
+state change. In short:
 
 1. In-process web application GUI test...
 2. ...of a persistent, monolithic...
 3. ...state machine...
 
 ...decoupled from the concrete web GUI framework (ancient WebForms, SSR MVC
-core, WebSharper SPA (optionally C# or F#) makes the aspnettest way of doing
-things (to my knowledge) unique - and blatantly ordinary at the same time,
+core, WebSharper SPA (C# or F#), Blazor Server) makes the aspnettest way of
+doing things (to my knowledge) unique - and blatantly ordinary at the same time,
 simply based on the model of classic native desktop applications.
 
-And even further: With WebForms (using `UpdatePanel`) and WebSharper, nothing
-stands in the way of compositionally building up very complex web applications
-made out of arbitrary many loosely coupled SMC monoliths, as demonstrated with
-the respective triptych examples with three components not even sharing the
-persistence mechanism (DOM, session and database).
+And even further: With WebForms (using `UpdatePanel`), WebSharper and Blazor
+Server, nothing stands in the way of compositionally building up very complex
+web applications made out of arbitrary many loosely coupled SMC monoliths, as
+demonstrated with the respective triptych examples with three components not
+even sharing the persistence mechanism (DOM, session and database).
+
+### The different frameworks
+
+The architecture presented has been implemented successively and isomorphically in these
+frameworks in chronological order:
+
+1. ASP.NET WebForms
+2. ASP.NET Core MVC (Controllers and Actions)
+3. WebSharper
+4. Blazor Server
+
+WebForms runs on .NET Framework and not on .NET Core like the other three
+architectures. [WebSharper](./doc/websharper.md) seems to have been discontinued
+now, and MVC Controllers and Actions never caught up to the old WebForms with
+respect to an abstract in-memory representation of the page structure
+(ultimately the DOM). Finally, Blazor Server arrived there where WebForms once
+was:
+
+The fully compositional Components (Blazor) roughly correspond to the User
+Controls (WebForms). Both are statically accessed by the running tests and can
+obtain the framework-generated unique ClientID resp. the (undocumented) ID HTML
+attribute to unambiguously access DOM elements from the Browser.
+
+In WebForms (and Core), synchronization is simple, as server round-trips always
+entail a full HTTP request. WebSharper SPAs are completely different: There is
+no synchronization, the tests have to wait and poll for changes to happen
+(`AssertPoll`). Blazor Server changed the game again: The `OnAfterRender` resp.
+`OnAfterRenderAsync` overrides allow a tight synchronization, as they're called
+*on the server* after the JS client in the browser has finished rendering.
+
 
 ### In Code
 

@@ -49,6 +49,15 @@
     <None Include="blazor-database.dia">
       <Filter>Sources</Filter>
     </None>
+    <None Include="blazor-synchronization.dia">
+      <Filter>Sources</Filter>
+    </None>
+    <None Include="webforms-core.dia">
+      <Filter>Sources</Filter>
+    </None>
+    <None Include="blazor-browserstorage.dia">
+      <Filter>Sources</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="components.png">
@@ -76,6 +85,15 @@
       <Filter>Targets</Filter>
     </Image>
     <Image Include="blazor-database.png">
+      <Filter>Targets</Filter>
+    </Image>
+    <Image Include="blazor-synchronization.png">
+      <Filter>Targets</Filter>
+    </Image>
+    <Image Include="webforms-core.png">
+      <Filter>Targets</Filter>
+    </Image>
+    <Image Include="blazor-browserstorage.png">
       <Filter>Targets</Filter>
     </Image>
   </ItemGroup>

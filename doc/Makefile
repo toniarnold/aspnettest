@@ -1,7 +1,9 @@
 # nmake needs a manually created list of all GNU .dia files
 
 DIA = apicaller-apiservice.dia \
+	blazor-browserstorage.dia \
 	blazor-database.dia \
+	blazor-synchronization.dia \
 	components.dia \
 	iie-component.dia \
 	iie-page.dia \

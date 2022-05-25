@@ -2,31 +2,33 @@
 
 * [Summary](#summary)
 * [Scaffolding of `minimal.blazor`](#scaffolding-of-minimalblazor)
-  * [Using the static main accessor](#using-the-static-main-accessor)
+  * [Using the static `TestFocus` accessor](#using-the-static-testfocus-accessor)
+    * [Automatic synchronization with `TestFocus`](#automatic-synchronization-with-testfocus) 
+    * [@ref Component references](#ref-component-references)
   * [Persistence of the main state object](#Persistence-of-the-main-state-object)
-    *  [The `DatabaseKeyAttribute` and `DatabaseSessionAttribute`](#the-databasekeyattribute-and-databasesessionattribute)
+    * [Database persistence sequence diagram](#database-persistence-sequence-diagram)
+    * [Browser storage persistence sequence diagram](#browser-storage-persistence-sequence-diagram)
   * [Using the test project](#using-the-test-project)
 * [`asp.blazor` with the SMC](#aspblazor-with-the-smc)
   *  [The ReRender override](#the-rerender-override)
-  * [Database persistence sequence diagram](#database-persistence-sequence-diagram)
+
 
 ## Summary
 
- [WebSharper](websharper.md) was made somewhat obsolete with the arrival of
- Microsoft Blazor Server. The earlier Blazor WebAssembly was not considered
- here, as only the server variant brings back the productivity that once was
- possible with [ASP.NET WebForms](webforms-core.md) by abstracting away the client-server
- communitacion and thus eliminates the need to program a separate backend API.
+[WebSharper](websharper.md) was made somewhat obsolete with the arrival of
+Microsoft Blazor Server. The earlier Blazor WebAssembly was not considered
+here, as only the server variant brings back the productivity that once was
+possible with [ASP.NET WebForms](webforms-core.md) by abstracting away the
+client-server communitacion and thus eliminates the need to program a separate
+backend API.
 
- From the testing point of view, Blazor Server is more similar to the
- [WebSharper](websharper.md) experience, as it behaves as a JavaScript SPA on
- the client side. Except for the initial HTTP request which initiates the
- SignalR two-way connection used in later interactions, there are no subsequent
- HTTP requests, thus there is no HttpContexxt available. For that reason, the
- `this.AssertPoll` extension methods are almost always required in NUnit
- tests.
+From the testing point of view, Blazor Server is more similar to the
+[WebSharper](websharper.md) experience, as it behaves as a JavaScript SPA on
+the client side. Except for the initial HTTP request which initiates the
+SignalR two-way connection used in later interactions, there are no subsequent
+HTTP requests, thus there is no HttpContext available.
 
-Traditional session persistence is not possible for the same reason: The SignalR
+Traditional session persistence is not possible for that reason: The SignalR
 communication doesn't allow to set session cookies. But database cookies can be
 negotiated on the initial request, and further serialization of the stateful
 main object doesn't require altering the cookie no more. The
@@ -38,6 +40,12 @@ persistence mechanisms:
 * Window.sessionStorage - JavaScript Session Storage provided by Blazor
 * Window.localStorage - JavaScript local storage provided by Blazor
 
+Unlike for WebSharper SPAs (and ultimately *all* modern SPA frameworks as
+React and Anguler), there is no need to wait and poll for changes to happen
+(`AssertPoll`), which turns out to be very brittle.
+
+Instead, the `ITestFocus` static class in `asplib.blazor` provides an
+`EndRender` resp. `EndRenderAsync` extension method to synchronize the tests.
 
 ## Scaffolding of `minimal.blazor`
 
@@ -62,27 +70,94 @@ member was common practice in the .NET Framework days, before DI.
 which serializes/deserializes the central `Main` state object.
 
 
-### Using the static main accessor
+### Using the static `TestFocus` accessor
 
-To be able to statically access the main state object, inherit from the generic
+To be able to statically access the test component in focus with a contained
+main state object from within tests, inherit from the generic
 `StaticComponentBase` as this in the Razor page:
 ```
 @using asplib.Components
-@inherits StaticComponentBase<Models.Main>
+@inherits StaticOwningComponentBase<Models.Main>
 ```
-This base class injects that central state object as a property `Main`. In
-NUnit tests run from within the browser and thus the ASP.NET core process, the
-state object can be accessed as `MainAccessor<Main>.Instance`.
+This base class injects that central state object as a property `Main` into the
+containing Component. In NUnit tests run from within the browser and thus the
+ASP.NET core process, the state object can be accessed statically as
+`TestFocus.Component.Main`. When inheriting from
+`StaticOwningComponentTest<TWebDriver, TComponent, TMain>`, the instance is
+directly accessible via the generic `Main` property.
+
+#### Automatic synchronization with `TestFocus`
+
+Blazor Components to be synchronized should call the `EndRender` resp.
+`EndRenderAsync` extension method (defined in the
+`ITestFocus`/`TestFocusExtension` static class in `asplib.blazor`) at the *end* of
+its own `OnAfterRender` resp. `OnAfterRenderAsync` override (or simply inherit
+from `StaticComponentBase`). This will set the `TestFocus.Event`
+`AutoResetEvent` to allow the waiting test method to continue and assign itself
+(the Blazor component instance) to `TestFocus.Component` if and only if its type
+was brought into focus by `SetFocus`. This diagram shows the sequence of a page
+request and a subsequent button click issued from an NUnit test fixture and its
+synchronization with `TestFocus.Event`:
+
+```csharp
+[SetUp]
+public void SetFocus()
+{
+    TestFocus.SetFocus(typeof(TComponent));
+}
+
+[Test]
+public void ClickSubmitTest()
+{
+    Navigate("/Withstatic");
+    Click(Component.submitButton);
+}
+
+```
+
+![Blazor synchronization sequence diagram](blazor-synchronization.png)
+
+The cause of the need for synchronization is Blazor's "Render" client-side
+JavaScript: Selenium returns from `Navigate` requests resp. `Click` calls
+*before* the page is rendered. To wait, the test thread blocks at `WaitOne` on
+the `AutoResetEvent` of `TestFocus`, as can be seen in the overlapping within
+Blazor's rendering process, here simply abbreviated as "Render". After having
+finished, this process will cause a call to Blazor's virtual `OnAfterRender`
+method on the server which calls our `EndRender` method outlined above. This
+will call Expose() for the Component, which adds the static C# reference
+`TestFocus.Component`.
+
+#### @ref Component references
+
+Therefore the statically referenced component under test is still instantiated
+after the first Navigate() block (on the left and the second Click() block can
+obtain the Id attribute through the `IdAttr()` extension method which in turn
+accesses the ElementReference.Id instance property.
+
+Blazor automatically generates a reference Guid when a Component or HTML element
+reference is added through the [@ref
+attribute](https://docs.microsoft.com/en-us/dotnet/architecture/blazor-for-web-forms-developers/components#capture-component-references).
+This empty HTML attribute with the undocumented(?) `_bl_` prefix for the Guid
+looks like this in Blazor-generated HTML (also for some built-in input
+components except `InputRadio<T>` for which an implementation has already been
+[committed in git](https://github.com/dotnet/aspnetcore/pull/40828), is planned
+for the Blazor 7 release):
+
+```html
+<button type="submit" _bl_6a88286a-1854-4d65-b9b4-140850e5ae7e="">Submit</button>
+```
 
 
 ### Persistence of the main state object
 
 To make the main state object persistent, inherit from the
 `PersistentComponentBase` instead:
-```
+
+```csharp
 @using asplib.Components
 @inherits PersistentComponentBase<Models.Main>
 ```
+
 This also injects a property `Main`, but makes it persistent according to
 the storage type configured in the calue `"SessionStorage"` in
 `aspsettongs.json`. The value is parsed as the global `Storage` enum
@@ -115,33 +190,87 @@ be enough to justify re-enabling the otherwise newly by .NET per default as
 `EnableUnsafeBinaryFormatterSerialization` to `true` in the .csproj
 file.
 
-#### The `DatabaseKeyAttribute` and `DatabaseSessionAttribute`
 
-In Blazor, the `HttpContext` where the database `Main.session` value and the
-optional encryption key are storedin permament Cookies is only available upon
-the initial HTTP request, but no more during the SignalR connection afterwards.
-Using these dynamically added attributes on the `Main` instance  is a
-transparent workaround to keep them after the initial load for subsequent
-storage into the database.
+
+#### Database persistence sequence diagram
+
+This sequence diagram shows the call sequence for database persistence over two
+distinct browser sessions. That the `<<create>>` call to instantiate the Main
+FSM is done by `ActivatorUtilities.CreateInstance` in the DI factory has been
+omitted for brevity.
+
+![Database persistence sequence diagram](blazor-database.png)
+
+This UML sequence diagram is not formally correct, but rather illustrative.
+Although the "HttpContext" is also a class, it doesn't call the Direct Injection
+transient factory registered in the static `PersistentMainFactoryExtension`
+class directly. The crucial fact to illustrate is the lifetime of the
+HttpContext: It is only available during the initial GET request. Afterwards, it
+will upgrade the HTTP connection to a SignalR WebSocket and dispose the
+HttpContext instance.
+
+The "Blazor" pseudo-class represents the whole Blazor Server Framework including
+Direct Injection (DI), the SignalR connection to the browser and the component
+lifecycle events, particularly the `OnAfterRenderAsync` override which serves
+the purpose of hte `OnPreRender` event in the ASP.NET WebForms implementation
+of the SMC pattern.
+
+Also the `TypeDescriptor.AddAttributes` static method is not called on the "Main
+SMC" object itself, but manipulates it by adding the  `DatabaseKeyAttribute` and
+`DatabaseSessionAttribute`. This is required, as the Browser Cookie storing
+these values is not available no more after the HttpContext has been disposed -
+these attributes serve as a workaround.
+
+Drawback of this pattern: Unlike in ASP.NET WebForms, the component must be
+initially visible on the GET request to trigger the Database persistence
+mechanism. But storing the serialized object server-side can be considered as a
+legacy technique that is replaced with Browser LocalStorage which did not exist
+when designing the database persistence mechanism. 
+
+On the other hand, Browser storage may cause significant network traffic from
+the client on each state change (just the same as WebForms' ViewState PostBack)
+if the serialized state object grows big. With database storage, the serialized
+object data is only moved from the web server to the database server unless the
+page gets reinitialized on the client (e.g. after a SignalR disconnect).
+
+
+#### Browser storage persistence sequence diagram
+
+This diagram exemplifies the usage of Blazor's `ProtectedLocalStorage` in the
+Browser, but the call sequence is exactly the same for
+`ProtectedSessionStorage`. The `ActivatorUtilities.CreateInstance` for
+`<<create>>` in the DI factory has also been omitted here.
+
+![Browser storage persistence sequence diagram](blazor-browserstorage.png)
+
+Unlike for the Database persistence diagram, there are no two separate blocks
+(although `ProtectedLocalStorage` survives Browser restarts). As DI must
+guarantee an instance right away (before it could be loaded from the Browser),
+the Main FSM gets instantiated twice: The first default instance is an
+initialization dummy which gets overwritten with a stored instance (ore a new
+one if it could not be loaded).
 
 
 ### Using the test project
 
-Adding an NUnit test button from the `asplib.core` project is as simple as
+Adding an NUnit test button from the `iselennium.blazor` project is as simple as
 adding
-```
-@using asplib.Components
-<TestButton testproject="minimaltest.blazor" tabindex="1000" />
+
+```html
+@using iselenium.Components
+<TestButton testproject="minimaltest.blazor" />
 ```
 
 The `minimaltest.blazor` test project can't directly be referenced by the
 Blazor application, as this would create a circular reference. The pattern used
 in the solution is to add this post-build event which will copy the DLL to the
 bin directory:
+
 ```
 diff --binary $(TargetPath) $(SolutionDir)\src\bin
 if errorlevel 1 xcopy /d /f /y $(TargetDir)\$(TargetName).* $(SolutionDir)\src\bin
 ```
+
 and then reference the DLL created directly in the Blazor application under test.
 
 The TestRunnerBase will load the DLL from the `bin` path parent to the
@@ -172,7 +301,7 @@ according to the SMC state by using the
 [DynamicComponent](https://docs.microsoft.com/en-us/aspnet/core/blazor/components/dynamiccomponent?view=aspnetcore-6.0)
 which displays a sub-component according to type:
 
-```
+```csharp
 protected override void ReRender()
 {
     switch (Main.State)
@@ -190,32 +319,3 @@ protected override void ReRender()
 ```
 
 
-### Database persistence sequence diagram
-
-This UML sequence diagram is not formally correct, but rather illustrative.
-Although the "HttpContext" is also a class, it doesn't call the Direct Injection
-transient factory registered in the static `PersistentMainFactoryExtension`
-class directly. The crucial fact to illustrate is the lifetime of the
-HttpContext: It is only available during the initial GET request. Afterwards, it
-will upgrade the HTTP connection to a SignalR WebSocket and dispose the
-HttpContext instance.
-
-The "Blazor" pseudo-class represents the whole Blazor Server Framework including
-Direct Injection (DI), the SignalR connection to the browser and the component
-lifecycle events, particularly the `OnAfterRenderAsync` override which serves
-the purpose of hte `OnPreRender` event in the ASP.NET WebForms implementation
-of the SMC pattern.
-
-Also the `TypeDescriptor.AddAttributes` static method is not called on the "Main
-SMC" object itself, but manipulates it by adding the  `DatabaseKeyAttribute` and
-`DatabaseSessionAttribute`. This is required, as the Browser Cookie storing
-these values is not available no more after the HttpContext has been disposed -
-these attributes serve as a workaround.
-
-![Blazor database persistence sequence diagram](blazor-database.png)
-
-Drawback of this pattern: Unlike in ASP.NET WebForms, the component must be
-initially visible on the GET request to trigger the Database persistence
-mechanism. But storing the serialized object server-side probably is a legacy
-technique that is replaced with Browser LocalStorage which did not exist when
-designing the database persistency mechanism.
