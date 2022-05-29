@@ -2,6 +2,9 @@
 using asplib.Model.Db;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using NUnit.Framework;
 using System;
 using System.Data;
@@ -14,15 +17,25 @@ namespace test.asplib.Model.Db
     public class DbTest
     {
         [Clsid("00000000-0000-0000-0000-000000000000")]
-        private class TestClass { }
+        private class TestClass
+        { }
 
         [OneTimeSetUp]
-        public void SetUpConnectionString()
+        public void SetUpDbContext()
         {
             var config = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .Build();
             ASP_DBEntities.ConnectionString = config["ASP_DBEntities"];
+            // See https://github.com/toniarnold/aspnettest/issues/5 A Logger is
+            // required, but cannot be used when
+            // Microsoft.AspNetCore.Components.Web is referenced (through
+            // asplib.blazor) -> the NullLoggerFactory works within tests.
+            var sc = new ServiceCollection();
+            sc.AddSingleton<ILoggerFactory>(NullLoggerFactory.Instance);
+            sc.AddEntityFrameworkSqlServer();
+            var sp = sc.BuildServiceProvider();
+            ASP_DBEntities.ServiceProvider = sp;
         }
 
         [Test]

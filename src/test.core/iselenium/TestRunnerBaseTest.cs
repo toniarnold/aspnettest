@@ -15,7 +15,7 @@ namespace test.iselenium
         /// <summary>
         /// Mocks testRunnerBase.Result = runner.Run(this, filter);
         /// </summary>
-        [OneTimeSetUp]
+        [SetUp]
         public void AssignTestResult()
         {
             TestRunnerBase.Result = ReadTestResult("TestResult-failed.xml");

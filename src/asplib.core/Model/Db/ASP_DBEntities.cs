@@ -2,6 +2,7 @@
 using Microsoft.Extensions.Logging;
 using System;
 using System.Data.SqlClient;
+using System.Diagnostics;
 using System.Linq;
 
 namespace asplib.Model.Db
@@ -12,6 +13,7 @@ namespace asplib.Model.Db
     public class ASP_DBEntities : DbContext
     {
         public static string ConnectionString = "";
+        public static IServiceProvider? ServiceProvider;
 
         public DbSet<Main> Main { get; set; }
 
@@ -20,9 +22,11 @@ namespace asplib.Model.Db
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseLoggerFactory(LoggerFactory.Create(builder => { builder.AddConsole(); }))
-                .EnableSensitiveDataLogging()
-                .UseSqlServer(ConnectionString);
+            if (ServiceProvider != null)
+            {
+                optionsBuilder.UseInternalServiceProvider(ServiceProvider);
+            }
+            optionsBuilder.UseSqlServer(ConnectionString);
         }
 
         /// <summary>
