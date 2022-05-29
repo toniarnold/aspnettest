@@ -94,12 +94,9 @@
     <None Include="TestRunnerFsm.sm" />
     <None Include="TestRunnerFsm_sm.cs" />
     <None Include="TestRunnerFsm_sm.dot" />
-    <None Include="TestRunner_sm.cs" />
-    <None Include="TestRunner_sm.dot" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="TestRunnerFsm_sm.png" />
-    <Image Include="TestRunner_sm.png" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

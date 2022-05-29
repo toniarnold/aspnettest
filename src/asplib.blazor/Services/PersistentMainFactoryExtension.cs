@@ -4,6 +4,7 @@ using asplib.Model.Db;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 using System.ComponentModel;
 using System.Net;
 
@@ -14,6 +15,10 @@ namespace asplib.Services
         public static void AddPersistent<T>(this IServiceCollection services)
             where T : class, new()  // for serialization
         {
+            // Add implicit dependencies for Persistent
+            services.TryAddSingleton<IServiceProvider>(sp => sp);
+            services.AddHttpContextAccessor();
+
             services.AddTransient<T>(provider =>
             {
                 // Implemented after PersistentControllerActivator for ASP.NET Core MVC
@@ -66,17 +71,22 @@ namespace asplib.Services
                         }
                         else
                         {
-                            main = (T)ActivatorUtilities.CreateInstance(provider, typeof(T));
+                            main = PersistentMainFactory<T>.Instantiate(provider);
                             // Immediately save the new instance to obtain a cookie and instance attributes before the initial request is disposed
                             StorageImplementation.SaveDatabase(configuration, httpContext, main);
                         }
                     }
-
-                    if (main == null)   // Instance required by PersistentComponentBase
-                    {
-                        main = (T)ActivatorUtilities.CreateInstance(provider, typeof(T));
-                    }
                 }
+
+                if (main == null)   // New instance required by PersistentComponentBase
+                {
+                    main = PersistentMainFactory<T>.Instantiate(provider);
+                }
+                else  // Hydrate the instance from the database
+                {
+                    PersistentMainFactory<T>.PerformPropertyInjection(provider, main);
+                }
+
                 return main;
             });
         }

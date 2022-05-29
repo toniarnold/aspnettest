@@ -9,11 +9,15 @@ namespace asp.blazor.Components
     public partial class CalculatorComponent
     {
         public ElementReference storageLink;
-        public DynamicComponent? calculatorPart;
+        public DynamicComponent calculatorPart = default!;
+        public Footer footer = default!;
 
         private Type pageType = typeof(Splash);
         private string? errorMsg;
         private Dictionary<string, object>? errorParams => errorMsg != null ? new() { { "ErrorMsg", errorMsg } } : null;
+
+        [Inject]
+        private NavigationManager uriHelper { get; set; } = default!;
 
         [Parameter]
         public string StorageLinkUrl { get; set; } = default!;
@@ -35,6 +39,14 @@ namespace asp.blazor.Components
                 return (this.GetStorage() == StorageEnum.Database && StorageImplementation.GetEncryptDatabaseStorage(this.Configuration)) ?
                     "&#x1f512;" : String.Empty;
             }
+        }
+
+        /// <summary>
+        /// Force a reload to be able to change to database
+        /// </summary>
+        public void ChangeStorage()
+        {
+            uriHelper.NavigateTo(StorageLinkUrl, forceLoad: true);
         }
 
         protected override void ReRender()

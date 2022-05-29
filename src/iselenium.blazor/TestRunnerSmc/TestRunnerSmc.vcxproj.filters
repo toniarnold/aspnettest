@@ -14,8 +14,6 @@
     <None Include="TestRunner.sm">
       <Filter>Sources</Filter>
     </None>
-    <None Include="TestRunner_sm.cs" />
-    <None Include="TestRunner_sm.dot" />
     <None Include="TestRunnerFsm_sm.cs">
       <Filter>Targets</Filter>
     </None>
@@ -27,7 +25,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Image Include="TestRunner_sm.png" />
     <Image Include="TestRunnerFsm_sm.png">
       <Filter>Targets</Filter>
     </Image>

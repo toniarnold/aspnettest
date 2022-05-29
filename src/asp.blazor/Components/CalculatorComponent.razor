@@ -4,7 +4,8 @@
 @inherits SmcComponentBase<Calculator, CalculatorContext, CalculatorContext.CalculatorState>
 
 <div class="header-container">
-    <a href="@StorageLinkUrl" @ref="storageLink" id="<%= this.StorageLinkClientID %>" class="hamburger-box">
+    <a href="@StorageLinkUrl" @onclick="ChangeStorage" @ref="storageLink" id="@StorageLinkClientID" class="hamburger-box">
+ 
         Session Storage: @Storage @((MarkupString)Encrypted)
     </a>
 </div>
@@ -14,5 +15,5 @@
     <hr/>
     <DynamicComponent @ref="calculatorPart" Type="@pageType" Parameters="@errorParams"/>
     <hr/>
-    <Footer/>
+    <Footer @ref="footer"/>
 </CascadingValue>

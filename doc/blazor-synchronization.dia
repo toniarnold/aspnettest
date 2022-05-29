@@ -1897,7 +1897,7 @@
         <dia:color val="#000000"/>
       </dia:attribute>
       <dia:attribute name="text">
-        <dia:string>#Click#</dia:string>
+        <dia:string>#Click()#</dia:string>
       </dia:attribute>
       <dia:attribute name="type">
         <dia:enum val="0"/>

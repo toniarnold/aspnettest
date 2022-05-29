@@ -6,11 +6,13 @@
 
 <PageTitle>asp.blazor Server Side SMC Calculator</PageTitle>
 
-<CalculatorComponent StorageLinkUrl="triptych" />
+<CalculatorComponent @ref="calculator" StorageLinkUrl="triptych" StorageLinkClientID="triptychLink" />
 
-<TestButton testproject="asptest.blazor" tabindex="1000" />
+<TestButton testproject="asptest.blazor" />
 
 @code {
+    CalculatorComponent? calculator;
+
     [Parameter]
     public string? Storage { get; set; }
 

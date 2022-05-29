@@ -1,9 +1,6 @@
-﻿using iselenium;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Edge;
-using OpenQA.Selenium.Firefox;
 
 namespace asptest.CalculatorTest
 {
@@ -17,11 +14,23 @@ namespace asptest.CalculatorTest
         [Test]
         public void NavigateDefaultTest()
         {
-            this.Navigate("/");
+            Navigate("/");
             Assert.Multiple(() =>
             {
                 Assert.That(Html(), Does.Contain("RPN calculator"));
                 Assert.That(Html(), Does.Contain("Map1.Splash"));          // even later than "late binding"
+            });
+        }
+
+        [Test]
+        public void InitEnterTest()
+        {
+            Navigate("/");
+            Click(Component.footer.enterButton);
+            Assert.Multiple(() =>
+            {
+                Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
+                Assert.That(this.Html(), Does.Contain("Map1.Enter"));
             });
         }
     }

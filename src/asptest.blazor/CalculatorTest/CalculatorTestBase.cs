@@ -2,6 +2,7 @@
 using iselenium;
 using OpenQA.Selenium;
 using asp.blazor.CalculatorSmc;
+using System.Collections.Generic;
 
 namespace asptest.CalculatorTest
 {
@@ -9,5 +10,9 @@ namespace asptest.CalculatorTest
         SmcComponentDbTest<TWebDriver, CalculatorComponent, Calculator, CalculatorContext, CalculatorContext.CalculatorState>
         where TWebDriver : IWebDriver, new()
     {
+        protected Stack<string> Stack
+        {
+            get { return this.Main.Stack; }
+        }
     }
 }

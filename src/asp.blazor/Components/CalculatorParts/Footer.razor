@@ -1,10 +1,11 @@
 ﻿@using asp.blazor.CalculatorSmc
 
-<button @onclick="@Enter" id="EnterButton">Enter &gt;</button>
+<button @onclick="@Enter" @ref="enterButton">Enter &gt;</button>
 
 @code {
     [CascadingParameter(Name="Main")]
     private Calculator Main{ get; set; } = default!;
+    public ElementReference enterButton;
 
     private void Enter()
     {

@@ -1,12 +1,13 @@
 ﻿@using asp.blazor.CalculatorSmc
 
 <p>
-    <input @bind-value=Operand />
+    <input @bind-value=Operand @ref="operand" />
 </p>
 
 @code {
     [CascadingParameter(Name="Main")]
     private Calculator Main{ get; set; } = default!;
+    public ElementReference operand;
 
     // Store the operand in the global state object
     private string Operand

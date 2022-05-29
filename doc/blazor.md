@@ -247,8 +247,7 @@ Unlike for the Database persistence diagram, there are no two separate blocks
 (although `ProtectedLocalStorage` survives Browser restarts). As DI must
 guarantee an instance right away (before it could be loaded from the Browser),
 the Main FSM gets instantiated twice: The first default instance is an
-initialization dummy which gets overwritten with a stored instance (ore a new
-one if it could not be loaded).
+initialization throwaway which gets overwritten with a stored instance.
 
 
 ### Using the test project

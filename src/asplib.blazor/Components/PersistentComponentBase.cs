@@ -1,4 +1,5 @@
 ﻿using asplib.Model;
+using asplib.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.Extensions.Configuration;
@@ -117,6 +118,8 @@ namespace asplib.Components
         /// <param name="firstRender"></param>
         protected async Task CreateMain(bool firstRender)
         {
+            Trace.Assert(Main != null);  // Guaranteed by Direct Injection from PersistentMainFactoryExtension.AddPersistent<T>
+
             if (firstRender)
             {
                 Logger.LogInformation(0, "Load Storage {storage}", this.GetStorage());
@@ -125,7 +128,6 @@ namespace asplib.Components
                 {
                     case Storage.ViewState:
                     case Storage.Database:
-                        Trace.Assert(Main != null);  // Provided by Direct Injection from PersistentMainFactoryExtension
                         break;
 
                     case Storage.SessionStorage:
@@ -183,7 +185,7 @@ namespace asplib.Components
             var storageId = StorageImplementation.GetStorageID(Main.GetType().Name);
             await ProtectedLocalStore.DeleteAsync(storageId);
             await ProtectedSessionStore.DeleteAsync(storageId);
-            this.Main = (T)ActivatorUtilities.CreateInstance(ServiceProvider, typeof(T));
+            this.Main = PersistentMainFactory<T>.Instantiate(ServiceProvider);
             this.StateHasChanged();
         }
 
@@ -213,6 +215,12 @@ namespace asplib.Components
             return (Storage)storage;
         }
 
+        /// <summary>
+        /// Returns a deserialized Main instance from the browser if available,
+        /// else just returns the one already there.
+        /// </summary>
+        /// <param name="storeGetAsync"></param>
+        /// <returns></returns>
         private async Task<T> LoadFromBrowser(Func<string, ValueTask<ProtectedBrowserStorageResult<string>>> storeGetAsync)
         {
             var storageId = StorageImplementation.GetStorageID(Main.GetType().Name);
@@ -221,13 +229,13 @@ namespace asplib.Components
             {
                 var viewState = result.Value;
                 var filter = StorageImplementation.DecryptViewState(Configuration);
-                var main = StorageImplementation.LoadFromViewstate(
-                    () => (T)ActivatorUtilities.CreateInstance(ServiceProvider, typeof(T)), viewState, filter);
+                var main = StorageImplementation.LoadFromViewstate(() => this.Main, viewState, filter);
+                PersistentMainFactory<T>.PerformPropertyInjection(ServiceProvider, main);   // always
                 return main;
             }
             else
             {
-                return (T)ActivatorUtilities.CreateInstance(ServiceProvider, typeof(T));
+                return this.Main;   // Got no instance from the bowser -> return the one from PersistentMainFactoryExtension
             }
         }
 

@@ -1,5 +1,6 @@
 ﻿using asplib.Components;
 using asplib.Model;
+using Microsoft.AspNetCore.Components;
 
 namespace asp.blazor.CalculatorSmc
 {
@@ -12,6 +13,12 @@ namespace asp.blazor.CalculatorSmc
     {
         protected CalculatorContext _fsm = default!;
         protected Stack<string> _stack = default!;
+
+        [NonSerialized]
+        private ILogger<Calculator> _logger;
+
+        [Inject]
+        private ILogger<Calculator> Logger { get => _logger; set => _logger = value; }
 
         public Calculator()
         {
@@ -67,17 +74,20 @@ namespace asp.blazor.CalculatorSmc
         //  context class.
         internal void Push(string value)
         {
+            Logger.LogInformation($"Calculator.Push({value})");
             this._stack.Push(value);
         }
 
         internal void Enter(string value)
         {
+            Logger.LogInformation($"Calculator.Enter({value})");
             this.Push(value);
             this.Operand = String.Empty;    // required in Blazor, in WebForms [NonSerialized]/EnableViewState="false" suffices
         }
 
         internal void Add()
         {
+            Logger.LogInformation("Calculator.Add()");
             var y = Double.Parse(this._stack.Pop());
             var x = Double.Parse(this._stack.Pop());
             var r = x + y;
@@ -86,6 +96,7 @@ namespace asp.blazor.CalculatorSmc
 
         internal void Sub()
         {
+            Logger.LogInformation("Calculator.Sub()");
             var y = Double.Parse(this._stack.Pop());
             var x = Double.Parse(this._stack.Pop());
             var r = x - y;
@@ -94,6 +105,7 @@ namespace asp.blazor.CalculatorSmc
 
         internal void Mul()
         {
+            Logger.LogInformation("Calculator.Mul()");
             var y = Double.Parse(this._stack.Pop());
             var x = Double.Parse(this._stack.Pop());
             var r = x * y;
@@ -102,6 +114,7 @@ namespace asp.blazor.CalculatorSmc
 
         internal void Div()
         {
+            Logger.LogInformation("Calculator.Div()");
             var y = Double.Parse(this._stack.Pop());
             var x = Double.Parse(this._stack.Pop());
             var r = x / y;
@@ -110,6 +123,7 @@ namespace asp.blazor.CalculatorSmc
 
         internal void Pow()
         {
+            Logger.LogInformation("Calculator.Pow()");
             var x = Double.Parse(this._stack.Pop());
             var r = Math.Pow(x, 2);
             this.Push(r.ToString());
@@ -117,6 +131,7 @@ namespace asp.blazor.CalculatorSmc
 
         internal void Sqrt()
         {
+            Logger.LogInformation("Calculator.Sqrt()");
             var x = Double.Parse(this._stack.Pop());
             var r = Math.Sqrt(x);
             this.Push(r.ToString());
@@ -124,11 +139,13 @@ namespace asp.blazor.CalculatorSmc
 
         internal void Clr()
         {
+            Logger.LogInformation("Calculator.Clr()");
             this._stack.Pop();
         }
 
         internal void ClrAll()
         {
+            Logger.LogInformation("Calculator.ClrAll()");
             this._stack = new Stack<string>();
         }
     }
