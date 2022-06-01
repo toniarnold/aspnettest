@@ -3,10 +3,22 @@
   <Items>
     <LogicalFolder Name="Verbindungen" Type="2" Sorted="true">
       <Items>
-        <ConnectionNode Name="HP:HP\tarnold">
+        <ConnectionNode Name="HP:WORK\tarnold">
           <Created>2018-05-27T09:19:25.3246884+02:00</Created>
           <Type>SQL</Type>
           <Server>HP</Server>
+          <UserName />
+          <Authentication>Windows-Authentifizierung</Authentication>
+          <InitialDB />
+          <LoginTimeout>30</LoginTimeout>
+          <ExecutionTimeout>0</ExecutionTimeout>
+          <ConnectionProtocol>NotSpecified</ConnectionProtocol>
+          <ApplicationName>Microsoft SQL Server Management Studio - Abfrage</ApplicationName>
+        </ConnectionNode>
+        <ConnectionNode Name="WORK:WORK\tarnold">
+          <Created>2022-06-01T07:08:15.8330968+02:00</Created>
+          <Type>SQL</Type>
+          <Server>WORK</Server>
           <UserName />
           <Authentication>Windows-Authentifizierung</Authentication>
           <InitialDB />
@@ -38,8 +50,8 @@
           <FullPath>ASP_DB.clean.sql</FullPath>
         </FileNode>
         <FileNode Name="ASP_DB.FibonacciTest.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:HP:True</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>HP</AssociatedConnSrvName>
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:WORK:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>WORK</AssociatedConnSrvName>
           <AssociatedConnUserName />
           <FullPath>ASP_DB.FibonacciTest.sql</FullPath>
         </FileNode>

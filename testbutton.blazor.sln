@@ -17,7 +17,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "doc", "doc\doc.vcxproj", "{
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iselenium.blazor", "src\iselenium.blazor\iselenium.blazor.csproj", "{69117CF2-C1C6-4261-8A42-365953D6B6DC}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestRunnerSmc", "src\iselenium.blazor\TestRunnerSmc\TestRunnerSmc.vcxproj", "{13CA5986-43F7-476F-8AB9-2DC3E5C23663}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "testrunner.sm", "src\iselenium.blazor\TestRunnerSmc\testrunner.sm.vcxproj", "{13CA5986-43F7-476F-8AB9-2DC3E5C23663}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "testbutton.blazor", "src\testbutton.blazor\testbutton.blazor.csproj", "{454F47C2-B098-43F3-A730-F3A8A058DF64}"
 EndProject

@@ -130,7 +130,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "testbutton.blazor", "src\te
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "testbuttontest.blazor", "src\testbuttontest.blazor\testbuttontest.blazor.csproj", "{C87FE7F3-1376-4D43-9679-DC86056DE010}"
 EndProject
-Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "TestRunnerSmc", "src\iselenium.blazor\TestRunnerSmc\TestRunnerSmc.vcxproj", "{13CA5986-43F7-476F-8AB9-2DC3E5C23663}"
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "testrunner.sm", "src\iselenium.blazor\TestRunnerSmc\testrunner.sm.vcxproj", "{13CA5986-43F7-476F-8AB9-2DC3E5C23663}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
