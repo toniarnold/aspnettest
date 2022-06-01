@@ -22,7 +22,7 @@
     <VCProjectVersion>17.0</VCProjectVersion>
     <ProjectGuid>{13CA5986-43F7-476F-8AB9-2DC3E5C23663}</ProjectGuid>
     <Keyword>Win32Proj</Keyword>
-    <ProjectName>TestRunnerSmc</ProjectName>
+    <ProjectName>testrunner.sm</ProjectName>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.Default.props" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
@@ -90,7 +90,6 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <None Include="Makefile" />
-    <None Include="TestRunner.sm" />
     <None Include="TestRunnerFsm.sm" />
     <None Include="TestRunnerFsm_sm.cs" />
     <None Include="TestRunnerFsm_sm.dot" />

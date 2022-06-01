@@ -32,7 +32,7 @@ namespace asptest
         {
             // In focus is the triptych -> no Component instance from the main page
             Navigate("/", expectRender: false);
-            this.AssertPoll(() => this.Html(), () => Does.Contain("Session Storage: SessionStorage"));  // default
+            this.AssertPoll(() => this.Html(), () => Does.Contain("Session Storage: ViewState"));  // per default disabled for tests
             this.Click(By.Id, "triptychLink");
             this.AssertTriptychHtml();
             this.Click(Component.calculatorLocalStorage.storageLink, expectRequest: true, expectRender: false); // not in focus

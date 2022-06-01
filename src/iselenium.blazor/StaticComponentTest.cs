@@ -71,14 +71,17 @@ namespace iselenium
         /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete (set to 0 if expectRender)</param>
         /// <param name="wait">Explicit WebDriverWait in seconds for the element to appear. 0 when expectRender is true</param>
         /// <param name="expectRender">Set to false if TestFocus.Event is not set OnAfterRenderAsync</param>
+        /// <param name="expectRerender">Set to true for awaiting a re-render which sets TestFocus.AwaitingRerender = false, as e.g. SmcComponentBase</param>
         public override void Click(Func<string, By> selector, string selectString, int index = 0,
                             bool expectRequest = false, bool? awaitRemoved = null,
-                            int expectedStatusCode = 200, int delay = 0, int pause = 0, int wait = 0, bool expectRender = true)
+                            int expectedStatusCode = 200, int delay = 0, int pause = 0, int wait = 0,
+                            bool expectRender = true,
+                            bool expectRerender = false)
         {
             var doAwaitRemoved = awaitRemoved ?? this.awaitRemovedDefault;
             if (expectRender)
             {
-                if (expectRequest)
+                if (expectRequest || expectRerender)
                 {
                     TestFocus.AwaitingRerender = true;
                 }

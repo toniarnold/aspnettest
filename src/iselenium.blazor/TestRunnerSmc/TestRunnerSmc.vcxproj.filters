@@ -11,9 +11,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Makefile" />
-    <None Include="TestRunner.sm">
-      <Filter>Sources</Filter>
-    </None>
     <None Include="TestRunnerFsm_sm.cs">
       <Filter>Targets</Filter>
     </None>

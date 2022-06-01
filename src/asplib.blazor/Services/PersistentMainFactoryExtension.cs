@@ -46,10 +46,13 @@ namespace asplib.Services
                 if (httpContext?.Request.Method == WebRequestMethods.Http.Get &&
                     Guid.TryParse(httpContext.Request.Query["session"], out sessionOverride))
                 {
-                    using (var db = new ASP_DBEntities())
+                    if (typeof(T).IsSerializable) // exclude the TestRunnerFsm
                     {
-                        (bytes, filter) = StorageImplementation.DatabaseBytes(configuration, httpContext, storageID, sessionOverride);
-                        main = DeserializeMain<T>(bytes, filter);
+                        using (var db = new ASP_DBEntities())
+                        {
+                            (bytes, filter) = StorageImplementation.DatabaseBytes(configuration, httpContext, storageID, sessionOverride);
+                            main = DeserializeMain<T>(bytes, filter);
+                        }
                     }
                 }
                 else
@@ -72,8 +75,11 @@ namespace asplib.Services
                         else
                         {
                             main = PersistentMainFactory<T>.Instantiate(provider);
-                            // Immediately save the new instance to obtain a cookie and instance attributes before the initial request is disposed
-                            StorageImplementation.SaveDatabase(configuration, httpContext, main);
+                            if (typeof(T).IsSerializable) // too early to override global storage settings
+                            {
+                                // Immediately save the new instance to obtain a cookie and instance attributes before the initial request is disposed
+                                StorageImplementation.SaveDatabase(configuration, httpContext, main);
+                            }
                         }
                     }
                 }

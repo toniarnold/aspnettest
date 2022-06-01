@@ -12,6 +12,9 @@ namespace asplib.Components
         where F : statemap.FSMContext
         where S : statemap.State
     {
+        private readonly List<statemap.StateChangeEventHandler> _stateChangedHandlers = new();
+        private bool _isDisposed = false;
+
         /// <summary>
         /// The state of the FSMContext class
         /// </summary>
@@ -28,32 +31,35 @@ namespace asplib.Components
             get { return Main.Fsm; }
         }
 
-        private readonly List<statemap.StateChangeEventHandler> _stateChangedHandlers = new();
-        private bool _isDisposed = false;
-
-        // Blazor State Container / SMC event notification handler pattern
+        /// <summary>
+        /// Blazor State Container / SMC event notification handler pattern
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="args"></param>
         public void StateChanged(object sender, StateChangeEventArgs args)
         {
-            ReRender();
-            InvokeAsync(StateHasChanged); // in case we're called not from the UI thread
+            Render();
+            TestFocus.AwaitingRerender = false; // re-rendering starts now
+            InvokeAsync(StateHasChanged); // Switch context in case we're not being called from the UI thread
         }
 
         /// <summary>
-        /// Dynamically set the pageType to display state-dependent parts here
+        /// Hook for changing the UI Component state according to FSM state,
+        /// e.g. setting the pageType in a DynamicComponent to display
+        /// state-dependent parts.
         /// </summary>
-        protected abstract void ReRender();
+        protected virtual void Render()
+        { }
 
-        protected override async Task OnAfterRenderAsync(bool firstRender)
+        /// <summary>
+        /// Wire up the FSM with StateChange event and owner instance.
+        /// </summary>
+        protected override void HydrateMain()
         {
-            await CreateMain(firstRender);
-            if (firstRender)
-            {
-                ScaffoldFsm();
-                // React to the loaded state
-                ReRender();
-                StateHasChanged();
-            }
-            await base.OnAfterRenderAsync(firstRender);
+            Main.Fsm.StateChange += StateChanged;
+            _stateChangedHandlers.Add(StateChanged);
+            Main.SetOwner();
+            this.Render();
         }
 
         /// <summary>
@@ -74,16 +80,6 @@ namespace asplib.Components
             // The component in focus must remain there for test assertions. In
             // production, there will never be a component in focus.
             _isDisposed = true;
-        }
-
-        /// <summary>
-        /// Set the StateChanged handlers and the Owner
-        /// </summary>
-        private void ScaffoldFsm()
-        {
-            Main.Fsm.StateChange += StateChanged;
-            _stateChangedHandlers.Add(StateChanged);
-            Main.SetOwner();
         }
 
         /// <summary>

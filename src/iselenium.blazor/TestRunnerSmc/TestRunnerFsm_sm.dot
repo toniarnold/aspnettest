@@ -46,16 +46,19 @@ digraph TestRunnerFsm {
             [label="OnTestEvent\l\[result == TestStatus.Passed\]/\l"];
 
         "Map1::RunningOk" -> "Map1::RunningWarning"
-            [label="OnTestEvent\l\[result == TestStatus.Warning\]/\l"];
+            [label="OnTestEvent\l\[result == TestStatus.Warning ||\l		 result == TestStatus.Inconclusive ||\l		 result == TestStatus.Skipped\]/\l"];
 
         "Map1::RunningOk" -> "Map1::RunningError"
-            [label="OnTestEvent\l\[result == TestStatus.Failed\]/\l"];
+            [label="OnTestEvent/\l"];
 
         "Map1::RunningOk" -> "Map1::Completed"
             [label="Complete/\l"];
 
         "Map1::RunningWarning" -> "Map1::RunningError"
-            [label="OnTestEvent\l\[result ==  TestStatus.Failed\]/\l"];
+            [label="OnTestEvent\l\[result == TestStatus.Failed ||\l	     result == TestStatus.Unknown\]/\l"];
+
+        "Map1::RunningWarning" -> "Map1::RunningWarning"
+            [label="OnTestEvent/\l"];
 
         "Map1::RunningWarning" -> "Map1::Completed"
             [label="Complete/\l"];

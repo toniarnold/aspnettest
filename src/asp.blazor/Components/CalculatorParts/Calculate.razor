@@ -1,14 +1,14 @@
 ﻿@using asp.blazor.CalculatorSmc
 
 <p>
-    <button @onclick="Add" id="AddButton" class="button"> + </button>
-    <button @onclick="Sub" id="SubButton" class="button"> - </button>
-    <button @onclick="Mul" id="MulButton" class="button"> * </button>
-    <button @onclick="Div" id="DivButton" class="button"> / </button>
-    <button @onclick="Pow" id="PowButton" class="button">x<sup>2</sup></button>
-    <button @onclick="Sqrt" id="SqrtButton" class="button">&radic;<span style='text-decoration: overline'>x</span></button>
-    <button @onclick="Clr" id="ClrButton" class="button"> C </button>
-    <button @onclick="ClrAll" id="ClrAllButton" class="button">CA</button>
+    <button @onclick="Add" @ref="addButton" class="button"> + </button>
+    <button @onclick="Sub" @ref="subButton" class="button"> - </button>
+    <button @onclick="Mul" @ref="mulButton" class="button"> * </button>
+    <button @onclick="Div" @ref="divButton" class="button"> / </button>
+    <button @onclick="Pow" @ref="powButton" class="button">x<sup>2</sup></button>
+    <button @onclick="Sqrt" @ref="sqrtButton" class="button">&radic;<span style='text-decoration: overline'>x</span></button>
+    <button @onclick="Clr" @ref="clrButton" class="button"> C </button>
+    <button @onclick="ClrAll" @ref="clrAllButton" class="button">CA</button>
 </p>
 
 <p>
@@ -18,6 +18,14 @@
 @code {
     [CascadingParameter(Name="Main")]
     private Calculator Main{ get; set; } = default!;
+    public ElementReference addButton;
+    public ElementReference subButton;
+    public ElementReference mulButton;
+    public ElementReference divButton;
+    public ElementReference powButton;
+    public ElementReference sqrtButton;
+    public ElementReference clrButton;
+    public ElementReference clrAllButton;
 
     private void Add()
     {

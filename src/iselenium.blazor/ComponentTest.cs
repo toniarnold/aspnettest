@@ -32,6 +32,20 @@ namespace iselenium
         }
 
         /// <summary>
+        /// Non-nullable typed accessor function to get the DynamicComponent
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="component"></param>
+        /// <returns></returns>
+        public T Dynamic<T>(DynamicComponent component)
+        {
+            Assert.That(component.Instance, Is.Not.Null);
+            object dynamicObject = component.Instance ?? default!;
+            Assert.That(dynamicObject, Is.AssignableTo<T>());
+            return (T)dynamicObject;
+        }
+
+        /// <summary>
         /// Navigate to a StaticComponentBase<T> which signals TestFocus.Event
         /// on OnAfterRenderAsync to continue
         /// </summary>
@@ -57,10 +71,12 @@ namespace iselenium
         /// <param name="delay">Optional delay time in milliseconds before clicking the element</param>
         /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete (set to 0 if expectRender)</param>
         /// <param name="wait">Explicit WebDriverWait in seconds for the element to appear. 0 when expectRender is true</param>
-        /// <param name="expectRender">Set to false if TestFocus.Event is not set onOnAfterRenderAsync</param>
+        /// <param name="expectRender">Set to false if TestFocus.Event is not set on OnAfterRenderAsync</param>
         public virtual void Click(Func<string, By> selector, string selectString, int index = 0,
                             bool expectRequest = false, bool? awaitRemoved = null,
-                            int expectedStatusCode = 200, int delay = 0, int pause = 0, int wait = 0, bool expectRender = true)
+                            int expectedStatusCode = 200, int delay = 0, int pause = 0, int wait = 0,
+                            bool expectRender = true,
+                            bool expectRerender = false)
         {
             var doAwaitRemoved = awaitRemoved ?? this.awaitRemovedDefault;
             SeleniumExtensionBase.Click(this, selector, selectString, index: 0,
@@ -70,9 +86,9 @@ namespace iselenium
                                             wait: (wait == 0) ? SeleniumExtensionBase.RequestTimeout : wait);
         }
 
-        public void Click(ElementReference element, bool expectRequest = false, int expectedStatusCode = 200, bool expectRender = true)
+        public void Click(ElementReference element, bool expectRequest = false, int expectedStatusCode = 200, bool expectRender = true, bool expectRerender = false)
         {
-            Click(By.CssSelector, $"*[{element.IdAttr()}]", index: 0, expectRequest, awaitRemoved: null, expectedStatusCode, delay: 0, pause: 0, wait: 0, expectRender: expectRender);
+            Click(By.CssSelector, $"*[{element.IdAttr()}]", index: 0, expectRequest, awaitRemoved: null, expectedStatusCode, delay: 0, pause: 0, wait: 0, expectRender: expectRender, expectRerender: expectRerender);
         }
 
         // The built-in components with an .Element property don't expose that as interface or by inheritance -> enumerate them explicitly:

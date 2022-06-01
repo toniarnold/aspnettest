@@ -21,8 +21,4 @@
     <ProjectReference Include="..\iselenium.core\iselenium.core.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Model\" />
-  </ItemGroup>
-
 </Project>

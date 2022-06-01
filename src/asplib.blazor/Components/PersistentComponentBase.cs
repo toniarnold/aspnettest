@@ -3,7 +3,6 @@ using asplib.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Diagnostics;
 
@@ -18,6 +17,11 @@ namespace asplib.Components
     public abstract class PersistentComponentBase<T> : StaticOwningComponentBase<T>
         where T : class, new()
     {
+        // OnParametersSetAsync double rendering mitigation:
+
+        private bool _firstRender = true;
+        private bool _shouldRender = true;
+
         [Inject]
         protected IConfiguration Configuration { get; set; } = default!;
 
@@ -44,12 +48,6 @@ namespace asplib.Components
         /// reinstantiating the component on reload after a storage change,
         /// </summary>
         public bool StorageHasChanged { get; set; } = false;
-
-        // OnParametersSetAsync double rendering prevention:
-
-        private bool _firstRender = true;
-
-        private bool _shouldRender = true;
 
         /// <summary>
         /// Set the instance-local storage type
@@ -85,10 +83,19 @@ namespace asplib.Components
             {
                 switch (this.GetStorage())
                 {
+                    case Storage.ViewState:
+                    case Storage.Database:
+                        this.HydrateMain();
+                        break;
+
                     case Storage.SessionStorage:
                     case Storage.LocalStorage:
                         _shouldRender = false;
                         break;
+
+                    default:
+                        throw new NotImplementedException(String.Format(
+                            "Storage {0}", this.GetStorage()));
                 }
                 _firstRender = false;
             }
@@ -106,7 +113,7 @@ namespace asplib.Components
         /// <param name="firstRender"></param>
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
-            await CreateMain(firstRender);
+            await PersistMain(firstRender);
             await base.OnAfterRenderAsync(firstRender);
         }
 
@@ -116,7 +123,7 @@ namespace asplib.Components
         /// on re-render.
         /// </summary>
         /// <param name="firstRender"></param>
-        protected async Task CreateMain(bool firstRender)
+        protected async Task PersistMain(bool firstRender)
         {
             Trace.Assert(Main != null);  // Guaranteed by Direct Injection from PersistentMainFactoryExtension.AddPersistent<T>
 
@@ -126,25 +133,19 @@ namespace asplib.Components
 
                 switch (this.GetStorage())
                 {
-                    case Storage.ViewState:
-                    case Storage.Database:
-                        break;
-
                     case Storage.SessionStorage:
                         Main = await this.LoadFromBrowser(k => ProtectedSessionStore.GetAsync<string>(k));
+                        this.HydrateMain();
                         _shouldRender = true;
                         this.StateHasChanged();
                         break;
 
                     case Storage.LocalStorage:
                         Main = await this.LoadFromBrowser(k => ProtectedLocalStore.GetAsync<string>(k));
+                        this.HydrateMain();
                         _shouldRender = true;
                         this.StateHasChanged();
                         break;
-
-                    default:
-                        throw new NotImplementedException(String.Format(
-                            "Storage {0}", this.GetStorage()));
                 }
             }
             else if (!StorageHasChanged)
@@ -157,7 +158,7 @@ namespace asplib.Components
                         break;  // Default instance lifetime in Blazor Server
 
                     case Storage.Database:
-                        this.SaveDatabase();
+                        this.SaveToDatabase();
                         break;
 
                     case Storage.SessionStorage:
@@ -176,6 +177,13 @@ namespace asplib.Components
         }
 
         /// <summary>
+        /// Hook to perform scaffolding with the deserialized new Main instance,
+        /// e.g. by setting transient object references or reacting to state.
+        /// </summary>
+        protected virtual void HydrateMain()
+        { }
+
+        /// <summary>
         /// Delete the Main instance from the current browser stores,
         /// regardless of the current Storage mechanism active.
         /// </summary>
@@ -186,6 +194,7 @@ namespace asplib.Components
             await ProtectedLocalStore.DeleteAsync(storageId);
             await ProtectedSessionStore.DeleteAsync(storageId);
             this.Main = PersistentMainFactory<T>.Instantiate(ServiceProvider);
+            this.HydrateMain();
             this.StateHasChanged();
         }
 
@@ -239,21 +248,21 @@ namespace asplib.Components
             }
         }
 
-        /// <summary>
-        /// Store the serialized Main to the database. Reference to it is
-        /// kept in a persistent cookie set in PersistentMainFactoryExtension.
-        /// </summary>
-        private void SaveDatabase()
-        {
-            StorageImplementation.SaveDatabase(Configuration, Main);
-        }
-
         private async Task SaveToBrowser(Func<string, object, ValueTask> storeSetAsync)
         {
             var storageId = StorageImplementation.GetStorageID(Main.GetType().Name);
             var filter = StorageImplementation.EncryptViewState(Configuration);
             var viewState = StorageImplementation.ViewState(Main, filter);
             await storeSetAsync(storageId, viewState);
+        }
+
+        /// <summary>
+        /// Store the serialized Main to the database. Reference to it is
+        /// kept in a persistent cookie set in PersistentMainFactoryExtension.
+        /// </summary>
+        private void SaveToDatabase()
+        {
+            StorageImplementation.SaveDatabase(Configuration, Main);
         }
     }
 }

@@ -419,7 +419,9 @@ public sealed class TestRunnerFsmContext :
                     context.State = Map1.RunningOk;
                     context.State.Entry(context);
                 }
-                else if (result == TestStatus.Warning)
+                else if (result == TestStatus.Warning ||
+		 result == TestStatus.Inconclusive ||
+		 result == TestStatus.Skipped)
                 {
 
                     context.State.Exit(context);
@@ -427,18 +429,13 @@ public sealed class TestRunnerFsmContext :
                     context.State = Map1.RunningWarning;
                     context.State.Entry(context);
                 }
-                else if (result == TestStatus.Failed)
+                else
                 {
 
                     context.State.Exit(context);
-                    // No actions.
                     context.State = Map1.RunningError;
                     context.State.Entry(context);
-                }                else
-                {
-                    base.OnTestEvent(context, result);
                 }
-
 
                 return;
             }
@@ -499,7 +496,8 @@ public sealed class TestRunnerFsmContext :
 
             protected internal override void OnTestEvent(TestRunnerFsmContext context, TestStatus result)
             {
-                if (result ==  TestStatus.Failed)
+                if (result == TestStatus.Failed ||
+	     result == TestStatus.Unknown)
                 {
 
                     context.State.Exit(context);
@@ -509,9 +507,11 @@ public sealed class TestRunnerFsmContext :
                 }
                 else
                 {
-                    base.OnTestEvent(context, result);
-                }
 
+                    context.State.Exit(context);
+                    context.State = Map1.RunningWarning;
+                    context.State.Entry(context);
+                }
 
                 return;
             }

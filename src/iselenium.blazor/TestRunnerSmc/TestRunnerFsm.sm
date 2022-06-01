@@ -26,12 +26,14 @@ RunningOk
 			{
 			}
 	OnTestEvent(result: TestStatus)
-		[result == TestStatus.Warning]	
+		[result == TestStatus.Warning ||
+		 result == TestStatus.Inconclusive ||
+		 result == TestStatus.Skipped]
 			RunningWarning
 			{
 			}
 	OnTestEvent(result: TestStatus)
-		[result == TestStatus.Failed]	
+		// Failed, Unknown
 			RunningError
 			{
 			}
@@ -44,8 +46,13 @@ RunningOk
 RunningWarning
 {
 	OnTestEvent(result: TestStatus)
-		[result ==  TestStatus.Failed]	
+		[result == TestStatus.Failed ||
+	     result == TestStatus.Unknown]
 			RunningError
+			{
+			}
+	OnTestEvent(result: TestStatus)
+			RunningWarning
 			{
 			}
 	Complete

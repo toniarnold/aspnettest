@@ -8,8 +8,6 @@ namespace iselenium.Components
 {
     public partial class TestButton
     {
-        private const int TESTRESULT_MINWIDTH = 10; // em, determines the position of the result link from the right
-
         [Parameter]
         public string? src { get; set; } = null;
 
@@ -62,11 +60,11 @@ namespace iselenium.Components
 
         protected override void OnInitialized()
         {
-            SetStorage(Storage.ViewState); // TestRunnerFsm is not serializable -> disable serialization for the component
+            SetStorage(Storage.ViewState); // disable serialization for the component
             SeleniumExtensionBase.Port = (int)(Http.HttpContext?.Request.Host.Port ?? 0);
         }
 
-        protected override void ReRender()
+        protected override void Render()
         {
             // Display the last warning/failure end leave it there
             switch (Main.LastTestStatus)

@@ -18,6 +18,9 @@
 
     protected override void OnParametersSet()
     {
-        StorageImplementation.SetStorage(Storage);
+        if (Storage != null) // only override the static StorageImplementation.SessionStorage if one is given
+        {
+            StorageImplementation.SetStorage(Storage);
+        }
     }
 }
