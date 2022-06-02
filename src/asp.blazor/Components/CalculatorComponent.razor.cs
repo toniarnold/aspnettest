@@ -49,7 +49,7 @@ namespace asp.blazor.Components
             uriHelper.NavigateTo(StorageLinkUrl, forceLoad: true);
         }
 
-        protected override void Render()
+        protected override void RenderMain()
         {
             errorMsg = null;
             switch (State)

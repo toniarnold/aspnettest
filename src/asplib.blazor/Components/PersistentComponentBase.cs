@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using System.ComponentModel;
 using System.Diagnostics;
 
 namespace asplib.Components
@@ -22,6 +23,11 @@ namespace asplib.Components
         private bool _firstRender = true;
         private bool _shouldRender = true;
 
+        /// <summary>
+        /// Local type of the session storage to override AppSettings["SessionStorage"]
+        /// </summary>
+        public Storage? SessionStorage { get; set; }
+
         [Inject]
         protected IConfiguration Configuration { get; set; } = default!;
 
@@ -38,16 +44,19 @@ namespace asplib.Components
         private ILogger<PersistentComponentBase<T>> Logger { get; set; } = default!;
 
         /// <summary>
-        /// Local type of the session storage to override AppSettings["SessionStorage"]
-        /// </summary>
-        public Storage? SessionStorage { get; set; }
-
-        /// <summary>
         /// Set to true to avoid storing the old state in the new storage after
         /// changing the storage. Will be reinitialized to false after
         /// reinstantiating the component on reload after a storage change,
         /// </summary>
         public bool StorageHasChanged { get; set; } = false;
+
+        /// <summary>
+        /// True when Main has the IsRequestedInstanceAttribute
+        /// </summary>
+        private bool IsMainRequestedInstance =>
+            (from Attribute a in TypeDescriptor.GetAttributes(this.Main)
+             where a is IsRequestedInstanceAttribute
+             select a).Any();
 
         /// <summary>
         /// Set the instance-local storage type
@@ -90,7 +99,14 @@ namespace asplib.Components
 
                     case Storage.SessionStorage:
                     case Storage.LocalStorage:
-                        _shouldRender = false;
+                        if (IsMainRequestedInstance)
+                        {
+                            this.HydrateMain(); // the instance we got from the database
+                        }
+                        else
+                        {
+                            _shouldRender = false; // overwrite Main in OnAfterRenderAsync
+                        }
                         break;
 
                     default:
@@ -129,23 +145,26 @@ namespace asplib.Components
 
             if (firstRender)
             {
-                Logger.LogInformation(0, "Load Storage {storage}", this.GetStorage());
-
-                switch (this.GetStorage())
+                if (!IsMainRequestedInstance)
                 {
-                    case Storage.SessionStorage:
-                        Main = await this.LoadFromBrowser(k => ProtectedSessionStore.GetAsync<string>(k));
-                        this.HydrateMain();
-                        _shouldRender = true;
-                        this.StateHasChanged();
-                        break;
+                    Logger.LogInformation(0, "Load Storage {storage}", this.GetStorage());
 
-                    case Storage.LocalStorage:
-                        Main = await this.LoadFromBrowser(k => ProtectedLocalStore.GetAsync<string>(k));
-                        this.HydrateMain();
-                        _shouldRender = true;
-                        this.StateHasChanged();
-                        break;
+                    switch (this.GetStorage())
+                    {
+                        case Storage.SessionStorage:
+                            Main = await this.LoadFromBrowser(k => ProtectedSessionStore.GetAsync<string>(k));
+                            this.HydrateMain();
+                            _shouldRender = true;
+                            this.StateHasChanged();
+                            break;
+
+                        case Storage.LocalStorage:
+                            Main = await this.LoadFromBrowser(k => ProtectedLocalStore.GetAsync<string>(k));
+                            this.HydrateMain();
+                            _shouldRender = true;
+                            this.StateHasChanged();
+                            break;
+                    }
                 }
             }
             else if (!StorageHasChanged)

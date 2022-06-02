@@ -5,7 +5,7 @@ namespace testbuttontest.blazor
 {
     public class TestStatus
     {
-        private const int SLEEPTIME = 2000;
+        private const int SLEEPTIME = 1000;
 
         [Test, Order(1)]
         public void Pass()

@@ -23,8 +23,14 @@ digraph TestRunnerFsm {
         "Map1::RunningError"
             [label="{RunningError}"];
 
-        "Map1::Completed"
-            [label="{Completed}"];
+        "Map1::CompletedOk"
+            [label="{CompletedOk}"];
+
+        "Map1::CompletedWarning"
+            [label="{CompletedWarning}"];
+
+        "Map1::CompletedError"
+            [label="{CompletedError}"];
 
         "Map1::Passed"
             [label="{Passed}"];
@@ -51,7 +57,7 @@ digraph TestRunnerFsm {
         "Map1::RunningOk" -> "Map1::RunningError"
             [label="OnTestEvent/\l"];
 
-        "Map1::RunningOk" -> "Map1::Completed"
+        "Map1::RunningOk" -> "Map1::CompletedOk"
             [label="Complete/\l"];
 
         "Map1::RunningWarning" -> "Map1::RunningError"
@@ -60,19 +66,22 @@ digraph TestRunnerFsm {
         "Map1::RunningWarning" -> "Map1::RunningWarning"
             [label="OnTestEvent/\l"];
 
-        "Map1::RunningWarning" -> "Map1::Completed"
+        "Map1::RunningWarning" -> "Map1::CompletedWarning"
             [label="Complete/\l"];
 
         "Map1::RunningError" -> "Map1::RunningError"
             [label="OnTestEvent/\l"];
 
-        "Map1::RunningError" -> "Map1::Completed"
+        "Map1::RunningError" -> "Map1::CompletedError"
             [label="Complete/\l"];
 
-        "Map1::Completed" -> "Map1::Passed"
-            [label="Report\l\[TestRunner.Passed\]/\l"];
+        "Map1::CompletedOk" -> "Map1::Passed"
+            [label="Report/\l"];
 
-        "Map1::Completed" -> "Map1::ResultXml"
+        "Map1::CompletedWarning" -> "Map1::ResultXml"
+            [label="Report/\l"];
+
+        "Map1::CompletedError" -> "Map1::ResultXml"
             [label="Report/\l"];
 
         "Map1::Passed" -> "Map1::RunningOk"

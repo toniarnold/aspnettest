@@ -38,7 +38,7 @@ namespace asplib.Components
         /// <param name="args"></param>
         public void StateChanged(object sender, StateChangeEventArgs args)
         {
-            Render();
+            RenderMain();
             TestFocus.AwaitingRerender = false; // re-rendering starts now
             InvokeAsync(StateHasChanged); // Switch context in case we're not being called from the UI thread
         }
@@ -48,7 +48,7 @@ namespace asplib.Components
         /// e.g. setting the pageType in a DynamicComponent to display
         /// state-dependent parts.
         /// </summary>
-        protected virtual void Render()
+        protected virtual void RenderMain()
         { }
 
         /// <summary>
@@ -59,7 +59,7 @@ namespace asplib.Components
             Main.Fsm.StateChange += StateChanged;
             _stateChangedHandlers.Add(StateChanged);
             Main.SetOwner();
-            this.Render();
+            this.RenderMain();
         }
 
         /// <summary>

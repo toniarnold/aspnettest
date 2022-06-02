@@ -46,10 +46,12 @@ namespace iselenium.Components
                 }
                 switch (State)
                 {
-                    case var s when s == TestRunnerFsmContext.Map1.RunningWarning:
+                    case var s when s == TestRunnerFsmContext.Map1.RunningWarning ||
+                                    s == TestRunnerFsmContext.Map1.CompletedWarning:
                         return $"{_contentPath}/nunit-warning.png";
 
-                    case var s when s == TestRunnerFsmContext.Map1.RunningError:
+                    case var s when s == TestRunnerFsmContext.Map1.RunningError ||
+                                    s == TestRunnerFsmContext.Map1.CompletedError:
                         return $"{_contentPath}/nunit-error.png";
 
                     default:
@@ -64,7 +66,7 @@ namespace iselenium.Components
             SeleniumExtensionBase.Port = (int)(Http.HttpContext?.Request.Host.Port ?? 0);
         }
 
-        protected override void Render()
+        protected override void RenderMain()
         {
             // Display the last warning/failure end leave it there
             switch (Main.LastTestStatus)

@@ -13,34 +13,24 @@
 New
 {
 	RunTests	
-		RunningOk
-		{
-		}
+		RunningOk {}
 }
 
 RunningOk
 {
 	OnTestEvent(result: TestStatus)
 		[result == TestStatus.Passed]				
-			RunningOk
-			{
-			}
+			RunningOk {}
 	OnTestEvent(result: TestStatus)
 		[result == TestStatus.Warning ||
 		 result == TestStatus.Inconclusive ||
 		 result == TestStatus.Skipped]
-			RunningWarning
-			{
-			}
+			RunningWarning {}
 	OnTestEvent(result: TestStatus)
 		// Failed, Unknown
-			RunningError
-			{
-			}
+			RunningError {}
 	Complete
-			Completed
-			{
-			}
+			CompletedOk {}
 }
 
 RunningWarning
@@ -48,58 +38,49 @@ RunningWarning
 	OnTestEvent(result: TestStatus)
 		[result == TestStatus.Failed ||
 	     result == TestStatus.Unknown]
-			RunningError
-			{
-			}
+			RunningError {}
 	OnTestEvent(result: TestStatus)
-			RunningWarning
-			{
-			}
+			RunningWarning {}
 	Complete
-			Completed
-			{
-			}
+			CompletedWarning {}
 }
 
 RunningError
 {
 	OnTestEvent(result: TestStatus)
-		RunningError
-		{
-		}
+		RunningError {}
 	Complete
-		Completed
-		{
-		}
+		CompletedError {}
 }
 
-Completed
+CompletedOk
 {
 	Report
-		[TestRunner.Passed]	
-			Passed
-			{
-			}
+		Passed {}
+}
+
+CompletedWarning
+{
 	Report
-		ResultXml		
-		{
-		}
+		ResultXml {}
+}
+
+CompletedError
+{
+	Report
+		ResultXml {}
 }
 
 Passed
 {
 	RunTests
-		RunningOk
-		{
-		}
+		RunningOk {}
 }
 
 ResultXml
 {
 	RunTests		
-		RunningOk
-		{
-		}
+		RunningOk {}
 }
 
 %%

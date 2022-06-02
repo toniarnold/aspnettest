@@ -10,7 +10,7 @@
     * [Browser storage persistence sequence diagram](#browser-storage-persistence-sequence-diagram)
   * [Using the test project](#using-the-test-project)
 * [`asp.blazor` with the SMC](#aspblazor-with-the-smc)
-  *  [The Render override](#the-render-override)
+  *  [The RenderMain override](#the-rendermain-override)
 
 
 ## Summary
@@ -290,10 +290,10 @@ directly inherits persistence generically with the type of the SMC model class:
 @inherits SmcComponentBase<Calculator, CalculatorContext, CalculatorContext.CalculatorState>
 ```
 
-### The Render override
+### The RenderMain override
 
 The abstract `SmcComponentBase` scaffolds the setup of the SMC state machine and
-adds an event handler for state changes which will call the virtual Render
+adds an event handler for state changes which will call the virtual RenderMain
 method. It is the responsibility of the concrete component
 (`CalculatorComponent` in the example) to dynamically display the parts
 according to the SMC state by using the
@@ -301,7 +301,7 @@ according to the SMC state by using the
 which displays a sub-component according to type:
 
 ```csharp
-protected override void Render()
+protected override void RenderMain()
 {
     switch (Main.State)
     {

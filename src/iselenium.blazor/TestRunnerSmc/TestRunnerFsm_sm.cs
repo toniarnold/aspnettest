@@ -184,7 +184,9 @@ public sealed class TestRunnerFsmContext :
         Map1.RunningOk,
         Map1.RunningWarning,
         Map1.RunningError,
-        Map1.Completed,
+        Map1.CompletedOk,
+        Map1.CompletedWarning,
+        Map1.CompletedError,
         Map1.Passed,
         Map1.ResultXml
     };
@@ -278,14 +280,20 @@ public sealed class TestRunnerFsmContext :
         internal static readonly Map1_Default.Map1_RunningError RunningError =
             new Map1_Default.Map1_RunningError("Map1.RunningError", 3);
         [NonSerialized]
-        internal static readonly Map1_Default.Map1_Completed Completed =
-            new Map1_Default.Map1_Completed("Map1.Completed", 4);
+        internal static readonly Map1_Default.Map1_CompletedOk CompletedOk =
+            new Map1_Default.Map1_CompletedOk("Map1.CompletedOk", 4);
+        [NonSerialized]
+        internal static readonly Map1_Default.Map1_CompletedWarning CompletedWarning =
+            new Map1_Default.Map1_CompletedWarning("Map1.CompletedWarning", 5);
+        [NonSerialized]
+        internal static readonly Map1_Default.Map1_CompletedError CompletedError =
+            new Map1_Default.Map1_CompletedError("Map1.CompletedError", 6);
         [NonSerialized]
         internal static readonly Map1_Default.Map1_Passed Passed =
-            new Map1_Default.Map1_Passed("Map1.Passed", 5);
+            new Map1_Default.Map1_Passed("Map1.Passed", 7);
         [NonSerialized]
         internal static readonly Map1_Default.Map1_ResultXml ResultXml =
-            new Map1_Default.Map1_ResultXml("Map1.ResultXml", 6);
+            new Map1_Default.Map1_ResultXml("Map1.ResultXml", 8);
         [NonSerialized]
         private static readonly Map1_Default Default =
             new Map1_Default("Map1.Default", -1);
@@ -402,7 +410,7 @@ public sealed class TestRunnerFsmContext :
             {
 
                 context.State.Exit(context);
-                context.State = Map1.Completed;
+                context.State = Map1.CompletedOk;
                 context.State.Entry(context);
 
 
@@ -487,7 +495,7 @@ public sealed class TestRunnerFsmContext :
             {
 
                 context.State.Exit(context);
-                context.State = Map1.Completed;
+                context.State = Map1.CompletedWarning;
                 context.State.Entry(context);
 
 
@@ -563,7 +571,7 @@ public sealed class TestRunnerFsmContext :
             {
 
                 context.State.Exit(context);
-                context.State = Map1.Completed;
+                context.State = Map1.CompletedError;
                 context.State.Entry(context);
 
 
@@ -601,7 +609,7 @@ public sealed class TestRunnerFsmContext :
         }
 
         [System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.1.0")]
-        internal class Map1_Completed :
+        internal class Map1_CompletedOk :
             Map1_Default
         {
         //-------------------------------------------------------
@@ -620,27 +628,17 @@ public sealed class TestRunnerFsmContext :
         // Member methods.
         //
 
-            internal Map1_Completed(string name, int id) :
+            internal Map1_CompletedOk(string name, int id) :
                 base (name, id)
             {}
 
             protected internal override void Report(TestRunnerFsmContext context)
             {
-                if (TestRunner.Passed)
-                {
 
-                    context.State.Exit(context);
-                    // No actions.
-                    context.State = Map1.Passed;
-                    context.State.Entry(context);
-                }
-                else
-                {
+                context.State.Exit(context);
+                context.State = Map1.Passed;
+                context.State.Entry(context);
 
-                    context.State.Exit(context);
-                    context.State = Map1.ResultXml;
-                    context.State.Entry(context);
-                }
 
                 return;
             }
@@ -654,7 +652,115 @@ public sealed class TestRunnerFsmContext :
             //
             new private static IDictionary<string, int> _transitions;
 
-            static Map1_Completed()
+            static Map1_CompletedOk()
+            {
+                _transitions = new Dictionary<string, int>();
+                _transitions.Add("Complete()", 0);
+                _transitions.Add("OnTestEvent(TestStatus result)", 0);
+                _transitions.Add("Report()", 1);
+                _transitions.Add("RunTests()", 0);
+            }
+        }
+
+        [System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.1.0")]
+        internal class Map1_CompletedWarning :
+            Map1_Default
+        {
+        //-------------------------------------------------------
+        // Properties.
+        //
+
+            public override IDictionary<string, int> Transitions
+            {
+                get
+                {
+                    return (_transitions);
+                }
+            }
+
+        //-------------------------------------------------------
+        // Member methods.
+        //
+
+            internal Map1_CompletedWarning(string name, int id) :
+                base (name, id)
+            {}
+
+            protected internal override void Report(TestRunnerFsmContext context)
+            {
+
+                context.State.Exit(context);
+                context.State = Map1.ResultXml;
+                context.State.Entry(context);
+
+
+                return;
+            }
+
+        //-------------------------------------------------------
+        // Member data.
+        //
+
+            //---------------------------------------------------
+            // Statics.
+            //
+            new private static IDictionary<string, int> _transitions;
+
+            static Map1_CompletedWarning()
+            {
+                _transitions = new Dictionary<string, int>();
+                _transitions.Add("Complete()", 0);
+                _transitions.Add("OnTestEvent(TestStatus result)", 0);
+                _transitions.Add("Report()", 1);
+                _transitions.Add("RunTests()", 0);
+            }
+        }
+
+        [System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.1.0")]
+        internal class Map1_CompletedError :
+            Map1_Default
+        {
+        //-------------------------------------------------------
+        // Properties.
+        //
+
+            public override IDictionary<string, int> Transitions
+            {
+                get
+                {
+                    return (_transitions);
+                }
+            }
+
+        //-------------------------------------------------------
+        // Member methods.
+        //
+
+            internal Map1_CompletedError(string name, int id) :
+                base (name, id)
+            {}
+
+            protected internal override void Report(TestRunnerFsmContext context)
+            {
+
+                context.State.Exit(context);
+                context.State = Map1.ResultXml;
+                context.State.Entry(context);
+
+
+                return;
+            }
+
+        //-------------------------------------------------------
+        // Member data.
+        //
+
+            //---------------------------------------------------
+            // Statics.
+            //
+            new private static IDictionary<string, int> _transitions;
+
+            static Map1_CompletedError()
             {
                 _transitions = new Dictionary<string, int>();
                 _transitions.Add("Complete()", 0);

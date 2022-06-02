@@ -15,4 +15,9 @@
         get { return Main.Operand; }
         set { Main.Operand = value; }
     }
+
+    protected override async Task OnAfterRenderAsync(bool firstRender)
+    {
+        await operand.FocusAsync();
+    }
 }

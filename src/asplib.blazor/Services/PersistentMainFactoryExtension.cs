@@ -12,6 +12,13 @@ namespace asplib.Services
 {
     public static class PersistentMainFactoryExtension
     {
+        private static Guid? sessionOverrideCached;
+
+        /// <summary>
+        /// Add a persistent Main object as a service
+        /// </summary>
+        /// <typeparam name="T"></typeparam>
+        /// <param name="services"></param>
         public static void AddPersistent<T>(this IServiceCollection services)
             where T : class, new()  // for serialization
         {
@@ -19,6 +26,10 @@ namespace asplib.Services
             services.TryAddSingleton<IServiceProvider>(sp => sp);
             services.AddHttpContextAccessor();
 
+            // A scoped service would behave as Singleton in Blazor Server -
+            // thus use a transient one. But then the factory gets called twice,
+            // once for the initial request, once for the request with the id
+            // query string to set up the SignalR WebSocket for Blazor.
             services.AddTransient<T>(provider =>
             {
                 // Implemented after PersistentControllerActivator for ASP.NET Core MVC
@@ -42,17 +53,29 @@ namespace asplib.Services
                 Func<byte[], byte[]>? filter = null;
                 T? main = null;
 
+                // Distinct 1st/2nd request, both instantiate the service, but
+                // the 2nd clears the original GET string in favor of the id:
+                bool isWebSocketRequest = (httpContext != null) ? httpContext.Request.Query.ContainsKey("id") : false;
+
                 // ---------- Direct GET request ?session= from the Database ----------
                 if (httpContext?.Request.Method == WebRequestMethods.Http.Get &&
                     Guid.TryParse(httpContext.Request.Query["session"], out sessionOverride))
                 {
-                    if (typeof(T).IsSerializable) // exclude the TestRunnerFsm
+                    sessionOverrideCached = sessionOverride;
+                    // isWebSocketRequest is still false during the 1st request
+                }
+                if (isWebSocketRequest && sessionOverrideCached != null)    // 2nd request
+                {
+                    if (typeof(T).IsSerializable) // exclude e.g. the TestRunnerFsm
                     {
                         using (var db = new ASP_DBEntities())
                         {
-                            (bytes, filter) = StorageImplementation.DatabaseBytes(configuration, httpContext, storageID, sessionOverride);
-                            main = DeserializeMain<T>(bytes, filter);
+                            (bytes, filter) = StorageImplementation.DatabaseBytes(
+                                configuration, httpContext, storageID, (Guid)sessionOverrideCached);
                         }
+                        sessionOverrideCached = null;   // immediately neutralize the static global
+                        main = DeserializeMain<T>(bytes, filter);
+                        TypeDescriptor.AddAttributes(main, new IsRequestedInstanceAttribute());
                     }
                 }
                 else
