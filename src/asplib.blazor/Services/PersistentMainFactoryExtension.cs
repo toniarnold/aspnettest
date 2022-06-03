@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using System.Collections.Concurrent;
 using System.ComponentModel;
 using System.Net;
 
@@ -12,7 +13,7 @@ namespace asplib.Services
 {
     public static class PersistentMainFactoryExtension
     {
-        private static Guid? sessionOverrideCached;
+        private static ConcurrentDictionary<Type, object> _webSocketRequestCache = new();
 
         /// <summary>
         /// Add a persistent Main object as a service
@@ -26,17 +27,28 @@ namespace asplib.Services
             services.TryAddSingleton<IServiceProvider>(sp => sp);
             services.AddHttpContextAccessor();
 
-            // A scoped service would behave as Singleton in Blazor Server -
-            // thus use a transient one. But then the factory gets called twice,
-            // once for the initial request, once for the request with the id
-            // query string to set up the SignalR WebSocket for Blazor.
+            // A scoped service behaves as Singleton in Blazor Server, multiple
+            // component instance would share the same state object. Therefore
+            // use a transient one. But then the factory gets called twice, once
+            // for the initial request, once for the request with the id query
+            // string to set up the SignalR WebSocket for Blazor. In this second
+            // request, cookies can no more be set in the response, thus the
+            // database not saved. For that case, always cache the object to
+            // instantiate it only once during the first request.
             services.AddTransient<T>(provider =>
             {
+                // If found it is the 2nd and final request -> immediately free the reference
+                if (_webSocketRequestCache.TryRemove(typeof(T), out var instance))
+                {
+                    return (T)instance;
+                }
+
                 // Implemented after PersistentControllerActivator for ASP.NET Core MVC
                 // In ASP.NET Core Blazor, HttpContext is only available on page initialization
                 // and cookies can only be set before the response has been started -  which is
                 // the case for DI instantiation.
                 var httpContextAccessor = provider.GetService<IHttpContextAccessor>();
+
                 var httpContext = httpContextAccessor?.HttpContext;
                 var configuration = provider.GetService<IConfiguration>();
                 var mainType = typeof(T);
@@ -53,29 +65,21 @@ namespace asplib.Services
                 Func<byte[], byte[]>? filter = null;
                 T? main = null;
 
-                // Distinct 1st/2nd request, both instantiate the service, but
-                // the 2nd clears the original GET string in favor of the id:
-                bool isWebSocketRequest = (httpContext != null) ? httpContext.Request.Query.ContainsKey("id") : false;
-
                 // ---------- Direct GET request ?session= from the Database ----------
                 if (httpContext?.Request.Method == WebRequestMethods.Http.Get &&
                     Guid.TryParse(httpContext.Request.Query["session"], out sessionOverride))
                 {
-                    sessionOverrideCached = sessionOverride;
-                    // isWebSocketRequest is still false during the 1st request
-                }
-                if (isWebSocketRequest && sessionOverrideCached != null)    // 2nd request
-                {
                     if (typeof(T).IsSerializable) // exclude e.g. the TestRunnerFsm
                     {
                         using (var db = new ASP_DBEntities())
+
                         {
                             (bytes, filter) = StorageImplementation.DatabaseBytes(
-                                configuration, httpContext, storageID, (Guid)sessionOverrideCached);
+                                configuration, httpContext, storageID, sessionOverride);
                         }
-                        sessionOverrideCached = null;   // immediately neutralize the static global
+
                         main = DeserializeMain<T>(bytes, filter);
-                        TypeDescriptor.AddAttributes(main, new IsRequestedInstanceAttribute());
+                        TypeDescriptor.AddAttributes(main, new IsRequestedInstanceAttribute()); // for PersistentComponentBase
                     }
                 }
                 else
@@ -111,11 +115,12 @@ namespace asplib.Services
                 {
                     main = PersistentMainFactory<T>.Instantiate(provider);
                 }
-                else  // Hydrate the instance from the database
+                else  // Begin to hydrate the deserialized instance from the database
                 {
                     PersistentMainFactory<T>.PerformPropertyInjection(provider, main);
                 }
 
+                _webSocketRequestCache[typeof(T)] = main;
                 return main;
             });
         }

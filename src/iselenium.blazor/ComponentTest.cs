@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Forms;
+using System.Diagnostics;
 using NUnit.Framework;
 using OpenQA.Selenium;
 
@@ -39,9 +40,11 @@ namespace iselenium
         /// <returns></returns>
         public T Dynamic<T>(DynamicComponent component)
         {
-            Assert.That(component.Instance, Is.Not.Null);
+            Trace.Assert(component.Instance != null,
+                $"DynamicComponent.Instance for {typeof(T)} is null");
             object dynamicObject = component.Instance ?? default!;
-            Assert.That(dynamicObject, Is.AssignableTo<T>());
+            Trace.Assert(typeof(T).IsAssignableFrom(dynamicObject.GetType()),
+                $"{dynamicObject.GetType()} is not of type {typeof(T)}");
             return (T)dynamicObject;
         }
 

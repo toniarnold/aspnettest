@@ -18,7 +18,7 @@
     <PackageReference Include="Selenium.Chrome.WebDriver" Version="85.0.0" />
     <PackageReference Include="Selenium.Firefox.WebDriver" Version="0.27.0" />
     <PackageReference Include="Selenium.InternetExplorer.WebDriver" Version="3.150.1" />
-    <PackageReference Include="Selenium.WebDriver.MSEdgeDriver" Version="96.0.1054.26" />
+    <PackageReference Include="Selenium.WebDriver.MSEdgeDriver" Version="101.0.1210.47" />
   </ItemGroup>
 
   <ItemGroup>

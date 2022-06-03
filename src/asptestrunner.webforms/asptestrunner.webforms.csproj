@@ -99,8 +99,8 @@
     <Error Condition="!Exists('..\..\packages\Selenium.InternetExplorer.WebDriver.3.150.1\build\Selenium.InternetExplorer.WebDriver.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Selenium.InternetExplorer.WebDriver.3.150.1\build\Selenium.InternetExplorer.WebDriver.targets'))" />
     <Error Condition="!Exists('..\..\packages\NUnit.3.13.2\build\NUnit.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\NUnit.3.13.2\build\NUnit.props'))" />
     <Error Condition="!Exists('..\..\packages\NUnit3TestAdapter.4.1.0\build\net35\NUnit3TestAdapter.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\NUnit3TestAdapter.4.1.0\build\net35\NUnit3TestAdapter.props'))" />
-    <Error Condition="!Exists('..\..\packages\Selenium.WebDriver.MSEdgeDriver.96.0.1054.26\build\Selenium.WebDriver.MSEdgeDriver.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Selenium.WebDriver.MSEdgeDriver.96.0.1054.26\build\Selenium.WebDriver.MSEdgeDriver.targets'))" />
+    <Error Condition="!Exists('..\..\packages\Selenium.WebDriver.MSEdgeDriver.101.0.1210.47\build\Selenium.WebDriver.MSEdgeDriver.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Selenium.WebDriver.MSEdgeDriver.101.0.1210.47\build\Selenium.WebDriver.MSEdgeDriver.targets'))" />
   </Target>
   <Import Project="..\..\packages\Selenium.InternetExplorer.WebDriver.3.150.1\build\Selenium.InternetExplorer.WebDriver.targets" Condition="Exists('..\..\packages\Selenium.InternetExplorer.WebDriver.3.150.1\build\Selenium.InternetExplorer.WebDriver.targets')" />
-  <Import Project="..\..\packages\Selenium.WebDriver.MSEdgeDriver.96.0.1054.26\build\Selenium.WebDriver.MSEdgeDriver.targets" Condition="Exists('..\..\packages\Selenium.WebDriver.MSEdgeDriver.96.0.1054.26\build\Selenium.WebDriver.MSEdgeDriver.targets')" />
+  <Import Project="..\..\packages\Selenium.WebDriver.MSEdgeDriver.101.0.1210.47\build\Selenium.WebDriver.MSEdgeDriver.targets" Condition="Exists('..\..\packages\Selenium.WebDriver.MSEdgeDriver.101.0.1210.47\build\Selenium.WebDriver.MSEdgeDriver.targets')" />
 </Project>
