@@ -1,5 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Data.SqlClient;
 using System.Diagnostics;
@@ -13,12 +15,46 @@ namespace asplib.Model.Db
     public class ASP_DBEntities : DbContext
     {
         public static string ConnectionString = "";
-        public static IServiceProvider? ServiceProvider;
+
+        private static IServiceProvider? ServiceProvider;
 
         public DbSet<Main> Main { get; set; }
 
         public ASP_DBEntities() : base()
         { }
+
+        /// <summary>
+        /// Add a static internal ServiceProvider for using the ASP_DBEntities
+        /// DBContext in VS Test-Explorer tests ("insulated" from a running
+        /// ASP.NET Core instance, without functional static
+        /// ServiceProviderCache).
+        /// </summary>
+        /// <param name="connectionString"></param>
+        public static void SetUpInsulatedDbContext(string connectionString)
+        {
+            ConnectionString = connectionString;
+
+            // See https://github.com/toniarnold/aspnettest/issues/5 A Logger is
+            // required, but cannot be used when
+            // Microsoft.AspNetCore.Components.Web is referenced (through
+            // asplib.blazor), but the NullLoggerFactory works within tests
+            // (without the full ASP.NET Core context).
+            var sc = new ServiceCollection();
+            sc.AddSingleton<ILoggerFactory>(NullLoggerFactory.Instance);
+            sc.AddEntityFrameworkSqlServer();
+            var sp = sc.BuildServiceProvider();
+            ASP_DBEntities.ServiceProvider = sp;
+        }
+
+        /// <summary>
+        /// Remove the global static internal service provider and the
+        /// connection string.
+        /// </summary>
+        public static void TearDownInsulatedDbContext()
+        {
+            ConnectionString = null;
+            ServiceProvider = null;
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

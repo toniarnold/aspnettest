@@ -69,13 +69,17 @@ namespace iselenium.Components
         protected override void RenderMain()
         {
             // Display the last warning/failure end leave it there
+            // The same status conditions as in TestRunnerFsm.sm
             switch (Main.LastTestStatus)
             {
                 case TestStatus.Warning:
+                case TestStatus.Inconclusive:
+                case TestStatus.Skipped:
                     TestResult = $"Warning....<br />{Main.LastTestName}";
                     break;
 
                 case TestStatus.Failed:
+                case TestStatus.Unknown:    // Exception
                     TestResult = $"Failure...<br />{Main.LastTestName}";
                     break;
             }

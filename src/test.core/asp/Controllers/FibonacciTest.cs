@@ -28,16 +28,13 @@ namespace test.asp.Controllers
             this.config = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
                 .Build();
-            ASP_DBEntities.ConnectionString = config["ASP_DBEntities"];
-            // See https://github.com/toniarnold/aspnettest/issues/5 A Logger is
-            // required, but cannot be used when
-            // Microsoft.AspNetCore.Components.Web is referenced (through
-            // asplib.blazor) -> the NullLoggerFactory works within tests.
-            var sc = new ServiceCollection();
-            sc.AddSingleton<ILoggerFactory>(NullLoggerFactory.Instance);
-            sc.AddEntityFrameworkSqlServer();
-            var sp = sc.BuildServiceProvider();
-            ASP_DBEntities.ServiceProvider = sp;
+            ASP_DBEntities.SetUpInsulatedDbContext(config["ASP_DBEntities"]);
+        }
+
+        [OneTimeTearDown]
+        public void TearDownInstulatedDbContext()
+        {
+            ASP_DBEntities.TearDownInsulatedDbContext();
         }
 
         [Test]
