@@ -242,7 +242,8 @@ namespace asplib.Model
         /// <param name="storageID"></param>
         internal static void ClearIfRequested(HttpContext httpContext, Storage sessionStorage, string storageID)
         {
-            if (httpContext.Request.Method == WebRequestMethods.Http.Get &&
+            if (httpContext != null && // e.g. bUnit
+                httpContext.Request.Method == WebRequestMethods.Http.Get &&
                 bool.TryParse(httpContext.Request.Query["clear"], out bool _))
             {
                 Enum.TryParse<Storage>(httpContext.Request.Query["storage"], true, out Storage clearstorage);
@@ -308,7 +309,8 @@ namespace asplib.Model
         internal static Storage GetStorage(IConfiguration configuration, HttpContext httpContext, string sessionStorageID = null)
         {
             Storage? storage = null;
-            if (httpContext.Request.Method == WebRequestMethods.Http.Post &&
+            if (httpContext != null && // e.g. bUnit
+                httpContext.Request.Method == WebRequestMethods.Http.Post &&
                 httpContext.Request.HasFormContentType &&   // Exclude WebSharper's application/json
                 httpContext.Request.Form.ContainsKey(sessionStorageID))
             {

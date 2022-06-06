@@ -1,0 +1,23 @@
+﻿@using iselenium.blazor
+
+@inherits BUnitTestContext
+
+@code {
+    [OneTimeSetUp]
+    public void RegisterCalculatorMain()
+    {
+        Services.AddPersistent<Calculator>();
+    }
+
+    //[SetUp]
+    //public void SetFocus()
+    //{
+    //    TestFocus.SetFocus(typeof(CalculatorComponent));
+    //}
+
+    //[TearDown]
+    //public void RemoveFocus()
+    //{
+    //    TestFocus.RemoveFocus();
+    //}
+}
