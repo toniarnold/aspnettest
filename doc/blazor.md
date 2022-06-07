@@ -3,15 +3,17 @@
 * [Summary](#summary)
 * [Scaffolding of `minimal.blazor`](#scaffolding-of-minimalblazor)
   * [Using the static `TestFocus` accessor](#using-the-static-testfocus-accessor)
-    * [Automatic synchronization with `TestFocus`](#automatic-synchronization-with-testfocus) 
+    * [Automatic synchronization with `TestFocus`](#automatic-synchronization-with-testfocus)
     * [@ref Component references](#ref-component-references)
   * [Persistence of the main state object](#Persistence-of-the-main-state-object)
     * [Database persistence sequence diagram](#database-persistence-sequence-diagram)
     * [Browser storage persistence sequence diagram](#browser-storage-persistence-sequence-diagram)
   * [Using the test project](#using-the-test-project)
 * [`asp.blazor` with the SMC](#aspblazor-with-the-smc)
-  *  [The RenderMain override](#the-rendermain-override)
-
+  * [The RenderMain override](#the-rendermain-override)
+* [Comparison with bUnit](#comparison-with-bunit)
+  * [Semantic HTML comparison in bUnit](#semantic-html-comparison-in-bunit)
+  * [The `BUnitTestContext`](#the-bunittestcontext)
 
 ## Summary
 
@@ -56,7 +58,7 @@ the raw template provided bv VS2022:
 builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 ASP_DBEntities.ConnectionString = builder.Configuration["ASP_DBEntities"];
 builder.Services.AddPersistent<Main>();
-app.UseMiddleware<ISeleniumMiddleware>(); 
+app.UseMiddleware<ISeleniumMiddleware>();
 ```
 
 The first two lines set up the database connection string for database
@@ -225,7 +227,7 @@ Drawback of this pattern: Unlike in ASP.NET WebForms, the component must be
 initially visible on the GET request to trigger the Database persistence
 mechanism. But storing the serialized object server-side can be considered as a
 legacy technique that is replaced with Browser LocalStorage which did not exist
-when designing the database persistence mechanism. 
+when designing the database persistence mechanism.
 
 On the other hand, Browser storage may cause significant network traffic from
 the client on each state change (just the same as WebForms' ViewState PostBack)
@@ -280,7 +282,6 @@ run.bat - which, unlike .NET Core MVC, is required in Blazor for the `_content`
 directoy from `asplib.blazor`.
 
 
-
 ## `asp.blazor` with the SMC
 
 Unlike ASP.NET Core MVC or WebSharper, there is no additional ViewModel-like
@@ -292,13 +293,13 @@ directly inherits persistence generically with the type of the SMC model class:
 
 ### The RenderMain override
 
-The abstract `SmcComponentBase` scaffolds the setup of the SMC state machine and
-adds an event handler for state changes which will call the virtual RenderMain
-method. It is the responsibility of the concrete component
-(`CalculatorComponent` in the example) to dynamically display the parts
-according to the SMC state by using the
+The abstract `SmcComponentBase` scaffolds the setup of the SMC state machine
+with its `HydrateMain` override that adds an event handler for state changes
+which in turn will call the virtual `RenderMain` method. It is the
+responsibility of the concrete component (`CalculatorComponent` in the example)
+to dynamically display the parts according to the SMC state by using the
 [DynamicComponent](https://docs.microsoft.com/en-us/aspnet/core/blazor/components/dynamiccomponent?view=aspnetcore-6.0)
-which displays a sub-component according to type:
+which displays a sub-component according to its type:
 
 ```csharp
 protected override void RenderMain()
@@ -317,4 +318,95 @@ protected override void RenderMain()
 }
 ```
 
+The `SmcComponentBase` also conveniently provides generic accessors for the
+`Fsm` and its `State`.
 
+## Comparison with bUnit
+
+Tests based on the new [bUnit](https://bunit.dev/) library draw upon ordinary
+unit tests running in the Test-Explorer of Visual Studio. As such, there is no
+web server and no Selenium invoved: A tests directly instantiates a component by
+calling the static `RenderComponent<T>()` factory which yields an
+`IRenderedComponent<T>` instance.
+
+This obtained object provides access to the `IRenderedFragment` produced by the
+Blazor component and also directly to its instance itself. There is no static
+`TestFocus` instance accessor and no synchronization necessary as with the
+Selenium tests, as instantiation and rendering happen synchronously within the
+test method. Assertions can directly read the global monolithic state object
+in both testing paradigms alike.
+
+The generated id HTML attributes for finding e.g. clickable buttons are as
+undocumented as the ones provided by Blazor itself and differ slightly:
+
+**Blazor Server**
+```html
+<button _bl_75ef2312-3b13-4dfe-925b-b29a10026a50="">Enter &gt;</button>
+```
+
+**bUnit**
+```html
+<button blazor:onclick="2" blazor:elementReference="d3e0716b-28b0-48d8-ac2e-33a3aa6cab47">Enter &gt;</button>
+```
+
+The reason for the difference lies in the fact that bUnit's internal `Htmlizer` is
+a modified copy of Blazor's internal
+[`HtmlRenderer`](https://source.dot.net/#Microsoft.AspNetCore.Mvc.ViewFeatures/RazorComponents/HtmlRenderer.cs)
+according to the source comments.
+
+In the bUnit documentation, these unambiguous instance reference id attributes
+are not used for finding HTML elements (they also turned out to be left empty in
+some cases, e.g. the enter button in the footer part of the
+`CalculatorComponent` after state changes in the example). Instead, these are
+located by arbitrary CSS selectors in the RenderFragment.
+
+Accessing elements by id is an inheritance from the original ASP.NET WebForms
+implementation of aspnettest. In WebForms, the `ClientID` property is *always*
+generated, while in Blazor it is only generated when there is a `@ref` reference
+to the element. One could argue that adding `@ref` component references just for
+accessing elements within tests clutters the application with otherwise
+unnecessary ids.
+
+### Semantic HTML comparison in bUnit
+
+It is encouraged to write tests as .razor classes in bUnit. These obviate the
+need for quoting the HTML to structurally compare expected and actual HTML:
+
+```csharp
+var title = cut.Find("h2");
+title.MarkupMatches(@<h2>RPN calculator</h2>);
+```
+
+However, IntelliSense seems to be less intelligent in .razor files and the
+"pythonic" [raw string
+literals](https://github.com/dotnet/csharplang/blob/main/proposals/raw-string-literal.md)
+in C# 11 provide another way to prevent having to quote quotation marks in HTML
+attributes.
+
+### The `BUnitTestContext`
+
+Without a browser, session persistence is not possible in the context of bUnit
+tests - but if the component under test is configured as persistent, it uses the
+corresponding services. Therefore the `BUnitTestContext` registers these
+formallly. An `IWebHostEnvironment` mock is created by
+[Moq](https://github.com/moq/moq).
+
+That specialized `Bunit.TestContext` also provides some helpers around bUnit's
+`blazor:elementReference` to be able to find HTML elements  in the "component
+under test" (`cut`) by its Blazor Component `Instance` accessor like this (from
+the `asptest.blazor.bunit` example):
+
+```csharp
+var cut = RenderComponent<CalculatorComponent>();
+cut.Find(Selector(cut.Instance.footer.enterButton)).Click();
+cut.Find(Selector(Dynamic<Enter>(cut.Instance.calculatorPart).operand)).Change("3.141");
+```
+
+Compared to the aspnettest/iselenium idiom with the static `Component` accessor in
+the test fixture class itself:
+
+```csharp
+Navigate("/");
+Click(Component.footer.enterButton);
+this.Write(Dynamic<Enter>(Component.calculatorPart).operand, "3.141");
+```

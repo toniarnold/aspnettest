@@ -120,7 +120,10 @@ namespace asplib.Services
                     PersistentMainFactory<T>.PerformPropertyInjection(provider, main);
                 }
 
-                _webSocketRequestCache[typeof(T)] = main;
+                if (httpContext != null)  // not bUnit
+                {
+                    _webSocketRequestCache[typeof(T)] = main;
+                }
                 return main;
             });
         }
