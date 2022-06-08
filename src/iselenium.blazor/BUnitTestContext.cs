@@ -15,7 +15,7 @@ using System.Text;
 using System.Threading.Tasks;
 using TestContext = Bunit.TestContext;
 
-namespace iselenium.blazor
+namespace iselenium
 {
     /// <summary>
     /// Extended Setup for our rich Component base classes in asplib.blazor
@@ -48,25 +48,6 @@ namespace iselenium.blazor
             Trace.Assert(typeof(T).IsAssignableFrom(dynamicObject.GetType()),
                 $"{dynamicObject.GetType()} is not of type {typeof(T)}");
             return (T)dynamicObject;
-        }
-
-        protected string Selector(ElementReference element)
-        {
-            return RefCssSelector(element.Id);
-        }
-
-        /// <summary>
-        /// CSS selector for @ref elements with quited blazor: namespace and the id in double quote
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        protected string RefCssSelector(string id)
-        {
-            return $"[blazor\\:elementReference=\"{id}\"]";
-        }
-
-        protected void Write(ElementReference element)
-        {
         }
     }
 }

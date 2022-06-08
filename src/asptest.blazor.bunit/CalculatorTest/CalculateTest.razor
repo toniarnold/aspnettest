@@ -1,4 +1,5 @@
 ﻿@using asp.blazor.Components.CalculatorParts
+@using iselenium
 @inherits CalculatorTestBase
 
 @code {
@@ -9,8 +10,7 @@
         Assert.That(cut.Markup, Does.Contain("RPN calculator"));      
         // More restrictive bUnit idiom:
         var title = cut.Find("h2");
-        title.MarkupMatches(@<h2>RPN calculator</h2>
-    );
+        title.MarkupMatches(@<h2>RPN calculator</h2>);
         // Initial state
         Assert.That(cut.Markup, Does.Contain("Map1.Splash"));
     }
@@ -19,7 +19,7 @@
     public void InitEnterTest()
     {
         var cut = RenderComponent<CalculatorComponent>(); 
-        cut.Find(Selector(cut.Instance.footer.enterButton)).Click();
+        cut.Find(cut.Instance.footer.enterButton).Click();
         Assert.Multiple(() =>
         {
             Assert.That(cut.Instance.State, Is.EqualTo(CalculatorContext.Map1.Enter));
@@ -30,12 +30,12 @@
     [Test]
     public void EnterTest()
     {
-        var cut = RenderComponent<CalculatorComponent>(); 
-        cut.Find(Selector(cut.Instance.footer.enterButton)).Click();
+        var cut = RenderComponent<CalculatorComponent>();
+        cut.Find(cut.Instance.footer.enterButton).Click();
         Assert.That(cut.Instance.State, Is.EqualTo(CalculatorContext.Map1.Enter));
-        cut.Find(Selector(Dynamic<Enter>(cut.Instance.calculatorPart).operand)).Change("3.141");
-        //cut.Find(Selector(cut.Instance.footer.enterButton)).Click();  // Id not set
-        cut.Find("button").Click();
+        cut.Find(Dynamic<Enter>(cut.Instance.calculatorPart).operand).Change("3.141");
+        //cut.Find(cut.Instance.footer.enterButton).Click();  // Id not set
+        cut.Find("#enterButton").Click();    
         Assert.Multiple(() =>
         {
             Assert.That(cut.Instance.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
@@ -45,28 +45,187 @@
         });
     }
 
-    //[Test]
-    //public void AddTest()
-    //{
-    //    var cut = RenderComponent<CalculatorComponent>(); 
-    //    cut.Find(Selector(cut.Instance.footer.enterButton)).Click();
-    //    Assert.That(cut.Instance.State, Is.EqualTo(CalculatorContext.Map1.Enter));
-    //    cut.Find(Selector(Dynamic<Enter>(cut.Instance.calculatorPart).operand)).Change("2");
-    //    cut.Find("button").Click();
-    //    Assert.That(cut.Instance.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
-    //    cut.Find(Selector(cut.Instance.footer.enterButton)).Click();
-    //    Assert.That(cut.Instance.State, Is.EqualTo(CalculatorContext.Map1.Enter));
-    //    cut.Find(Selector(Dynamic<Enter>(cut.Instance.calculatorPart).operand)).Change("3");
-    //    cut.Find("button").Click();
-    //    Assert.That(cut.Instance.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
-    //    var before = cut.Instance.Main.Stack.Count;
-    //    cut.Find(Selector(Dynamic<Calculate>(cut.Instance.calculatorPart).addButton)).Click();
-    //    Assert.Multiple(() =>
-    //    {
-    //        Assert.That(cut.Instance.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
-    //        Assert.That(cut.Instance.Main.Stack.Peek(), Is.EqualTo("5"));
-    //        Assert.That(cut.Instance.Main.Stack.Count, Is.EqualTo(before - 1));
-    //        Assert.That(cut.Markup, Does.Contain("5"));
-    //    });
-    //}
+    [Test]
+    public void AddTest()
+    {
+        var cut = RenderComponent<CalculatorComponent>();
+        cut.Find(cut.Instance.footer.enterButton).Click();
+        Assert.That(cut.Instance.State, Is.EqualTo(CalculatorContext.Map1.Enter));
+        cut.Find(Dynamic<Enter>(cut.Instance.calculatorPart).operand).Change("2");
+        cut.Find("#enterButton").Click();
+        Assert.That(cut.Instance.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
+        cut.Find("#enterButton").Click();
+        Assert.That(cut.Instance.State, Is.EqualTo(CalculatorContext.Map1.Enter));
+        cut.Find(Dynamic<Enter>(cut.Instance.calculatorPart).operand).Change("3");
+        cut.Find("#enterButton").Click();
+        Assert.That(cut.Instance.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
+        var before = cut.Instance.Main.Stack.Count;
+        cut.Find(Dynamic<Calculate>(cut.Instance.calculatorPart).addButton).Click();
+        Assert.Multiple(() =>
+        {
+            Assert.That(cut.Instance.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
+            Assert.That(cut.Instance.Main.Stack.Peek(), Is.EqualTo("5"));
+            Assert.That(cut.Instance.Main.Stack.Count, Is.EqualTo(before - 1));
+            Assert.That(cut.Markup, Does.Contain("5"));
+        });
+    }
+
+    [Test]
+    public void SubTest()
+    {
+        var cut = RenderComponent<CalculatorComponent>();
+        cut.Find(cut.Instance.footer.enterButton).Click();
+        Assert.That(cut.Instance.State, Is.EqualTo(CalculatorContext.Map1.Enter));
+        cut.Find(Dynamic<Enter>(cut.Instance.calculatorPart).operand).Change("12");
+        cut.Find("#enterButton").Click();
+        Assert.That(cut.Instance.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
+        cut.Find("#enterButton").Click();
+        Assert.That(cut.Instance.State, Is.EqualTo(CalculatorContext.Map1.Enter));
+        cut.Find(Dynamic<Enter>(cut.Instance.calculatorPart).operand).Change("3");
+        cut.Find("#enterButton").Click();
+        Assert.That(cut.Instance.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
+        var before = cut.Instance.Main.Stack.Count;
+        cut.Find(Dynamic<Calculate>(cut.Instance.calculatorPart).subButton).Click();
+        Assert.Multiple(() =>
+        {
+            Assert.That(cut.Instance.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
+            Assert.That(cut.Instance.Main.Stack.Peek(), Is.EqualTo("9"));
+            Assert.That(cut.Instance.Main.Stack.Count, Is.EqualTo(before - 1));
+            Assert.That(cut.Markup, Does.Contain("9"));
+        });
+    }
+
+    [Test]
+    public void MulTest()
+    {
+        var cut = RenderComponent<CalculatorComponent>();
+        cut.Find(cut.Instance.footer.enterButton).Click();
+        Assert.That(cut.Instance.State, Is.EqualTo(CalculatorContext.Map1.Enter));
+        cut.Find(Dynamic<Enter>(cut.Instance.calculatorPart).operand).Change("4");
+        cut.Find("#enterButton").Click();
+        Assert.That(cut.Instance.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
+        cut.Find("#enterButton").Click();
+        Assert.That(cut.Instance.State, Is.EqualTo(CalculatorContext.Map1.Enter));
+        cut.Find(Dynamic<Enter>(cut.Instance.calculatorPart).operand).Change("3");
+        cut.Find("#enterButton").Click();
+        Assert.That(cut.Instance.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
+        var before = cut.Instance.Main.Stack.Count;
+        cut.Find(Dynamic<Calculate>(cut.Instance.calculatorPart).mulButton).Click();
+        Assert.Multiple(() =>
+        {
+            Assert.That(cut.Instance.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
+            Assert.That(cut.Instance.Main.Stack.Peek(), Is.EqualTo("12"));
+            Assert.That(cut.Instance.Main.Stack.Count, Is.EqualTo(before - 1));
+            Assert.That(cut.Markup, Does.Contain("12"));
+        });
+    }
+
+    [Test]
+    public void DivTest()
+    {
+        var cut = RenderComponent<CalculatorComponent>();
+        cut.Find(cut.Instance.footer.enterButton).Click();
+        Assert.That(cut.Instance.State, Is.EqualTo(CalculatorContext.Map1.Enter));
+        cut.Find(Dynamic<Enter>(cut.Instance.calculatorPart).operand).Change("12");
+        cut.Find("#enterButton").Click();
+        Assert.That(cut.Instance.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
+        cut.Find("#enterButton").Click();
+        Assert.That(cut.Instance.State, Is.EqualTo(CalculatorContext.Map1.Enter));
+        cut.Find(Dynamic<Enter>(cut.Instance.calculatorPart).operand).Change("3");
+        cut.Find("#enterButton").Click();
+        Assert.That(cut.Instance.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
+        var before = cut.Instance.Main.Stack.Count;
+        cut.Find(Dynamic<Calculate>(cut.Instance.calculatorPart).divButton).Click();
+        Assert.Multiple(() =>
+        {
+            Assert.That(cut.Instance.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
+            Assert.That(cut.Instance.Main.Stack.Peek(), Is.EqualTo("4"));
+            Assert.That(cut.Instance.Main.Stack.Count, Is.EqualTo(before - 1));
+            Assert.That(cut.Markup, Does.Contain("4"));
+        });
+    }
+
+    [Test]
+    public void PowTest()
+    {
+        var cut = RenderComponent<CalculatorComponent>();
+        cut.Find(cut.Instance.footer.enterButton).Click();
+        Assert.That(cut.Instance.State, Is.EqualTo(CalculatorContext.Map1.Enter));
+        cut.Find(Dynamic<Enter>(cut.Instance.calculatorPart).operand).Change("2");
+        cut.Find("#enterButton").Click();
+        var before = cut.Instance.Main.Stack.Count;
+        cut.Find(Dynamic<Calculate>(cut.Instance.calculatorPart).powButton).Click();
+        Assert.Multiple(() =>
+        {
+            Assert.That(cut.Instance.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
+            Assert.That(cut.Instance.Main.Stack.Peek(), Is.EqualTo("4"));
+            Assert.That(cut.Instance.Main.Stack.Count, Is.EqualTo(before));
+            Assert.That(cut.Markup, Does.Contain("4"));
+        });
+    }
+
+    [Test]
+    public void SqrtTest()
+    {
+        var cut = RenderComponent<CalculatorComponent>();
+        cut.Find(cut.Instance.footer.enterButton).Click();
+        Assert.That(cut.Instance.State, Is.EqualTo(CalculatorContext.Map1.Enter));
+        cut.Find(Dynamic<Enter>(cut.Instance.calculatorPart).operand).Change("49");
+        cut.Find("#enterButton").Click();
+        var before = cut.Instance.Main.Stack.Count;
+        cut.Find(Dynamic<Calculate>(cut.Instance.calculatorPart).sqrtButton).Click();
+        Assert.Multiple(() =>
+        {
+            Assert.That(cut.Instance.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
+            Assert.That(cut.Instance.Main.Stack.Peek(), Is.EqualTo("7"));
+            Assert.That(cut.Instance.Main.Stack.Count, Is.EqualTo(before));
+            Assert.That(cut.Markup, Does.Contain("7"));
+        });
+    }
+
+    [Test]
+    public void ClrTest()
+    {
+        var cut = RenderComponent<CalculatorComponent>();
+        cut.Find(cut.Instance.footer.enterButton).Click();
+        Assert.That(cut.Instance.State, Is.EqualTo(CalculatorContext.Map1.Enter));
+        cut.Find(Dynamic<Enter>(cut.Instance.calculatorPart).operand).Change("2");
+        cut.Find("#enterButton").Click();
+        Assert.That(cut.Instance.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
+        cut.Find("#enterButton").Click();
+        Assert.That(cut.Instance.State, Is.EqualTo(CalculatorContext.Map1.Enter));
+        cut.Find(Dynamic<Enter>(cut.Instance.calculatorPart).operand).Change("3");
+        cut.Find("#enterButton").Click();
+        Assert.That(cut.Instance.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
+        var before = cut.Instance.Main.Stack.Count;
+        cut.Find(Dynamic<Calculate>(cut.Instance.calculatorPart).clrButton).Click();
+        Assert.Multiple(() =>
+        {
+            Assert.That(cut.Instance.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
+            Assert.That(cut.Instance.Main.Stack.Count, Is.EqualTo(before - 1));
+        });
+    }
+
+    [Test]
+    public void ClrAllTest()
+    {
+        var cut = RenderComponent<CalculatorComponent>();
+        cut.Find(cut.Instance.footer.enterButton).Click();
+        Assert.That(cut.Instance.State, Is.EqualTo(CalculatorContext.Map1.Enter));
+        cut.Find(Dynamic<Enter>(cut.Instance.calculatorPart).operand).Change("2");
+        cut.Find("#enterButton").Click();
+        Assert.That(cut.Instance.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
+        cut.Find("#enterButton").Click();
+        Assert.That(cut.Instance.State, Is.EqualTo(CalculatorContext.Map1.Enter));
+        cut.Find(Dynamic<Enter>(cut.Instance.calculatorPart).operand).Change("3");
+        cut.Find("#enterButton").Click();
+        Assert.That(cut.Instance.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
+        var before = cut.Instance.Main.Stack.Count;
+        cut.Find(Dynamic<Calculate>(cut.Instance.calculatorPart).clrAllButton).Click();
+        Assert.Multiple(() =>
+        {
+            Assert.That(cut.Instance.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
+            Assert.That(cut.Instance.Main.Stack.Count, Is.EqualTo(0));
+        });
+    }
 }

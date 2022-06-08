@@ -337,16 +337,16 @@ test method. Assertions can directly read the global monolithic state object
 in both testing paradigms alike.
 
 The generated id HTML attributes for finding e.g. clickable buttons are as
-undocumented as the ones provided by Blazor itself and differ slightly:
+undocumented in bUnit as the ones provided by Blazor itself and differ slightly:
 
 **Blazor Server**
 ```html
-<button _bl_75ef2312-3b13-4dfe-925b-b29a10026a50="">Enter &gt;</button>
+<button _bl_75ef2312-3b13-4dfe-925b-b29a10026a50="">Enter</button>
 ```
 
 **bUnit**
 ```html
-<button blazor:onclick="2" blazor:elementReference="d3e0716b-28b0-48d8-ac2e-33a3aa6cab47">Enter &gt;</button>
+<button blazor:onclick="2" blazor:elementReference="d3e0716b-28b0-48d8-ac2e-33a3aa6cab47">Enter</button>
 ```
 
 The reason for the difference lies in the fact that bUnit's internal `Htmlizer` is
@@ -360,12 +360,18 @@ some cases, e.g. the enter button in the footer part of the
 `CalculatorComponent` after state changes in the example). Instead, these are
 located by arbitrary CSS selectors in the RenderFragment.
 
+**WebForms**
+```html
+<input type="submit" name="ctl00$ContentPlaceHolder1$calculator$footer$enterButton" value="Enter" id="ContentPlaceHolder1_calculator_footer_enterButton">
+```
+
 Accessing elements by id is an inheritance from the original ASP.NET WebForms
-implementation of aspnettest. In WebForms, the `ClientID` property is *always*
-generated, while in Blazor it is only generated when there is a `@ref` reference
-to the element. One could argue that adding `@ref` component references just for
-accessing elements within tests clutters the application with otherwise
-unnecessary ids.
+implementation of aspnettest. In WebForms, the publicly documented
+[ClientID](https://docs.microsoft.com/en-us/dotnet/api/system.web.ui.control.clientid)
+property is *always* generated for web controls, while in Blazor it is only
+generated implicitly when there is an explicit `@ref` reference to the element.
+One could argue that adding `@ref` component references just for accessing
+elements within tests clutters the application with otherwise unnecessary ids.
 
 ### Semantic HTML comparison in bUnit
 
@@ -398,8 +404,8 @@ the `asptest.blazor.bunit` example):
 
 ```csharp
 var cut = RenderComponent<CalculatorComponent>();
-cut.Find(Selector(cut.Instance.footer.enterButton)).Click();
-cut.Find(Selector(Dynamic<Enter>(cut.Instance.calculatorPart).operand)).Change("3.141");
+cut.Find(Dynamic<Enter>(cut.Instance.calculatorPart).operand).Change("3.141");
+cut.Find(cut.Instance.footer.enterButton).Click();
 ```
 
 Compared to the aspnettest/iselenium idiom with the static `Component` accessor in
@@ -407,6 +413,6 @@ the test fixture class itself:
 
 ```csharp
 Navigate("/");
-Click(Component.footer.enterButton);
 this.Write(Dynamic<Enter>(Component.calculatorPart).operand, "3.141");
+Click(Component.footer.enterButton);
 ```

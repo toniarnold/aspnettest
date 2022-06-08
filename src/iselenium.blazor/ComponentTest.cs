@@ -116,10 +116,12 @@ namespace iselenium
             Click(By.CssSelector, $"*[{component.Element?.IdAttr()}]", index: 0, expectRequest, awaitRemoved: null, expectedStatusCode, delay: 0, pause: 0, wait: 0, expectRender: expectRender);
         }
 
-        //public void Click<T>(InputRadio<T> component,bool expectRequest = false, int expectedStatusCode = 200, bool expectRender = true)
-        //{
-        //    Click(By.CssSelector, $"*[{component.Element?.IdAttr()}]", index: 0, expectRequest,awaitRemoved: null, expectedStatusCode, delay: 0, pause: 0, wait: 0, expectRender: expectRender);
-        //}
+#if NET7_0_OR_GREATER
+        public void Click<T>(InputRadio<T> component, bool expectRequest = false, int expectedStatusCode = 200, bool expectRender = true)
+        {
+            Click(By.CssSelector, $"*[{component.Element?.IdAttr()}]", index: 0, expectRequest, awaitRemoved: null, expectedStatusCode, delay: 0, pause: 0, wait: 0, expectRender: expectRender);
+        }
+#endif
 
         public void Click<T>(InputSelect<T> component, bool expectRequest = false, int expectedStatusCode = 200, bool expectRender = true)
         {
