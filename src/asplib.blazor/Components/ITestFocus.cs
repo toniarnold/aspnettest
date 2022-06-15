@@ -50,5 +50,15 @@
                 }
             }
         }
+
+        /// <summary>
+        /// True when the component is in focus (after SetFocus())
+        /// </summary>
+        /// <param name="component"></param>
+        /// <returns></returns>
+        public static bool HasFocus(this ITestFocus focussableComponent)
+        {
+            return TestFocus.HasFocus(focussableComponent.GetType());
+        }
     }
 }

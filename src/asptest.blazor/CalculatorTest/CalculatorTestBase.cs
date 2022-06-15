@@ -1,7 +1,7 @@
-﻿using asp.blazor.Components;
+﻿using asp.blazor.CalculatorSmc;
+using asp.blazor.Components;
 using iselenium;
 using OpenQA.Selenium;
-using asp.blazor.CalculatorSmc;
 using System.Collections.Generic;
 
 namespace asptest.CalculatorTest

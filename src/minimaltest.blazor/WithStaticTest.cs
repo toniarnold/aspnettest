@@ -20,6 +20,8 @@ namespace minimaltest.blazor
         {
             Navigate("/Withstatic");
             Assert.That(Html(), Does.Contain(">minimalist test setup with static main</h1>"));
+            Find("h1").MarkupMatches(
+                @"<h1 tabindex='-1'>minimalist test setup with static main</h1>");
         }
 
         [Test]
@@ -31,6 +33,10 @@ namespace minimaltest.blazor
             Assert.That(Main, Has.Exactly(1).Items);
             var firstString = Main[0];
             Assert.That(firstString, Is.EqualTo("a first content line"));
+            Find("ul").MarkupMatches(
+                @"<ul>
+                    <li>a first content line</li>
+                  </ul>");
 
             Write(Component.contentTextBox, "a second content line");
             Click(Component.submitButton);
@@ -39,6 +45,11 @@ namespace minimaltest.blazor
             Assert.That(firstString2, Is.EqualTo("a first content line"));
             var secondString = Main[1];
             Assert.That(secondString, Is.EqualTo("a second content line"));
+            Find("ul").MarkupMatches(
+                @"<ul>
+                    <li>a first content line</li>
+                    <li>a second content line</li>
+                  </ul>");
         }
     }
 }

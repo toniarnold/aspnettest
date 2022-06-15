@@ -11,6 +11,8 @@
   * [Using the test project](#using-the-test-project)
 * [`asp.blazor` with the SMC](#aspblazor-with-the-smc)
   * [The RenderMain override](#the-rendermain-override)
+* [`EditForm` handling](#editform-handling)
+  * [`select` and `InputSelect` inputs](#select-and-inputselect-inputs)
 * [Comparison with bUnit](#comparison-with-bunit)
   * [Semantic HTML comparison in bUnit](#semantic-html-comparison-in-bunit)
   * [The `BUnitTestContext`](#the-bunittestcontext)
@@ -321,6 +323,40 @@ protected override void RenderMain()
 The `SmcComponentBase` also conveniently provides generic accessors for the
 `Fsm` and its `State`.
 
+## `EditForm` handling
+
+A Blazor component containing a validating `EditForm` will not trigger
+`OnAfterRender()` when submitting with a validation failure by itself. But when
+derived from `StaticOwningComponentBase<T>`, `AddEditContextTestFocus()`
+automatically adds a `OnValidationStateChanged` handler which will re-render the
+component also on validation failure, which in turn triggers the usual
+`TestFocus` synchronization. Wire it up immediately after the the `editContext`
+instantiation:
+
+```csharp
+protected override void OnInitialized()
+{
+    editContext = new(Main);
+    this.AddEditContextTestFocus(editContext);
+}
+```
+
+### `select` and `InputSelect` inputs
+
+The former is as direct HTML `<select>` element, the latter a Blazor Input
+component which is rendered as `<select multiple="">` HTML element. They
+currently cannot be selected by its instance, but individual options clicked on
+by CSS selectors like this multi select example:
+
+```csharp
+Click(By.CssSelector, "#saladSelection > option[value=Corn]", expectRender: false);
+Click(By.CssSelector, "#saladSelection > option[value=Lentils]", expectRender: false);
+```
+
+The non-default `expectRender: false` has to be added to prevent triggering
+`TestFocus` synchronization.
+
+
 ## Comparison with bUnit
 
 Tests based on the new [bUnit](https://bunit.dev/) library draw upon ordinary
@@ -388,6 +424,23 @@ However, IntelliSense seems to be less intelligent in .razor files and the
 literals](https://github.com/dotnet/csharplang/blob/main/proposals/raw-string-literal.md)
 in C# 11 provide another way to prevent having to quote quotation marks in HTML
 attributes.
+
+The [semantic HTML comparer from
+bUnit](https://bunit.dev/docs/verification/verify-markup.html) is also available
+in `iselenium` (including [bUnit-style
+Find()](https://bunit.dev/docs/verification/verify-markup.html#finding-nodes-with-the-find-and-findall-methods)
+methods retrieving a Selenium
+[`IWebElement`](https://www.selenium.dev/selenium/docs/api/dotnet/html/T_OpenQA_Selenium_IWebElement.htm)
+instead of an AngleSharp `INode` from bUnit). Here's an example from
+`WithStaticTest`:
+
+```csharp
+Find("ul").MarkupMatches(
+    @"<ul>
+        <li>a first content line</li>
+        <li>a second content line</li>
+      </ul>");
+```
 
 ### The `BUnitTestContext`
 

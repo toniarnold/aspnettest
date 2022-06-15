@@ -1,0 +1,93 @@
+﻿@page "/forms"
+
+@using asplib.Components
+@using asplib.Model
+@using Microsoft.Extensions.Logging
+@inject ILogger<Forms> Logger
+
+@inherits PersistentComponentBase<Models.FormsModel>
+
+<h3>Forms</h3>
+
+<EditForm EditContext="@editContext" OnValidSubmit="@HandleValidSubmit">
+    <DataAnnotationsValidator />
+    <ValidationSummary />
+    <div class="row">
+        <div class="col-25">
+            <label for="check">Check</label>
+        </div>
+        <div class="col-75">
+            <InputCheckbox id="check" @ref="check" @bind-Value="Main.Check" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-25">
+            <label for="date">Date</label>
+        </div>
+        <div class="col-75">
+            <InputDate id="date" @ref="date" @bind-Value="Main.Date" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-25">
+            <label for="decimal">Decimal</label>
+        </div>
+        <div class="col-75">
+            <InputNumber id="decimal" @ref="dec" @bind-Value="Main.Decimal" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-25">
+            <label for="integer">Integer</label>
+        </div>
+        <div class="col-75">
+            <InputNumber id="integer" @ref="integer" @bind-Value="Main.Integer" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-25">
+            <label for="someSalad">Some Salad</label>
+        </div>
+        <div class="col-75">
+            <select @bind="Main.SomeSalad" id="someSalad" @ref="someSalad" >
+                <option value="Beans">Beans</option>
+                <option value="Corn">Corn</option>
+                <option value="Eggs">Eggs</option>
+                <option value="Lentils">Lentils</option>
+            </select>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-25">
+            <label for="select">Salad Combination</label>
+        </div>
+        <div class="col-75">
+            <InputSelect id="saladSelection" @bind-Value="Main.SaladSelection" >
+                <option value="Beans">Beans</option>
+                <option value="Corn">Corn</option>
+                <option value="Eggs">Eggs</option>
+                <option value="Lentils">Lentils</option>
+            </InputSelect>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-25">
+            <label for="line">Line</label>
+        </div>
+        <div class="col-75">
+            <InputText id="line" @ref="line" @bind-Value="Main.Line" />
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-25">
+            <label for="paragraph">Paragraph</label>
+        </div>
+        <div class="col-75">
+            <InputTextArea id="paragraph" @ref="paragraph" @bind-Value="Main.Paragraph" />
+        </div>
+    </div>
+    <div class="row">
+        <button type="submit" id="submit" @ref="submit" >Submit</button>
+    </div>
+</EditForm>
+

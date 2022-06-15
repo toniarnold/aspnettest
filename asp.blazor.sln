@@ -25,7 +25,7 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "calculator.blazor", "src\as
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iselenium.blazor", "src\iselenium.blazor\iselenium.blazor.csproj", "{C42178F0-41FC-4631-8EEF-A50C4020E83C}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "asptest.blazor.bunit", "src\asptest.blazor.bunit\asptest.blazor.bunit.csproj", "{CF3AD587-533F-4944-A47E-213AE41F4DF6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "asptest.blazor.bunit", "src\asptest.blazor.bunit\asptest.blazor.bunit.csproj", "{CF3AD587-533F-4944-A47E-213AE41F4DF6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

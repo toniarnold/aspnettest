@@ -1,12 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using asplib.Model;
+﻿using asplib.Model;
 using NUnit.Framework;
 using OpenQA.Selenium;
-using OpenQA.Selenium.Edge;
 
 namespace asptest.CalculatorTest
 {

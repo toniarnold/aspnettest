@@ -1,6 +1,4 @@
-﻿using System.ComponentModel;
-
-namespace asplib.Model
+﻿namespace asplib.Model
 {
     /// <summary>
     /// Dynamically added attribute to mark an instance as requested by GET

@@ -4,7 +4,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Logging.Abstractions;
 using System;
 using System.Data.SqlClient;
-using System.Diagnostics;
 using System.Linq;
 
 namespace asplib.Model.Db

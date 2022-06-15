@@ -63,7 +63,7 @@ namespace iselenium
         /// is true.
         /// </summary>
         /// <param name="selector">Selenium By selector function</param>
-        /// <param name="selector">string passed to the selector function</param>
+        /// <param name="selectString">string passed to the selector function</param>
         /// <param name="expectRequest">Whether to expect a GET/POST request to the server from the click</param>
         /// <param name="awaitRemoved">Whether to wait for the HTML element to disappear (in an SPA)</param>
         /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>///
