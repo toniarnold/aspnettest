@@ -47,20 +47,17 @@ namespace asptest.blazor.bunit
             cut.Find("#date").Change("2022-05-15");    // Unlike with iSelenium, "15.5.2022" is not recognized
             cut.Find("#decimal").Change("9876543.21");
             cut.Find("#integer").Change("256");
-            // Single select -> will be Eggs
+            // 2* single select -> will be Eggs
             cut.Find("#someSalad").Change("Corn");
             cut.Find("#someSalad").Change("Eggs");
-            // Multiple select does not work the same way in current bUnit 1.9.8, the SaladSelection assertion fails, as nothing gets selected.
-            //cut.Find("#saladSelection > option[value=Corn]").Click(); // Bunit.MissingEventHandlerException : The element does not have an event handler for the event 'onclick'. It does however have an event handler for the 'onchange' event.
-            cut.Find("#saladSelection").Change("Corn");
-            cut.Find("#saladSelection").Change("Lentils");
+            // select with list
+            cut.Find("#saladSelection").Change(new string[] { "Corn", "Lentils" });
             cut.Find("#line").Change("one-liner");
             cut.Find("#paragraph").Change(@"
                 Line 1
                 Line 2");
 
             cut.Find("#submit").Click();
-            var validationErrrors = cut.Find(".validation-errors");
 
             Assert.Multiple(() =>
             {
@@ -70,6 +67,8 @@ namespace asptest.blazor.bunit
                 Assert.That(cut.Instance.Main.Integer, Is.EqualTo(256));
                 Assert.That(cut.Instance.Main.SomeSalad, Is.EqualTo(Salad.Eggs));
                 Assert.That(cut.Instance.Main.SaladSelection, Has.Length.EqualTo(2));
+                Assert.That(cut.Instance.Main.SaladSelection[0], Is.EqualTo(Salad.Corn));
+                Assert.That(cut.Instance.Main.SaladSelection[1], Is.EqualTo(Salad.Lentils));
                 Assert.That(cut.Instance.Main.Line, Is.EqualTo("one-liner"));
                 Assert.That(cut.Instance.Main.Paragraph, Is.EqualTo(@"
                 Line 1
