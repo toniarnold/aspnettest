@@ -43,7 +43,7 @@ namespace asptest.blazor.bunit
             // Various methods to fill the elements
             //cut.Find(cut.Instance.check).Click();   // Bunit.MissingEventHandlerException : The element does not have an event handler for the event 'onclick'. It does however have an event handler for the 'onchange' event.
             cut.Find(cut.Instance.check).Change(true);
-            // ReferenceCaptureId deleted now, fall back to #id selector, see: https://github.com/bUnit-dev/bUnit/issues/7
+            // ReferenceCaptureId deleted now, fall back to #id selector, see: https://github.com/bUnit-dev/bUnit/issues/749
             cut.Find("#date").Change("2022-05-15");    // Unlike with iSelenium, "15.5.2022" is not recognized
             cut.Find("#decimal").Change("9876543.21");
             cut.Find("#integer").Change("256");
