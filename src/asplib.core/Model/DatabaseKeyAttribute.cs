@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.AspNetCore.DataProtection;
 
 namespace asplib.Model
 {
@@ -9,11 +10,19 @@ namespace asplib.Model
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
     public class DatabaseKeyAttribute : Attribute
     {
-        internal byte[] Key;
+        private static IDataProtector _protector;
+        private readonly byte[] _key;
+
+        internal byte[] Key => _protector.Unprotect(_key);
 
         public DatabaseKeyAttribute(byte[] key)
         {
-            this.Key = key;
+            if (_protector == null)
+            {
+                var provider = DataProtectionProvider.Create("asplib");
+                _protector = provider.CreateProtector("DatabaseKeyAttribute");
+            }
+            _key = _protector.Protect(key);
         }
     }
 }
