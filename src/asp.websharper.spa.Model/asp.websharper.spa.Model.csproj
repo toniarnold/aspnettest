@@ -8,6 +8,10 @@
     <ProjectReference Include="..\asplib.core\asplib.core.csproj" />
     <ProjectReference Include="..\asplib.websharper\asplib.websharper.csproj" />
     <ProjectReference Include="..\asplib\asplib.csproj" />
+    <ProjectReference Include="smc\calculator.websharper.spa.vcxproj">
+      <Name>calculator.websharper.spa</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
   </ItemGroup>
 
 </Project>

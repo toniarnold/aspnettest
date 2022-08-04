@@ -19,7 +19,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\asplib.blazor\asplib.blazor.csproj" />
-	  <ProjectReference Include="..\iselenium.core\iselenium.core.csproj" />
+    <ProjectReference Include="..\iselenium.core\iselenium.core.csproj" />
+    <ProjectReference Include="TestRunnerSmc\testrunner.sm.vcxproj">
+      <Name>testrunner.sm</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
   </ItemGroup>
 
 </Project>

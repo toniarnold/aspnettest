@@ -4,13 +4,17 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-	<EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
+    <EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
   </PropertyGroup>
 
   <ItemGroup>
     <ProjectReference Include="..\asplib.blazor\asplib.blazor.csproj" />
     <ProjectReference Include="..\iselenium.blazor\iselenium.blazor.csproj" />
     <ProjectReference Include="..\smc\smc.csproj" />
+    <ProjectReference Include="CalculatorSmc\calculator.blazor.vcxproj">
+      <Name>calculator.blazor</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
   </ItemGroup>
 
   <ItemGroup>

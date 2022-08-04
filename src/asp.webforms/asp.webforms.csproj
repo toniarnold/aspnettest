@@ -219,6 +219,11 @@
       <Project>{079cccf0-0fb4-463a-81dc-98493d097d6a}</Project>
       <Name>smc</Name>
     </ProjectReference>
+    <ProjectReference Include="calculator\Control\calculator.webforms.vcxproj">
+      <Project>{69EB69AB-0D24-4974-8D7D-2D2CDB62DCFA}</Project>
+      <Name>calculator.webforms</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Service Include="{508349B6-6B84-4DF5-91F0-309BEEBAD82D}" />

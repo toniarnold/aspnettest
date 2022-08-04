@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net5.0</TargetFramework>
     <RootNamespace>asp</RootNamespace>
-	<EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
+    <EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
   </PropertyGroup>
 
   <ItemGroup>
@@ -21,6 +21,10 @@
     <ProjectReference Include="..\asplib\asplib.csproj" />
     <ProjectReference Include="..\iselenium.core\iselenium.core.csproj" />
     <ProjectReference Include="..\smc\smc.csproj" />
+    <ProjectReference Include="Controllers\calculator.core.vcxproj">
+      <Name>calculator.core</Name>
+      <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
+    </ProjectReference>
   </ItemGroup>
 
   <ItemGroup>
