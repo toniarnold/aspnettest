@@ -44,8 +44,8 @@
           <FullPath>APISERVICE_DB.populate-tables.sql</FullPath>
         </FileNode>
         <FileNode Name="ASP_DB.clean.sql">
-          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:HP:True</AssociatedConnectionMoniker>
-          <AssociatedConnSrvName>HP</AssociatedConnSrvName>
+          <AssociatedConnectionMoniker>8c91a03d-f9b4-46c0-a305-b5dcc79ff907:WORK:True</AssociatedConnectionMoniker>
+          <AssociatedConnSrvName>WORK</AssociatedConnSrvName>
           <AssociatedConnUserName />
           <FullPath>ASP_DB.clean.sql</FullPath>
         </FileNode>
