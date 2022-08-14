@@ -15,7 +15,7 @@ namespace iie
                         Headers: new[] { Http.Header.Custom("Content-Type", "application/xml") },
                         WriteBody: stream =>
                         {
-                            using (var w = new System.IO.StreamWriter(stream))
+                            using (var w = new System.IO.StreamWriter(stream, leaveOpen: true))
                             {
                                 w.Write(TestRunner.StaticResultString);
                             }

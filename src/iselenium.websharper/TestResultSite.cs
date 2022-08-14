@@ -22,7 +22,7 @@ namespace iselenium
                         Headers: new[] { Http.Header.Custom("Content-Type", "application/xml; charset=UTF-8") },
                         WriteBody: stream =>
                         {
-                            using (var writer = new StreamWriter(stream))
+                            using (var writer = new StreamWriter(stream, leaveOpen: true))
                             {
                                 writer.Write(TestRunner.ResultXml);
                             }
