@@ -21,6 +21,7 @@
   <ItemGroup>
     <Reference Include="minimaltest.blazor">
       <HintPath>..\bin\minimaltest.blazor.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
 

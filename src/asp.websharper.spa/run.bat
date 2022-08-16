@@ -1,3 +1,3 @@
 :Start
-.\bin\Debug\netcoreapp3.1\asp.websharper.spa.exe --urls=http://localhost:5000
+dotnet run --no-build
 GOTO Start

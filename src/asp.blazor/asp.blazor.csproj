@@ -30,6 +30,7 @@
   <ItemGroup>
     <Reference Include="asptest.blazor">
       <HintPath>..\bin\asptest.blazor.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
 

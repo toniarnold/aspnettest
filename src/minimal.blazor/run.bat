@@ -1,5 +1,4 @@
 ECHO %ASPNETCORE_ENVIRONMENT%
 :Start
-CD .\bin\Release\net6.0\publish\
-minimal.blazor.exe
+dotnet run --no-build
 GOTO Start

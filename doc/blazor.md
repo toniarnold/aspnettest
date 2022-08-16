@@ -274,7 +274,8 @@ diff --binary $(TargetPath) $(SolutionDir)\src\bin
 if errorlevel 1 xcopy /d /f /y $(TargetDir)\$(TargetName).* $(SolutionDir)\src\bin
 ```
 
-and then reference the DLL created directly in the Blazor application under test.
+and then reference the DLL created directly in the Blazor application under
+test. Set "Copy Local" to true, as the TestRunnerBase loads the DLL from there.
 
 The TestRunnerBase will load the DLL from the `bin` path parent to the
 `Environment.ContentRootPath` which only works when run from VisualStudio

@@ -39,6 +39,7 @@
   <ItemGroup>
     <Reference Include="asptest.websharper.spa.fs">
       <HintPath>..\bin\asptest.websharper.spa.fs.dll</HintPath>
+      <Private>True</Private>
     </Reference>
   </ItemGroup>
 

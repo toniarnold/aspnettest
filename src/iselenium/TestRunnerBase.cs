@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Reflection;
 using System.Xml;
 
 namespace iselenium
@@ -185,6 +186,13 @@ namespace iselenium
             get => string.Join("<br />", this.Summary);
         }
 
+        /// <summary>
+        /// Load the assembly testproject.dll from the bin directory (side by side deploy)
+        /// </summary>
+        /// <param name="testproject">DLL name (without suffix) of the test project</param>
+        /// <param name="approot">unused</param>
+        /// <param name="testFilterWhere">NUnit TestFilter WHERE string, e.g. name==TestName</param>
+        /// <param name="listener">Test event callback</param>
         public void Run(string testproject, string approot, string testFilterWhere, ITestEventListener listener = null)
         {
             try
@@ -195,7 +203,9 @@ namespace iselenium
                 // diff / if errorlevel 1 xcopy construct in the post build event
                 // to avoid endlessly recompiling a newer, but identical DLL
                 // in a cyclic dependency loop.
-                var dll = Path.GetFullPath(Path.Combine(approot, "..", "bin", testproject + ".dll"));
+                // Assembly.location is isolated in .NET Framework, therefore use .CodeBase which points to ./bin
+                var binPath = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).AbsolutePath);
+                var dll = Path.Combine(binPath, testproject + ".dll");
                 var package = new TestPackage(dll);
                 // NUnit.EnginePackageSettings
                 package.AddSetting("ProcessModel", "Single");

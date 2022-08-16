@@ -1,3 +1,3 @@
 :Start
-.\bin\Debug\netcoreapp3.1\minimal.core.exe
+dotnet run --no-build
 GOTO Start

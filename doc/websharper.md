@@ -4,9 +4,10 @@
 * [Controller persistence](#controller-persistence)
 * [State driven document part visibility](#state-driven-document-part-visibility)
 
-*IntellyFactory seems to have abandoned WebSharper in favor of Bolero (Blazor
+*IntellyFactory seems to have deprecated WebSharper in favor of Bolero (Blazor
 Server in F#, see the [WebSharper Blog](https://forums.websharper.com/blogs)),
-and asp.websharper.spa.fs now even crashes wsfsc.exe ([Bug #5](/../../issues/5)).*
+and asp.websharper.spa.fs now even crashes wsfsc.exe ([Bug #5](/../../issues/5)).
+Anyway, they have finally released a version for .NET 6.0 in July 2022.*
 
 ## Summary
 

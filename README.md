@@ -4,7 +4,8 @@
 
 [Technical Documentation](./doc/toc.md)
 
-[Most recent development: Blazor Server](./doc/blazor.md)
+[Most recent development: Blazor Server](./doc/blazor.md),
+[LinkedIn-Artikelserie (in German)](https://www.linkedin.com/pulse/blazor-1-disruptive-entwicklungen-toni-arnold)
 
 *While* reading above article on Dr. Dobb's, I immediately knew: 
 "This is it!" - even more so on the ASP.NET stack. Quote from  the article:
