@@ -228,6 +228,10 @@ namespace asplib.Model
             {
                 bytes = db.LoadMain(session);
             }
+            if (bytes == null)
+            {
+                throw new ArgumentException($"No data for session={session}");
+            }
             return (bytes, filter);
         }
 

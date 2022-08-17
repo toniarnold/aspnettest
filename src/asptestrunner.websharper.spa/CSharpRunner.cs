@@ -16,7 +16,7 @@ namespace asptestrunner
         public void SetUp()
         {
             var config = this.GetConfig();
-            this.StartServer(config, server: config["ServerCSharp"], root: config["RootCSharp"]);
+            this.StartServer(config, serverproject: config["ServerProjectCSharp"], root: config["RootCSharp"]);
         }
 
         [TearDown]

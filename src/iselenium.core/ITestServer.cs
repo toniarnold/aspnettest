@@ -38,8 +38,8 @@ namespace iselenium
 
         /// <summary>
         /// Start the web application .exe as web server according to appsettings.json:
-        /// Server: path to the server.exe (the .NET Core binary)
-        /// Root: server application root directory
+        /// ServerProject: Filename of the project file for dotnet run in the root directory
+        /// Root: server application root directory, relative to the test binary
         /// Port: port to listen on
         /// RequestTimeout: expected duration of all tests in sec
         /// ServerStartTimeout: expected start time of the server in sec
@@ -53,32 +53,32 @@ namespace iselenium
         /// <summary>
         /// Start the web application .exe as web server with optional parameters
         /// overriding the default configuration in appsettings.json:
-        /// Server: path to the server.exe (the .NET Core binary)
-        /// Root: server application root directory
+        /// ServerProject: Filename of the project file for dotnet run in the root directory
+        /// Root: server application root directory, relative to the test binary
         /// Port: port to listen on
         /// RequestTimeout: expected duration of all tests in sec
         /// ServerStartTimeout: expected start time of the server in sec
         /// Can be called multiple times to start auxiliary service processes.
         /// </summary>
         /// <param name="config">default configuration</param>
-        /// <param name="server">explicit path to the server.exe (the .NET Core binary)</param>
-        /// <param name="root">explicit server application root directory</param>
+        /// <param name="serverproject">Filename of the project file for dotnet run in the root directory</param>
+        /// <param name="root">explicit server application root directory, relative to the test binary</param>
         /// <param name="port">explicit port to listen on</param>
         /// <param name="timeout">explicit expected duration of all tests in sec</param>
         /// <param name="servertimeout">expected start time of the server in sec</param>
         public static void StartServer(this ITestServer inst, IConfiguration config,
-                                       string server = null, string root = null, int? port = null,
+                                       string serverproject = null, string root = null, int? port = null,
                                        int? timeout = null, int? servertimeout = null)
         {
-            string cserver = server ?? config["Server"];
+            string cserverproject = serverproject ?? config["ServerProject"];
             string croot = root ?? config["Root"];
             int cport = port ?? config.GetValue<int>("Port");
             int ctimeout = timeout ?? config.GetValue<int>("RequestTimeout");
             int cservertimeout = servertimeout ?? config.GetValue<int>("ServerStartTimeout");
 
             var info = new ProcessStartInfo();
-            info.FileName = Path.GetFullPath(Path.Join(TestContext.CurrentContext.WorkDirectory, cserver));
-            info.Arguments = String.Format("--urls=http://localhost:{0}/", cport);
+            info.FileName = Path.Join(System.Environment.GetEnvironmentVariable("ProgramFiles"), "dotnet", "dotnet.exe");
+            info.Arguments = $"run --no-build --project {cserverproject} -- --urls=http://localhost:{cport}/";
             info.WorkingDirectory = Path.GetFullPath(Path.Join(TestContext.CurrentContext.WorkDirectory, croot));
             info.UseShellExecute = true;
             if (inst.ServerProcesses == null)

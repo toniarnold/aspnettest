@@ -21,6 +21,8 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "doc", "doc\doc.vcxproj", "{
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "iselenium.blazor", "src\iselenium.blazor\iselenium.blazor.csproj", "{AA25DDB7-3A64-478F-B04F-EB6C9D5ACE6C}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "minimaltestrunner.blazor", "src\minimaltestrunner.blazor\minimaltestrunner.blazor.csproj", "{89E3E911-D34A-4A19-9BC7-C888DA22C7F5}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -139,6 +141,18 @@ Global
 		{AA25DDB7-3A64-478F-B04F-EB6C9D5ACE6C}.Release|x64.Build.0 = Release|Any CPU
 		{AA25DDB7-3A64-478F-B04F-EB6C9D5ACE6C}.Release|x86.ActiveCfg = Release|Any CPU
 		{AA25DDB7-3A64-478F-B04F-EB6C9D5ACE6C}.Release|x86.Build.0 = Release|Any CPU
+		{89E3E911-D34A-4A19-9BC7-C888DA22C7F5}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{89E3E911-D34A-4A19-9BC7-C888DA22C7F5}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{89E3E911-D34A-4A19-9BC7-C888DA22C7F5}.Debug|x64.ActiveCfg = Debug|Any CPU
+		{89E3E911-D34A-4A19-9BC7-C888DA22C7F5}.Debug|x64.Build.0 = Debug|Any CPU
+		{89E3E911-D34A-4A19-9BC7-C888DA22C7F5}.Debug|x86.ActiveCfg = Debug|Any CPU
+		{89E3E911-D34A-4A19-9BC7-C888DA22C7F5}.Debug|x86.Build.0 = Debug|Any CPU
+		{89E3E911-D34A-4A19-9BC7-C888DA22C7F5}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{89E3E911-D34A-4A19-9BC7-C888DA22C7F5}.Release|Any CPU.Build.0 = Release|Any CPU
+		{89E3E911-D34A-4A19-9BC7-C888DA22C7F5}.Release|x64.ActiveCfg = Release|Any CPU
+		{89E3E911-D34A-4A19-9BC7-C888DA22C7F5}.Release|x64.Build.0 = Release|Any CPU
+		{89E3E911-D34A-4A19-9BC7-C888DA22C7F5}.Release|x86.ActiveCfg = Release|Any CPU
+		{89E3E911-D34A-4A19-9BC7-C888DA22C7F5}.Release|x86.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
