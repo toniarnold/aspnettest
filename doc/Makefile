@@ -3,6 +3,7 @@
 DIA = apicaller-apiservice.dia \
 	blazor-browserstorage.dia \
 	blazor-database.dia \
+	blazor-inoutprocess.dia \
 	blazor-synchronization.dia \
 	components.dia \
 	iie-component.dia \

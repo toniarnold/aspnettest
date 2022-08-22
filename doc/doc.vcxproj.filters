@@ -58,6 +58,9 @@
     <None Include="blazor-browserstorage.dia">
       <Filter>Sources</Filter>
     </None>
+    <None Include="blazor-inoutprocess.dia">
+      <Filter>Sources</Filter>
+    </None>
   </ItemGroup>
   <ItemGroup>
     <Image Include="components.png">
@@ -94,6 +97,9 @@
       <Filter>Targets</Filter>
     </Image>
     <Image Include="blazor-browserstorage.png">
+      <Filter>Targets</Filter>
+    </Image>
+    <Image Include="blazor-inoutprocess.png">
       <Filter>Targets</Filter>
     </Image>
   </ItemGroup>

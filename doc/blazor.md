@@ -16,6 +16,7 @@
 * [Comparison with bUnit](#comparison-with-bunit)
   * [Semantic HTML comparison in bUnit](#semantic-html-comparison-in-bunit)
   * [The `BUnitTestContext`](#the-bunittestcontext)
+* [The Text Explorer test runner](#the-test-explorer-test-runner)
 
 ## Summary
 
@@ -470,3 +471,80 @@ Navigate("/");
 this.Write(Dynamic<Enter>(Component.calculatorPart).operand, "3.141");
 Click(Component.footer.enterButton);
 ```
+
+
+## The Test Explorer test runner
+
+The example runner `minimaltestrunner.blazor` runs as ordinary unit test in the
+Visual Studio Text Explorer, but contains besides a `Setup()/TearDown()` pair
+only one test method `RunTest()`:
+
+```csharp
+[TestFixture]
+[Category("ITestServer")]
+public class Runner : SeleniumTest<EdgeDriver>, ITestServer
+{
+    public List<Process> ServerProcesses { get; set; }
+
+    [SetUp]
+    public void SetUp()
+    {
+        this.StartServer();
+    }
+
+    [TearDown]
+    public void TearDown()
+    {
+        this.StopServer();
+    }
+
+    [Test]
+    public void RunTests()
+    {
+        this.Navigate("/", pause: 200); // allow the testButton time to render
+        this.ClickID("testButton");
+        this.AssertTestsOK();
+    }
+}
+```
+
+...that is run run with this configuration:
+
+```js
+{
+  "ServerProject": "minimal.blazor.csproj",
+  "Root": "..\\..\\..\\..\\minimal.blazor",
+  "Port": "5000",
+  "RequestTimeout": "100",
+  "ServerStartTimeout": "10"
+}
+```
+
+The extension methods of `ITestServer` provide a `StartServer()`/`StopServer()`
+pair which start a Kestrel server process in the project directory ("`Root`").
+The base class `SeleniumTest<EdgeDriver>` runs the chosen Browser and clicks the
+`testButton`. This button starts the nested in-process test within the web
+server process, which in turn starts another browser instance with Selenium.
+
+In the current implementation, the test can only succeed or fail as a whole. It
+doesn't seem to be possible to reload the tests actually running in-process
+kinda dynamically in the Test Adapter for the Test Explorer - therefore it only
+shows the XML test result that's also shown in the Browser itself (where no Test
+Explorer is available at all).
+
+The outer Selenium test (the test runner) is effectively classic (running out-of
+process), therefore it has to pause some time span after `Navigate()` to allow
+Blazor's client side rendering to complete and then to click the test button by
+its HTML DOM `id`, not by instance.
+
+The inner Selenium test on the other side runs in-process and therefore has
+access to the element instances and the `AutoResetEvent` synchronization
+mechanism presented here. This diagram shows the process boundaries:
+
+![In- and out-of-process Selenium tests](blazor-inoutprocess.png)
+
+It would be preferable to run the Kestrel server in-process from within the
+Visual Studio Test adapter process, but Blazor Server applications can't even be
+run from the ./bin/../app.exe executable (resources from a Blazor component
+library are not found), it requires project-level `dotnet run` for a working
+environment.

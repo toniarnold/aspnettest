@@ -23,6 +23,7 @@
     <None Include="architecture.md" />
     <None Include="blazor-browserstorage.dia" />
     <None Include="blazor-database.dia" />
+    <None Include="blazor-inoutprocess.dia" />
     <None Include="blazor-synchronization.dia" />
     <None Include="blazor.md" />
     <None Include="components.dia" />
@@ -48,6 +49,7 @@
     <Image Include="apicaller-apiservice.png" />
     <Image Include="blazor-browserstorage.png" />
     <Image Include="blazor-database.png" />
+    <Image Include="blazor-inoutprocess.png" />
     <Image Include="blazor-synchronization.png" />
     <Image Include="components.png" />
     <Image Include="iie-component.png" />
