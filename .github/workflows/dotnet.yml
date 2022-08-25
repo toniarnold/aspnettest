@@ -21,4 +21,4 @@ jobs:
     - name: Restore dependencies
       run:  dotnet restore .\src\asp.blazor\asp.blazor.csproj
     - name: Build
-      run:  dotnet build --no-restore .\src\asp.blazor\asp.blazor.csproj
+      run:  dotnet build --no-restore .\src\asplib.blazor\asplib.blazor.csproj
