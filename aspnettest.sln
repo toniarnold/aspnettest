@@ -134,9 +134,15 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "testrunner.sm", "src\iselen
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "asptest.blazor.bunit", "src\asptest.blazor.bunit\asptest.blazor.bunit.csproj", "{0B3526A5-64EA-4B61-82E5-E6062DF892A4}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "minimaltestrunner.blazor", "src\minimaltestrunner.blazor\minimaltestrunner.blazor.csproj", "{4AD8FE84-E4C5-4591-9BA9-9B6D1B31B833}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "minimaltestrunner.blazor", "src\minimaltestrunner.blazor\minimaltestrunner.blazor.csproj", "{4AD8FE84-E4C5-4591-9BA9-9B6D1B31B833}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "asptestrunner.blazor", "src\asptestrunner.blazor\asptestrunner.blazor.csproj", "{77CF1CB2-A665-4EF1-A0D0-484290A0CB49}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "asptestrunner.blazor", "src\asptestrunner.blazor\asptestrunner.blazor.csproj", "{77CF1CB2-A665-4EF1-A0D0-484290A0CB49}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github-workflows", "github-workflows", "{B40564BC-5E4C-47EB-82A4-52AE263E4792}"
+	ProjectSection(SolutionItems) = preProject
+		.github\workflows\codeql-analysis.yml = .github\workflows\codeql-analysis.yml
+		.github\workflows\dotnet.yml = .github\workflows\dotnet.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

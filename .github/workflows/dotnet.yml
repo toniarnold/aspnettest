@@ -7,7 +7,7 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: windows-latest
 
     steps:
     - uses: actions/checkout@v3
@@ -15,7 +15,8 @@ jobs:
       uses: actions/setup-dotnet@v2
       with:
         dotnet-version: 6.0.x
+
     - name: Restore dependencies
-      run: dotnet restore
+      run:  dotnet restore .\src\asp.blazor\asp.blazor.csproj
     - name: Build
-      run: dotnet build --no-restore
+      run:  dotnet build --no-restore .\src\asp.blazor\asp.blazor.csproj
