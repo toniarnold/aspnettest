@@ -6,7 +6,6 @@
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
 
-
   <ItemGroup>
     <SupportedPlatform Include="browser" />
   </ItemGroup>
@@ -20,10 +19,13 @@
   <ItemGroup>
     <ProjectReference Include="..\asplib.blazor\asplib.blazor.csproj" />
     <ProjectReference Include="..\iselenium.core\iselenium.core.csproj" />
+  </ItemGroup>
+
+  <!-- Don't require the SMC code generator Makefile project dependency when /p:noSmc=true -->
+  <ItemGroup Condition="$(noSmc)!='true'">
     <ProjectReference Include="TestRunnerSmc\testrunner.sm.vcxproj">
       <Name>testrunner.sm</Name>
       <ReferenceOutputAssembly>false</ReferenceOutputAssembly>
     </ProjectReference>
   </ItemGroup>
-
 </Project>

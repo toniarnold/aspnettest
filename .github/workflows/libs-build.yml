@@ -1,10 +1,9 @@
-name: .NET
+name: Build Libraries
 
 on:
- workflow_dispatch
+ workflow_dispatch:
 
-env:
-  VCTargetsPath: C:\Program Files\Microsoft Visual Studio\2022\Community\MSBuild\Microsoft\VC\v170\
+ workflow_call:
 
 jobs:
   build-core:
@@ -19,7 +18,7 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore libs.core.sln
     - name: Build .NET Core libraries
-      run: dotnet build --no-restore libs.core.sln
+      run: dotnet build --no-restore libs.core.sln /p:noSmc=true
 
 
   build-framework:
