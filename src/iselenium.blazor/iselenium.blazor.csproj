@@ -4,6 +4,16 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+    <Authors>Toni Arnold</Authors>
+    <Version>0.2.1</Version>
+    <PackageId>iselenium.blazor</PackageId>
+    <Product>aspnettest</Product>
+    <Description>ASP.NET In-App-GUI-Tests with Selenium and NUnit</Description>
+    <PackageLicenseExpression>AGPL-3.0-or-later</PackageLicenseExpression>
+    <Copyright>Copyright © 2018-2022</Copyright>
+    <PackageProjectUrl>https://github.com/toniarnold/aspnettest/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/toniarnold/aspnettest.git</RepositoryUrl>
+    <PackageReleaseNotes>alpha</PackageReleaseNotes>
   </PropertyGroup>
 
   <ItemGroup>

@@ -9,13 +9,26 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>iselenium</RootNamespace>
     <AssemblyName>iselenium.webforms</AssemblyName>
-    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
     <TargetFrameworkProfile />
   </PropertyGroup>
+  <PropertyGroup>
+    <Authors>Toni Arnold</Authors>
+    <Version>0.2.1</Version>
+    <PackageId>iselenium.webforms</PackageId>
+    <Product>aspnettest</Product>
+    <Description>ASP.NET In-App-GUI-Tests with Selenium and NUnit</Description>
+    <PackageLicenseExpression>AGPL-3.0-or-later</PackageLicenseExpression>
+    <Copyright>Copyright © 2018-2022</Copyright>
+    <PackageProjectUrl>https://github.com/toniarnold/aspnettest/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/toniarnold/aspnettest.git</RepositoryUrl>
+    <PackageReleaseNotes>alpha</PackageReleaseNotes>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+  </PropertyGroup>  
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
@@ -78,10 +91,16 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
+    <None Include="iselenium.webforms.nuspec" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="EntityFramework">
       <Version>6.4.4</Version>
+    </PackageReference>
+    <PackageReference Include="NuGet.Build.Tasks.Pack">
+      <Version>6.3.0</Version>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+      <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="NUnit">
       <Version>3.13.3</Version>
