@@ -20,9 +20,9 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore libs.core.sln
     - name: Build .NET Core libraries
-      run: dotnet build libs.core.sln /p:noSmc=true --no-restore -c Release -o ${GITHUB_WORKSPACE}/packages
+      run: dotnet build libs.core.sln /p:noSmc=true --no-restore -c Release -o ${{ github.workspace }}/packages
     - name: Create packages
-      run: dotnet pack libs.core.sln /p:noSmc=true --no-build  -c Release -o ${GITHUB_WORKSPACE}/packages
+      run: dotnet pack libs.core.sln /p:noSmc=true --no-build  -c Release -o ${{ github.workspace }}/packages
 
 
   build-framework:
@@ -39,4 +39,4 @@ jobs:
     - name: Build.NET Framework libraries
       run: msbuild libs.framework.sln /p:Configuration=Release
     - name: Create packages
-      run: msbuild libs.framework.sln /p:Configuration=Release -t:pack /p:PackageOutputPath= ${GITHUB_WORKSPACE}/packages
+      run: msbuild libs.framework.sln /p:Configuration=Release -t:pack /p:PackageOutputPath=${{ github.workspace }}/packages
