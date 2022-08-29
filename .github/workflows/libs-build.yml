@@ -20,9 +20,9 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore libs.core.sln
     - name: Build .NET Core libraries
-      run: dotnet build libs.core.sln /p:noSmc=true --no-restore -c Release -o ${GITHUB_WORKSPACE}/packages -p:ContinuousIntegrationBuild=true
+      run: dotnet build libs.core.sln /p:noSmc=true --no-restore -c Release -o ${GITHUB_WORKSPACE}/packages
     - name: Create packages
-      run: dotnet pack libs.core.sln /p:noSmc=true --no-build  -c Release -o ${GITHUB_WORKSPACE}/packages -p:ContinuousIntegrationBuild=true
+      run: dotnet pack libs.core.sln /p:noSmc=true --no-build  -c Release -o ${GITHUB_WORKSPACE}/packages
 
 
   build-framework:
