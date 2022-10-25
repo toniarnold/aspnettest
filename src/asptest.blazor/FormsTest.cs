@@ -47,16 +47,16 @@ namespace asptest
         {
             Navigate("/forms");
             // Various methods to fill the elements
-            Click(Component.check, expectRender: false);
+            Click(Component.check, expectRenders: 0);
             Write(Component.date, "15.5.2022");    // "2022-05-15" yields 2051-02-20
             Write(Component.dec, "9876543.21");
             Write(Component.integer, "256");
             // Single select -> will be Eggs
-            Click(By.CssSelector, "#someSalad > option[value=Corn]", expectRender: false);
-            Click(By.CssSelector, "#someSalad > option[value=Eggs]", expectRender: false);
+            Click(By.CssSelector, "#someSalad > option[value=Corn]", expectRenders: 0);
+            Click(By.CssSelector, "#someSalad > option[value=Eggs]", expectRenders: 0);
             // Multiple select
-            Click(By.CssSelector, "#saladSelection > option[value=Corn]", expectRender: false);
-            Click(By.CssSelector, "#saladSelection > option[value=Lentils]", expectRender: false);
+            Click(By.CssSelector, "#saladSelection > option[value=Corn]", expectRenders: 0);
+            Click(By.CssSelector, "#saladSelection > option[value=Lentils]", expectRenders: 0);
             Write(Component.line, "one-liner");
             Write(Component.paragraph, @"
                 Line 1

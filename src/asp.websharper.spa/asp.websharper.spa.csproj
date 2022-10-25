@@ -9,16 +9,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FSharp.Core" Version="6.0.5" />
-    <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="17.3.0" />
+    <PackageReference Include="FSharp.Core" Version="6.0.6" />
+    <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="17.3.2" />
     <PackageReference Include="Selenium.Chrome.WebDriver" Version="85.0.0" />
     <PackageReference Include="Selenium.Firefox.WebDriver" Version="0.27.0" />
     <PackageReference Include="Selenium.InternetExplorer.WebDriver" Version="3.150.1" />
-    <PackageReference Include="WebSharper" Version="6.0.0.228" />    
-    <PackageReference Include="WebSharper.CSharp" Version="6.0.0.228" />
-    <PackageReference Include="WebSharper.UI" Version="6.0.0.230" />
-    <PackageReference Include="WebSharper.UI.CSharp" Version="6.0.0.230" />
-    <PackageReference Include="WebSharper.AspNetCore" Version="6.0.0.228" />
+    <PackageReference Include="WebSharper" Version="6.0.4.240" />    
+    <PackageReference Include="WebSharper.CSharp" Version="6.0.4.240" />
+    <PackageReference Include="WebSharper.UI" Version="6.0.5.240" />
+    <PackageReference Include="WebSharper.UI.CSharp" Version="6.0.5.240" />
+    <PackageReference Include="WebSharper.AspNetCore" Version="6.0.4.240" />
   </ItemGroup>
 
   <ItemGroup>

@@ -6,12 +6,29 @@
 	<RootNamespace>asplib</RootNamespace>	
   </PropertyGroup>
 
+  <PropertyGroup>
+    <Authors>Toni Arnold, Charles W. Rapp (SMC)</Authors>
+    <Version>0.2.1</Version>
+    <PackageId>asplib.websharper</PackageId>
+    <Product>aspnettest</Product>
+    <Description>
+      Base for an ASP.NET Model Control View design pattern with session persistence and optionally SMC, the State Machine Compiler
+    </Description>
+    <PackageLicenseExpression>AGPL-3.0-or-later</PackageLicenseExpression>
+    <Copyright>Copyright © 2018-2022</Copyright>
+    <PackageProjectUrl>https://github.com/toniarnold/aspnettest/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/toniarnold/aspnettest.git</RepositoryUrl>
+    <PackageReleaseNotes>alpha</PackageReleaseNotes>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+  </PropertyGroup>
+
+
   <ItemGroup>
-    <PackageReference Include="FSharp.Core" Version="6.0.5" />
-    <PackageReference Include="WebSharper" Version="6.0.0.228" />
-    <PackageReference Include="WebSharper.CSharp" Version="6.0.0.228" />
-    <PackageReference Include="WebSharper.UI" Version="6.0.0.230" />
-    <PackageReference Include="WebSharper.UI.CSharp" Version="6.0.0.230" />
+    <PackageReference Include="FSharp.Core" Version="6.0.6" />
+    <PackageReference Include="WebSharper" Version="6.0.4.240" />
+    <PackageReference Include="WebSharper.CSharp" Version="6.0.4.240" />
+    <PackageReference Include="WebSharper.UI" Version="6.0.5.240" />
+    <PackageReference Include="WebSharper.UI.CSharp" Version="6.0.5.240" />
   </ItemGroup>
 
   <ItemGroup>

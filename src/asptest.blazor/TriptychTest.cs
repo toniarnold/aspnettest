@@ -33,20 +33,20 @@ namespace asptest
             this.AssertPoll(() => this.Html(), () => Does.Contain("Session Storage: ViewState"));  // per default disabled for tests
             this.Click(By.Id, "triptychLink");
             this.AssertTriptychHtml();
-            this.Click(Component.calculatorLocalStorage.storageLink, expectRequest: true, expectRender: false); // not in focus
+            this.Click(Component.calculatorLocalStorage.storageLink, expectRequest: true, expectRenders: 0); // not in focus
             Assert.That(StorageImplementation.SessionStorage, Is.EqualTo(Storage.LocalStorage));
             Assert.That(this.Html(), Does.Contain("Session Storage: LocalStorage"));
 
             this.Click(By.Id, "triptychLink");
             this.AssertTriptychHtml();
-            this.Click(Component.calculatorSessionStorage.storageLink, expectRequest: true, expectRender: false); // not in focus
+            this.Click(Component.calculatorSessionStorage.storageLink, expectRequest: true, expectRenders: 0); // not in focus
             Assert.That(StorageImplementation.SessionStorage, Is.EqualTo(Storage.SessionStorage));
             Assert.That(this.Html(), Does.Contain("Session Storage: SessionStorage"));
 
             // Dynamically switching to Database storage is broken
             //this.Click(By.Id, "triptychLink");
             //this.AssertTriptychHtml();
-            //this.Click(Component.calculatorDatabase.storageLink, expectRequest: true, expectRender: false); // not in focus
+            //this.Click(Component.calculatorDatabase.storageLink, expectRequest: true, expectRenders: 0); // not in focus
             //Assert.That(StorageImplementation.SessionStorage, Is.EqualTo(Storage.Database));
             //Assert.That(this.Html(), Does.Contain("Session Storage: Database"));
         }

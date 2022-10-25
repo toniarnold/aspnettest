@@ -3,6 +3,9 @@
   <PropertyGroup>
 	<TargetFramework>net6.0</TargetFramework>
     <RootNamespace>iselenium</RootNamespace>
+  </PropertyGroup>
+
+  <PropertyGroup>
     <Authors>Toni Arnold</Authors>
     <Version>0.2.1</Version>
     <PackageId>iselenium.websharper</PackageId>
@@ -16,8 +19,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="WebSharper" Version="6.0.0.228" />
-    <PackageReference Include="WebSharper.CSharp" Version="6.0.0.228" />
+    <PackageReference Include="WebSharper" Version="6.0.4.240" />
+    <PackageReference Include="WebSharper.CSharp" Version="6.0.4.240" />
   </ItemGroup>
 
   <ItemGroup>

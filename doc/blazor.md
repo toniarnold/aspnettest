@@ -13,6 +13,7 @@
   * [The RenderMain override](#the-rendermain-override)
 * [`EditForm` handling](#editform-handling)
   * [`select` and `InputSelect` inputs](#select-and-inputselect-inputs)
+* [Multiple async renders](#multiple-async-renders)
 * [Comparison with bUnit](#comparison-with-bunit)
   * [Semantic HTML comparison in bUnit](#semantic-html-comparison-in-bunit)
   * [The `BUnitTestContext`](#the-bunittestcontext)
@@ -351,12 +352,71 @@ currently cannot be selected by its instance, but individual options clicked on
 by CSS selectors like this multi select example:
 
 ```csharp
-Click(By.CssSelector, "#saladSelection > option[value=Corn]", expectRender: false);
-Click(By.CssSelector, "#saladSelection > option[value=Lentils]", expectRender: false);
+Click(By.CssSelector, "#saladSelection > option[value=Corn]",  expectRenders: 0);
+Click(By.CssSelector, "#saladSelection > option[value=Lentils]",  expectRenders: 0);
 ```
 
-The non-default `expectRender: false` has to be added to prevent triggering
-`TestFocus` synchronization.
+The non-default `expectRenders: 0` has to be added to prevent triggering
+`TestFocus` synchronization when there is no server action.
+
+
+## Multiple async renders
+
+The optional `expectRenders` parameter on the `Click` method default to 1 and
+replaces the original expectRender bool which just discriminated whether a
+rendering is expected to happen (usually) or not (e.g. when selecting an
+option).
+
+But when awaiting another async method in an async event handler, Blazor will
+return to the caller method from the framework, allowing it to re-render the
+component. The `AutoResetEvent` from `TestFocus` needs to be awaited as many
+times as a re-rendering is triggered, otherwise it will continue too early.
+
+The `Async.razor` example page specifically exposes that property of Blazor. The
+core is the following button click event handler:
+
+```
+public static int Iterations = 100;
+public CountModel model = new(Iterations);
+
+public async Task Start()
+{
+    while (model.Counter > 0)
+    {
+        model.Counter--;
+        await Task.Delay(1);
+        if (model.Counter % 2 == 0) // only render each 2nd time
+        {
+            StateHasChanged();
+        }
+    }
+}
+```
+
+The corresponding test methods with a given iteration count either need to wait
+for the rendering cascade to finish (`NonSynchronized`) - or to specify the
+exact expected number of renderings in advance (`Synchronized`):
+
+```
+[Test]
+public void NonSynchronized()
+{
+    Navigate("/async");
+    Assert.That(Component.countNumber.Value, Is.EqualTo(Async.Iterations));
+    Click(Component.startButton);
+    this.AssertPoll(() => Component.countNumber.Value, () => Is.EqualTo(0));
+}
+
+[Test]
+public void Synchronized()
+{
+    Navigate("/async");
+    Assert.That(Component.countNumber.Value, Is.EqualTo(Async.Iterations));
+    // Will always render once plus additionally half of the iterations
+    cut.Click(cut.Instance.startButton, expectRenders: (Async.Iterations / 2) + 1);
+    Assert.That(Component.countNumber.Value, Is.EqualTo(0));
+}
+```
 
 
 ## Comparison with bUnit

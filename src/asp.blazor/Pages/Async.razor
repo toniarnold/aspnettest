@@ -1,0 +1,33 @@
+﻿@page "/async"
+
+@using asplib.Components
+@inherits StaticComponentBase
+
+<h3>Async Countdown</h3>
+
+<EditForm Model="@model" OnValidSubmit="@Start">
+    <InputNumber @bind-Value="model.Counter" @ref="countNumber"></InputNumber>
+  <button type="submit" @ref="startButton">Start</button>
+</EditForm>
+
+@code {
+    public static int Iterations = 100;
+    public CountModel model = new(Iterations);
+    public InputNumber<int> countNumber = default!;
+    public ElementReference startButton = default!;
+
+    public async Task Start()
+    {
+        while (model.Counter > 0)
+        {
+            model.Counter--;
+            // Await to return to the caller, allow it to additionally render:
+            //await Task.Yield(); // with zero delay not working in the asptestrunnder.blazor, only from the VS debugger directly
+            await Task.Delay(1);
+            if (model.Counter % 2 == 0) // only render each 2nd time
+            {
+                StateHasChanged();
+            }
+        }
+    }
+}

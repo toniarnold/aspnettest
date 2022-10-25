@@ -1,4 +1,6 @@
-﻿using Bunit;
+﻿using AngleSharp;
+using asplib.Components;
+using Bunit;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
 using Microsoft.AspNetCore.DataProtection;
@@ -8,6 +10,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Moq;
 using NUnit.Framework;
 using System.Diagnostics;
+using IConfiguration = Microsoft.Extensions.Configuration.IConfiguration;
 using TestContext = Bunit.TestContext;
 
 namespace iselenium
@@ -20,13 +23,38 @@ namespace iselenium
         [OneTimeSetUp]
         public void RegisterServices()
         {
-            Services.AddSingleton<IConfiguration>(new ConfigurationBuilder()
+            var config = new ConfigurationBuilder()
                     .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
-                    .Build());
+                    .Build();
+            Services.AddSingleton<IConfiguration>(config);
             Services.AddSingleton<ProtectedSessionStorage>(new ProtectedSessionStorage(JSInterop.JSRuntime, new EphemeralDataProtectionProvider()));
             Services.AddSingleton<ProtectedLocalStorage>(new ProtectedLocalStorage(JSInterop.JSRuntime, new EphemeralDataProtectionProvider()));
             Services.AddSingleton<IWebHostEnvironment>(Mock.Of<IWebHostEnvironment>());
             JSInterop.Mode = JSRuntimeMode.Loose;
+
+            // For synchronized Click() with TestFocus:
+            Configure(config.GetValue<int>("RequestTimeout"));
+        }
+
+        protected void Configure(int requestTimeout)
+        {
+            SeleniumExtensionBase.RequestTimeout = requestTimeout;
+        }
+
+        /// <summary>
+        /// TestFocus-setting override of Bunit.TestContext.RenderComponent:
+        /// Instantiates and performs a first render of a component of type <typeparamref name="TComponent"/>.
+        /// </summary>
+        /// <typeparam name="TComponent">Type of the component to render.</typeparam>
+        /// <param name="parameters">Parameters to pass to the component when it is rendered.</param>
+        /// <returns>The rendered <typeparamref name="TComponent"/>.</returns>
+        public override IRenderedComponent<TComponent> RenderComponent<TComponent>(params ComponentParameter[] parameters)
+        {
+            if (typeof(ITestFocus).IsAssignableFrom(typeof(TComponent)))
+            {
+                TestFocus.SetFocus(typeof(TComponent));
+            }
+            return base.RenderComponent<TComponent>(parameters);
         }
 
         /// <summary>

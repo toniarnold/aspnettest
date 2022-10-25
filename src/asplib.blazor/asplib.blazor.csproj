@@ -7,13 +7,28 @@
     <RootNamespace>asplib</RootNamespace>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <Authors>Toni Arnold, Charles W. Rapp (SMC)</Authors>
+    <Version>0.2.1</Version>
+    <PackageId>asplib.blazor</PackageId>
+    <Product>aspnettest</Product>
+    <Description>
+      Base for an ASP.NET Model Control View design pattern with session persistence and optionally SMC, the State Machine Compiler
+    </Description>
+    <PackageLicenseExpression>AGPL-3.0-or-later</PackageLicenseExpression>
+    <Copyright>Copyright © 2018-2022</Copyright>
+    <PackageProjectUrl>https://github.com/toniarnold/aspnettest/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/toniarnold/aspnettest.git</RepositoryUrl>
+    <PackageReleaseNotes>alpha</PackageReleaseNotes>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+  </PropertyGroup>
 
   <ItemGroup>
     <SupportedPlatform Include="browser" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.8" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.10" />
   </ItemGroup>
 
   <ItemGroup>

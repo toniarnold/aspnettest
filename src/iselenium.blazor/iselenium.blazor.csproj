@@ -4,6 +4,9 @@
     <TargetFramework>net6.0</TargetFramework>
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
+  </PropertyGroup>
+  
+  <PropertyGroup>
     <Authors>Toni Arnold</Authors>
     <Version>0.2.1</Version>
     <PackageId>iselenium.blazor</PackageId>
@@ -21,8 +24,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="bunit" Version="1.9.8" />
-    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.8" />
+    <PackageReference Include="bunit" Version="1.11.7" />
+    <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.10" />
     <PackageReference Include="Moq" Version="4.18.2" />
   </ItemGroup>
 

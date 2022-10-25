@@ -28,7 +28,7 @@
     <RepositoryUrl>https://github.com/toniarnold/aspnettest.git</RepositoryUrl>
     <PackageReleaseNotes>alpha</PackageReleaseNotes>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
-  </PropertyGroup>  
+  </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
     <DebugType>full</DebugType>
@@ -98,7 +98,7 @@
       <Version>6.4.4</Version>
     </PackageReference>
     <PackageReference Include="NuGet.Build.Tasks.Pack">
-      <Version>6.3.0</Version>
+      <Version>6.3.1</Version>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
@@ -112,7 +112,7 @@
       <Version>4.2.1</Version>
     </PackageReference>
     <PackageReference Include="Selenium.WebDriver">
-      <Version>4.4.0</Version>
+      <Version>4.5.1</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

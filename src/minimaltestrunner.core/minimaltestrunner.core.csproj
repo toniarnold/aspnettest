@@ -14,9 +14,9 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.0" />
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
     <PackageReference Include="Selenium.InternetExplorer.WebDriver" Version="3.150.1" />
-    <PackageReference Include="Selenium.WebDriver.MSEdgeDriver" Version="104.0.1293.54" />
+    <PackageReference Include="Selenium.WebDriver.MSEdgeDriver" Version="106.0.1370.34" />
   </ItemGroup>
 
   <ItemGroup>

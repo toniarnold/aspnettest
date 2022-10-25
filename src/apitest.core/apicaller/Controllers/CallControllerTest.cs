@@ -47,7 +47,7 @@ namespace apitest.apicaller.Controllers
             get { return (AccesscodeController)StaticControllerExtension.GetController(); }
         }
 
-        [OneTimeSetUp]
+        [SetUp]  // instead of OneTimeSetUp, enforce a new session
         public void ConfigureServices()
         {
             this.configuration = ServiceProvider.Configuration;

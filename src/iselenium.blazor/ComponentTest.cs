@@ -77,11 +77,12 @@ namespace iselenium
         /// <param name="delay">Optional delay time in milliseconds before clicking the element</param>
         /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete (set to 0 if expectRender)</param>
         /// <param name="wait">Explicit WebDriverWait in seconds for the element to appear. 0 when expectRender is true</param>
-        /// <param name="expectRender">Set to false if TestFocus.Event is not set on OnAfterRenderAsync</param>
+        /// <param name="expectRenders">Ignored in this base class, TestFocus.Event isnot awaited</param>
+        /// <param name="expectRerender">Set to true for awaiting a re-render which sets TestFocus.AwaitingRerender = false, as e.g. SmcComponentBase</param>
         public virtual void Click(Func<string, By> selector, string selectString, int index = 0,
                             bool expectRequest = false, bool? awaitRemoved = null,
                             int expectedStatusCode = 200, int delay = 0, int pause = 0, int wait = 0,
-                            bool expectRender = true,
+                            int expectRenders = 1,
                             bool expectRerender = false)
         {
             var doAwaitRemoved = awaitRemoved ?? this.awaitRemovedDefault;
@@ -100,9 +101,9 @@ namespace iselenium
         /// <param name="expectedStatusCode"></param>
         /// <param name="expectRender"></param>
         /// <param name="expectRerender"></param>
-        public void Click(ElementReference element, bool expectRequest = false, int expectedStatusCode = 200, bool expectRender = true, bool expectRerender = false)
+        public void Click(ElementReference element, bool expectRequest = false, int expectedStatusCode = 200, int expectRenders = 1, bool expectRerender = false)
         {
-            Click(By.CssSelector, $"*[{element.IdAttr()}]", index: 0, expectRequest, awaitRemoved: null, expectedStatusCode, delay: 0, pause: 0, wait: 0, expectRender: expectRender, expectRerender: expectRerender);
+            Click(By.CssSelector, $"*[{element.IdAttr()}]", index: 0, expectRequest, awaitRemoved: null, expectedStatusCode, delay: 0, pause: 0, wait: 0, expectRenders: expectRenders, expectRerender: expectRerender);
         }
 
         // The built-in components with an .Element property don't expose that as interface or by inheritance -> enumerate them explicitly:
@@ -114,9 +115,9 @@ namespace iselenium
         /// <param name="expectRequest"></param>
         /// <param name="expectedStatusCode"></param>
         /// <param name="expectRender"></param>
-        public void Click(InputCheckbox component, bool expectRequest = false, int expectedStatusCode = 200, bool expectRender = true)
+        public void Click(InputCheckbox component, bool expectRequest = false, int expectedStatusCode = 200, int expectRenders = 1)
         {
-            Click(By.CssSelector, $"*[{component.Element?.IdAttr()}]", index: 0, expectRequest, awaitRemoved: null, expectedStatusCode, delay: 0, pause: 0, wait: 0, expectRender: expectRender);
+            Click(By.CssSelector, $"*[{component.Element?.IdAttr()}]", index: 0, expectRequest, awaitRemoved: null, expectedStatusCode, delay: 0, pause: 0, wait: 0, expectRenders: expectRenders);
         }
 
         /// <summary>
@@ -126,9 +127,9 @@ namespace iselenium
         /// <param name="expectRequest"></param>
         /// <param name="expectedStatusCode"></param>
         /// <param name="expectRender"></param>
-        public void Click<T>(InputDate<T> component, bool expectRequest = false, int expectedStatusCode = 200, bool expectRender = true)
+        public void Click<T>(InputDate<T> component, bool expectRequest = false, int expectedStatusCode = 200, int expectRenders = 1)
         {
-            Click(By.CssSelector, $"*[{component.Element?.IdAttr()}]", index: 0, expectRequest, awaitRemoved: null, expectedStatusCode, delay: 0, pause: 0, wait: 0, expectRender: expectRender);
+            Click(By.CssSelector, $"*[{component.Element?.IdAttr()}]", index: 0, expectRequest, awaitRemoved: null, expectedStatusCode, delay: 0, pause: 0, wait: 0, expectRenders: expectRenders);
         }
 
         /// <summary>
@@ -138,9 +139,9 @@ namespace iselenium
         /// <param name="expectRequest"></param>
         /// <param name="expectedStatusCode"></param>
         /// <param name="expectRender"></param>
-        public void Click(InputFile component, bool expectRequest = false, int expectedStatusCode = 200, bool expectRender = true)
+        public void Click(InputFile component, bool expectRequest = false, int expectedStatusCode = 200, int expectRenders = 1)
         {
-            Click(By.CssSelector, $"*[{component.Element?.IdAttr()}]", index: 0, expectRequest, awaitRemoved: null, expectedStatusCode, delay: 0, pause: 0, wait: 0, expectRender: expectRender);
+            Click(By.CssSelector, $"*[{component.Element?.IdAttr()}]", index: 0, expectRequest, awaitRemoved: null, expectedStatusCode, delay: 0, pause: 0, wait: 0, expectRenders: expectRenders);
         }
 
         /// <summary>
@@ -150,9 +151,9 @@ namespace iselenium
         /// <param name="expectRequest"></param>
         /// <param name="expectedStatusCode"></param>
         /// <param name="expectRender"></param>
-        public void Click<T>(InputNumber<T> component, bool expectRequest = false, int expectedStatusCode = 200, bool expectRender = true)
+        public void Click<T>(InputNumber<T> component, bool expectRequest = false, int expectedStatusCode = 200, int expectRenders = 1)
         {
-            Click(By.CssSelector, $"*[{component.Element?.IdAttr()}]", index: 0, expectRequest, awaitRemoved: null, expectedStatusCode, delay: 0, pause: 0, wait: 0, expectRender: expectRender);
+            Click(By.CssSelector, $"*[{component.Element?.IdAttr()}]", index: 0, expectRequest, awaitRemoved: null, expectedStatusCode, delay: 0, pause: 0, wait: 0, expectRenders: expectRenders);
         }
 
 #if NET7_0_OR_GREATER
@@ -163,9 +164,9 @@ namespace iselenium
         /// <param name="expectRequest"></param>
         /// <param name="expectedStatusCode"></param>
         /// <param name="expectRender"></param>
-        public void Click<T>(InputRadio<T> component, bool expectRequest = false, int expectedStatusCode = 200, bool expectRender = true)
+        public void Click<T>(InputRadio<T> component, bool expectRequest = false, int expectedStatusCode = 200, int expectRenders = 1)
         {
-            Click(By.CssSelector, $"*[{component.Element?.IdAttr()}]", index: 0, expectRequest, awaitRemoved: null, expectedStatusCode, delay: 0, pause: 0, wait: 0, expectRender: expectRender);
+            Click(By.CssSelector, $"*[{component.Element?.IdAttr()}]", index: 0, expectRequest, awaitRemoved: null, expectedStatusCode, delay: 0, pause: 0, wait: 0, expectRenders: expectRenders);
         }
 #endif
 
@@ -176,9 +177,9 @@ namespace iselenium
         /// <param name="expectRequest"></param>
         /// <param name="expectedStatusCode"></param>
         /// <param name="expectRender"></param>
-        public void Click<T>(InputSelect<T> component, bool expectRequest = false, int expectedStatusCode = 200, bool expectRender = true)
+        public void Click<T>(InputSelect<T> component, bool expectRequest = false, int expectedStatusCode = 200, int expectRenders = 1)
         {
-            Click(By.CssSelector, $"*[{component.Element?.IdAttr()}]", index: 0, expectRequest, awaitRemoved: null, expectedStatusCode, delay: 0, pause: 0, wait: 0, expectRender: expectRender);
+            Click(By.CssSelector, $"*[{component.Element?.IdAttr()}]", index: 0, expectRequest, awaitRemoved: null, expectedStatusCode, delay: 0, pause: 0, wait: 0, expectRenders: expectRenders);
         }
 
         /// <summary>
@@ -188,9 +189,9 @@ namespace iselenium
         /// <param name="expectRequest"></param>
         /// <param name="expectedStatusCode"></param>
         /// <param name="expectRender"></param>
-        public void Click(InputText component, bool expectRequest = false, int expectedStatusCode = 200, bool expectRender = true)
+        public void Click(InputText component, bool expectRequest = false, int expectedStatusCode = 200, int expectRenders = 1)
         {
-            Click(By.CssSelector, $"*[{component.Element?.IdAttr()}]", index: 0, expectRequest, awaitRemoved: null, expectedStatusCode, delay: 0, pause: 0, wait: 0, expectRender: expectRender);
+            Click(By.CssSelector, $"*[{component.Element?.IdAttr()}]", index: 0, expectRequest, awaitRemoved: null, expectedStatusCode, delay: 0, pause: 0, wait: 0, expectRenders: expectRenders);
         }
 
         /// <summary>
@@ -200,9 +201,9 @@ namespace iselenium
         /// <param name="expectRequest"></param>
         /// <param name="expectedStatusCode"></param>
         /// <param name="expectRender"></param>
-        public void Click(InputTextArea component, bool expectRequest = false, int expectedStatusCode = 200, bool expectRender = true)
+        public void Click(InputTextArea component, bool expectRequest = false, int expectedStatusCode = 200, int expectRenders = 1)
         {
-            Click(By.CssSelector, $"*[{component.Element?.IdAttr()}]", index: 0, expectRequest, awaitRemoved: null, expectedStatusCode, delay: 0, pause: 0, wait: 0, expectRender: expectRender);
+            Click(By.CssSelector, $"*[{component.Element?.IdAttr()}]", index: 0, expectRequest, awaitRemoved: null, expectedStatusCode, delay: 0, pause: 0, wait: 0, expectRenders: expectRenders);
         }
 
         #endregion Click

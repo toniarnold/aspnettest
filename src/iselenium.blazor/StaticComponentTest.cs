@@ -70,34 +70,35 @@ namespace iselenium
         /// <param name="delay">Optional delay time in milliseconds before clicking the element</param>
         /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete (set to 0 if expectRender)</param>
         /// <param name="wait">Explicit WebDriverWait in seconds for the element to appear. 0 when expectRender is true</param>
-        /// <param name="expectRender">Set to false if TestFocus.Event is not set OnAfterRenderAsync</param>
+        /// <param name="expectRenders">Number of renderings where TestFocus.Event is set OnAfterRenderAsync</param>
         /// <param name="expectRerender">Set to true for awaiting a re-render which sets TestFocus.AwaitingRerender = false, as e.g. SmcComponentBase</param>
         public override void Click(Func<string, By> selector, string selectString, int index = 0,
                             bool expectRequest = false, bool? awaitRemoved = null,
                             int expectedStatusCode = 200, int delay = 0, int pause = 0, int wait = 0,
-                            bool expectRender = true,
+                            int expectRenders = 1,
                             bool expectRerender = false)
         {
             var doAwaitRemoved = awaitRemoved ?? this.awaitRemovedDefault;
-            if (expectRender)
+            if (expectRenders > 0)
             {
                 if (expectRequest || expectRerender)
                 {
                     TestFocus.AwaitingRerender = true;
                 }
-                TestFocus.Event.Reset();
+                TestFocus.Event.Reset();    // defensive, should have been AutoReset
             }
             SeleniumExtensionBase.Click(this, selector, selectString, index: 0,
                                             expectRequest: expectRequest, samePage: false, // In Blazor the "same" page receives new Ids
                                             awaitRemoved: doAwaitRemoved, expectedStatusCode: expectedStatusCode,
                                             delay: delay, pause: pause,
                                             wait: (wait == 0) ? SeleniumExtensionBase.RequestTimeout : wait);
-            if (expectRender)
+            while (expectRenders > 0)
             {
                 if (!TestFocus.Event.WaitOne(SeleniumExtensionBase.RequestTimeout * 1000))
                 {
                     throw new TimeoutException($"Click({selectString}): TestFocus.Event not signaled");
                 }
+                expectRenders--;
             }
         }
 
