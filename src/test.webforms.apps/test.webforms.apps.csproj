@@ -4,7 +4,7 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{7ACC2161-77B2-4DBD-BEC3-E4ABB31D3149}</ProjectGuid>
+    <ProjectGuid>{A0B781F4-CF0B-4A3A-BF07-B9560DEC8C11}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>test</RootNamespace>
@@ -46,15 +46,18 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="asplib\Model\DbTest.cs" />
-    <Compile Include="asplib\Model\MainTest.cs" />
-    <Compile Include="asplib\View\ControlStorageExtensionTest.cs" />
+    <Compile Include="asp\calculator\Control\CalculatorTest.cs" />
+    <Compile Include="asp\calculator\Control\FibonacciTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\asp.webforms\asp.webforms.csproj">
+      <Project>{36e1692e-9b7c-467c-adbe-a3f86575269a}</Project>
+      <Name>asp.webforms</Name>
+    </ProjectReference>
     <ProjectReference Include="..\asplib.webforms\asplib.webforms.csproj">
       <Project>{776e3032-bfd5-4c20-9867-942f045a8b0f}</Project>
       <Name>asplib.webforms</Name>

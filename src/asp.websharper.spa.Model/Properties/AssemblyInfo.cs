@@ -5,3 +5,4 @@
 [assembly: InternalsVisibleTo("asptest.websharper.spa")]
 [assembly: InternalsVisibleTo("asptest.websharper.spa.fs")]
 [assembly: InternalsVisibleTo("test.core")]
+[assembly: InternalsVisibleTo("test.core.apps")]

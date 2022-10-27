@@ -16,7 +16,7 @@ namespace asplib.Model
     public partial class ASP_DBEntities : DbContext
     {
         public ASP_DBEntities()
-            : base("name=ASP_DBEntities")
+            : base(Environment.GetEnvironmentVariable("ASP_DBEntities") ?? "name=ASP_DBEntities")
         {
         }
     

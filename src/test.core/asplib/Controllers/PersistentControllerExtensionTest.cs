@@ -27,6 +27,7 @@ namespace test.asplib.Controllers
         {
             var config = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddEnvironmentVariables()
                 .Build();
             ASP_DBEntities.ConnectionString = config["ASP_DBEntities"];
         }
