@@ -25,6 +25,7 @@ namespace test.asplib.Model.Db
         {
             var config = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json", optional: false, reloadOnChange: true)
+                .AddEnvironmentVariables()
                 .Build();
             ASP_DBEntities.SetUpInsulatedDbContext(config["ASP_DBEntities"]);
         }

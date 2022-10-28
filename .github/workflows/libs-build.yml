@@ -13,14 +13,30 @@ jobs:
       with:
         fetch-depth: 0
     - name: Setup .NET
-      uses: actions/setup-dotnet@v2
+      uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 6.0.x
 
     - name: Restore dependencies
       run: dotnet restore libs.core.sln
-    - name: Build .NET Core libraries and create packages
-      run: dotnet pack libs.core.sln /p:noSmc=true --no-restore -c Release -o ${{ github.workspace }}/packages
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v1.1
+    - name: Build .NET Core libraries
+      run: msbuild libs.core.sln -property:noSmc=true,Configuration=Release
+
+    - name: Install SQL Server
+      uses: Particular/install-sql-server-action@v1.0.2
+      with:
+        connection-string-env-var: ASP_DBEntities
+        catalog: ASP_DB
+    - name: Create schemas
+      shell: pwsh
+      run: sqlcmd -i ${{ github.workspace }}/db/ASP_DB.Main.sql -d "ASP_DB"
+    - name: Test
+      run: dotnet test libs.core.sln --configuration Release --no-restore --no-build --verbosity normal
+
+    - name: Create packages
+      run: dotnet pack libs.core.sln -property:noSmc=true --configuration Release --no-restore -o ${{ github.workspace }}/packages
     - name: Upload .nupkg
       uses: actions/upload-artifact@v3
       with:
