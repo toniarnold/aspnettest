@@ -9,7 +9,7 @@
 
   <PropertyGroup>
     <Authors>Toni Arnold, Charles W. Rapp (SMC)</Authors>
-    <Version>0.2.1</Version>
+    <Version>0.2.0</Version>
     <PackageId>asplib.blazor</PackageId>
     <Product>aspnettest</Product>
     <Description>
@@ -29,11 +29,16 @@
 
   <ItemGroup>
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.10" />
+    <PackageReference Include="Teronis.MSBuild.Packaging.ProjectBuildInPackage" Version="1.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\asplib.core\asplib.core.csproj" />
-    <ProjectReference Include="..\iselenium.core\iselenium.core.csproj" />
+    <ProjectReference Include="..\asplib.core\asplib.core.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\asplib\asplib.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\smc\smc.csproj" PrivateAssets="all" />
   </ItemGroup>
 
 </Project>

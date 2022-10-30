@@ -13,7 +13,7 @@ using System.Collections.Generic;
 
 using iselenium;
 [Serializable]
-[System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.1.0")]
+[System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.2.0")]
 public sealed class TestRunnerFsmContext :
     statemap.FSMContext,
     ISerializable
@@ -195,7 +195,7 @@ public sealed class TestRunnerFsmContext :
 // Inner classes.
 //
 
-    [System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.1.0")]
+    [System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.2.0")]
     public abstract class TestRunnerFsmState :
         statemap.State
     {
@@ -252,7 +252,7 @@ public sealed class TestRunnerFsmContext :
                     context.GetTransition()));
         }
     }
-    [System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.1.0")]
+    [System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.2.0")]
 
     internal abstract class Map1
     {
@@ -300,7 +300,7 @@ public sealed class TestRunnerFsmContext :
 
     }
 
-    [System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.1.0")]
+    [System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.2.0")]
     internal class Map1_Default :
         TestRunnerFsmState
     {
@@ -328,7 +328,7 @@ public sealed class TestRunnerFsmContext :
     // Inner classes.
     //
 
-        [System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.1.0")]
+        [System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.2.0")]
         internal class Map1_New :
             Map1_Default
         {
@@ -382,7 +382,7 @@ public sealed class TestRunnerFsmContext :
             }
         }
 
-        [System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.1.0")]
+        [System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.2.0")]
         internal class Map1_RunningOk :
             Map1_Default
         {
@@ -467,7 +467,7 @@ public sealed class TestRunnerFsmContext :
             }
         }
 
-        [System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.1.0")]
+        [System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.2.0")]
         internal class Map1_RunningWarning :
             Map1_Default
         {
@@ -543,7 +543,7 @@ public sealed class TestRunnerFsmContext :
             }
         }
 
-        [System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.1.0")]
+        [System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.2.0")]
         internal class Map1_RunningError :
             Map1_Default
         {
@@ -608,7 +608,7 @@ public sealed class TestRunnerFsmContext :
             }
         }
 
-        [System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.1.0")]
+        [System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.2.0")]
         internal class Map1_CompletedOk :
             Map1_Default
         {
@@ -662,7 +662,7 @@ public sealed class TestRunnerFsmContext :
             }
         }
 
-        [System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.1.0")]
+        [System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.2.0")]
         internal class Map1_CompletedWarning :
             Map1_Default
         {
@@ -716,7 +716,7 @@ public sealed class TestRunnerFsmContext :
             }
         }
 
-        [System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.1.0")]
+        [System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.2.0")]
         internal class Map1_CompletedError :
             Map1_Default
         {
@@ -770,7 +770,7 @@ public sealed class TestRunnerFsmContext :
             }
         }
 
-        [System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.1.0")]
+        [System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.2.0")]
         internal class Map1_Passed :
             Map1_Default
         {
@@ -824,7 +824,7 @@ public sealed class TestRunnerFsmContext :
             }
         }
 
-        [System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.1.0")]
+        [System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.2.0")]
         internal class Map1_ResultXml :
             Map1_Default
         {

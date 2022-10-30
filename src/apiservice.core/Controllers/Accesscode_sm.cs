@@ -13,7 +13,7 @@ using System.Collections.Generic;
 
 using apiservice.Controllers;
 [Serializable]
-[System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.1.0")]
+[System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.2.0")]
 public sealed class AccesscodeContext :
     statemap.FSMContext,
     ISerializable
@@ -174,7 +174,7 @@ public sealed class AccesscodeContext :
 // Inner classes.
 //
 
-    [System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.1.0")]
+    [System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.2.0")]
     public abstract class AccesscodeControllerState :
         statemap.State
     {
@@ -221,7 +221,7 @@ public sealed class AccesscodeContext :
                     context.GetTransition()));
         }
     }
-    [System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.1.0")]
+    [System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.2.0")]
 
     internal abstract class AuthMap
     {
@@ -254,7 +254,7 @@ public sealed class AccesscodeContext :
 
     }
 
-    [System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.1.0")]
+    [System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.2.0")]
     internal class AuthMap_Default :
         AccesscodeControllerState
     {
@@ -282,7 +282,7 @@ public sealed class AccesscodeContext :
     // Inner classes.
     //
 
-        [System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.1.0")]
+        [System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.2.0")]
         internal class AuthMap_Idle :
             AuthMap_Default
         {
@@ -347,7 +347,7 @@ public sealed class AccesscodeContext :
             }
         }
 
-        [System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.1.0")]
+        [System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.2.0")]
         internal class AuthMap_Unverified :
             AuthMap_Default
         {
@@ -438,7 +438,7 @@ public sealed class AccesscodeContext :
             }
         }
 
-        [System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.1.0")]
+        [System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.2.0")]
         internal class AuthMap_Verified :
             AuthMap_Default
         {
@@ -479,7 +479,7 @@ public sealed class AccesscodeContext :
             }
         }
 
-        [System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.1.0")]
+        [System.CodeDom.Compiler.GeneratedCode("smc"," v. 7.2.0")]
         internal class AuthMap_Denied :
             AuthMap_Default
         {

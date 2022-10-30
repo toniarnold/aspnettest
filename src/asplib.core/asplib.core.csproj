@@ -7,7 +7,7 @@
 
   <PropertyGroup>
     <Authors>Toni Arnold, Charles W. Rapp (SMC)</Authors>
-    <Version>0.2.1</Version>
+    <Version>0.2.0</Version>
     <PackageId>asplib.core</PackageId>
     <Product>aspnettest</Product>
     <Description>Base for an ASP.NET Model Control View design pattern with session persistence and optionally SMC, the State Machine Compiler
@@ -29,11 +29,15 @@
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.10" />
     <PackageReference Include="Microsoft.Extensions.Logging.Console" Version="6.0.0" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.4" />
+    <PackageReference Include="Teronis.MSBuild.Packaging.ProjectBuildInPackage" Version="1.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\asplib\asplib.csproj" />
-    <ProjectReference Include="..\smc\smc.csproj" />
+    <ProjectReference Include="..\asplib\asplib.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\smc\smc.csproj" PrivateAssets="all" />
   </ItemGroup>
 
 </Project>

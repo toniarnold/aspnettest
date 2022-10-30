@@ -8,7 +8,7 @@
   
   <PropertyGroup>
     <Authors>Toni Arnold</Authors>
-    <Version>0.2.1</Version>
+    <Version>0.2.0</Version>
     <PackageId>iselenium.blazor</PackageId>
     <Product>aspnettest</Product>
     <Description>ASP.NET In-App-GUI-Tests with Selenium and NUnit</Description>
@@ -27,11 +27,19 @@
     <PackageReference Include="bunit" Version="1.11.7" />
     <PackageReference Include="Microsoft.AspNetCore.Components.Web" Version="6.0.10" />
     <PackageReference Include="Moq" Version="4.18.2" />
+    <PackageReference Include="Teronis.MSBuild.Packaging.ProjectBuildInPackage" Version="1.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\asplib.blazor\asplib.blazor.csproj" />
-    <ProjectReference Include="..\iselenium.core\iselenium.core.csproj" />
+    <ProjectReference Include="..\asplib.blazor\asplib.blazor.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\asplib.core\asplib.core.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\asplib\asplib.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\iselenium.core\iselenium.core.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\iselenium\iselenium.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\smc\smc.csproj" PrivateAssets="all" />
   </ItemGroup>
 
   <!-- Don't require the SMC code generator Makefile project dependency when /p:noSmc=true -->

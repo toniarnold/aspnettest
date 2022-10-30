@@ -7,7 +7,7 @@
 
   <PropertyGroup>
     <Authors>Toni Arnold</Authors>
-    <Version>0.2.1</Version>
+    <Version>0.2.0</Version>
     <PackageId>iselenium.core</PackageId>
     <Product>aspnettest</Product>
     <Description>ASP.NET In-App-GUI-Tests with Selenium and NUnit</Description>
@@ -22,11 +22,16 @@
   <ItemGroup>
     <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="17.3.2" />
     <PackageReference Include="NUnit.Engine" Version="3.15.2" />
+    <PackageReference Include="Teronis.MSBuild.Packaging.ProjectBuildInPackage" Version="1.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\asplib.core\asplib.core.csproj" />
-    <ProjectReference Include="..\iselenium\iselenium.csproj" />
+    <ProjectReference Include="..\asplib.core\asplib.core.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\iselenium\iselenium.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\smc\smc.csproj" PrivateAssets="all" />
   </ItemGroup>
 
 

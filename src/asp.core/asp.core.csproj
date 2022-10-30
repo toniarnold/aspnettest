@@ -20,6 +20,7 @@
     <ProjectReference Include="..\asplib.core\asplib.core.csproj" />
     <ProjectReference Include="..\asplib\asplib.csproj" />
     <ProjectReference Include="..\iselenium.core\iselenium.core.csproj" />
+    <ProjectReference Include="..\iselenium\iselenium.csproj" />
     <ProjectReference Include="..\smc\smc.csproj" />
     <ProjectReference Include="Controllers\calculator.core.vcxproj">
       <Name>calculator.core</Name>

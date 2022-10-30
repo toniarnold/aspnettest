@@ -23,8 +23,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\asp.websharper.spa.Model\asp.websharper.spa.Model.csproj" />
+    <ProjectReference Include="..\asplib.core\asplib.core.csproj" />
     <ProjectReference Include="..\asplib.websharper\asplib.websharper.csproj" />
+    <ProjectReference Include="..\asplib\asplib.csproj" />
+    <ProjectReference Include="..\iselenium.core\iselenium.core.csproj" />
     <ProjectReference Include="..\iselenium.websharper\iselenium.websharper.csproj" />
+    <ProjectReference Include="..\iselenium\iselenium.csproj" />
     <ProjectReference Include="..\smc\smc.csproj" />
   </ItemGroup>
 

@@ -1,27 +1,15 @@
+SMC - The State Machine Compiler Downloads
 
+Current release is SMC 7.3.0, released on November 11, 2021.
 
+SMC releases are now stored in folders named SMC m.n.o which contain
+the Smc.jar, SMC library files, documentation, and the SMC maven plug-in.
 
-                              SMC -
-                     The State Machine Compiler
+++++++++++++++++++++++++++++++++++++++++
 
-
-+ Building & Installing statemap.dll
-------------------------------------
-
-NOTE: This code only should be used to generate statemap.dll.
-This dll should be used for both CSharp and VB.net applications.
-
-1. If you have built statemap.dll previously and want to perform
-   a complete build, then do
-
-   $ make clean
-
-2. Build statemap.dll:
-
-   (Must use Microsoft DevStudio v. 7.0 or later. Build both
-    Debug and Release configurations.)
-
-3. To install statemap.dll in the Smc distribution directory
-   tree, do:
-
-   $ make install
+If you have any questions or bugs, please surf
+over to http://smc.sourceforge.net and check out
+the discussion and bug forums. Note: you must be
+a SourceForge member to add articles or bugs. You
+do not have to be a member to read posted
+articles or bugs.

@@ -9,7 +9,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\asplib.blazor\asplib.blazor.csproj" />
+    <ProjectReference Include="..\asplib.core\asplib.core.csproj" />
+    <ProjectReference Include="..\asplib\asplib.csproj" />
     <ProjectReference Include="..\iselenium.blazor\iselenium.blazor.csproj" />
+    <ProjectReference Include="..\iselenium.core\iselenium.core.csproj" />
+    <ProjectReference Include="..\iselenium\iselenium.csproj" />
     <ProjectReference Include="..\smc\smc.csproj" />
     <ProjectReference Include="CalculatorSmc\calculator.blazor.vcxproj">
       <Name>calculator.blazor</Name>

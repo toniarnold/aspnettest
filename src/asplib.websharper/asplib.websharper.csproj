@@ -8,7 +8,7 @@
 
   <PropertyGroup>
     <Authors>Toni Arnold, Charles W. Rapp (SMC)</Authors>
-    <Version>0.2.1</Version>
+    <Version>0.2.0</Version>
     <PackageId>asplib.websharper</PackageId>
     <Product>aspnettest</Product>
     <Description>
@@ -25,6 +25,10 @@
 
   <ItemGroup>
     <PackageReference Include="FSharp.Core" Version="6.0.6" />
+    <PackageReference Include="Teronis.MSBuild.Packaging.ProjectBuildInPackage" Version="1.0.0">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="WebSharper" Version="6.0.4.240" />
     <PackageReference Include="WebSharper.CSharp" Version="6.0.4.240" />
     <PackageReference Include="WebSharper.UI" Version="6.0.5.240" />
@@ -32,7 +36,9 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\asplib.core\asplib.core.csproj" />
+    <ProjectReference Include="..\asplib.core\asplib.core.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\asplib\asplib.csproj" PrivateAssets="all" />
+    <ProjectReference Include="..\smc\smc.csproj" PrivateAssets="all" />
   </ItemGroup>
 
 </Project>
