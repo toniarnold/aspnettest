@@ -19,14 +19,14 @@ namespace asplib.Controllers
         { get { return this.configuration; } }
 
         [NonSerialized]
-        protected IConfiguration configuration;
+        protected IConfiguration configuration = default!;
 
         public Storage? SessionStorage { get; set; }
 
         [NonSerialized]
-        private object model;
+        private object? model;
 
-        public object Model
+        public object? Model
         { get { return this.model; } }
 
         public Guid? Session { get; set; }
@@ -47,7 +47,7 @@ namespace asplib.Controllers
         /// <param name="filter"></param>
         /// <returns></returns>
         [NonAction]
-        public byte[] Serialize(Func<byte[], byte[]> filter = null)
+        public byte[] Serialize(Func<byte[], byte[]>? filter = null)
         {
             return Serialization.Serialize(this.GetValues(), filter);
         }
@@ -58,7 +58,7 @@ namespace asplib.Controllers
         /// <param name="bytes"></param>
         /// <param name="filter"></param>
         [NonAction]
-        public virtual void Deserialize(byte[] bytes, Func<byte[], byte[]> filter = null)
+        public virtual void Deserialize(byte[] bytes, Func<byte[], byte[]>? filter = null)
         {
             var members = (Dictionary<string, object>)Serialization.Deserialize(bytes, filter);
             if (members != null)
@@ -102,7 +102,7 @@ namespace asplib.Controllers
         /// <param name="name"></param>
         /// <param name="model"></param>
         /// <returns></returns>
-        public override ViewResult View(string name, object model)
+        public override ViewResult View(string? name, object? model)
         {
             this.model = model;
             return base.View(name, model);
@@ -114,7 +114,7 @@ namespace asplib.Controllers
         /// </summary>
         /// <param name="model"></param>
         /// <returns></returns>
-        public override ViewResult View(object model)
+        public override ViewResult View(object? model)
         {
             this.model = model;
             return base.View(model);
@@ -143,11 +143,11 @@ namespace asplib.Controllers
         /// Get all name:value pairs from the fields to serialize.
         /// </summary>
         /// <returns></returns>
-        internal Dictionary<string, object> GetValues()
+        internal Dictionary<string, object?> GetValues()
         {
             var fields = new List<FieldInfo>();
             this.GetFields(this.GetType(), fields);
-            var values = new Dictionary<string, object>();
+            var values = new Dictionary<string, object?>();
             foreach (var field in fields)
             {
                 values.Add(field.Name, field.GetValue(this));
@@ -171,7 +171,7 @@ namespace asplib.Controllers
             members.AddRange(serializalbeFields);
             if (type != typeof(PersistentController)) // ceiling parent
             {
-                this.GetFields(type.BaseType, members);
+                this.GetFields(type.BaseType!, members);
             }
             else
             {

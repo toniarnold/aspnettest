@@ -13,7 +13,7 @@ namespace asplib.Model
         /// <typeparam name="T"></typeparam>
         /// <param name="src"></param>
         /// <returns></returns>
-        public static T Map<T>(object src)
+        public static T? Map<T>(object src)
             where T : new()
         {
             var json = Serialize(src);
@@ -36,7 +36,7 @@ namespace asplib.Model
         /// <typeparam name="T"></typeparam>
         /// <param name="json"></param>
         /// <returns></returns>
-        public static T Deserialize<T>(string json)
+        public static T? Deserialize<T>(string json)
         {
             return JsonSerializer.Deserialize<T>(json);
         }

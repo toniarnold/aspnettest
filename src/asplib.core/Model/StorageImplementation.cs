@@ -73,43 +73,46 @@ namespace asplib.Model
         /// <param name="configuration">The configuration.</param>
         /// <param name="httpContext">The HTTP context.</param>
         /// <param name="main">The main.</param>
-        public static void SaveDatabase(IConfiguration configuration, HttpContext httpContext, object main)
+        public static void SaveDatabase(IConfiguration configuration, HttpContext? httpContext, object main)
         {
-            var storageID = GetStorageID(main.GetType().Name);
-            Guid session;
-            var newCookie = new NameValueCollection();
-            var cookie = httpContext.Request.Cookies[storageID].FromCookieString();
-            if (cookie["session"] != null)
+            if (httpContext != null)// e.g. bUnit
             {
-                Guid.TryParse(cookie["session"], out session);
+                var storageID = GetStorageID(main.GetType().Name);
+                Guid session;
+                var newCookie = new NameValueCollection();
+                var cookie = httpContext.Request.Cookies[storageID].FromCookieString();
+                if (cookie["session"] != null)
+                {
+                    Guid.TryParse(cookie["session"], out session);
+                }
+                else
+                {
+                    session = Guid.NewGuid();  // cannot exist in the database
+                }
+                Func<byte[], byte[]>? filter = null;
+                if (StorageImplementation.GetEncryptDatabaseStorage(configuration))
+                {
+                    var key = (cookie["key"] != null) ? Convert.FromBase64String(cookie["key"]!) : null;
+                    var secret = StorageImplementation.GetSecret(key);
+                    filter = x => Crypt.Encrypt(secret, x);
+                    newCookie["key"] = Convert.ToBase64String(secret.Key);
+                    TypeDescriptor.AddAttributes(main, new DatabaseKeyAttribute(secret.Key));
+                }
+                using (var db = new ASP_DBEntities())
+                {
+                    var savedSession = db.SaveMain(main.GetType(), StorageImplementation.Bytes(main, filter), session);
+                    newCookie["session"] = savedSession.ToString();
+                    TypeDescriptor.AddAttributes(main, new DatabaseSessionAttribute(savedSession));
+                }
+                var days = configuration.GetValue<int>("DatabaseStorageExpires");
+                var options = new CookieOptions()
+                {
+                    Expires = DateTime.Now.AddDays(days),
+                    HttpOnly = true,
+                    SameSite = SameSiteMode.Strict
+                };
+                httpContext.Response.Cookies.Append(storageID, newCookie.ToCookieString(), options);
             }
-            else
-            {
-                session = Guid.NewGuid();  // cannot exist in the database
-            }
-            Func<byte[], byte[]> filter = null;
-            if (StorageImplementation.GetEncryptDatabaseStorage(configuration))
-            {
-                var key = (cookie["key"] != null) ? Convert.FromBase64String(cookie["key"]) : null;
-                var secret = StorageImplementation.GetSecret(key);
-                filter = x => Crypt.Encrypt(secret, x);
-                newCookie["key"] = Convert.ToBase64String(secret.Key);
-                TypeDescriptor.AddAttributes(main, new DatabaseKeyAttribute(secret.Key));
-            }
-            using (var db = new ASP_DBEntities())
-            {
-                var savedSession = db.SaveMain(main.GetType(), StorageImplementation.Bytes(main, filter), session);
-                newCookie["session"] = savedSession.ToString();
-                TypeDescriptor.AddAttributes(main, new DatabaseSessionAttribute(savedSession));
-            }
-            var days = configuration.GetValue<int>("DatabaseStorageExpires");
-            var options = new CookieOptions()
-            {
-                Expires = DateTime.Now.AddDays(days),
-                HttpOnly = true,
-                SameSite = SameSiteMode.Strict
-            };
-            httpContext.Response.Cookies.Append(storageID, newCookie.ToCookieString(), options);
         }
 
         /// <summary>
@@ -122,9 +125,9 @@ namespace asplib.Model
         {
             var storageID = GetStorageID(main.GetType().Name);
             Guid session = Guid.NewGuid();  // initially cannot exist in the database
-            byte[] key = null;
+            byte[]? key = null;
             var attributes = TypeDescriptor.GetAttributes(main);
-            var sessionAttribute = (DatabaseSessionAttribute)
+            var sessionAttribute = (DatabaseSessionAttribute?)
                 (from Attribute a in attributes
                  where a is DatabaseSessionAttribute
                  select a).FirstOrDefault();
@@ -132,7 +135,7 @@ namespace asplib.Model
             {
                 session = sessionAttribute.Session; // override with the session attribute programmatically set
             }
-            var keyAttribute = (DatabaseKeyAttribute)
+            var keyAttribute = (DatabaseKeyAttribute?)
                 (from Attribute a in attributes
                  where a is DatabaseKeyAttribute
                  select a).FirstOrDefault();
@@ -140,7 +143,7 @@ namespace asplib.Model
             {
                 key = keyAttribute.Key;
             }
-            Func<byte[], byte[]> filter = null;
+            Func<byte[], byte[]>? filter = null;
             if (StorageImplementation.GetEncryptDatabaseStorage(configuration))
             {
                 var secret = StorageImplementation.GetSecret(key);
@@ -170,9 +173,9 @@ namespace asplib.Model
         /// </summary>
         /// <param name="configuration">The configuration.</param>
         /// <returns></returns>
-        public static Func<byte[], byte[]> EncryptViewState(IConfiguration configuration)
+        public static Func<byte[], byte[]>? EncryptViewState(IConfiguration configuration)
         {
-            Func<byte[], byte[]> filter = null;
+            Func<byte[], byte[]>? filter = null;
             var key = configuration.GetValue<string>("EncryptViewStateKey");
             if (!String.IsNullOrEmpty(key))
             {
@@ -187,9 +190,9 @@ namespace asplib.Model
         /// </summary>
         /// <param name="configuration">The configuration.</param>
         /// <returns></returns>
-        public static Func<byte[], byte[]> DecryptViewState(IConfiguration configuration)
+        public static Func<byte[], byte[]>? DecryptViewState(IConfiguration configuration)
         {
-            Func<byte[], byte[]> filter = null;
+            Func<byte[], byte[]>? filter = null;
             var key = configuration.GetValue<string>("EncryptViewStateKey");
             if (!String.IsNullOrEmpty(key))
             {
@@ -204,7 +207,7 @@ namespace asplib.Model
         /// <param name="configuration">The configuration.</param>
         /// <param name="viewstate">The Basee64-encoded ViewState string.</param>
         /// <returns></returns>
-        public static (byte[] bytes, Func<byte[], byte[]> filter) ViewStateBytes(
+        public static (byte[] bytes, Func<byte[], byte[]>? filter) ViewStateBytes(
             IConfiguration configuration, string viewstate)
         {
             var filter = DecryptViewState(configuration);
@@ -212,11 +215,11 @@ namespace asplib.Model
             return (bytes, filter);
         }
 
-        public static (byte[] bytes, Func<byte[], byte[]> filter) DatabaseBytes(
+        public static (byte[] bytes, Func<byte[], byte[]>? filter) DatabaseBytes(
             IConfiguration configuration, HttpContext httpContext, string storageID, Guid session)
         {
             byte[] bytes;
-            Func<byte[], byte[]> filter = null;
+            Func<byte[], byte[]>? filter = null;
             if (GetEncryptDatabaseStorage(configuration))
             {
                 var keyString = httpContext.Request.Cookies[storageID].FromCookieString()["key"];
@@ -226,11 +229,7 @@ namespace asplib.Model
             }
             using (var db = new ASP_DBEntities())
             {
-                bytes = db.LoadMain(session);
-            }
-            if (bytes == null)
-            {
-                throw new ArgumentException($"No data for session={session}");
+                bytes = db.LoadMain(session) ?? throw new ArgumentException($"No data for session={session}"); ;
             }
             return (bytes, filter);
         }
@@ -244,7 +243,7 @@ namespace asplib.Model
         /// </summary>
         /// <param name="sessionStorage">the configured session storage</param>
         /// <param name="storageID"></param>
-        internal static void ClearIfRequested(HttpContext httpContext, Storage sessionStorage, string storageID)
+        internal static void ClearIfRequested(HttpContext? httpContext, Storage sessionStorage, string storageID)
         {
             if (httpContext != null && // e.g. bUnit
                 httpContext.Request.Method == WebRequestMethods.Http.Get &&
@@ -310,12 +309,13 @@ namespace asplib.Model
         /// <param name="sessionStorageID">Optional session-local storage field
         /// for POST requests (not applicable for WebSharper SPA)</param>
         /// <returns></returns>
-        internal static Storage GetStorage(IConfiguration configuration, HttpContext httpContext, string sessionStorageID = null)
+        internal static Storage GetStorage(IConfiguration configuration, HttpContext? httpContext, string? sessionStorageID = null)
         {
             Storage? storage = null;
             if (httpContext != null && // e.g. bUnit
                 httpContext.Request.Method == WebRequestMethods.Http.Post &&
                 httpContext.Request.HasFormContentType &&   // Exclude WebSharper's application/json
+                sessionStorageID != null &&
                 httpContext.Request.Form.ContainsKey(sessionStorageID))
             {
                 Storage postedStorage;
@@ -381,12 +381,12 @@ namespace asplib.Model
         public static string InsertSQL(this object inst)
         {
             var sql = String.Empty;
-            byte[] bytes;
+            byte[]? bytes;
             if (TryGetBytes(inst, out bytes)) // serialize without filter
             {
                 using (var db = new ASP_DBEntities())
                 {
-                    sql = db.InsertSQL(inst.GetType(), bytes);
+                    sql = db.InsertSQL(inst.GetType(), bytes!);
                 }
             }
             return sql;
@@ -397,7 +397,7 @@ namespace asplib.Model
         /// ViewState HTML input fields
         /// </summary>
         /// <returns></returns>
-        internal static string ViewState(object main, Func<byte[], byte[]> filter = null)
+        internal static string ViewState(object main, Func<byte[], byte[]>? filter = null)
         {
             byte[] bytes = Bytes(main);
             return Convert.ToBase64String((filter == null) ? bytes : filter(bytes));
@@ -410,7 +410,7 @@ namespace asplib.Model
         /// <param name="viewstate">The viewstate string</param>
         /// <param name="filter">optional encryption filter</param>
         /// <returns></returns>
-        internal static T LoadFromViewstate<T>(Func<T> construct, string viewstate, Func<byte[], byte[]> filter = null)
+        internal static T LoadFromViewstate<T>(Func<T> construct, string viewstate, Func<byte[], byte[]>? filter = null)
         {
             if (String.IsNullOrEmpty(viewstate))  // Initialization: return a new object
             {
@@ -428,7 +428,7 @@ namespace asplib.Model
         /// <param name="bytes"></param>
         /// <param name="filter"></param>
         /// <returns></returns>
-        internal static T LoadFromBytes<T>(Func<T> construct, byte[] bytes, Func<byte[], byte[]> filter = null)
+        internal static T LoadFromBytes<T>(Func<T> construct, byte[] bytes, Func<byte[], byte[]>? filter = null)
         {
             if (bytes == null)  // Initialization: return a new object
             {
@@ -441,16 +441,16 @@ namespace asplib.Model
         /// Returns a byte array as a serialization of the controller
         /// </summary>
         /// <returns></returns>
-        internal static byte[] Bytes(object main, Func<byte[], byte[]> filter = null)
+        internal static byte[] Bytes(object main, Func<byte[], byte[]>? filter = null)
         {
-            byte[] bytes;
+            byte[]? bytes;
             if (!TryGetBytes(main, out bytes, filter))
             {
                 throw new ArgumentException(String.Format(
                     "{0} is not a serializable object",
                     main.GetType()));
             }
-            return bytes;
+            return bytes!;
         }
 
         /// <summary>
@@ -459,7 +459,7 @@ namespace asplib.Model
         /// </summary>
         /// <param name="main"></param>
         /// <returns></returns>
-        public static bool TryGetBytes(object main, out byte[] bytes, Func<byte[], byte[]> filter = null)
+        public static bool TryGetBytes(object main, out byte[]? bytes, Func<byte[], byte[]>? filter = null)
         {
             if (main is PersistentController)
             {
@@ -496,7 +496,7 @@ namespace asplib.Model
         /// the key is null.
         /// </summary>
         /// <returns></returns>
-        internal static Crypt.Secret GetSecret(byte[] key)
+        internal static Crypt.Secret GetSecret(byte[]? key)
         {
             Crypt.Secret secret;
             if (key != null)

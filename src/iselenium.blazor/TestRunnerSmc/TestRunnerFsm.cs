@@ -25,7 +25,7 @@ namespace iselenium
             this.Construct();
         }
 
-        public TestRunnerFsm() : base(null, null, 0)
+        public TestRunnerFsm() : base(0)
         {
             this.Construct();
         }

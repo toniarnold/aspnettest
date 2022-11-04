@@ -9,8 +9,11 @@ namespace minimaltest
     /// Additionally to DefaultTest, the main Control must inherit from IRootControl
     /// to be able to navigate through the control hierarchy.
     /// </summary>
+#pragma warning disable CS0618 // IIE obsolete
+
     [TestFixture]
     public class WithStaticControllerTest : IETest<WithStaticController>
+#pragma warning restore CS0618 // IIE obsolete
     {
         /// <summary>
         /// Typed accessor to the only ViewModel for the app

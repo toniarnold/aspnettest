@@ -29,7 +29,7 @@ namespace asplib.Services
         /// <typeparam name="T"></typeparam>
         /// <param name="stream"></param>
         /// <returns></returns>
-        public static T Deserialize<T>(HttpContent content)
+        public static T? Deserialize<T>(HttpContent content)
         {
             var buffer = new Pipe().Writer.GetSpan();
             var stream = content.ReadAsStreamAsync().Result;

@@ -1,5 +1,6 @@
 ﻿using apiservice.Model.Db;
 using asplib.Model.Db;
+using Azure;
 using Microsoft.EntityFrameworkCore;
 using NUnit.Framework;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace apitest.apiservice.Model.Db
     [TestFixture]
     public class AspserviceDbTest : AspserviceDb, IGlobalTransaction
     {
-        public List<DbContext> DbContexts { get; set; }
+        public List<DbContext> DbContexts { get; set; } = new();
 
         [OneTimeSetUp]
         public void ConfigureServices()
@@ -44,7 +45,7 @@ namespace apitest.apiservice.Model.Db
                         select m;
             var main = query.FirstOrDefault();
             Assert.That(main, Is.Not.Null);
-            Assert.That(main.Session, Is.EqualTo(DbTestData.SESSION));
+            Assert.That(main!.Session, Is.EqualTo(DbTestData.SESSION));
         }
 
         [Test]
@@ -66,8 +67,13 @@ namespace apitest.apiservice.Model.Db
                               a.Phonenumber == phonenumber
                         select a;
             var retrieved = query.FirstOrDefault();
-            Assert.That(retrieved.Phonenumber, Is.EqualTo(phonenumber));
-            Assert.That(retrieved.Accesscode1, Is.EqualTo(accesscode));
+
+            Assert.That(retrieved, Is.Not.Null);
+            Assert.Multiple(() =>
+            {
+                Assert.That(retrieved!.Phonenumber, Is.EqualTo(phonenumber));
+                Assert.That(retrieved.Accesscode1, Is.EqualTo(accesscode));
+            });
         }
     }
 }

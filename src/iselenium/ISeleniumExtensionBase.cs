@@ -535,7 +535,9 @@ namespace iselenium
 
         private static bool IIECompatible(this ISeleniumBase inst)
         {
+#pragma warning disable CS0618 // IIE obsolete
             return inst is IIE;
+#pragma warning restore CS0618 // IIE obsolete
         }
     }
 }

@@ -10,7 +10,7 @@ namespace asptestrunner
     [Category("ITestServer")]
     public class Runner : SeleniumTest<EdgeDriver>, ITestServer
     {
-        public List<Process> ServerProcesses { get; set; }
+        public List<Process> ServerProcesses { get; set; } = new();
 
         [SetUp]
         public void SetUp()

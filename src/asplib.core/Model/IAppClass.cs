@@ -22,7 +22,7 @@
             where F : statemap.FSMContext
             where S : statemap.State
         {
-            main.Fsm.GetType().GetProperty("Owner").SetValue(main.Fsm, main);
+            main.Fsm.GetType().GetProperty("Owner")!.SetValue(main.Fsm, main);  // Owner is generated thus guaranteed
         }
 
         /// <summary>
@@ -35,7 +35,7 @@
             where F : statemap.FSMContext
             where S : statemap.State
         {
-            return (S)main.Fsm.GetType().GetProperty("State").GetValue(main.Fsm);
+            return (S)main.Fsm.GetType().GetProperty("State")!.GetValue(main.Fsm)!;
         }
     }
 }

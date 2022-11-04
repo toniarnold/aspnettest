@@ -14,7 +14,7 @@ namespace apiservice.Model.Db
     {
         public const int ACCESSCODE_LENGTH = 6;    // dbo.Accesscode.accesscode
 
-        internal AspserviceDbContext _DbContext;
+        internal AspserviceDbContext _DbContext = default!;
 
         public AspserviceDb(AspserviceDbContext dbContext)
         {

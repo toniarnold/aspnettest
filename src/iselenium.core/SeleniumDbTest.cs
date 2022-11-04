@@ -22,7 +22,7 @@ namespace iselenium
         /// <summary>
         /// IDeleteNewRows
         /// </summary>
-        public List<(string, string, object)> MaxIds { get; set; }
+        public List<(string, string, object)> MaxIds { get; set; } = new();
 
         /// <summary>
         /// Remember the last row in [Main] before the tests started

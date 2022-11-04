@@ -23,6 +23,6 @@ namespace asplib.Model
 
         public Guid clsid { get; set; }
 
-        public byte[] main { get; set; }
+        public byte[] main { get; set; } = default!;   // NOT NULL
     }
 }

@@ -34,8 +34,10 @@ namespace asptest.Calculator
         /// </summary>
         private void RestartIE()
         {
+#pragma warning disable CS0618 // IIE obsolete
             this.TearDownIE();
             this.SetUpIE();
+#pragma warning restore CS0618 // IIE obsolete
             this.Navigate("/");
         }
 

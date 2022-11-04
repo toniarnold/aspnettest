@@ -67,7 +67,7 @@ namespace iselenium
         /// <param name="timeout">explicit expected duration of all tests in sec</param>
         /// <param name="servertimeout">expected start time of the server in sec</param>
         public static void StartServer(this ITestServer inst, IConfiguration config,
-                                       string serverproject = null, string root = null, int? port = null,
+                                       string? serverproject = null, string? root = null, int? port = null,
                                        int? timeout = null, int? servertimeout = null)
         {
             string cserverproject = serverproject ?? config["ServerProject"];

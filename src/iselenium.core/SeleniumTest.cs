@@ -1,6 +1,7 @@
 ﻿using asplib.Controllers;
 using NUnit.Framework;
 using OpenQA.Selenium;
+using System;
 
 namespace iselenium
 {
@@ -19,7 +20,14 @@ namespace iselenium
         /// </summary>
         protected TController Controller
         {
-            get { return (TController)StaticControllerExtension.GetController(); }
+            get
+            {
+                if (this.Controller == null)
+                {
+                    throw new NullReferenceException("Controller not set or torn down");
+                }
+                return (TController)StaticControllerExtension.GetController();
+            }
         }
 
         /// <summary>

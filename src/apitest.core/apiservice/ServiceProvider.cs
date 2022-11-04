@@ -13,8 +13,10 @@ namespace apitest.apiservice
     /// </summary>
     public static class ServiceProvider
     {
-        private static IConfiguration _configuration;
-        private static IServiceProvider _provider;
+        // Instantiated by lazy CreateMembers on each accessor
+        private static IConfiguration _configuration = default!;
+
+        private static IServiceProvider _provider = default!;
 
         public static IConfiguration Configuration
         {
@@ -28,7 +30,12 @@ namespace apitest.apiservice
         public static T Get<T>()
         {
             CreateMembers();
-            return (T)_provider.GetService(typeof(T));
+            var inst = (T?)_provider.GetService(typeof(T));
+            if (inst == null)
+            {
+                throw new Exception($"Service not registered: {typeof(T)}");
+            }
+            return (T)inst;
         }
 
         public static TestServer CreateTestServer()

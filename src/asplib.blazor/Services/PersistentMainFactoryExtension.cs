@@ -48,14 +48,14 @@ namespace asplib.Services
                 // and cookies can only be set before the response has been started -  which is
                 // the case for DI instantiation.
                 var httpContextAccessor = provider.GetService<IHttpContextAccessor>();
-
-                var httpContext = httpContextAccessor?.HttpContext;
-                var configuration = provider.GetService<IConfiguration>();
+                var httpContext = httpContextAccessor?.HttpContext; // null in bUnit
+                IConfiguration configuration = provider.GetService<IConfiguration>() ??
+                    throw new NullReferenceException("IConfiguration not registered");
                 var mainType = typeof(T);
                 var storageID = StorageImplementation.GetStorageID(mainType.Name);
                 var sessionStorageID = StorageImplementation.GetSessionStorageID(mainType.Name);
 
-                ASP_DBEntities.ConnectionString = configuration?["ASP_DBEntities"];  // globally
+                ASP_DBEntities.ConnectionString = configuration["ASP_DBEntities"];  // globally
                 var storage = StorageImplementation.GetStorage(configuration, httpContext, sessionStorageID);
                 StorageImplementation.ClearIfRequested(httpContext, storage, storageID);
 
@@ -94,8 +94,9 @@ namespace asplib.Services
                             TypeDescriptor.AddAttributes(main, new DatabaseSessionAttribute(session));  // remember the session Guid
                             if (StorageImplementation.GetEncryptDatabaseStorage(configuration))
                             {
-                                var cookie = httpContext.Request.Cookies[storageID].FromCookieString();
-                                var key = (cookie?["key"] != null) ? Convert.FromBase64String(cookie?["key"] ?? "") : null;
+                                var cookie = httpContext?.Request.Cookies[storageID].FromCookieString();
+                                var key = (cookie?["key"] != null) ? Convert.FromBase64String(cookie!["key"]!) :
+                                    throw new Exception("No cookie[\"key\"] ");
                                 TypeDescriptor.AddAttributes(main, new DatabaseKeyAttribute(key));
                             }
                         }

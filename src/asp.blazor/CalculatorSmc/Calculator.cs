@@ -14,7 +14,7 @@ namespace asp.blazor.CalculatorSmc
         protected Stack<string> _stack = default!;
 
         [NonSerialized]
-        private ILogger<Calculator> _logger;
+        private ILogger<Calculator> _logger = default!;
 
         [Inject]
         private ILogger<Calculator> Logger { get => _logger; set => _logger = value; }
@@ -58,16 +58,16 @@ namespace asp.blazor.CalculatorSmc
         }
 
         /// <summary>
-        /// IMain is the access point for fhe equivalent of global variables in PHP (volatile between requests)
+        /// IMain is the access point for the equivalent of global variables in PHP (volatile between requests)
         /// </summary>
-        public string Operand
+        public string? Operand
         {
             get { return this.operand; }
             set { this.operand = value; }
         }
 
         [NonSerialized]
-        private string operand;
+        private string? operand;
 
         //  Context method implementations, called indirectly by the FSM
         //  context class.

@@ -17,10 +17,10 @@ namespace apicaller.Services
 {
     public class ServiceClient : IServiceClient
     {
-        internal IConfiguration _configuration;
-        internal IHttpClientFactory _clientFactory;
+        internal IConfiguration _configuration = default!;
+        internal IHttpClientFactory _clientFactory = default!;
 
-        public string[] Cookies { get; set; }
+        public string[] Cookies { get; set; } = Array.Empty<string>();
 
         internal virtual Uri ServiceHost
         {
@@ -63,7 +63,8 @@ namespace apicaller.Services
                 var response = await client.PostAsync(ResouceUri("authenticate"), JsonContent.Serialize(request));
                 if (response.StatusCode != HttpStatusCode.OK) return new StatusCodeResult((int)HttpStatusCode.ServiceUnavailable);
                 this.Cookies = response.Headers.GetValues(SetCookie).ToArray();
-                var result = JsonContent.Deserialize<MessageResponseDto>(response.Content);
+                var result = JsonContent.Deserialize<MessageResponseDto>(response.Content) ??
+                    throw new Exception("Null response"); ;
                 return result.Message;
             }
         }
@@ -75,7 +76,8 @@ namespace apicaller.Services
                 var request = new VerifyRequest() { Accesscode = accesscode };
                 var response = await client.PostAsync(ResouceUri("verify"), JsonContent.Serialize(request));
                 if (response.StatusCode != HttpStatusCode.OK) return new StatusCodeResult((int)HttpStatusCode.ServiceUnavailable);
-                var result = JsonContent.Deserialize<MessageResponseDto>(response.Content);
+                var result = JsonContent.Deserialize<MessageResponseDto>(response.Content) ??
+                    throw new Exception("Null response"); ;
                 return result.Message;
             }
         }
@@ -85,7 +87,10 @@ namespace apicaller.Services
             Uri retval;
             var builder = new UriBuilder(ServiceHost);
             builder.Path = _configuration.GetValue<string>("accesscodePath").TrimEnd('/') + "/";
-            Uri.TryCreate(builder.Uri, command, out retval);
+            if (!Uri.TryCreate(builder.Uri, command, out retval!))
+            {
+                throw new Exception($"Could not create Uri for path {builder.Path} and command {command}");
+            }
             return retval;
         }
 

@@ -4,12 +4,15 @@ using System.Web.UI.WebControls;
 
 namespace minimaltest
 {
+#pragma warning disable CS0618 // IIE obsolete
+
     /// <summary>
     /// Additionally to DefaultTest, the main Control must inherit from IRootControl
     /// to be able to navigate through the control hierarchy.
     /// </summary>
     [TestFixture]
     public class WithRootTest : IETest
+#pragma warning restore CS0618 // IIE obsolete
     {
         [Test]
         public void NavigateWithRootTest()

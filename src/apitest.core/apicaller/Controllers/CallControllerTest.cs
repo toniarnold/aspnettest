@@ -28,9 +28,10 @@ namespace apitest.apicaller.Controllers
         /// <summary>
         /// IDeleteNewRows
         /// </summary>
-        public List<(string, string, object)> MaxIds { get; set; }
+        public List<(string, string, object)> MaxIds { get; set; } = new();
 
-        private TestServer _serviceServer;  // indirectly used
+        // Instantiated by [SetUp]:
+        private TestServer _serviceServer = default!;  // indirectly used
 
         /// <summary>
         /// IDeleteNewRows

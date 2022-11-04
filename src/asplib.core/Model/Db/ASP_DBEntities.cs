@@ -17,7 +17,7 @@ namespace asplib.Model.Db
 
         private static IServiceProvider? ServiceProvider;
 
-        public DbSet<Main> Main { get; set; }
+        public DbSet<Main> Main { get; set; } = default!;
 
         public ASP_DBEntities() : base()
         { }
@@ -51,7 +51,7 @@ namespace asplib.Model.Db
         /// </summary>
         public static void TearDownInsulatedDbContext()
         {
-            ConnectionString = null;
+            ConnectionString = String.Empty; ;
             ServiceProvider = null;
         }
 
@@ -68,8 +68,8 @@ namespace asplib.Model.Db
         /// Factory for fetching a  byte array from the database
         /// </summary>
         /// <param name="session"></param>
-        /// <returns></returns>
-        public byte[] LoadMain(Guid session)
+        /// <returns>a byte array, else null if not found</returns>
+        public byte[]? LoadMain(Guid session)
         {
             var query = from m in this.Main
                         where m.session == session

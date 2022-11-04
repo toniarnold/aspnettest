@@ -17,7 +17,7 @@ namespace apitest.apiservice.Controllers
     [TestFixture]
     public class AccesscodeFsmTest : AccesscodeController, IGlobalTransaction
     {
-        public List<DbContext> DbContexts { get; set; }
+        public List<DbContext> DbContexts { get; set; } = new();
 
         [OneTimeSetUp]
         public void ConfigureServices()
@@ -111,7 +111,7 @@ namespace apitest.apiservice.Controllers
                           where a.Phonenumber == PHONE
                           select a).FirstOrDefault();
             Assert.That(stored, Is.Not.Null);
-            Assert.That(stored.Accesscode1, Is.EqualTo(CODE));
+            Assert.That(stored!.Accesscode1, Is.EqualTo(CODE));
         }
     }
 }

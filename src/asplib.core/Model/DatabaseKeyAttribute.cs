@@ -10,7 +10,7 @@ namespace asplib.Model
     [AttributeUsage(AttributeTargets.Class, AllowMultiple = false)]
     public class DatabaseKeyAttribute : Attribute
     {
-        private static IDataProtector _protector;
+        private static IDataProtector _protector = default!;
         private readonly byte[] _key;
 
         internal byte[] Key => _protector.Unprotect(_key);

@@ -7,12 +7,15 @@ using System.Web.UI.WebControls;
 
 namespace minimaltest
 {
+#pragma warning disable CS0618 // IIE obsolete
+
     /// <summary>
     /// Additionally to DefaultTest, the main Control must inherit from IStorageControl
     /// such that it maintains its own storage mechanism.
     /// </summary>
     [TestFixture]
     public class WithStorageTest : StorageTest<ContentStorage>
+#pragma warning restore CS0618 // IIE obsolete
     {
         /// <summary>
         /// IIE: There could be a manually generated row in IE's current cookie, thus explicitly delete.
@@ -68,7 +71,8 @@ namespace minimaltest
         /// <summary>
         /// ViewState does not survive navigation
         /// </summary>
-        private void Nop() { }
+        private void Nop()
+        { }
 
         /// <summary>
         /// Reload the page, session storage should survive
@@ -78,6 +82,8 @@ namespace minimaltest
             this.Navigate("/withstorage.aspx");
             this.Select("storageList", "Session", expectPostBack: true);
         }
+
+#pragma warning disable CS0618 // IIE obsolete
 
         /// <summary>
         /// Restart Internet Explorer and navigate to the page, database storage should survive
@@ -89,6 +95,8 @@ namespace minimaltest
             this.Navigate("/withstorage.aspx");
             this.Select("storageList", "Database", expectPostBack: true);
         }
+
+#pragma warning restore CS0618 // IIE obsolete
 
         /// <summary>
         /// Basically the same test as WithRootTest.WriteContentTest(),

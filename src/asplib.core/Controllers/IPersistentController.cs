@@ -27,7 +27,7 @@ namespace asplib.Controllers
         /// <summary>
         /// ViewModel used for the current View action method
         /// </summary>
-        object Model { get; }
+        object? Model { get; }
 
         /// <summary>
         /// dbo.Main.session when loaded from the Database
@@ -140,7 +140,7 @@ namespace asplib.Controllers
         /// <input viewstate="@ViewBag.ViewState" />
         /// </summary>
         /// <returns></returns>
-        internal static string ViewState(this IPersistentController inst, Func<byte[], byte[]> filter = null)
+        internal static string ViewState(this IPersistentController inst, Func<byte[], byte[]>? filter = null)
         {
             return string.Format("{0}:{1}",
                             GetStorageID(inst),

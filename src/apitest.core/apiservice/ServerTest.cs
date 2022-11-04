@@ -24,16 +24,18 @@ namespace apitest.apiservice
     {
         #region scaffolding
 
-        private IConfiguration _configuration;
+        // Instantiated by [OneTimeSetUp]:
 
-        private TestServer _server;
+        private IConfiguration _configuration = default!;
 
-        private IHttpClientFactory _clientFactory;
+        private TestServer _server = default!;
+
+        private IHttpClientFactory _clientFactory = default!;
 
         /// <summary>
         /// IDeleteNewRows
         /// </summary>
-        public List<(string, string, object)> MaxIds { get; set; }
+        public List<(string, string, object)> MaxIds { get; set; } = new();
 
         /// <summary>
         /// IDeleteNewRows
@@ -109,11 +111,16 @@ namespace apitest.apiservice
                 var result = JsonContent.Deserialize<AuthenticateResponse>(response.Content);
 
                 // Assertions on the result
-                Assert.That(result.State, Is.EqualTo("AuthMap.Unverified"));
-                Assert.That(result.Phonenumber, Is.EqualTo(DbTestData.PHONENUMBER));
-                // Assertions on IStaticController
-                Assert.That(ServiceController.State, Is.EqualTo(Unverified));
-                Assert.That(ServiceController._pnonenumber, Is.EqualTo(DbTestData.PHONENUMBER));
+                Assert.That(result, Is.Not.Null);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(result!.State, Is.EqualTo("AuthMap.Unverified"));
+                    Assert.That(result.Phonenumber, Is.EqualTo(DbTestData.PHONENUMBER));
+
+                    // Assertions on IStaticController
+                    Assert.That(ServiceController.State, Is.EqualTo(Unverified));
+                    Assert.That(ServiceController._pnonenumber, Is.EqualTo(DbTestData.PHONENUMBER));
+                });
             }
         }
 
@@ -131,8 +138,13 @@ namespace apitest.apiservice
                 client.DefaultRequestHeaders.Add(Cookie, cookies[0]);   // set session
 
                 var resultAuth = JsonContent.Deserialize<AuthenticateResponse>(responseAuth.Content);
-                Assert.That(resultAuth.State, Is.EqualTo("AuthMap.Unverified"));
-                Assert.That(resultAuth.Phonenumber, Is.EqualTo(DbTestData.PHONENUMBER));
+                Assert.That(resultAuth, Is.Not.Null);
+                Assert.Multiple(() =>
+                {
+                    Assert.That(resultAuth!.State, Is.EqualTo("AuthMap.Unverified"));
+                    Assert.That(resultAuth.Phonenumber, Is.EqualTo(DbTestData.PHONENUMBER));
+                });
+
                 // Get the correct access code that "leaks" through IStaticController:
                 var accesscodeOk = ServiceController._accesscode;
 
@@ -142,7 +154,8 @@ namespace apitest.apiservice
                 };
                 var responseWrong = client.PostAsync("/api/accesscode/verify", JsonContent.Serialize(queryVerifyWrong)).Result;
                 var resultWrong = JsonContent.Deserialize<AuthenticateResponse>(responseWrong.Content);
-                Assert.That(resultWrong.State, Is.EqualTo("AuthMap.Unverified"));
+                Assert.That(resultWrong, Is.Not.Null);
+                Assert.That(resultWrong!.State, Is.EqualTo("AuthMap.Unverified"));
 
                 var queryVerifyOk = new VerifyRequest()
                 {
@@ -150,7 +163,8 @@ namespace apitest.apiservice
                 };
                 var responseOk = client.PostAsync("/api/accesscode/verify", JsonContent.Serialize(queryVerifyOk)).Result;
                 var resultOk = JsonContent.Deserialize<AuthenticateResponse>(responseOk.Content);
-                Assert.That(resultOk.State, Is.EqualTo("AuthMap.Verified"));
+                Assert.That(resultOk, Is.Not.Null);
+                Assert.That(resultOk!.State, Is.EqualTo("AuthMap.Verified"));
             }
         }
 
@@ -175,12 +189,14 @@ namespace apitest.apiservice
                 {
                     var responseWrong = client.PostAsync("/api/accesscode/verify", JsonContent.Serialize(queryVerifyWrong)).Result;
                     var resultWrong = JsonContent.Deserialize<AuthenticateResponse>(responseWrong.Content);
-                    Assert.That(resultWrong.State, Is.EqualTo("AuthMap.Unverified"));
+                    Assert.That(resultWrong, Is.Not.Null);
+                    Assert.That(resultWrong!.State, Is.EqualTo("AuthMap.Unverified"));
                 }
 
                 var responseDenied = client.PostAsync("/api/accesscode/verify", JsonContent.Serialize(queryVerifyWrong)).Result;
                 var resultDenied = JsonContent.Deserialize<AuthenticateResponse>(responseDenied.Content);
-                Assert.That(resultDenied.State, Is.EqualTo("AuthMap.Denied"));
+                Assert.That(resultDenied, Is.Not.Null);
+                Assert.That(resultDenied!.State, Is.EqualTo("AuthMap.Denied"));
             }
         }
     }

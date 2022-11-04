@@ -12,13 +12,13 @@ namespace apiservice.Controllers
     [Clsid("10E4F343-877A-422F-A736-4EF32D87D28A")]
     public partial class AccesscodeController : SmcController<AccesscodeContext, AccesscodeContext.AccesscodeControllerState>
     {
-        internal IConfiguration _configuration;
-        internal AspserviceDbContext _DbContext;
-        internal ISMSService _SMSService;
+        internal IConfiguration _configuration = default!;
+        internal AspserviceDbContext _DbContext = default!;
+        internal ISMSService _SMSService = default!;
 
-        internal string _pnonenumber;
-        internal string _accesscode;
-        internal int _attempts;
+        internal string _pnonenumber = default!;
+        internal string _accesscode = default!;
+        internal int _attempts = default!;
 
         public AccesscodeController() : base()
         {

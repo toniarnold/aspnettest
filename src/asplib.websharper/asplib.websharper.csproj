@@ -11,9 +11,7 @@
     <Version>0.2.0</Version>
     <PackageId>asplib.websharper</PackageId>
     <Product>aspnettest</Product>
-    <Description>
-      Base for an ASP.NET Model Control View design pattern with session persistence and optionally SMC, the State Machine Compiler
-    </Description>
+    <Description>Base for an ASP.NET Model Control View design pattern with session persistence and optionally SMC, the State Machine Compiler</Description>
     <PackageLicenseExpression>AGPL-3.0-or-later</PackageLicenseExpression>
     <Copyright>Copyright © 2018-2022</Copyright>
     <PackageProjectUrl>https://github.com/toniarnold/aspnettest/</PackageProjectUrl>

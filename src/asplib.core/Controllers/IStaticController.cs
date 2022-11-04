@@ -1,4 +1,6 @@
-﻿namespace asplib.Controllers
+﻿using System;
+
+namespace asplib.Controllers
 {
     /// <summary>
     /// Extension interface for a Controller to access the SetController() method
@@ -15,7 +17,7 @@
         /// <summary>
         /// Global reference to the static controller of an application under test
         /// </summary>
-        private static object Controller { get; set; }
+        private static object? Controller { get; set; }
 
         /// <summary>
         /// Set once the global reference to controller of an application under test.
@@ -24,7 +26,7 @@
         /// <param name="control"></param>
         public static void SetController(this object controller)
         {
-            StaticControllerExtension.Controller = controller;
+            Controller = controller;
         }
 
         /// <summary>
@@ -33,7 +35,11 @@
         /// <returns></returns>
         public static object GetController()
         {
-            return StaticControllerExtension.Controller;
+            if (Controller == null)
+            {
+                throw new NullReferenceException("Controller not set or torn down");
+            }
+            return Controller;
         }
 
         /// <summary>

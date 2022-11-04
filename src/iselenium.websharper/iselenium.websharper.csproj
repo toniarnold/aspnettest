@@ -16,6 +16,7 @@
     <PackageProjectUrl>https://github.com/toniarnold/aspnettest/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/toniarnold/aspnettest.git</RepositoryUrl>
     <PackageReleaseNotes>alpha</PackageReleaseNotes>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
   <ItemGroup>

@@ -35,7 +35,7 @@ namespace apitest.apiservice.Model.Db
                         select m;
             var main = query.FirstOrDefault();
             Assert.That(main, Is.Not.Null);
-            Assert.That(main.Session, Is.EqualTo(DbTestData.SESSION));
+            Assert.That(main!.Session, Is.EqualTo(DbTestData.SESSION));
         }
 
         [Test]
@@ -46,7 +46,7 @@ namespace apitest.apiservice.Model.Db
                 WHERE session = {DbTestData.SESSION}
                 ").FirstOrDefault();
             Assert.That(main, Is.Not.Null);
-            Assert.That(main.Session, Is.EqualTo(DbTestData.SESSION));
+            Assert.That(main!.Session, Is.EqualTo(DbTestData.SESSION));
         }
 
         [Test]
@@ -68,7 +68,7 @@ namespace apitest.apiservice.Model.Db
 
                     var fromDb = LoadMain(testSession);
                     Assert.That(fromDb, Is.Not.Null);
-                    Assert.That(fromDb.Session, Is.EqualTo(testSession));
+                    Assert.That(fromDb!.Session, Is.EqualTo(testSession));
                 }
                 finally
                 {
@@ -79,12 +79,13 @@ namespace apitest.apiservice.Model.Db
             }
         }
 
-        private Main LoadMain(Guid session)
+        private Main? LoadMain(Guid session)
         {
             var query = from m in Main
                         where m.Session == session
                         select m;
-            return query.FirstOrDefault();
+            var inst = query.FirstOrDefault();
+            return inst;
         }
     }
 }

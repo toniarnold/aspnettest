@@ -28,7 +28,7 @@ namespace asplib.Common
             return String.Join("&", items);
         }
 
-        public static NameValueCollection FromCookieString(this string cookieString)
+        public static NameValueCollection FromCookieString(this string? cookieString)
         {
             NameValueCollection retval = new NameValueCollection(); ;
             if (!String.IsNullOrEmpty(cookieString))

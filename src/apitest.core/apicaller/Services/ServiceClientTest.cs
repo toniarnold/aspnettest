@@ -26,12 +26,13 @@ namespace apitest.apicaller.Services
     {
         #region scaffolding
 
-        private TestServer _server;
+        // Instantiated by [OneTimeSetUp]
+        private TestServer _server = default!;
 
         /// <summary>
         /// IDeleteNewRows
         /// </summary>
-        public List<(string, string, object)> MaxIds { get; set; }
+        public List<(string, string, object)> MaxIds { get; set; } = new();
 
         /// <summary>
         /// "Foreign" connection string from the  service receiving the API calls
@@ -73,7 +74,7 @@ namespace apitest.apicaller.Services
         [TearDown]
         public void DeleteSession()
         {
-            Cookies = null;
+            Cookies = Array.Empty<string>();
         }
 
         [OneTimeTearDown]

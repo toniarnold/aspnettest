@@ -21,7 +21,7 @@ namespace apitest.apiservice.Controllers
     {
         private const string ACCESSCODE = "123456";
 
-        public List<DbContext> DbContexts { get; set; }
+        public List<DbContext> DbContexts { get; set; } = new();
 
         [OneTimeSetUp]
         public void ConfigureServices()
@@ -73,8 +73,9 @@ namespace apitest.apiservice.Controllers
             };
             var response = Authenticate(query).Result.Value;
 
-            Assert.That(response.State, Is.EqualTo("AuthMap.Unverified"));
-            Assert.That(response.Phonenumber, Is.EqualTo(DbTestData.PHONENUMBER));
+            Assert.That(response, Is.Not.Null);
+            Assert.That(response!.State, Is.EqualTo("AuthMap.Unverified"));
+            Assert.That(response!.Phonenumber, Is.EqualTo(DbTestData.PHONENUMBER));
         }
 
         [Test]
@@ -90,9 +91,13 @@ namespace apitest.apiservice.Controllers
             };
             var response = Verify(query).Result.Value;
 
-            Assert.That(response.State, Is.EqualTo("AuthMap.Verified"));
-            Assert.That(response.Phonenumber, Is.EqualTo(DbTestData.PHONENUMBER));
-            Assert.That(response.Message, Does.Contain(DbTestData.PHONENUMBER));
+            Assert.That(response, Is.Not.Null);
+            Assert.Multiple(() =>
+            {
+                Assert.That(response!.State, Is.EqualTo("AuthMap.Verified"));
+                Assert.That(response.Phonenumber, Is.EqualTo(DbTestData.PHONENUMBER));
+                Assert.That(response.Message, Does.Contain(DbTestData.PHONENUMBER));
+            });
         }
 
         [Test]
@@ -108,9 +113,13 @@ namespace apitest.apiservice.Controllers
             };
             var response = Verify(query).Result.Value;
 
-            Assert.That(response.State, Is.EqualTo("AuthMap.Unverified"));
-            Assert.That(response.Phonenumber, Is.EqualTo(DbTestData.PHONENUMBER));
-            Assert.That(response.Message, Does.Contain("retry"));
+            Assert.That(response, Is.Not.Null);
+            Assert.Multiple(() =>
+            {
+                Assert.That(response!.State, Is.EqualTo("AuthMap.Unverified"));
+                Assert.That(response.Phonenumber, Is.EqualTo(DbTestData.PHONENUMBER));
+                Assert.That(response.Message, Does.Contain("retry"));
+            });
         }
 
         [Test]
@@ -129,9 +138,13 @@ namespace apitest.apiservice.Controllers
             var fail3 = Verify(query).Result.Value;
             var response = Verify(query).Result.Value;
 
-            Assert.That(response.State, Is.EqualTo("AuthMap.Denied"));
-            Assert.That(response.Phonenumber, Is.EqualTo(DbTestData.PHONENUMBER));
-            Assert.That(response.Message, Does.Contain("denied"));
+            Assert.That(response, Is.Not.Null);
+            Assert.Multiple(() =>
+            {
+                Assert.That(response!.State, Is.EqualTo("AuthMap.Denied"));
+                Assert.That(response.Phonenumber, Is.EqualTo(DbTestData.PHONENUMBER));
+                Assert.That(response.Message, Does.Contain("denied"));
+            });
         }
     }
 }

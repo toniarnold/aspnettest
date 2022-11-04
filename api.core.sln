@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29230.61
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32407.343
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "apiservice.core", "src\apiservice.core\apiservice.core.csproj", "{13497EE9-EACF-4F88-9EB0-03DE6BFBA3EE}"
 	ProjectSection(ProjectDependencies) = postProject

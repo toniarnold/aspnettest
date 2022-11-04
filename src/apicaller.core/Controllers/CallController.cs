@@ -2,6 +2,7 @@
 using asplib.Controllers;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
+using System;
 using System.Threading.Tasks;
 
 namespace apicaller.Controllers
@@ -10,8 +11,8 @@ namespace apicaller.Controllers
     [ApiController]
     public class CallController : PersistentController
     {
-        internal IServiceClient _serviceClient;
-        internal string[] _serviceClientCookies;
+        internal IServiceClient _serviceClient = default!;
+        internal string[] _serviceClientCookies = Array.Empty<string>();
 
         public CallController(
             IConfiguration configuration,

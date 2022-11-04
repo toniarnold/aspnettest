@@ -29,22 +29,27 @@ namespace asplib.Controllers
 
         protected virtual void Construct()
         {
-            // Create manually due to constructor argument:
-            this.Fsm = (F)Activator.CreateInstance(typeof(F), new object[] { this });
+            // Create manually due to missing constructor argument:
+            var inst = (F?)Activator.CreateInstance(typeof(F), new object[] { this });
+            if (inst == null)
+            {
+                throw new NullReferenceException($"Could not create instance of {typeof(F)}");
+            }
+            this.Fsm = inst;
         }
 
         /// <summary>
         /// The generated FSM class
         /// </summary>
-        public F Fsm { get; private set; }
+        public F Fsm { get; private set; } = default!;
 
         /// <summary>
-        /// The state of the FSM class
+        /// The generated state of the FSM class
         /// </summary>
         public S State
         {
-            get { return (S)this.Fsm.GetType().GetProperty("State").GetValue(this.Fsm); }
-            set { this.Fsm.GetType().GetProperty("State").SetValue(this.Fsm, value); }
+            get { return (S)this.Fsm.GetType().GetProperty("State")!.GetValue(this.Fsm)!; }
+            set { this.Fsm.GetType().GetProperty("State")!.SetValue(this.Fsm, value); }
         }
 
         /// <summary>
@@ -52,7 +57,7 @@ namespace asplib.Controllers
         /// </summary>
         /// <param name="bytes"></param>
         /// <param name="filter"></param>
-        public override void Deserialize(byte[] bytes, Func<byte[], byte[]> filter = null)
+        public override void Deserialize(byte[] bytes, Func<byte[], byte[]>? filter = null)
         {
             base.Deserialize(bytes, filter);
             this.SetOwner();
@@ -63,7 +68,7 @@ namespace asplib.Controllers
         /// </summary>
         private void SetOwner()
         {
-            this.Fsm.GetType().GetProperty("Owner").SetValue(this.Fsm, this);
+            this.Fsm.GetType().GetProperty("Owner")!.SetValue(this.Fsm, this);
         }
     }
 }

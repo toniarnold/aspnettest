@@ -36,7 +36,7 @@ namespace asplib.Controllers
                 byte[] bytes;
                 if (controller != null &&
                     !StorageImplementation.GetEncryptDatabaseStorage(this.Configuration) &&
-                    StorageImplementation.TryGetBytes(controller, out bytes))
+                    StorageImplementation.TryGetBytes(controller, out bytes!))
                 {
                     Guid session;
                     using (var db = new ASP_DBEntities())

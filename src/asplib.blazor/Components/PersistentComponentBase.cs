@@ -253,7 +253,7 @@ namespace asplib.Components
         {
             var storageId = StorageImplementation.GetStorageID(Main.GetType().Name);
             var result = await storeGetAsync(storageId);
-            if (result.Success)
+            if (result.Success && result.Value != null)
             {
                 var viewState = result.Value;
                 var filter = StorageImplementation.DecryptViewState(Configuration);

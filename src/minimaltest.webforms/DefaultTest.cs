@@ -5,6 +5,8 @@ using System.Collections.Generic;
 
 namespace minimaltest
 {
+#pragma warning disable CS0618 // IIE obsolete
+
     /// <summary>
     /// No dependencies on the side of the web application itself except
     /// Application_EndRequest in Global.asax.cs, therefore the client id of
@@ -14,12 +16,14 @@ namespace minimaltest
     /// </summary>
     [TestFixture]
     public class DefaultTest : IIE
+#pragma warning restore CS0618 // IIE obsolete
     {
 #pragma warning disable IDE1006 // Members in Selenium-generated C# code
         public IDictionary<string, object> vars { get; set; }
         public IJavaScriptExecutor js { get; set; }
         public IWebDriver driver { get; set; }
 #pragma warning restore IDE1006
+#pragma warning disable CS0618 // IIE obsolete
 
         [OneTimeSetUp]
         public void OneTimeSetUpIE()
@@ -32,6 +36,8 @@ namespace minimaltest
         {
             this.TearDownIE();
         }
+
+#pragma warning restore CS0618 // IIE obsolete
 
         [Test]
         public void NavigateDefaultTest()

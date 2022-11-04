@@ -6,8 +6,11 @@ using System.Text.RegularExpressions;
 
 namespace minimaltest
 {
+#pragma warning disable CS0618 // IIE obsolete
+
     [TestFixture]
     public class ExceptionDumpTest : StorageTest<WithStorageController>
+#pragma warning restore CS0618 // IIE obsolete
     {
         /// <summary>
         /// Typed accessor for the only ViewModel used in the app
@@ -40,9 +43,11 @@ namespace minimaltest
             Assert.That(coredumpPath, Does.StartWith("/WithStorage?session="));
             this.Navigate(coredumpPath);
             this.AssertBenignLine();    // restored from the dump before the exception
+#pragma warning disable CS0618 // IIE obsolete
             this.TearDownIE();
             // Next week the bug is still unresolved -> do more postmortem debugging
             this.SetUpIE();
+#pragma warning restore CS0618 // IIE obsolete
             this.Navigate(coredumpPath);
             this.AssertBenignLine();    // restored again in a new Internet Explorer instance
         }

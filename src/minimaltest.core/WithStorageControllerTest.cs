@@ -8,8 +8,11 @@ using System;
 
 namespace minimaltest
 {
+#pragma warning disable CS0618 // IIE obsolete
+
     [TestFixture]
     public class WithStorageControllerTest : StorageTest<WithStorageController>
+#pragma warning restore CS0618 // IIE obsolete
     {
         /// <summary>
         /// Typed accessor for the only ViewModel used in the app
@@ -74,7 +77,8 @@ namespace minimaltest
         /// <summary>
         /// ViewState does not survive navigation
         /// </summary>
-        private void Nop() { }
+        private void Nop()
+        { }
 
         /// <summary>
         /// Reload the page, session storage should survive
@@ -90,8 +94,11 @@ namespace minimaltest
         /// </summary>
         private void RestartIE()
         {
+#pragma warning disable CS0618 // IIE obsolete
             this.TearDownIE();
             this.SetUpIE();
+#pragma warning restore CS0618 // IIE obsolete
+
             this.Navigate("/WithStorage");
             this.Select("Storage", "Database", expectPostBack: true);
         }

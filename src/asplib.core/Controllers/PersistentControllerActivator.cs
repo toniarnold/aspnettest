@@ -25,7 +25,14 @@ namespace asplib.Controllers
 
         private HttpContext HttpContext
         {
-            get { return this.httpContextAccessor.HttpContext; }
+            get
+            {
+                if (this.httpContextAccessor.HttpContext == null)
+                {
+                    throw new NullReferenceException("HttpContext not available");
+                }
+                return this.httpContextAccessor.HttpContext;
+            }
         }
 
         private IConfiguration Configuration { get; }
@@ -43,7 +50,7 @@ namespace asplib.Controllers
         /// <returns></returns>
         public object Create(ControllerContext actionContext)
         {
-            object controller = null;
+            object? controller = null;
             var controllerTypeInfo = actionContext.ActionDescriptor.ControllerTypeInfo;
             var controllerType = controllerTypeInfo.AsType();
             var storageID = StorageImplementation.GetStorageID(controllerTypeInfo.Name);
@@ -55,7 +62,7 @@ namespace asplib.Controllers
             Guid sessionOverride;
             Guid session;
             byte[] bytes;
-            Func<byte[], byte[]> filter = null;
+            Func<byte[], byte[]>? filter = null;
 
             // ---------- Direct GET request ?session= from the Database ----------
             if (this.HttpContext.Request.Method == WebRequestMethods.Http.Get &&
@@ -85,14 +92,16 @@ namespace asplib.Controllers
 
                 // ---------- Load from Session ----------
                 else if (storage == Storage.Session &&
-                         this.HttpContext.Session.TryGetValue(storageID, out bytes))
+                         this.HttpContext.Session.TryGetValue(storageID, out bytes!))
                 {
                     controller = DeserializeController(actionContext, controllerTypeInfo, controllerType, bytes);
                 }
 
                 // ---------- Load from Database ----------
                 else if (storage == Storage.Database &&
-                         Guid.TryParse(this.HttpContext.Request.Cookies[storageID].FromCookieString()["session"], out session))
+                         Guid.TryParse(
+                             this.HttpContext.Request.Cookies[storageID].FromCookieString()["session"],
+                             out session))
                 {
                     (bytes, filter) = StorageImplementation.DatabaseBytes(Configuration, HttpContext, storageID, session);
                     controller = DeserializeController(actionContext, controllerTypeInfo, controllerType, bytes, filter);
@@ -116,9 +125,12 @@ namespace asplib.Controllers
                 {
                     // ASP.NET Core implementation, no persistence, just return the new controller
                     controller = actionContext.HttpContext.RequestServices.GetService(controllerType);
+                    if (controller == null)
+                    {
+                        throw new ArgumentException($"No service registered for {controllerType}");
+                    }
                 }
             }
-
             return controller;
         }
 
@@ -132,13 +144,17 @@ namespace asplib.Controllers
         /// <param name="bytes"></param>
         /// <returns></returns>
         internal static object DeserializeController(ControllerContext actionContext, TypeInfo controllerTypeInfo, Type controllerType,
-                                                     byte[] bytes, Func<byte[], byte[]> filter = null)
+                                                     byte[]? bytes, Func<byte[], byte[]>? filter = null)
         {
-            object controller;
+            object? controller;
             if (controllerTypeInfo.IsSubclassOf(typeof(PersistentController)))
             {
                 // Instantiate and populate own fields with the serialized objects
                 controller = actionContext.HttpContext.RequestServices.GetService(controllerType);
+                if (controller == null)
+                {
+                    throw new ArgumentException($"No service registered for {controllerType}");
+                }
                 if (bytes != null)
                 {
                     ((PersistentController)controller).Deserialize(bytes, filter);
@@ -163,7 +179,7 @@ namespace asplib.Controllers
                     controllerType.Name));
             }
 
-            return controller;
+            return controller!;
         }
 
         /// <summary>

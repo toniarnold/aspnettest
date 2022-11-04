@@ -28,18 +28,17 @@ namespace apitest.apicaller
     {
         #region scaffolding
 
-        private IConfiguration _configuration;
+        // instantiated in [OneTimeSetUp]:
+        private IConfiguration _configuration = default!;
 
-        private TestServer _callerServer;   // Our own server, directly used here
-
-        private TestServer _serviceServer;  // Service server, called indirectly used from _callerServer
-
-        private IHttpClientFactory _clientFactory;  // for our _callerServer
+        private TestServer _callerServer = default!;   // Our own server, directly used here
+        private TestServer _serviceServer = default!;  // Service server, called indirectly used from _callerServer
+        private IHttpClientFactory _clientFactory = default!;  // for our _callerServer
 
         /// <summary>
         /// IDeleteNewRows
         /// </summary>
-        public List<(string, string, object)> MaxIds { get; set; }
+        public List<(string, string, object)> MaxIds { get; set; } = new();
 
         /// <summary>
         /// IDeleteNewRows

@@ -15,9 +15,9 @@ namespace apicaller
 {
     public class Startup
     {
-        public IConfiguration Configuration { get; }
-        public IWebHostEnvironment Environment { get; }
-        public IHttpContextAccessor HttpContext { get; }
+        public IConfiguration Configuration { get; } = default!;
+        public IWebHostEnvironment Environment { get; } = default!;
+        public IHttpContextAccessor HttpContext { get; } = default!;
 
         public Startup(IConfiguration configuration)
         {

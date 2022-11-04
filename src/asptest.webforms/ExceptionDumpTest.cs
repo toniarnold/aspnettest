@@ -39,10 +39,14 @@ namespace asptest
             this.Click("footer.enterButton", expectedStatusCode: 500);
             Assert.That(this.Html(), Does.Contain("Deliberate Exception"));
 
-            // Navigate to the Main dump on the ysod-Page
+            // Navigate to the Main dump on the ysod-
+#pragma warning disable CS0618 // IIE obsolete
             var linkToDump = this.GetHTMLElement(IEExtension.EXCEPTION_LINK_ID);
+#pragma warning restore CS0618 // IIE obsolete
             Assert.That(linkToDump.getAttribute("href"), Does.Contain("/default.aspx?session="));
+#pragma warning disable CS0618 // IIE obsolete
             this.ClickID(IEExtension.EXCEPTION_LINK_ID);
+#pragma warning restore CS0618 // IIE obsolete
 
             Assert.Multiple(() =>
             {

@@ -124,10 +124,13 @@ namespace iselenium
             }
         }
 
+#pragma warning disable CS0809 // obsolete member (WebSharper)
+
         [Obsolete("For Blazor, you probably want synchronized Click(By.Id, someId), if intended asynchronously use it with expectRender: false", true)]
         public override void Click(string id, int index = 0,
                             bool expectRequest = false, bool? samePage = null, bool? awaitRemoved = null,
                             int expectedStatusCode = 200, int delay = 0, int pause = 0, int wait = 0)
+#pragma warning restore CS0809 // obsolete member (WebSharper)
         {
             base.Click(id, index, expectRequest, samePage, awaitRemoved, expectedStatusCode, delay, wait);
         }
