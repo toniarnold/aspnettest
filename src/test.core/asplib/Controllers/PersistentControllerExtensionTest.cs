@@ -16,10 +16,14 @@ namespace test.asplib.Controllers
         // IPersistentController
         public dynamic ViewBag { get; }
 
-        public HttpContext HttpContext { get { return null; } }
-        public IConfiguration Configuration { get { return null; } }
-        public Storage? SessionStorage { get { return null; } set { } }
-        public object Model { get { return null; } }
+        public HttpContext HttpContext
+        { get { return null; } }
+        public IConfiguration Configuration
+        { get { return null; } }
+        public Storage? SessionStorage
+        { get { return null; } set { } }
+        public object Model
+        { get { return null; } }
         public Guid? Session { get; set; }
 
         [OneTimeSetUp]

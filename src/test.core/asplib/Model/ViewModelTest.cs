@@ -47,7 +47,7 @@ namespace test.asplib.Model
             public override void SaveMembers()
             {
                 if (this.Exposed != null) // called as part of ToJson()
-                { 
+                {
                     this.Main.Embedded = this.Exposed;
                 }
             }

@@ -1,5 +1,5 @@
-﻿using System;
-using Microsoft.AspNetCore.DataProtection;
+﻿using Microsoft.AspNetCore.DataProtection;
+using System;
 
 namespace asplib.Model
 {

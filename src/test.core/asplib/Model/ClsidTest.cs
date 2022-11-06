@@ -8,7 +8,8 @@ namespace test.asplib.Model
     public class ClsidTest
     {
         [Clsid("33209477-886F-4031-8C34-8ACA964F1B96")]
-        private class TestClass { }
+        private class TestClass
+        { }
 
         [Test]
         public void IdTest()

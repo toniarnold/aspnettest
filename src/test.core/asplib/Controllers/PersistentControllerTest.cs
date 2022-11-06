@@ -8,7 +8,8 @@ using System.Reflection;
 namespace test.asplib.Controllers
 {
     // Build a Controller class hierarchy to test recursive member serialization
-    public class NonSerializable { }
+    public class NonSerializable
+    { }
 
     public class Controller1 : PersistentController
     {

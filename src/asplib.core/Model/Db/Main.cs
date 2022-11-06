@@ -3,17 +3,15 @@
 using System;
 using System.Collections.Generic;
 
-namespace apiservice.Model.Db
+namespace asplib.Model.Db
 {
-    public partial class Accesscode
+    public partial class Main
     {
-        public long Accesscodeid { get; set; }
+        public long Mainid { get; set; }
         public Guid Session { get; set; }
         public DateTime Created { get; set; }
         public DateTime Changed { get; set; }
-        public string Phonenumber { get; set; } = null!;
-        public string Accesscode1 { get; set; } = null!;
-
-        public virtual Main SessionNavigation { get; set; } = null!;
+        public Guid Clsid { get; set; }
+        public byte[] Main1 { get; set; } = null!;
     }
 }

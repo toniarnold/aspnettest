@@ -1,14 +1,12 @@
 /*
 Clean the Tables Main and Accesscode in order
-and populate them with test data
+and populate them with an empty example session main and test data
 */
-USE APISERVICE_DB
-GO
 
 DELETE FROM [Accesscode]
-DBCC CHECKIDENT ('[Accesscode]', RESEED, 0);
+DBCC CHECKIDENT ('[Accesscode]', RESEED, 1);
 DELETE FROM [Main]
-DBCC CHECKIDENT ('[Main]', RESEED, 0);
+DBCC CHECKIDENT ('[Main]', RESEED, 1);
 GO
 
 INSERT INTO [Main] ([session], [clsid], [main])
