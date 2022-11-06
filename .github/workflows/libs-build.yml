@@ -1,9 +1,11 @@
 name: Build Libraries
 
 on:
- workflow_dispatch:
-
- workflow_call:
+  workflow_dispatch:
+  workflow_call:
+  push:
+    branches:
+      - master
 
 jobs:
   build-core:
@@ -31,7 +33,7 @@ jobs:
         catalog: ASP_DB
     - name: Create schemas
       shell: pwsh
-      run: sqlcmd -i ${{ github.workspace }}/db/ASP_DB.Main.sql -d "ASP_DB"
+      run: sqlcmd -i ${{ github.workspace }}src/asp.db/dbo/Tables/Main.sql -d "ASP_DB"
     - name: Test
       run: dotnet test libs.core.sln --configuration Release --no-restore --no-build --verbosity normal
 
