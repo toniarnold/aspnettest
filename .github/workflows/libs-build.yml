@@ -38,7 +38,7 @@ jobs:
       run: dotnet test libs.core.sln --configuration Release --no-restore --no-build --verbosity normal
 
     - name: Create packages
-      run: dotnet pack libs.core.sln -property:noSmc=true --configuration Release --no-restore -o ${{ github.workspace }}/packages
+      run: dotnet pack libs.core.sln -property:noSmc=true --configuration Release --no-build -o ${{ github.workspace }}/packages
     - name: Upload .nupkg
       uses: actions/upload-artifact@v3
       with:
