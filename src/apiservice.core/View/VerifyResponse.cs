@@ -5,10 +5,10 @@ namespace apiservice.View
 {
     public class VerifyResponse : IMessageResponse
     {
-        private readonly AccesscodeContext.AccesscodeControllerState _state;
+        private readonly AccesscodeContext.AccesscodeControllerState _state = default!;
 
-        public string State { get; set; }
-        public string Phonenumber { get; set; }
+        public string State { get; set; } = default!;
+        public string Phonenumber { get; set; } = default!;
 
         public string Message
         {
