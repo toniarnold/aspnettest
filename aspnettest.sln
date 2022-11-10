@@ -152,6 +152,8 @@ Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "asp.db", "src\asp.db\asp.db
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "apiservice.db", "src\apiservice.db\apiservice.db.sqlproj", "{A697994D-0365-466A-B9BA-4A8A5F0596D8}"
 EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "calculator.blazor", "src\asp.blazor\CalculatorSmc\calculator.blazor.vcxproj", "{BAC05072-44C6-4C3E-A938-F987E16324CF}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1632,6 +1634,30 @@ Global
 		{A697994D-0365-466A-B9BA-4A8A5F0596D8}.ReleaseNoTrace|x86.ActiveCfg = Release|Any CPU
 		{A697994D-0365-466A-B9BA-4A8A5F0596D8}.ReleaseNoTrace|x86.Build.0 = Release|Any CPU
 		{A697994D-0365-466A-B9BA-4A8A5F0596D8}.ReleaseNoTrace|x86.Deploy.0 = Release|Any CPU
+		{BAC05072-44C6-4C3E-A938-F987E16324CF}.Debug|Any CPU.ActiveCfg = Debug|x64
+		{BAC05072-44C6-4C3E-A938-F987E16324CF}.Debug|Any CPU.Build.0 = Debug|x64
+		{BAC05072-44C6-4C3E-A938-F987E16324CF}.Debug|x64.ActiveCfg = Debug|x64
+		{BAC05072-44C6-4C3E-A938-F987E16324CF}.Debug|x64.Build.0 = Debug|x64
+		{BAC05072-44C6-4C3E-A938-F987E16324CF}.Debug|x86.ActiveCfg = Debug|Win32
+		{BAC05072-44C6-4C3E-A938-F987E16324CF}.Debug|x86.Build.0 = Debug|Win32
+		{BAC05072-44C6-4C3E-A938-F987E16324CF}.DebugNoTrace|Any CPU.ActiveCfg = Debug|x64
+		{BAC05072-44C6-4C3E-A938-F987E16324CF}.DebugNoTrace|Any CPU.Build.0 = Debug|x64
+		{BAC05072-44C6-4C3E-A938-F987E16324CF}.DebugNoTrace|x64.ActiveCfg = Debug|x64
+		{BAC05072-44C6-4C3E-A938-F987E16324CF}.DebugNoTrace|x64.Build.0 = Debug|x64
+		{BAC05072-44C6-4C3E-A938-F987E16324CF}.DebugNoTrace|x86.ActiveCfg = Debug|Win32
+		{BAC05072-44C6-4C3E-A938-F987E16324CF}.DebugNoTrace|x86.Build.0 = Debug|Win32
+		{BAC05072-44C6-4C3E-A938-F987E16324CF}.Release|Any CPU.ActiveCfg = Release|x64
+		{BAC05072-44C6-4C3E-A938-F987E16324CF}.Release|Any CPU.Build.0 = Release|x64
+		{BAC05072-44C6-4C3E-A938-F987E16324CF}.Release|x64.ActiveCfg = Release|x64
+		{BAC05072-44C6-4C3E-A938-F987E16324CF}.Release|x64.Build.0 = Release|x64
+		{BAC05072-44C6-4C3E-A938-F987E16324CF}.Release|x86.ActiveCfg = Release|Win32
+		{BAC05072-44C6-4C3E-A938-F987E16324CF}.Release|x86.Build.0 = Release|Win32
+		{BAC05072-44C6-4C3E-A938-F987E16324CF}.ReleaseNoTrace|Any CPU.ActiveCfg = Release|x64
+		{BAC05072-44C6-4C3E-A938-F987E16324CF}.ReleaseNoTrace|Any CPU.Build.0 = Release|x64
+		{BAC05072-44C6-4C3E-A938-F987E16324CF}.ReleaseNoTrace|x64.ActiveCfg = Release|x64
+		{BAC05072-44C6-4C3E-A938-F987E16324CF}.ReleaseNoTrace|x64.Build.0 = Release|x64
+		{BAC05072-44C6-4C3E-A938-F987E16324CF}.ReleaseNoTrace|x86.ActiveCfg = Release|Win32
+		{BAC05072-44C6-4C3E-A938-F987E16324CF}.ReleaseNoTrace|x86.Build.0 = Release|Win32
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

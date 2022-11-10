@@ -30,7 +30,7 @@ namespace minimaltest
 #pragma warning disable CS0618 // IIE obsolete
             var linkToDump = this.GetHTMLElement(IEExtension.EXCEPTION_LINK_ID);
 #pragma warning restore CS0618 // IIE obsolete
-            var coredumpUrl = (string)linkToDump.getAttribute("href");
+            var coredumpUrl = (string)linkToDump.GetAttribute("href");
             Assert.That(coredumpUrl, Does.Contain("/withstorage.aspx?session="));
 #pragma warning disable CS0618 // IIE obsolete
             this.ClickID(IEExtension.EXCEPTION_LINK_ID);

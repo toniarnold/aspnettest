@@ -1,7 +1,7 @@
 using asplib.Model.Db;
 using asplib.Services;
 using iselenium;
-using minimal.blazor.Models;
+using ModelMain = minimal.blazor.Models.Main;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -11,7 +11,7 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddSingleton<IConfiguration>(builder.Configuration);
 ASP_DBEntities.ConnectionString = builder.Configuration["ASP_DBEntities"];  // legacy .NET Framework pattern static reference
 builder.Services.AddPersistent<TestRunnerFsm>();            // TestButton SMC FSM
-builder.Services.AddPersistent<Main>();                     // asplib
+builder.Services.AddPersistent<ModelMain>();                // asplib
 
 var app = builder.Build();
 
