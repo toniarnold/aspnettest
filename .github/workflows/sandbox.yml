@@ -1,0 +1,20 @@
+name: Sandbox
+
+on:
+  workflow_dispatch:
+
+jobs:
+  try:
+    runs-on: windows-latest
+    steps:
+    - name: Write nuget.config
+      shell: pwsh
+      run: >
+        @('<packageSources>', '  <add key="action" value="${{github.workspace}}/packages/" />', '</packageSources>')
+        | Set-Content -Path '${{github.workspace}}/nuget.config'
+    - name: Read nuget.config
+      shell: pwsh
+      run: >
+        Get-Content '${{github.workspace}}/nuget.config' | echo
+
+        
