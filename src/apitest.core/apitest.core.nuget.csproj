@@ -20,8 +20,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\apicaller.core\apicaller.core.csproj" />
-    <ProjectReference Include="..\apiservice.core\apiservice.core.csproj" />
+    <ProjectReference Include="..\apicaller.core\apicaller.core.nuget.csproj" />
+    <ProjectReference Include="..\apiservice.core\apiservice.core.nuget.csproj" />
   </ItemGroup>
 
   <ItemGroup>

@@ -19,6 +19,7 @@ jobs:
       with:
         dotnet-version: 6.0.x
 
+    # Build libs.core
     - name: Restore dependencies
       run: dotnet restore libs.core.sln
     - name: Add msbuild to PATH
@@ -26,20 +27,48 @@ jobs:
     - name: Build .NET Core libraries
       run: msbuild libs.core.sln -property:noSmc=true,Configuration=Release
 
+    # Test libs.core with SQL  and create nuGet packages
     - name: Install SQL Server
       uses: Particular/install-sql-server-action@v1.0.2
       with:
         connection-string-env-var: ASP_DBEntities
         catalog: ASP_DB
-    - name: Create schemas
+    - name: Create [Main] table
       shell: pwsh
       run: sqlcmd -i ${{ github.workspace }}/src/asp.db/dbo/Tables/Main.sql -d "ASP_DB"
-    - name: Test
+    - name: Test libs
       run: dotnet test libs.core.sln --configuration Release --no-restore --no-build --verbosity normal
 
-    - name: Create packages
+    - name: Create .nupkg packages
       run: dotnet pack libs.core.sln -property:noSmc=true --configuration Release --no-restore -o ${{ github.workspace }}/packages
-    - name: Upload .nupkg
+
+    # Use the new asplib.core package to build and test apiservice
+    - name: Create [Accesscode] table
+      shell: pwsh
+      run: |
+        sqlcmd -i ${{ github.workspace }}/src/apiservice.db/dbo/Tables/Accesscode.sql -d "ASP_DB"
+        sqlcmd -i ${{ github.workspace }}/src/apiservice.db/Scripts/Insert.Main.Accesscode.sql -d "ASP_DB"
+    - name: Create local NuGet.Config
+      shell: pwsh
+      run: >
+        @('<configuration>',
+          '  <packageSources>',
+          '    <add key="nuget.org" value="https://api.nuget.org/v3/index.json" protocolVersion="3" />',
+          '    <add key="action-local" value="${{ github.workspace }}/packages/" />',
+          '  </packageSources>',
+          '</configuration>'
+        ) | Set-Content -Path '${{ github.workspace }}/NuGet.Config'
+    - name: Restore dependencies from above local source
+      run: dotnet restore api.core.nuget.sln
+    - name: Build api with local asplib.core package
+      run: msbuild api.core.nuget.sln -property:noSmc=true,Configuration=Release
+    - name: Test api
+      run: dotnet test api.core.nuget.sln --configuration Release --no-restore --no-build --verbosity normal
+      env:
+        "ConnectionStrings:ApiserviceDb": "${{ env.ASP_DBEntities }}"
+
+    # Upload the packages when above smoke test was green
+    - name: Upload .nupkg packages
       uses: actions/upload-artifact@v3
       with:
         name: libs.core

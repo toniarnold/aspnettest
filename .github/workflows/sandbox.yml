@@ -7,14 +7,50 @@ jobs:
   try:
     runs-on: windows-latest
     steps:
+    - name: Set the value
+      id: step_one
+      run: |
+        echo "action_state=yellow" >> $env:GITHUB_ENV
+    - name: Use the value
+      id: step_two
+      run: |
+        echo "${{ env.action_state }}" # This will output 'yellow'
+    - name: Set github environment variable
+      run: echo "UMGEB=aword" >> $GITHUB_ENV
+    - name: Read github environment variables
+      run: echo "${{ env.action_state }}"
+    - name: Read environment variables
+      run: "Get-Item -Path Env:"
+    - name: Set pwsh environment variable
+      shell: pwsh
+      run: "[System.Environment]::SetEnvironmentVariable('PWSH_Environ','Powershell-Value')"
     - name: Write nuget.config
       shell: pwsh
       run: >
-        @('<packageSources>', '  <add key="action" value="${{github.workspace}}/packages/" />', '</packageSources>')
-        | Set-Content -Path '${{github.workspace}}/nuget.config'
+        @('<configuration>',
+          '  <packageSources>',
+          '    <add key="nuget.org" value="https://api.nuget.org/v3/index.json" protocolVersion="3" />',
+          '    <add key="action-local" value="${{ github.workspace }}/packages/" />',
+          '  </packageSources>',
+          '</configuration>'
+        ) | Set-Content -Path '${{ github.workspace }}/NuGet.Config'
     - name: Read nuget.config
       shell: pwsh
       run: >
-        Get-Content '${{github.workspace}}/nuget.config' | echo
-
-        
+        Get-Content '${{github.workspace}}/NuGet.Config' | echo
+    - name: Read environment variables as is
+      shell: pwsh
+      run: "Get-Item -Path Env:"
+    - name: Read github set environment variable
+      shell: pwsh
+      run: "Get-Item -Path Env:"
+      env:
+        "ConnectionStrings:ApiserviceDb": "$env:PWSH_Environ"
+        "OuterCurly": "${{ env.PWSH_Environ }}"
+        "OuterCurly2": "${{ env.action_state }}"
+    - name: as in doc
+      run: echo "Deploying to production server on branch $GITHUB_REF"
+    - name: as on hn
+      run: echo "Deploying to production server on branch $env:GITHUB_REF"
+    - name: as in other places
+      run: echo "Deploying to production server on branch ${{ env.GITHUB_REF }}"

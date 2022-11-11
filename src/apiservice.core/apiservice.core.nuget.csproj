@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="asplib.core" Version="0.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.10" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="6.0.10">
@@ -21,12 +22,6 @@
     <PackageReference Include="Microsoft.Extensions.Logging.Debug" Version="6.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.10" />
     <PackageReference Include="System.Data.SqlClient" Version="4.8.4" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <ProjectReference Include="..\asplib.core\asplib.core.csproj" />
-    <ProjectReference Include="..\asplib\asplib.csproj" />
-    <ProjectReference Include="..\smc\smc.csproj" />
   </ItemGroup>
 
   <!-- Don't require the SMC code generator Makefile project dependency when /p:noSmc=true -->

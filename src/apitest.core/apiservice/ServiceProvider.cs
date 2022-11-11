@@ -61,6 +61,7 @@ namespace apitest.apiservice
                         .AddJsonFile(
                             Path.Combine("apiservice", "appsettings.json"),
                                 optional: false, reloadOnChange: true)
+                        .AddEnvironmentVariables()
                         .Build();
                     var startup = new Startup(_configuration);
                     var sc = new ServiceCollection();

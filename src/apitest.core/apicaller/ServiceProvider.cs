@@ -61,6 +61,7 @@ namespace apitest.apicaller
                         .AddJsonFile(
                             Path.Combine("apicaller", "appsettings.json"),
                                 optional: false, reloadOnChange: true)
+                        .AddEnvironmentVariables()
                         .Build();
                     var startup = new Startup(_configuration);
                     var sc = new ServiceCollection();
