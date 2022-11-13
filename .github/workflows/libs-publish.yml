@@ -1,0 +1,19 @@
+name: Publish Libraries
+
+on:
+  workflow_dispatch:
+
+jobs:
+  publish:
+    runs-on: windows-latest
+    steps:
+    - uses: ./.github/workflows/sandbox.yml
+
+    - name: List files
+      shell: pwsh
+      run: >
+        Get-ChildItem -Path "."
+        | Foreach-Object
+            {
+                echo $_.FullName
+            }
