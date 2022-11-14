@@ -73,7 +73,7 @@ jobs:
       with:
         name: libs.core
         path: ${{ github.workspace }}/packages/*.nupkg
-        retention-days: 1
+        retention-days: 10
 
   build-webforms:
     runs-on: windows-latest
@@ -95,4 +95,4 @@ jobs:
       with:
         name: libs.webforms
         path: ${{ github.workspace }}/packages/*.nupkg
-        retention-days: 1
+        retention-days: 10

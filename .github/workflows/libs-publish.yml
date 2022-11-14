@@ -2,17 +2,33 @@ name: Publish Libraries
 
 on:
   workflow_dispatch:
+  workflow_call:
 
 jobs:
   publish:
     runs-on: windows-latest
     steps:
-    - uses: ./.github/workflows/sandbox.yml
-
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 6.0.x
+    - name: Download .NET Core .nupkg packages
+      uses: actions/download-artifact@v3
+      with:
+        name: libs.core
+        path: ${{ github.workspace }}/packages/
+    - name: Download .NET WebForms .nupkg packages
+      uses: actions/download-artifact@v3
+      with:
+        name: libs.webforms
+        path: ${{ github.workspace }}/packages/
     - name: List files
       shell: pwsh
       run: >
-        Get-ChildItem -Path "."
+        Get-ChildItem -Path ${{ github.workspace }}/packages/"
         | Foreach-Object
             {
                 echo $_.FullName

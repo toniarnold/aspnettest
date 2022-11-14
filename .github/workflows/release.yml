@@ -1,0 +1,11 @@
+name: Build and Publish Libraries
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    uses: ./.github/workflows/libs-build.yml
+  publish:
+    needs: build
+    uses: ./.github/workflows/libs-publish.yml
