@@ -8,6 +8,11 @@ jobs:
   try:
     runs-on: windows-latest
     steps:
-    - name: Echo
-      run: |
-        echo "action_state=yellow" >> $env:GITHUB_ENV
+    - name: List files
+      shell: pwsh
+      run: >
+        Get-ChildItem -Path "${{ github.workspace }}"
+        | Foreach-Object Process
+            {
+                echo $_.Name
+            }

@@ -1,4 +1,4 @@
-name: Build and Publish Libraries
+name: Release Libraries
 
 on:
   workflow_dispatch:
@@ -9,3 +9,5 @@ jobs:
   publish:
     needs: build
     uses: ./.github/workflows/libs-publish.yml
+    secrets:
+      nuget_api_key: ${{ secrets.NUGET_API }}

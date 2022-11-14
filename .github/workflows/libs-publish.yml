@@ -1,11 +1,14 @@
 name: Publish Libraries
 
 on:
-  workflow_dispatch:
   workflow_call:
+    secrets:
+      nuget_api_key:
+        description: 'nuget.org API key'
+        required: true
 
 jobs:
-  publish:
+  publish-nuget:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v3
@@ -25,11 +28,16 @@ jobs:
       with:
         name: libs.webforms
         path: ${{ github.workspace }}/packages/
-    - name: List files
+    - name: List packages
       shell: pwsh
       run: >
-        Get-ChildItem -Path ${{ github.workspace }}/packages/"
-        | Foreach-Object
+        Get-ChildItem -Path "${{ github.workspace }}/packages/"
+        | Foreach-Object Process
             {
-                echo $_.FullName
+                echo $_.Name
             }
+    - name: Publish NuGet packages to nuget.org
+      uses: myci-actions/publish-nuget@5
+      with:
+        filename: '{{ github.workspace }}/packages/*.nupkg'
+        api-key: "no" # ${{ secrets.nuget_api_key }}
