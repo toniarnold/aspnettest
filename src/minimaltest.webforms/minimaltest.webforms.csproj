@@ -12,7 +12,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>minimaltest</RootNamespace>
     <AssemblyName>minimaltest.webforms</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
@@ -79,10 +79,6 @@
     <Compile Include="WithStorageTest.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\asp.webforms\asp.webforms.csproj">
-      <Project>{36e1692e-9b7c-467c-adbe-a3f86575269a}</Project>
-      <Name>asp.webforms</Name>
-    </ProjectReference>
     <ProjectReference Include="..\iselenium.webforms\iselenium.webforms.csproj">
       <Project>{f3bedb25-a002-4eb5-b951-4a5e3e2ec477}</Project>
       <Name>iselenium.webforms</Name>

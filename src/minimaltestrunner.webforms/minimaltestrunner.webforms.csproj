@@ -11,7 +11,7 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>minimaltestrunner</RootNamespace>
     <AssemblyName>minimaltest.runner.webforms</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.2</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <Deterministic>true</Deterministic>
     <NuGetPackageImportStamp>
@@ -73,24 +73,6 @@
       <CopyToOutputDirectory>Always</CopyToOutputDirectory>
     </None>
     <None Include="packages.config" />
-  </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\iselenium.webforms\iselenium.webforms.csproj">
-      <Project>{f3bedb25-a002-4eb5-b951-4a5e3e2ec477}</Project>
-      <Name>iselenium.webforms</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\iselenium\iselenium.csproj">
-      <Project>{47062059-6fe3-432c-bfb2-fa09d1c8b5ed}</Project>
-      <Name>iselenium</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\minimal.webforms\minimal.webforms.csproj">
-      <Project>{d276ffa5-0e92-4ed0-82d9-d5fe08ac69a8}</Project>
-      <Name>minimal.webforms</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\minimaltest.webforms\minimaltest.webforms.csproj">
-      <Project>{11f715de-1c48-4503-ad49-31ec4bad7045}</Project>
-      <Name>minimaltest.webforms</Name>
-    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
