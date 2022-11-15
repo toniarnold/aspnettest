@@ -1,4 +1,4 @@
-name: Release Libraries
+name: Build and Publish Libraries
 
 on:
   workflow_dispatch:

@@ -3,9 +3,9 @@ name: Build Core Libraries
 on:
   workflow_dispatch:
   workflow_call:
-  # push:
-  #   branches:
-  #     - master
+  push:
+    branches:
+      - master
 
 jobs:
   build-core:
