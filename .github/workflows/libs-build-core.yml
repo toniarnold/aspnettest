@@ -1,11 +1,11 @@
-name: Build Libraries
+name: Build Core Libraries
 
 on:
   workflow_dispatch:
   workflow_call:
-  push:
-    branches:
-      - master
+  # push:
+  #   branches:
+  #     - master
 
 jobs:
   build-core:
@@ -72,27 +72,5 @@ jobs:
       uses: actions/upload-artifact@v3
       with:
         name: libs.core
-        path: ${{ github.workspace }}/packages/*.nupkg
-        retention-days: 10
-
-  build-webforms:
-    runs-on: windows-latest
-    steps:
-    - uses: actions/checkout@v3
-      with:
-        fetch-depth: 0
-    - name: Add msbuild to PATH
-      uses: microsoft/setup-msbuild@v1.1
-
-    - name: Restore dependencies
-      run: nuget restore libs.webforms.sln
-    - name: Build.NET Framework libraries
-      run: msbuild libs.webforms.sln /p:Configuration=Release
-    - name: Create packages
-      run: msbuild libs.webforms.sln /p:Configuration=Release -t:pack /p:PackageOutputPath=${{ github.workspace }}/packages
-    - name: Upload .nupkg
-      uses: actions/upload-artifact@v3
-      with:
-        name: libs.webforms
         path: ${{ github.workspace }}/packages/*.nupkg
         retention-days: 10

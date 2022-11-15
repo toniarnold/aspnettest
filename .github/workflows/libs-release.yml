@@ -1,0 +1,15 @@
+name: Release Libraries
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-core:
+    uses: ./.github/workflows/libs-build-core.yml
+  build-webforms:
+    uses: ./.github/workflows/libs-build-webforms.yml
+  publish:
+    needs: [build-core, build-webforms]
+    uses: ./.github/workflows/libs-publish.yml
+    secrets:
+      nuget_api_key: ${{ secrets.NUGET_API }}
