@@ -74,6 +74,16 @@
     </None>
     <None Include="packages.config" />
   </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\iselenium.webforms\iselenium.webforms.csproj">
+      <Project>{f3bedb25-a002-4eb5-b951-4a5e3e2ec477}</Project>
+      <Name>iselenium.webforms</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\iselenium\iselenium.csproj">
+      <Project>{579678b7-daec-4038-9ae5-9423aab4b8c6}</Project>
+      <Name>iselenium</Name>
+    </ProjectReference>
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
     <PropertyGroup>
