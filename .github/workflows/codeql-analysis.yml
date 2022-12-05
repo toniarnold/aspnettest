@@ -6,8 +6,8 @@ on:
   pull_request:
     # The branches below must be a subset of the branches above
     branches: [master]
-  schedule:
-    - cron: '0 19 * * 1'
+  # schedule:
+  #   - cron: '0 19 * * 1'
 
 jobs:
   analyse:
@@ -29,15 +29,17 @@ jobs:
 
     # Initializes the CodeQL tools for scanning.
     - name: Initialize CodeQL
-      uses: github/codeql-action/init@v1
+      uses: github/codeql-action/init@v2
       # Override language selection by uncommenting this and choosing your languages
       # with:
       #   languages: go, javascript, csharp, python, cpp, java
+      with:
+        languages: csharp
 
     # Autobuild attempts to build any compiled languages  (C/C++, C#, or Java).
     # If this step fails, then you should remove it and run the build manually (see below)
-    - name: Autobuild
-      uses: github/codeql-action/autobuild@v1
+    # - name: Autobuild
+    #   uses: github/codeql-action/autobuild@v2
 
     # ℹ️ Command-line programs to run using the OS shell.
     # 📚 https://git.io/JvXDl
@@ -50,5 +52,20 @@ jobs:
     #   make bootstrap
     #   make release
 
+    # TA: Custom build
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 6.0.x
+
+    # Build libs.core
+    - name: Restore dependencies
+      run: dotnet restore libs.core.sln
+    - name: Add msbuild to PATH
+      uses: microsoft/setup-msbuild@v1.1
+    - name: Build .NET Core libraries
+      run: msbuild libs.core.sln -property:noSmc=true,Configuration=Release
+
+    # Github original again
     - name: Perform CodeQL Analysis
-      uses: github/codeql-action/analyze@v1
+      uses: github/codeql-action/analyze@v2
