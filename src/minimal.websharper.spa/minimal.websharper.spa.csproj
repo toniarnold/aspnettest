@@ -13,10 +13,9 @@
   <ItemGroup>
 	<PackageReference Include="FSharp.Core" Version="6.0.6" />
     <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="17.3.2" />
-    <PackageReference Include="Selenium.InternetExplorer.WebDriver" Version="3.150.1" />
-    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="106.0.5249.6100" />
+    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="108.0.5359.7100" />
     <PackageReference Include="Selenium.WebDriver.GeckoDriver" Version="0.32.0" />
-    <PackageReference Include="Selenium.WebDriver.MSEdgeDriver" Version="106.0.1370.34" />
+    <PackageReference Include="Selenium.WebDriver.MSEdgeDriver" Version="107.0.1418.42" />
     <PackageReference Include="WebSharper" Version="6.0.4.240" />
     <PackageReference Include="WebSharper.CSharp" Version="6.0.4.240" />
     <PackageReference Include="WebSharper.UI" Version="6.0.5.240" />

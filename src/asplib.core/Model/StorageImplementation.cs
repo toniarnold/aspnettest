@@ -277,10 +277,12 @@ namespace asplib.Model
                     break;
 
                 case Storage.Database:
-                    // delete from the database and expire the cookie
+                    // expire the cookie, then delete from the database
                     Guid session;
                     if (Guid.TryParse(httpContext.Request.Cookies[storageID].FromCookieString()["session"], out session))
                     {
+                        httpContext.Response.Cookies.Delete(storageID);
+
                         using (var db = new ASP_DBEntities())
                         {
                             db.Database.ExecuteSqlInterpolated($@"

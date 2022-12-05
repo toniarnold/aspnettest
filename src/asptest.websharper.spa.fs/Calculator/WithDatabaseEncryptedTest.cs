@@ -1,11 +1,11 @@
 ﻿using asplib.Model;
 using NUnit.Framework;
 using OpenQA.Selenium;
-using OpenQA.Selenium.IE;
+using OpenQA.Selenium.Edge;
 
 namespace asptest.Calculator
 {
-    [TestFixture(typeof(InternetExplorerDriver))]
+    [TestFixture(typeof(EdgeDriver))]
     public class WithDatabaseEncryptedTest<TWebDriver> : WithDatabaseTest<TWebDriver>
         where TWebDriver : IWebDriver, new()
     {

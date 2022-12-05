@@ -1,7 +1,7 @@
 ﻿using iselenium;
 using NUnit.Framework;
 using OpenQA.Selenium;
-using OpenQA.Selenium.IE;
+using OpenQA.Selenium.Edge;
 using System.Collections.Generic;
 
 namespace minimaltest
@@ -21,7 +21,7 @@ namespace minimaltest
         [OneTimeSetUp]
         public void OneTimeSetUpIE()
         {
-            this.SetUpBrowser<InternetExplorerDriver>();
+            this.SetUpBrowser<EdgeDriver>();
         }
 
         [OneTimeTearDown]

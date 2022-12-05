@@ -3,7 +3,7 @@ using minimal.websharper.spa;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.IE;
+using OpenQA.Selenium.Edge;
 using System;
 using System.Collections.Generic;
 
@@ -12,7 +12,7 @@ using System.Collections.Generic;
 namespace minimaltest
 {
     [TestFixture(typeof(ChromeDriver))]
-    [TestFixture(typeof(InternetExplorerDriver))]
+    [TestFixture(typeof(EdgeDriver))]
     public class WithStorageRemoteTest<TWebDriver> : SpaDbTest<TWebDriver>
         where TWebDriver : IWebDriver, new()
     {
@@ -66,19 +66,15 @@ namespace minimaltest
         {
             this.NavigatekWithStorageRemote();
             this.Click("storageSession");
-            this.WriteContentTest(() => this.Reload());
+            this.WriteContentTest(() => this.ReloadSession());
         }
 
         [Test]
         public void StorageDatabaseTest()
         {
-            // Chrome is "user friendly", no persistent cookies in selenium remote  mode
-            if (!(this.driver is ChromeDriver))
-            {
-                this.NavigatekWithStorageRemote();
-                this.Click("storageDatabase");
-                this.WriteContentTest(() => this.RestartBrowser());
-            }
+            this.NavigatekWithStorageRemote();
+            this.Click("storageDatabase");
+            this.WriteContentTest(() => this.ReloadDatabase()); // this.RestartBrowser() has become impossible with modern selenium
         }
 
         // "survives()"-Method implementations with explicit storage selection,
@@ -92,10 +88,19 @@ namespace minimaltest
         /// <summary>
         /// Reload the page, session storage should survive
         /// </summary>
-        private void Reload()
+        private void ReloadSession()
         {
             this.NavigatekWithStorageRemote();
             this.Click("storageSession");
+        }
+
+        /// <summary>
+        /// Reload the page, session storage should survive
+        /// </summary>
+        private void ReloadDatabase()
+        {
+            this.NavigatekWithStorageRemote();
+            this.Click("storageDatabase");
         }
 
         /// <summary>

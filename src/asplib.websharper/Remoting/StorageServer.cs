@@ -106,10 +106,17 @@ namespace asplib.Remoting
                 // ---------- Load Database ----------
                 else if (storage == Storage.Database)
                 {
-                    Guid.TryParse(HttpContext.Request.Cookies[storageID].FromCookieString()["session"], out session);
-                    (bytes, filter) = StorageImplementation.DatabaseBytes(Configuration, HttpContext, storageID, session);
-                    viewModel = new V();
-                    viewModel.SetMain(StorageImplementation.LoadFromBytes(() => new M(), bytes, filter));
+                    if (Guid.TryParse(HttpContext.Request.Cookies[storageID].FromCookieString()["session"], out session))
+                    {
+                        (bytes, filter) = StorageImplementation.DatabaseBytes(Configuration, HttpContext, storageID, session);
+                        viewModel = new V();
+                        viewModel.SetMain(StorageImplementation.LoadFromBytes(() => new M(), bytes, filter));
+                    }
+                    else
+                    {
+                        viewModel = new V();
+                        viewModel.SetMain(new M());
+                    }
                 }
                 else
                 {

@@ -138,7 +138,8 @@ namespace iselenium
         {
             int pollFor = timeout ?? RequestTimeout;
             var constraint = expression().Resolve();
-            for (int i = 0; i < pollFor * 1000 / FAST_POLL_MILLISECONDS; i++)
+            var end = DateTime.Now.AddSeconds(pollFor);
+            while (DateTime.Now < end)
             {
                 try
                 {

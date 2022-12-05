@@ -51,9 +51,8 @@ namespace iselenium
 
         private void PollHttpOK()
         {
-            for (int i = 0;
-                 i < SeleniumExtensionBase.RequestTimeout * 1000 / SeleniumExtensionBase.FAST_POLL_MILLISECONDS;
-                 i++)
+            var timeout = DateTime.Now.AddSeconds(SeleniumExtensionBase.RequestTimeout);
+            while (DateTime.Now < timeout)
             {
                 var rooturl = String.Format("http://localhost:{0}", SeleniumExtensionBase.Port);
                 this.driver.Navigate().GoToUrl(rooturl);

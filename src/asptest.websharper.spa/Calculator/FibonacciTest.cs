@@ -5,16 +5,15 @@ using Microsoft.Extensions.Configuration;
 using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
-using OpenQA.Selenium.IE;
+using OpenQA.Selenium.Edge;
 using System;
 using System.Linq;
 using static asplib.View.TagHelper;
 
 namespace asptest.Calculator
 {
-    [TestFixture(typeof(InternetExplorerDriver))]
+    [TestFixture(typeof(EdgeDriver))]
     [TestFixture(typeof(ChromeDriver))]
-    //[TestFixture(typeof(FirefoxDriver))]
     public class FibonacciTest<TWebDriver> : CalculatorTestBase<TWebDriver>
         where TWebDriver : IWebDriver, new()
     {

@@ -22,10 +22,6 @@ namespace iselenium
         {
             get
             {
-                if (this.Controller == null)
-                {
-                    throw new NullReferenceException("Controller not set or torn down");
-                }
                 return (TController)StaticControllerExtension.GetController();
             }
         }

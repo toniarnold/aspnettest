@@ -156,7 +156,7 @@ namespace iselenium
         /// Assert that there is no TestResult.xml with result="Failed" shown.
         /// Intended For running tests from ITestServer in a TestAdapter.
         /// </summary>
-        public static void AssertTestsOK(this ISeleniumBase inst)
+        public static void AssertTestsOK(this ISeleniumBase _)
         {
             while (TestServerIPC.IsTestRunning)    // poll until the tests are finished
             {
@@ -270,7 +270,27 @@ namespace iselenium
         private static void Click(IWebElement element, bool awaitRemoved, int delay, int pause)
         {
             Thread.Sleep(delay);
-            element.Click();
+            // Try to mimic JAVA selenium's elementToBeClickable:
+            var timeout = DateTime.Now.AddSeconds(RequestTimeout);
+            Exception threw = null;
+            while (DateTime.Now < timeout)
+            {
+                try
+                {
+                    element.Click();
+                    threw = null;
+                    break;
+                }
+                catch (ElementNotInteractableException ex)
+                {
+                    threw = ex;
+                    Thread.Sleep(FAST_POLL_MILLISECONDS);
+                }
+            }
+            if (threw != null)
+            {
+                throw threw;
+            }
             if (awaitRemoved)
             {
                 AwaitElementRemoved(element);
@@ -288,7 +308,7 @@ namespace iselenium
         public static void Write(this ISeleniumBase inst, string name, string text, int index = 0,
                                 int wait = 0, int throttle = 0)
         {
-            Write(inst, By.Name, name, text, index, wait: wait);
+            Write(inst, By.Name, name, text, index, wait: wait, throttle: throttle);
         }
 
         /// <summary>
@@ -450,7 +470,8 @@ namespace iselenium
                                                                         string nameOrId, int wait)
         {
             var elements = new ReadOnlyCollection<IWebElement>(Array.Empty<IWebElement>());
-            for (int i = 0; i < RequestTimeout * 1000 / FAST_POLL_MILLISECONDS; i++)
+            var timeout = DateTime.Now.AddSeconds(RequestTimeout);
+            while (DateTime.Now < timeout)
             {
                 try
                 {
@@ -476,7 +497,8 @@ namespace iselenium
         private static void AwaitElementRemoved(IWebElement element)
         {
             bool isRemoved = false;
-            for (int i = 0; i < RequestTimeout * 1000 / FAST_POLL_MILLISECONDS; i++)
+            var timeout = DateTime.Now.AddSeconds(RequestTimeout);
+            while (DateTime.Now < timeout)
             {
                 try
                 {
