@@ -4,6 +4,7 @@ using NUnit.Framework;
 using OpenQA.Selenium;
 using OpenQA.Selenium.Chrome;
 using OpenQA.Selenium.Edge;
+using OpenQA.Selenium.Firefox;
 using System;
 using System.Collections.Generic;
 
@@ -11,7 +12,8 @@ using System.Collections.Generic;
 
 namespace minimaltest
 {
-    [TestFixture(typeof(ChromeDriver))]
+    //[TestFixture(typeof(ChromeDriver))]
+    //[TestFixture(typeof(FirefoxDriver))]
     [TestFixture(typeof(EdgeDriver))]
     public class WithStorageRemoteTest<TWebDriver> : SpaDbTest<TWebDriver>
         where TWebDriver : IWebDriver, new()
@@ -100,11 +102,12 @@ namespace minimaltest
         private void ReloadDatabase()
         {
             this.NavigatekWithStorageRemote();
-            this.Click("storageDatabase");
+            this.Click("storageDatabase", pause: 3000);
         }
 
         /// <summary>
-        /// Restart the Browser and navigate to the storage page, database storage should survive
+        /// Restart the Browser and navigate to the storage page, database storage should survive -
+        /// Not possible no more with modern browsers running in incognito mode under Selenium.
         /// </summary>
         private void RestartBrowser()
         {
@@ -121,11 +124,11 @@ namespace minimaltest
         public void WriteContentTest(Action survives)
         {
             this.Write("contentTextBox", "a first content line");
-            this.Click("submitButton");
+            this.Click("submitButton", pause: 3000);
             this.AssertPoll(() => this.Content, () => Has.Exactly(1).Items);
             Assert.That(this.Content[0], Is.EqualTo("a first content line"));
 
-            survives(); // Reload() or RestartIE()
+            survives(); // ReloadSession() or ReloadDatabase()
             this.AssertPoll(() => this.Html(), () => Does.Contain("a first content line"));
 
             this.Write("contentTextBox", "a second content line");

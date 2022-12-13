@@ -18,9 +18,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\iselenium.core\iselenium.core.csproj" />
-    <ProjectReference Include="..\minimal.websharper.spa\minimal.websharper.spa.csproj" />
-    <ProjectReference Include="..\minimaltest.websharper.spa\minimaltest.websharper.spa.csproj" />
+    <ProjectReference Include="..\minimal.websharper.spa\minimal.websharper.spa.nuget.csproj" />
+    <ProjectReference Include="..\minimaltest.websharper.spa\minimaltest.websharper.spa.nuget.csproj" />
   </ItemGroup>
 
   <ItemGroup>

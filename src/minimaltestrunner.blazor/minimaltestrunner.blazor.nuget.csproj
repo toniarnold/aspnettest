@@ -2,25 +2,26 @@
 
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
     <RootNamespace>minimaltestrunner</RootNamespace>
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="nunit" Version="3.13.3" />
-    <PackageReference Include="NUnit3TestAdapter" Version="4.3.1">
+    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
+    <PackageReference Include="NUnit" Version="3.13.3" />
+    <PackageReference Include="NUnit3TestAdapter" Version="4.3.1" />
+    <PackageReference Include="NUnit.Analyzers" Version="3.5.0">
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.3.2" />
-    <PackageReference Include="Selenium.Chrome.WebDriver" Version="85.0.0" />
     <PackageReference Include="Selenium.WebDriver.MSEdgeDriver" Version="107.0.1418.42" />
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\iselenium.core\iselenium.core.csproj" />
-    <ProjectReference Include="..\minimal.websharper.spa\minimal.websharper.spa.csproj" />
-    <ProjectReference Include="..\minimaltest.websharper.spa\minimaltest.websharper.spa.csproj" />
+    <ProjectReference Include="..\minimal.blazor\minimal.blazor.nuget.csproj" />
+    <ProjectReference Include="..\minimaltest.blazor\minimaltest.blazor.nuget.csproj" />
   </ItemGroup>
 
   <ItemGroup>
