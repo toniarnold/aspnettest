@@ -3,6 +3,7 @@
   <PropertyGroup>
 	<TargetFramework>net6.0</TargetFramework>
     <RootNamespace>minimal</RootNamespace>
+    <AssemblyName>minimal.core</AssemblyName>
 	<EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>	  
   </PropertyGroup>
 
