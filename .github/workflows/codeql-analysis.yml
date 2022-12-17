@@ -60,12 +60,18 @@ jobs:
         dotnet-version: 6.0.x
 
     # Build libs.core
-    - name: Restore dependencies
+    - name: Restore .NET Core dependencies
       run: dotnet restore libs.core.sln
     - name: Add msbuild to PATH
       uses: microsoft/setup-msbuild@v1.1
     - name: Build .NET Core libraries
       run: msbuild libs.core.sln -property:noSmc=true,Configuration=Release
+
+    # Build libs.webforms
+    - name: Restore .NET Framework dependencies
+      run: nuget restore libs.webforms.sln
+    - name: Build .NET Framework libraries
+      run: msbuild libs.webforms.sln /p:Configuration=Release
 
     # Github original again
     - name: Perform CodeQL Analysis
