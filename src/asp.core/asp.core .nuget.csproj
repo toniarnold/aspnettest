@@ -16,7 +16,7 @@
     <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="17.3.2" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.10" />
     <PackageReference Include="Selenium.InternetExplorer.WebDriver" Version="3.150.1" />
-    <PackageReference Include="Selenium.WebDriver" Version="4.5.1" />
+    <PackageReference Include="Selenium.WebDriver" Version="4.7.0" />
   </ItemGroup>
 
   <ItemGroup>

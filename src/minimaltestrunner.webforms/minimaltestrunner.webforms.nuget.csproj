@@ -86,7 +86,7 @@
       <HintPath>..\..\packages\NUnit.Engine.3.15.2\lib\net20\testcentric.engine.metadata.dll</HintPath>
     </Reference>
     <Reference Include="WebDriver, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\Selenium.WebDriver.4.5.1\lib\net47\WebDriver.dll</HintPath>
+      <HintPath>..\..\packages\Selenium.WebDriver.4.7.0\lib\net47\WebDriver.dll</HintPath>
     </Reference>
   </ItemGroup>
   <ItemGroup>
