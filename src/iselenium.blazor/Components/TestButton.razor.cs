@@ -31,7 +31,7 @@ namespace iselenium.Components
         protected string spin { get; set; } = "";
         protected string imageText => State.ToString();
 
-        private const string _contentPath = "/_content/iselenium.blazor";
+        private const string _contentPath = "/_content/aspnettest.iselenium.blazor";
 
         /// <summary>
         /// Display the NUnit image color according to the FSM state

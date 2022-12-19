@@ -3,10 +3,10 @@
     <Rule Match="All">
       <Property Name="Solution" />
       <Rule Match="Any">
+        <Property Name="Project" Value="minimaltestrunner.blazor.nuget" />
         <Property Name="Project" Value="minimaltestrunner.core.nuget" />
         <Property Name="Project" Value="minimaltestrunner.webforms.nuget" />
         <Property Name="Project" Value="minimaltestrunner.websharper.spa.nuget" />
-        <Property Name="Project" Value="minimaltestrunner.blazor.nuget" />
       </Rule>
     </Rule>
   </Rule>

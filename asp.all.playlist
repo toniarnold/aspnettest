@@ -1,0 +1,13 @@
+<Playlist Version="2.0">
+  <Rule Name="Includes" Match="Any">
+    <Rule Match="All">
+      <Property Name="Solution" />
+      <Rule Match="Any">
+        <Property Name="Project" Value="asptestrunner.blazor" />	  
+        <Property Name="Project" Value="asptestrunner.core" />
+        <Property Name="Project" Value="asptestrunner.webforms" />
+        <Property Name="Project" Value="asptestrunner.websharper.spa" />
+      </Rule>
+    </Rule>
+  </Rule>
+</Playlist>
