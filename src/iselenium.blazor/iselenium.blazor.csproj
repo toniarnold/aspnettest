@@ -5,11 +5,11 @@
     <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
   </PropertyGroup>
-  
+
   <PropertyGroup>
     <Authors>Toni Arnold</Authors>
     <Version>0.2.0</Version>
-    <PackageId>iselenium.blazor</PackageId>
+    <PackageId>aspnettest.iselenium.blazor</PackageId>
     <Product>aspnettest</Product>
     <Description>ASP.NET In-App-GUI-Tests with Selenium and NUnit</Description>
     <PackageLicenseExpression>AGPL-3.0-or-later</PackageLicenseExpression>

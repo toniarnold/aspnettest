@@ -8,7 +8,7 @@
   <PropertyGroup>
     <Authors>Toni Arnold</Authors>
     <Version>0.2.0</Version>
-    <PackageId>iselenium.websharper</PackageId>
+    <PackageId>aspnettest.iselenium.websharper</PackageId>
     <Product>aspnettest</Product>
     <Description>ASP.NET In-App-GUI-Tests with Selenium and NUnit</Description>
     <PackageLicenseExpression>AGPL-3.0-or-later</PackageLicenseExpression>

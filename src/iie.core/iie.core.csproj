@@ -3,7 +3,7 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>iie</RootNamespace>
-    <PackageId>aspnettest.core</PackageId>
+    <PackageId>aspnettest.aspnettest.core</PackageId>
     <Version>1.0.0</Version>
     <Authors>Toni Arnold</Authors>
     <Product>aspnettest</Product>
@@ -45,6 +45,6 @@
       <Lcid>0</Lcid>
       <Isolated>false</Isolated>
     </COMReference>
-  </ItemGroup>  
+  </ItemGroup>
 
 </Project>

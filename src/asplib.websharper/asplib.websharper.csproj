@@ -3,13 +3,13 @@
   <PropertyGroup>
     <TargetFramework>net6.0</TargetFramework>
 	<WebSharperProject>Library</WebSharperProject>
-	<RootNamespace>asplib</RootNamespace>	
+	<RootNamespace>asplib</RootNamespace>
   </PropertyGroup>
 
   <PropertyGroup>
     <Authors>Toni Arnold, Charles W. Rapp (SMC)</Authors>
     <Version>0.2.0</Version>
-    <PackageId>asplib.websharper</PackageId>
+    <PackageId>aspnettest.asplib.websharper</PackageId>
     <Product>aspnettest</Product>
     <Description>Base for an ASP.NET Model Control View design pattern with session persistence and optionally SMC, the State Machine Compiler</Description>
     <PackageLicenseExpression>AGPL-3.0-or-later</PackageLicenseExpression>

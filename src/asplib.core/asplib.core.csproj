@@ -9,7 +9,7 @@
   <PropertyGroup>
     <Authors>Toni Arnold, Charles W. Rapp (SMC)</Authors>
     <Version>0.2.0</Version>
-    <PackageId>asplib.core</PackageId>
+    <PackageId>aspnettest.asplib.core</PackageId>
     <Product>aspnettest</Product>
     <Description>Base for an ASP.NET Model Control View design pattern with session persistence and optionally SMC, the State Machine Compiler</Description>
     <PackageLicenseExpression>AGPL-3.0-or-later</PackageLicenseExpression>

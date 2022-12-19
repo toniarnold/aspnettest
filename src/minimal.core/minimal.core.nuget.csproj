@@ -4,18 +4,18 @@
 	<TargetFramework>net6.0</TargetFramework>
     <RootNamespace>minimal</RootNamespace>
     <AssemblyName>minimal.core</AssemblyName>
-	<EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>	  
+	<EnableUnsafeBinaryFormatterSerialization>true</EnableUnsafeBinaryFormatterSerialization>
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Views\WithStatic\" />  
+    <Folder Include="Views\WithStatic\" />
     <Folder Include="Views\WithStorage\" />
     <Folder Include="wwwroot\" />
   </ItemGroup>
 
-  <ItemGroup>    
-    <PackageReference Include="asplib.core" Version="0.2.0" />    
-    <PackageReference Include="iselenium.core" Version="0.2.0" />    
+  <ItemGroup>
+    <PackageReference Include="aspnettest.asplib.core" Version="0.2.0" />
+    <PackageReference Include="aspnettest.iselenium.core" Version="0.2.0" />
     <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="17.3.2" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="6.0.10" />
     <PackageReference Include="NUnit" Version="3.13.3" />
