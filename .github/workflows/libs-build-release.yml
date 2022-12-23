@@ -10,7 +10,7 @@ jobs:
     uses: ./.github/workflows/libs-build-webforms.yml
   publish:
     needs: [build-core, build-webforms]
-    uses: ./.github/workflows/libs-publish.yml
+    uses: ./.github/workflows/libs-release.yml
     with:
       version: v0.2.0
     secrets:
