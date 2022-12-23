@@ -19,7 +19,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="17.3.2" />
+    <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="17.4.1" />
     <PackageReference Include="Selenium.Chrome.WebDriver" Version="85.0.0" />
     <PackageReference Include="Selenium.WebDriver.GeckoDriver" Version="0.32.0" />
     <PackageReference Include="Selenium.WebDriver.MSEdgeDriver" Version="107.0.1418.42" />
@@ -48,7 +48,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Update="FSharp.Core" Version="6.0.6" />
+    <PackageReference Update="FSharp.Core" Version="6.0.7" />
   </ItemGroup>
 
   <Target Name="PreBuild" BeforeTargets="PreBuildEvent">

@@ -7,7 +7,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="FSharp.Core" Version="6.0.6" />
+    <PackageReference Include="FSharp.Core" Version="6.0.7" />
     <PackageReference Include="WebSharper" Version="6.1.0.249" />
     <PackageReference Include="WebSharper.CSharp" Version="6.1.0.249" />
     <PackageReference Include="WebSharper.UI" Version="6.1.0.249" />
