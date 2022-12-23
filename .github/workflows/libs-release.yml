@@ -42,8 +42,8 @@ jobs:
       with:
         nuget-api-key: ${{ secrets.nuget_api_key }}
     - name: Publish NuGet packages to nuget.org
-      run: nuget push -Source https://api.nuget.org/v3/index.json '${{ github.workspace }}/packages/*.nupkg' -SkipDuplicate
-    - name: Create GitHub release
+      run: nuget push -Source https://api.nuget.org/v3/index.json '${{ github.workspace }}\packages\*.nupkg' -SkipDuplicate
+    - name: Create GitHub release ${{ inputs.version }}
       uses: ncipollo/release-action@v1
       with:
         commit: master
