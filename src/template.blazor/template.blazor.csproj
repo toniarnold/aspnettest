@@ -1,0 +1,29 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <PackageType>Template</PackageType>
+    <PackageVersion>0.2.0</PackageVersion>
+    <PackageId>aspnettest.template.blazor</PackageId>
+    <Title>aspnettest Blazor Server App with bUnit and Selenium</Title>
+    <Authors>Toni Arnold</Authors>
+    <Description>Blazor Server App wired up with bUnit and aspnettest Selenium.</Description>
+    <PackageTags>dotnet-new;templates;blazor;bunit;selenium</PackageTags>
+    <PackageProjectUrl>https://github.com/toniarnold/aspnettest/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/toniarnold/aspnettest.git</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+
+    <TargetFramework>netstandard2.0</TargetFramework>
+
+    <IncludeContentInPack>true</IncludeContentInPack>
+    <IncludeBuildOutput>false</IncludeBuildOutput>
+    <ContentTargetFolders>content</ContentTargetFolders>
+    <NoWarn>$(NoWarn);NU5128</NoWarn>
+    <NoDefaultExcludes>true</NoDefaultExcludes>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Content Include="**\*"
+             Exclude="bin\**;src\BlazorApp1*\bin\**;src\bin\BlazorApp1*;**\obj\**;.vs/**" />
+    <Compile Remove="**\*" />
+  </ItemGroup>
+</Project>

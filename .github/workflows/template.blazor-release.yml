@@ -1,0 +1,35 @@
+name: Release Blazor template
+
+on:
+  workflow_call:
+    secrets:
+      nuget_api_key:
+        description: 'nuget.org API key'
+        required: true
+
+jobs:
+  publish-nuget:
+    runs-on: windows-latest
+    steps:
+    - uses: actions/checkout@v3
+      with:
+        fetch-depth: 0
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: 6.0.x
+    - name: Download Template .nupkg package
+      uses: actions/download-artifact@v3
+      with:
+        name: template.blazor
+        path: ${{ github.workspace }}/packages/
+    - name: List packages
+      shell: pwsh
+      run: >
+        Get-ChildItem -Path "${{ github.workspace }}/packages/" | Foreach-Object -Process { echo $_.Name }
+    - name: Setup NuGet.exe
+      uses: nuget/setup-nuget@v1
+      with:
+        nuget-api-key: ${{ secrets.nuget_api_key }}
+    - name: Publish package to nuget.org
+      run: nuget push -Source https://api.nuget.org/v3/index.json '${{ github.workspace }}\packages\*.nupkg' -SkipDuplicate

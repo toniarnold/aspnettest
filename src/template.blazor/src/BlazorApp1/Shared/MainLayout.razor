@@ -1,0 +1,22 @@
+﻿@using iselenium.Components
+
+@inherits LayoutComponentBase
+
+<PageTitle>BlazorApp1</PageTitle>
+
+<div class="page">
+    <div class="sidebar">
+        <NavMenu />
+    </div>
+
+    <main>
+        <div class="top-row px-4">
+            <a href="https://docs.microsoft.com/aspnet/" target="_blank">About</a>
+            <TestButton testproject="BlazorApp1SeleniumTest" tabindex="1000" />
+        </div>
+
+        <article class="content px-4">
+            @Body
+        </article>
+    </main>
+</div>

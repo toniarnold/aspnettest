@@ -1,0 +1,42 @@
+{
+    "identity": "aspnettest.template.blazor",
+    "author": "Toni Arnold",
+    "classifications": [
+        "Solution",
+        "Web",
+        "Blazor",
+        "Test",
+        "NUnit",
+        "bUnit",
+        "Selenium"
+    ],
+    "name": "aspnettest Blazor Server App with bUnit and Selenium",
+    "shortName": "aspnettest-blazor",
+    "tags": {
+        "language": "C#",
+        "type": "solution"
+    },
+    "sources": [
+        {
+          "modifiers": [
+            {
+                "exclude": [
+                    ".vs/**",
+                    "template.blazor.csproj"
+                ],
+                "include": [
+                    "src/bin/.gitignore"
+                ]
+            }
+          ]
+        }
+      ],
+    "guids": [
+        "{9A19103F-16F7-4668-BE54-9A1E7A4F7556}",
+        "{A3885922-B54D-445C-90F1-7C64A096E77E}",
+        "{0F9A3CD4-720D-4450-BD6C-1D7BEB10A95E}",
+        "{B7122D06-49C7-40B7-9686-4C6ABF150D25}",
+        "{5B29B878-CD69-4C6D-ABB6-7B5B83261586}"
+    ],
+    "sourceName": "BlazorApp1"
+}

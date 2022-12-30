@@ -1,4 +1,4 @@
-# WebSharper with SMC (defunct)
+# WebSharper with SMC
 
 * [Summary](#summary)
 * [Controller persistence](#controller-persistence)

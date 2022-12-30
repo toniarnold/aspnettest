@@ -1,0 +1,13 @@
+name: Build and Release Blazor template
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    uses: ./.github/workflows/template.blazor-build.yml
+  release:
+    needs: [build]
+    uses: ./.github/workflows/template.blazor-release.yml
+    secrets:
+      nuget_api_key: ${{ secrets.NUGET_API }}

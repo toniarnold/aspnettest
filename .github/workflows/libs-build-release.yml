@@ -8,7 +8,7 @@ jobs:
     uses: ./.github/workflows/libs-build-core.yml
   build-webforms:
     uses: ./.github/workflows/libs-build-webforms.yml
-  publish:
+  release:
     needs: [build-core, build-webforms]
     uses: ./.github/workflows/libs-release.yml
     with:

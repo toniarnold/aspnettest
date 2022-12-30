@@ -1,6 +1,7 @@
 # ASP.NET Blazor Server
 
 * [Summary](#summary)
+* [Quickstart](#quickstart)
 * [Scaffolding of `minimal.blazor`](#scaffolding-of-minimalblazor)
   * [Using the static `TestFocus` accessor](#using-the-static-testfocus-accessor)
     * [Automatic synchronization with `TestFocus`](#automatic-synchronization-with-testfocus)
@@ -52,6 +53,28 @@ React and Anguler), there is no need to wait and poll for changes to happen
 
 Instead, the `ITestFocus` static class in `asplib.blazor` provides an
 `EndRender` resp. `EndRenderAsync` extension method to synchronize the tests.
+
+## Quickstart
+
+With the `aspnettest.template.blazor` NuGet package, a `dotnet new` template is
+available to generate a Blazor Server App already wired up with bUnit and
+aspnettest Selenium:
+
+```sh
+dotnet new install aspnettest.template.blazor
+dotnet new aspnettest-blazor -o MyBlazorApp
+```
+
+Then open the generated MyBlazorApp.sln with Visual Studio. Due to the circular
+dependency (by design) between the app and its Selenium tests, it is mandatory
+to build the solution *twice*, the second time enforced as "Rebuild Solution".
+From the Test-Explorer window, open the generated MyBlazorApp.playlist. It
+contains two test projects: `MyBlazorAppBunitTest` (which runs fast) and
+`MyBlazorAppSeleniumTestRunner` which starts the web server, an Edge browser
+instance and runs the tests in `MyBlazorAppSeleniumTest` (excluded from the
+playlist) by pushing the test button in the browser.
+
+
 
 ## Scaffolding of `minimal.blazor`
 

@@ -27,7 +27,7 @@ jobs:
     - name: Build .NET Core libraries
       run: msbuild libs.core.sln -property:noSmc=true,Configuration=Release
 
-    # Test libs.core with SQL  and create nuGet packages
+    # Test libs.core with SQL and create nuGet packages
     - name: Install SQL Server
       uses: Particular/install-sql-server-action@v1.0.2
       with:

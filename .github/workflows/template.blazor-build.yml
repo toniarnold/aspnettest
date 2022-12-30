@@ -1,11 +1,14 @@
-name: Sandbox
+name: Build/Test Blazor template
 
 on:
   workflow_dispatch:
   workflow_call:
+  push:
+    branches:
+      - master
 
 jobs:
-  try:
+  build-template:
     runs-on: windows-latest
     steps:
     - uses: actions/checkout@v3
