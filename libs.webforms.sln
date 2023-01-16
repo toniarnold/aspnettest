@@ -24,7 +24,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github-workflows", "github-workflows", "{B40564BC-5E4C-47EB-82A4-52AE263E4792}"
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\codeql-analysis.yml = .github\workflows\codeql-analysis.yml
-		.github\workflows\libs-build.yml = .github\workflows\libs-build.yml
+		.github\workflows\libs-build-webforms.yml = .github\workflows\libs-build-webforms.yml
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test.webforms", "src\test.webforms\test.webforms.csproj", "{7ACC2161-77B2-4DBD-BEC3-E4ABB31D3149}"

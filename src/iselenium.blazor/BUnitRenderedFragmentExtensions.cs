@@ -13,7 +13,7 @@ namespace iselenium
         /// </summary>
         /// <param name="renderedFragment"></param>
         /// <param name="element"></param>
-        /// <param name="expectRender"></param>
+        /// <param name="expectRenders"></param>
         /// <exception cref="TimeoutException"></exception>
         public static void Click(this IRenderedFragment renderedFragment, ElementReference element, int expectRenders = 1)
         {

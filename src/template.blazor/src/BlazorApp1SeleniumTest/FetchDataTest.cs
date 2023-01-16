@@ -1,9 +1,7 @@
-﻿using BlazorApp1.Pages;
-
-namespace BlazorApp1
+﻿namespace BlazorApp1
 {
     [TestFixture(typeof(EdgeDriver))]
-    public class FetchDataTest<TWebDriver> : StaticComponentTest<TWebDriver, FetchData>
+    public class FetchDataTest<TWebDriver> : StaticComponentTest<TWebDriver, Pages.FetchData>
         where TWebDriver : IWebDriver, new()
     {
         [Test]

@@ -133,10 +133,11 @@ namespace iselenium
         /// <summary>
         /// Reloads the page at the current URL
         /// </summary>
-        /// <param name="inst"></param>
-        public static void Refresh(this ISeleniumBase inst)
+        /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete</param>
+        public static void Refresh(this ISeleniumBase inst, int pause = 0)
         {
             inst.driver.Navigate().Refresh();
+            Thread.Sleep(pause);
         }
 
         /// <summary>

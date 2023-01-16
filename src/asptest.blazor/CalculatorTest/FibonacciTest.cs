@@ -45,21 +45,21 @@ namespace asptest.CalculatorTest
                 // Check the correctness of the Fibonacci sequence  in the calculator GUI
 
                 // Delete the current sum and recalculate it from the sequence
-                this.Click(Dynamic<Calculate>(Component.calculatorPart).clrButton);
-                this.Click(Dynamic<Calculate>(Component.calculatorPart).addButton);
+                this.Click(Dynamic<Calculate>(Cut.calculatorPart).clrButton);
+                this.Click(Dynamic<Calculate>(Cut.calculatorPart).addButton);
                 Assert.That(this.Stack.ElementAt(0), Is.EqualTo(sum));
 
                 // Delete the calculated check sum
-                this.Click(Dynamic<Calculate>(Component.calculatorPart).clrButton);
+                this.Click(Dynamic<Calculate>(Cut.calculatorPart).clrButton);
 
                 // Put the original summands onto the stack again
-                this.Click(Component.footer.enterButton);
-                this.Write(Dynamic<Enter>(Component.calculatorPart).operand, summand2);
-                this.Click(Component.footer.enterButton);
+                this.Click(Cut.footer.enterButton);
+                this.Write(Dynamic<Enter>(Cut.calculatorPart).operand, summand2);
+                this.Click(Cut.footer.enterButton);
 
-                this.Click(Component.footer.enterButton);
-                this.Write(Dynamic<Enter>(Component.calculatorPart).operand, summand1);
-                this.Click(Component.footer.enterButton);
+                this.Click(Cut.footer.enterButton);
+                this.Write(Dynamic<Enter>(Cut.calculatorPart).operand, summand1);
+                this.Click(Cut.footer.enterButton);
 
                 // Check that the loop will terminate by continuing with N-1 elements
                 Assert.That(this.Stack.Count, Is.EqualTo(initialStackCount - 1));

@@ -24,7 +24,14 @@ namespace asplib.Components
         private bool _shouldRender = true;
 
         /// <summary>
-        /// Local type of the session storage to override AppSettings["SessionStorage"]
+        /// ?clear=true requests prior deletion of the stored object
+        /// </summary>
+        [Parameter]
+        [SupplyParameterFromQuery]
+        public bool? Clear { get; set; }
+
+        /// <summary>
+        /// Local type of the session storage to override the storage configured in the appsettings
         /// </summary>
         public Storage? SessionStorage { get; set; }
 
@@ -51,7 +58,8 @@ namespace asplib.Components
         public bool StorageHasChanged { get; set; } = false;
 
         /// <summary>
-        /// True when Main has the IsRequestedInstanceAttribute
+        /// True when Main has the IsRequestedInstanceAttribute indicating that
+        /// it has been injected by the ?session= GET parameter
         /// </summary>
         private bool IsMainRequestedInstance =>
             (from Attribute a in TypeDescriptor.GetAttributes(this.Main)
@@ -125,10 +133,16 @@ namespace asplib.Components
         /// <summary>
         /// Instantiate the Main instance and signal TestFocus.Event
         /// on re-render.
+        /// Handle the "clear=true" GET argument
         /// </summary>
         /// <param name="firstRender"></param>
         protected override async Task OnAfterRenderAsync(bool firstRender)
         {
+            if (Clear != null && (bool)Clear)
+            {
+                await this.DeleteBrowserStore();
+                this.Clear = false;  // only clear once
+            }
             await PersistMain(firstRender);
             await base.OnAfterRenderAsync(firstRender);
         }
@@ -171,6 +185,10 @@ namespace asplib.Components
             {
                 Logger.LogInformation(0, "Save Storage {storage}", this.GetStorage());
 
+                // The IsRequestedInstanceAttribute would be serialized, too, thus remove it now
+                var provider = TypeDescriptor.GetProvider(Main!);
+                TypeDescriptor.RemoveProvider(provider, Main!);
+
                 switch (this.GetStorage())
                 {
                     case Storage.ViewState:
@@ -205,11 +223,12 @@ namespace asplib.Components
         /// <summary>
         /// Delete the Main instance from the current browser stores,
         /// regardless of the current Storage mechanism active.
+        /// Only callable OnAfterRender.
         /// </summary>
         /// <returns></returns>
         protected async Task DeleteBrowserStore()
         {
-            var storageId = StorageImplementation.GetStorageID(Main.GetType().Name);
+            var storageId = StorageImplementation.GetStorageID(typeof(T).Name);
             await ProtectedLocalStore.DeleteAsync(storageId);
             await ProtectedSessionStore.DeleteAsync(storageId);
             this.Main = PersistentMainFactory<T>.Instantiate(ServiceProvider);
@@ -229,16 +248,14 @@ namespace asplib.Components
             var storage = this.SessionStorage;    // Instance property
             if (storage == null)
             {
-                storage = SessionStorage;   // overrides all
-            }
-            if (storage == null)
-            {
                 storage = StorageImplementation.SessionStorage;       // static and global override
             }
             if (storage == null)                // configuration or default
             {
                 var configStorage = this.Configuration.GetValue<string>("SessionStorage");
-                storage = String.IsNullOrWhiteSpace(configStorage) ? Storage.SessionStorage : (Storage)Enum.Parse(typeof(Storage), configStorage);
+                storage = String.IsNullOrWhiteSpace(configStorage) ?
+                            Storage.SessionStorage :    // default value
+                            (Storage)Enum.Parse(typeof(Storage), configStorage);
             }
             return (Storage)storage;
         }
@@ -251,7 +268,7 @@ namespace asplib.Components
         /// <returns></returns>
         private async Task<T> LoadFromBrowser(Func<string, ValueTask<ProtectedBrowserStorageResult<string>>> storeGetAsync)
         {
-            var storageId = StorageImplementation.GetStorageID(Main.GetType().Name);
+            var storageId = StorageImplementation.GetStorageID(typeof(T).Name);
             var result = await storeGetAsync(storageId);
             if (result.Success && result.Value != null)
             {
@@ -269,7 +286,7 @@ namespace asplib.Components
 
         private async Task SaveToBrowser(Func<string, object, ValueTask> storeSetAsync)
         {
-            var storageId = StorageImplementation.GetStorageID(Main.GetType().Name);
+            var storageId = StorageImplementation.GetStorageID(typeof(T).Name);
             var filter = StorageImplementation.EncryptViewState(Configuration);
             var viewState = StorageImplementation.ViewState(Main, filter);
             await storeSetAsync(storageId, viewState);

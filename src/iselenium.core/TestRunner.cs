@@ -15,10 +15,14 @@ namespace iselenium
             Configuration = config;
             Environment = env;
 
-            this.Configure(Configuration.GetValue<int>("RequestTimeout"),
-                           Configuration.GetValue<bool>("IEVisible"),
-                           String.IsNullOrWhiteSpace(config?["TestWriteThrottle"]) ? 0 :
-                                config.GetValue<int>("TestWriteThrottle")
+            // Configure with defaults:
+            this.Configure(
+                String.IsNullOrWhiteSpace(config?["RequestTimeout"]) ? 1 :
+                    config.GetValue<int>("RequestTimeout"),
+                String.IsNullOrWhiteSpace(config?["IEVisible"]) ? true :
+                    config.GetValue<bool>("IEVisible"),
+                String.IsNullOrWhiteSpace(config?["TestWriteThrottle"]) ? 0 :
+                    config.GetValue<int>("TestWriteThrottle")
                 );
         }
 

@@ -18,19 +18,19 @@ namespace asptest
         public void NonSynchronized()
         {
             Navigate("/async");
-            Assert.That(Component.countNumber.Value, Is.EqualTo(Async.Iterations));
-            Click(Component.startButton);
-            this.AssertPoll(() => Component.countNumber.Value, () => Is.EqualTo(0));
+            Assert.That(Cut.countNumber.Value, Is.EqualTo(Async.Iterations));
+            Click(Cut.startButton);
+            this.AssertPoll(() => Cut.countNumber.Value, () => Is.EqualTo(0));
         }
 
         [Test]
         public void Synchronized()
         {
             Navigate("/async");
-            Assert.That(Component.countNumber.Value, Is.EqualTo(Async.Iterations));
+            Assert.That(Cut.countNumber.Value, Is.EqualTo(Async.Iterations));
             // Will always render once plus additionally half of the iterations:
-            Click(Component.startButton, expectRenders: (Async.Iterations / 2) + 1);
-            Assert.That(Component.countNumber.Value, Is.EqualTo(0));
+            Click(Cut.startButton, expectRenders: (Async.Iterations / 2) + 1);
+            Assert.That(Cut.countNumber.Value, Is.EqualTo(0));
         }
     }
 }

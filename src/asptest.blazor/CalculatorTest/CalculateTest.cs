@@ -27,7 +27,7 @@ namespace asptest.CalculatorTest
         public void InitEnterTest()
         {
             Navigate("/");
-            Click(Component.footer.enterButton);
+            Click(Cut.footer.enterButton);
             Assert.Multiple(() =>
             {
                 Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
@@ -39,10 +39,10 @@ namespace asptest.CalculatorTest
         public void EnterTest()
         {
             Navigate("/");
-            Click(Component.footer.enterButton);
+            Click(Cut.footer.enterButton);
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
-            this.Write(Dynamic<Enter>(Component.calculatorPart).operand, "3.141");
-            Click(Component.footer.enterButton);
+            this.Write(Dynamic<Enter>(Cut.calculatorPart).operand, "3.141");
+            Click(Cut.footer.enterButton);
             Assert.Multiple(() =>
             {
                 Assert.That(State, Is.EqualTo(CalculatorContext.Map1.Calculate));
@@ -56,18 +56,18 @@ namespace asptest.CalculatorTest
         public void AddTest()
         {
             Navigate("/");
-            Click(Component.footer.enterButton);
+            Click(Cut.footer.enterButton);
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
-            this.Write(Dynamic<Enter>(Component.calculatorPart).operand, "2");
-            Click(Component.footer.enterButton);
+            this.Write(Dynamic<Enter>(Cut.calculatorPart).operand, "2");
+            Click(Cut.footer.enterButton);
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
-            Click(Component.footer.enterButton);
+            Click(Cut.footer.enterButton);
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
-            this.Write(Dynamic<Enter>(Component.calculatorPart).operand, "3");
-            Click(Component.footer.enterButton);
+            this.Write(Dynamic<Enter>(Cut.calculatorPart).operand, "3");
+            Click(Cut.footer.enterButton);
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             var before = this.Stack.Count;
-            this.Click(Dynamic<Calculate>(Component.calculatorPart).addButton);
+            this.Click(Dynamic<Calculate>(Cut.calculatorPart).addButton);
             Assert.Multiple(() =>
             {
                 Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
@@ -81,18 +81,18 @@ namespace asptest.CalculatorTest
         public void SubTest()
         {
             Navigate("/");
-            Click(Component.footer.enterButton);
+            Click(Cut.footer.enterButton);
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
-            this.Write(Dynamic<Enter>(Component.calculatorPart).operand, "12");
-            Click(Component.footer.enterButton);
+            this.Write(Dynamic<Enter>(Cut.calculatorPart).operand, "12");
+            Click(Cut.footer.enterButton);
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
-            Click(Component.footer.enterButton);
+            Click(Cut.footer.enterButton);
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
-            this.Write(Dynamic<Enter>(Component.calculatorPart).operand, "3");
-            Click(Component.footer.enterButton);
+            this.Write(Dynamic<Enter>(Cut.calculatorPart).operand, "3");
+            Click(Cut.footer.enterButton);
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             var before = this.Stack.Count;
-            this.Click(Dynamic<Calculate>(Component.calculatorPart).subButton);
+            this.Click(Dynamic<Calculate>(Cut.calculatorPart).subButton);
             Assert.Multiple(() =>
             {
                 Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
@@ -106,18 +106,18 @@ namespace asptest.CalculatorTest
         public void MulTest()
         {
             Navigate("/");
-            Click(Component.footer.enterButton);
+            Click(Cut.footer.enterButton);
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
-            this.Write(Dynamic<Enter>(Component.calculatorPart).operand, "4");
-            Click(Component.footer.enterButton);
+            this.Write(Dynamic<Enter>(Cut.calculatorPart).operand, "4");
+            Click(Cut.footer.enterButton);
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
-            Click(Component.footer.enterButton);
+            Click(Cut.footer.enterButton);
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
-            this.Write(Dynamic<Enter>(Component.calculatorPart).operand, "3");
-            Click(Component.footer.enterButton);
+            this.Write(Dynamic<Enter>(Cut.calculatorPart).operand, "3");
+            Click(Cut.footer.enterButton);
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             var before = this.Stack.Count;
-            this.Click(Dynamic<Calculate>(Component.calculatorPart).mulButton);
+            this.Click(Dynamic<Calculate>(Cut.calculatorPart).mulButton);
             Assert.Multiple(() =>
             {
                 Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
@@ -131,18 +131,18 @@ namespace asptest.CalculatorTest
         public void DivTest()
         {
             Navigate("/");
-            Click(Component.footer.enterButton);
+            Click(Cut.footer.enterButton);
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
-            this.Write(Dynamic<Enter>(Component.calculatorPart).operand, "12");
-            Click(Component.footer.enterButton);
+            this.Write(Dynamic<Enter>(Cut.calculatorPart).operand, "12");
+            Click(Cut.footer.enterButton);
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
-            Click(Component.footer.enterButton);
+            Click(Cut.footer.enterButton);
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
-            this.Write(Dynamic<Enter>(Component.calculatorPart).operand, "3");
-            Click(Component.footer.enterButton);
+            this.Write(Dynamic<Enter>(Cut.calculatorPart).operand, "3");
+            Click(Cut.footer.enterButton);
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             var before = this.Stack.Count;
-            this.Click(Dynamic<Calculate>(Component.calculatorPart).divButton);
+            this.Click(Dynamic<Calculate>(Cut.calculatorPart).divButton);
             Assert.Multiple(() =>
             {
                 Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
@@ -156,13 +156,13 @@ namespace asptest.CalculatorTest
         public void PowTest()
         {
             Navigate("/");
-            Click(Component.footer.enterButton);
+            Click(Cut.footer.enterButton);
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
-            this.Write(Dynamic<Enter>(Component.calculatorPart).operand, "2");
-            Click(Component.footer.enterButton);
+            this.Write(Dynamic<Enter>(Cut.calculatorPart).operand, "2");
+            Click(Cut.footer.enterButton);
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             var before = this.Stack.Count;
-            this.Click(Dynamic<Calculate>(Component.calculatorPart).powButton);
+            this.Click(Dynamic<Calculate>(Cut.calculatorPart).powButton);
             Assert.Multiple(() =>
             {
                 Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
@@ -176,13 +176,13 @@ namespace asptest.CalculatorTest
         public void SqrtTest()
         {
             Navigate("/");
-            Click(Component.footer.enterButton);
+            Click(Cut.footer.enterButton);
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
-            this.Write(Dynamic<Enter>(Component.calculatorPart).operand, "49");
-            Click(Component.footer.enterButton);
+            this.Write(Dynamic<Enter>(Cut.calculatorPart).operand, "49");
+            Click(Cut.footer.enterButton);
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             var before = this.Stack.Count;
-            this.Click(Dynamic<Calculate>(Component.calculatorPart).sqrtButton);
+            this.Click(Dynamic<Calculate>(Cut.calculatorPart).sqrtButton);
             Assert.Multiple(() =>
             {
                 Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
@@ -196,18 +196,18 @@ namespace asptest.CalculatorTest
         public void ClrTest()
         {
             Navigate("/");
-            Click(Component.footer.enterButton);
+            Click(Cut.footer.enterButton);
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
-            this.Write(Dynamic<Enter>(Component.calculatorPart).operand, "2");
-            Click(Component.footer.enterButton);
+            this.Write(Dynamic<Enter>(Cut.calculatorPart).operand, "2");
+            Click(Cut.footer.enterButton);
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
-            Click(Component.footer.enterButton);
+            Click(Cut.footer.enterButton);
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
-            this.Write(Dynamic<Enter>(Component.calculatorPart).operand, "3");
-            Click(Component.footer.enterButton);
+            this.Write(Dynamic<Enter>(Cut.calculatorPart).operand, "3");
+            Click(Cut.footer.enterButton);
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             var before = this.Stack.Count;
-            this.Click(Dynamic<Calculate>(Component.calculatorPart).clrButton);
+            this.Click(Dynamic<Calculate>(Cut.calculatorPart).clrButton);
             Assert.Multiple(() =>
             {
                 Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
@@ -219,18 +219,18 @@ namespace asptest.CalculatorTest
         public void ClrAllTest()
         {
             Navigate("/");
-            Click(Component.footer.enterButton);
+            Click(Cut.footer.enterButton);
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
-            this.Write(Dynamic<Enter>(Component.calculatorPart).operand, "2");
-            Click(Component.footer.enterButton);
+            this.Write(Dynamic<Enter>(Cut.calculatorPart).operand, "2");
+            Click(Cut.footer.enterButton);
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
-            Click(Component.footer.enterButton);
+            Click(Cut.footer.enterButton);
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
-            this.Write(Dynamic<Enter>(Component.calculatorPart).operand, "3");
-            Click(Component.footer.enterButton);
+            this.Write(Dynamic<Enter>(Cut.calculatorPart).operand, "3");
+            Click(Cut.footer.enterButton);
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             var before = this.Stack.Count;
-            this.Click(Dynamic<Calculate>(Component.calculatorPart).clrAllButton);
+            this.Click(Dynamic<Calculate>(Cut.calculatorPart).clrAllButton);
             Assert.Multiple(() =>
             {
                 Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));

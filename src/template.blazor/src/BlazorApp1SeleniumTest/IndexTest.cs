@@ -1,6 +1,9 @@
 ﻿namespace BlazorApp1
 {
+    // Generic Test Fixture to schedule the browsers to run the tests with
+    [TestFixture(typeof(ChromeDriver))]
     [TestFixture(typeof(EdgeDriver))]
+    [TestFixture(typeof(FirefoxDriver))]
     public class IndexTest<TWebDriver> : StaticComponentTest<TWebDriver, Pages.Index>
         where TWebDriver : IWebDriver, new()
     {

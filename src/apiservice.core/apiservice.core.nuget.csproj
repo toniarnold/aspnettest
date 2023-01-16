@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="aspnettest.asplib.core" Version="0.2.0" />
+    <PackageReference Include="aspnettest.asplib.core" Version="0.2.1" />
   </ItemGroup>
 
   <!-- Don't require the SMC code generator Makefile project dependency when /p:noSmc=true -->

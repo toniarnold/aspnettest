@@ -30,7 +30,7 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github-workflows", "github-workflows", "{B40564BC-5E4C-47EB-82A4-52AE263E4792}"
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\codeql-analysis.yml = .github\workflows\codeql-analysis.yml
-		.github\workflows\libs-build.yml = .github\workflows\libs-build.yml
+		.github\workflows\libs-build-core.yml = .github\workflows\libs-build-core.yml
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "asplib.websharper", "src\asplib.websharper\asplib.websharper.csproj", "{8F404E60-F442-44CA-8A90-CF636F465413}"

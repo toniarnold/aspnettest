@@ -8,7 +8,7 @@
 
   <PropertyGroup>
     <Authors>Toni Arnold</Authors>
-    <Version>0.2.0</Version>
+    <Version>0.2.1</Version>
     <PackageId>aspnettest.iselenium.core</PackageId>
     <Product>aspnettest</Product>
     <Description>ASP.NET In-App-GUI-Tests with Selenium and NUnit</Description>
@@ -21,7 +21,19 @@
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
+  <PropertyGroup>
+    <!-- Source Link -->
+    <PublishRepositoryUrl>true</PublishRepositoryUrl>
+    <EmbedUntrackedSources>true</EmbedUntrackedSources>
+    <IncludeSymbols>true</IncludeSymbols>
+    <SymbolPackageFormat>snupkg</SymbolPackageFormat>
+  </PropertyGroup>
+
   <ItemGroup>
+    <PackageReference Include="Microsoft.SourceLink.GitHub" Version="1.1.1">
+      <PrivateAssets>all</PrivateAssets>
+      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
+    </PackageReference>
     <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="17.4.1" />
     <PackageReference Include="NUnit.Engine" Version="3.15.2" />
     <PackageReference Include="Teronis.MSBuild.Packaging.ProjectBuildInPackage" Version="1.0.0">

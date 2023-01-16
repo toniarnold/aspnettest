@@ -61,7 +61,7 @@ namespace minimaltest.blazor
         {
             Navigate("/Withstorage");
             Click(By.Id, "storageSessionStorage", expectRequest: true);    // temporary by id
-            Click(Component.clearButton, expectRequest: true);
+            Click(Cut.clearButton, expectRequest: true);
             WriteContentTest(() => Reload());
         }
 
@@ -76,7 +76,7 @@ namespace minimaltest.blazor
             {
                 Navigate("/Withstorage");
                 Click(By.Id, "storageDatabase", expectRequest: true);
-                Click(Component.clearButton, expectRequest: true);
+                Click(Cut.clearButton, expectRequest: true);
                 WriteContentTest(() => Reload());
             }
         }
@@ -86,7 +86,7 @@ namespace minimaltest.blazor
         {
             Navigate("/Withstorage");
             Click(By.Id, "storageLocalStorage", expectRequest: true);
-            Click(Component.clearButton, expectRequest: true);
+            Click(Cut.clearButton, expectRequest: true);
             WriteContentTest(() => Reload());
         }
 
@@ -97,16 +97,16 @@ namespace minimaltest.blazor
         /// </summary>
         public void WriteContentTest(Action survives)
         {
-            Write(Component.contentTextBox, "a first content line");
-            Click(Component.submitButton);
+            Write(Cut.contentTextBox, "a first content line");
+            Click(Cut.submitButton);
             Assert.That(Content, Has.Exactly(1).Items);
             Assert.That(Content[0], Is.EqualTo("a first content line"));
 
             survives();
             Assert.That(Html(), Does.Contain("a first content line"));
 
-            Write(Component.contentTextBox, "a second content line");
-            Click(Component.submitButton);
+            Write(Cut.contentTextBox, "a second content line");
+            Click(Cut.submitButton);
             Assert.That(Content, Has.Exactly(2).Items);
             Assert.That(Content[0], Is.EqualTo("a first content line"));
             Assert.That(Content[1], Is.EqualTo("a second content line"));

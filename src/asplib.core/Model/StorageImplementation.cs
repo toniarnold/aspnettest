@@ -247,7 +247,8 @@ namespace asplib.Model
         {
             if (httpContext != null && // e.g. bUnit
                 httpContext.Request.Method == WebRequestMethods.Http.Get &&
-                bool.TryParse(httpContext.Request.Query["clear"], out bool _))
+                bool.TryParse(httpContext.Request.Query["clear"], out bool clear) &&
+                clear)
             {
                 Enum.TryParse<Storage>(httpContext.Request.Query["storage"], true, out Storage clearstorage);
                 Clear(httpContext, clearstorage, sessionStorage, storageID);

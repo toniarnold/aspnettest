@@ -38,10 +38,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="asplib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\iselenium.webforms.0.2.0\lib\net462\asplib.dll</HintPath>
+      <HintPath>..\..\packages\iselenium.webforms.0.2.1\lib\net462\asplib.dll</HintPath>
     </Reference>
     <Reference Include="asplib.webforms, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\iselenium.webforms.0.2.0\lib\net462\asplib.webforms.dll</HintPath>
+      <HintPath>..\..\packages\iselenium.webforms.0.2.1\lib\net462\asplib.webforms.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
@@ -50,10 +50,10 @@
       <HintPath>..\..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="iselenium, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\iselenium.webforms.0.2.0\lib\net462\iselenium.dll</HintPath>
+      <HintPath>..\..\packages\iselenium.webforms.0.2.1\lib\net462\iselenium.dll</HintPath>
     </Reference>
     <Reference Include="iselenium.webforms, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\iselenium.webforms.0.2.0\lib\net462\iselenium.webforms.dll</HintPath>
+      <HintPath>..\..\packages\iselenium.webforms.0.2.1\lib\net462\iselenium.webforms.dll</HintPath>
     </Reference>
     <Reference Include="nunit.engine, Version=3.15.2.0, Culture=neutral, PublicKeyToken=2638cd05610744eb, processorArchitecture=MSIL">
       <HintPath>..\..\packages\NUnit.Engine.3.15.2\lib\net20\nunit.engine.dll</HintPath>
@@ -68,7 +68,7 @@
       <HintPath>..\..\packages\NUnit.3.13.3\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="smc, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\iselenium.webforms.0.2.0\lib\net462\smc.dll</HintPath>
+      <HintPath>..\..\packages\iselenium.webforms.0.2.1\lib\net462\smc.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.ComponentModel.DataAnnotations" />

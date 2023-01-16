@@ -7,6 +7,7 @@
     * [Automatic synchronization with `TestFocus`](#automatic-synchronization-with-testfocus)
     * [@ref Component references](#ref-component-references)
   * [Persistence of the main state object](#Persistence-of-the-main-state-object)
+    * [Scope correlation setup](#scope-correlation-setup)
     * [Database persistence sequence diagram](#database-persistence-sequence-diagram)
     * [Browser storage persistence sequence diagram](#browser-storage-persistence-sequence-diagram)
   * [Using the test project](#using-the-test-project)
@@ -65,14 +66,16 @@ dotnet new install aspnettest.template.blazor
 dotnet new aspnettest-blazor -o MyBlazorApp
 ```
 
-Then open the generated MyBlazorApp.sln with Visual Studio. Due to the circular
-dependency (by design) between the app and its Selenium tests, it is mandatory
-to build the solution *twice*, the second time enforced as "Rebuild Solution".
-From the Test-Explorer window, open the generated MyBlazorApp.playlist. It
-contains two test projects: `MyBlazorAppBunitTest` (which runs fast) and
-`MyBlazorAppSeleniumTestRunner` which starts the web server, an Edge browser
-instance and runs the tests in `MyBlazorAppSeleniumTest` (excluded from the
-playlist) by pushing the test button in the browser.
+If you haven't already, enable the "Microsoft WebDriver" in "Apps and Features"
+in the Windows Settings. Then open the generated MyBlazorApp.sln with Visual
+Studio. Due to the circular dependency (by design) between the app and its
+Selenium tests, it is mandatory to build the solution *twice*, the second time
+enforced as "Rebuild Solution". From the Test-Explorer window, open the
+generated MyBlazorApp.playlist. It contains two test projects:
+`MyBlazorAppBunitTest` (which runs fast) and `MyBlazorAppSeleniumTestRunner`
+which starts the web server, an Edge browser instance and runs the tests in
+`MyBlazorAppSeleniumTest` (excluded from the playlist) by pushing the test
+button in the browser.
 
 
 
@@ -212,7 +215,7 @@ and not availiable in .NET Core MVC ore WebForms):
      retain the data.
 
 The binary serialization in the browser is (additionally to the built-in
-Protected*Storage mechanism) encrypted by the server-side secret
+ProtectedStorage mechanism) encrypted by the server-side secret
 `"EncryptViewStateKey"` and thus not manipulable by the client. This should
 be enough to justify re-enabling the otherwise newly by .NET per default as
 "unsafe" declared binary serialization by setting
@@ -220,6 +223,54 @@ be enough to justify re-enabling the otherwise newly by .NET per default as
 file.
 
 
+#### Scope correlation setup
+
+This is only required for database persistence based on cookies. A request to a
+Blazor Server application effectively consists of two requests: First comes the
+initial full HTTP request/response with a valid `HttpContext` which can handle
+cookies as usual. Then the Blazor App issues a second request (the one with the
+`id` query string) to set up the SignalR connection. This second request
+creates a second scope in which the Blazor App will run for the SignalR
+connection lifetime. To retrieve persistent objects instantiated in the first
+scope in the second scope from a cache, these scopes must be correlated for a
+given client request.
+
+To pass a correlation Guid from the first scope to the second one, the docs
+recommend this pattern to "Pass tokens to a Blazor Server app" according to
+[https://learn.microsoft.com/en-us/aspnet/core/blazor/security/server/additional-scenarios?view=aspnetcore-6.0#pass-tokens-to-a-blazor-server-app](https://learn.microsoft.com/en-us/aspnet/core/blazor/security/server/additional-scenarios?view=aspnetcore-6.0#pass-tokens-to-a-blazor-server-app)
+
+To hook into the scope correlation mechanism, two small additions are made:
+
+##### ./Pages/_Host.cshtml
+
+Add the `param-CorrelationGuid="@Guid.NewGuid()"` to the app component:
+
+```
+@page "/"
+(…)
+<component type="typeof(App)" param-CorrelationGuid="@Guid.NewGuid()" render-mode="ServerPrerendered" />
+```
+
+##### ./App.razor
+
+On top, add `@inject ScopeCorrelationProvider provider` and the following
+`@code` block transferring the correlation Guid from the parameter set by
+`_Host.cshtml` to the SignalR-scoped service:
+
+```
+@inject ScopeCorrelationProvider provider
+(…)
+@code {
+    [Parameter] // received once from _Host.cshtml
+    public Guid CorrelationGuid { get; set; } = default!;
+
+    protected override Task OnInitializedAsync()
+    {
+        provider.SetScope(CorrelationGuid);
+        return base.OnInitializedAsync();
+    }
+}
+```
 
 #### Database persistence sequence diagram
 

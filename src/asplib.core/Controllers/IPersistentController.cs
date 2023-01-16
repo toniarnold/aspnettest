@@ -58,7 +58,9 @@ namespace asplib.Controllers
             if (storage == null)                // configuration or default
             {
                 var configStorage = inst.Configuration.GetValue<string>("SessionStorage");
-                storage = String.IsNullOrWhiteSpace(configStorage) ? Storage.ViewState : (Storage)Enum.Parse(typeof(Storage), configStorage);
+                storage = String.IsNullOrWhiteSpace(configStorage) ?
+                            Storage.ViewState :     // default value
+                            (Storage)Enum.Parse(typeof(Storage), configStorage);
             }
             return (Storage)storage;
         }

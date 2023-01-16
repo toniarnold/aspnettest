@@ -28,8 +28,8 @@ namespace minimaltest.blazor
         public void WriteContentTest()
         {
             Navigate("/Withstatic");
-            Write(Component.contentTextBox, "a first content line");
-            Click(Component.submitButton);
+            Write(Cut.contentTextBox, "a first content line");
+            Click(Cut.submitButton);
             Assert.That(Main, Has.Exactly(1).Items);
             var firstString = Main[0];
             Assert.That(firstString, Is.EqualTo("a first content line"));
@@ -38,8 +38,8 @@ namespace minimaltest.blazor
                     <li>a first content line</li>
                   </ul>");
 
-            Write(Component.contentTextBox, "a second content line");
-            Click(Component.submitButton);
+            Write(Cut.contentTextBox, "a second content line");
+            Click(Cut.submitButton);
             Assert.That(Main, Has.Exactly(2).Items);
             var firstString2 = Main[0];
             Assert.That(firstString2, Is.EqualTo("a first content line"));

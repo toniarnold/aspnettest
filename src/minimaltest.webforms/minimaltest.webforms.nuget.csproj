@@ -72,10 +72,10 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="aspnettest.asplib.webforms">
-      <Version>0.2.0</Version>
+      <Version>0.2.1</Version>
     </PackageReference>
     <PackageReference Include="aspnettest.iselenium.webforms">
-      <Version>0.2.0</Version>
+      <Version>0.2.1</Version>
     </PackageReference>
     <PackageReference Include="Selenium.Support">
       <Version>4.7.0</Version>

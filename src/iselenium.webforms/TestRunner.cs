@@ -10,15 +10,16 @@ namespace iselenium
     {
         public TestRunner(int port) : base(port)
         {
+            // Configure with defaults:
             this.Configure(
                 String.IsNullOrWhiteSpace(
                     ConfigurationManager.AppSettings["RequestTimeout"]) ? 1 :
                     int.Parse(ConfigurationManager.AppSettings["RequestTimeout"]),
                 String.IsNullOrWhiteSpace(
-                    ConfigurationManager.AppSettings["IEVisible"]) ? false :
+                    ConfigurationManager.AppSettings["IEVisible"]) ? true :
                     bool.Parse(ConfigurationManager.AppSettings["IEVisible"]),
                 String.IsNullOrWhiteSpace(ConfigurationManager.AppSettings["TestWriteThrottle"]) ? 0 :
-                            int.Parse(ConfigurationManager.AppSettings["TestWriteThrottle"])
+                    int.Parse(ConfigurationManager.AppSettings["TestWriteThrottle"])
                 );
         }
 

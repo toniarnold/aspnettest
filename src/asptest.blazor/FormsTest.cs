@@ -34,12 +34,12 @@ namespace asptest
         public void SubmitEmptyFormTest()
         {
             Navigate("/forms");
-            Click(Component.submit);
+            Click(Cut.submit);
             var validationErrrors = Find(".validation-errors");
             Assert.That(validationErrrors, Is.Not.Null);
             var messages = FindAll(".validation-message");
             Assert.That(messages, Has.Count.EqualTo(4));
-            //Assert.That(Component.editContext?.Validate(), Is.False); // wrong thread, only possible within the UI itself
+            //Assert.That(Cut.editContext?.Validate(), Is.False); // wrong thread, only possible within the UI itself
         }
 
         [Test]
@@ -47,33 +47,33 @@ namespace asptest
         {
             Navigate("/forms");
             // Various methods to fill the elements
-            Click(Component.check, expectRenders: 0);
-            Write(Component.date, "15.5.2022");    // "2022-05-15" yields 2051-02-20
-            Write(Component.dec, "9876543.21");
-            Write(Component.integer, "256");
+            Click(Cut.check, expectRenders: 0);
+            Write(Cut.date, "15.5.2022");    // "2022-05-15" yields 2051-02-20
+            Write(Cut.dec, "9876543.21");
+            Write(Cut.integer, "256");
             // Single select -> will be Eggs
             Click(By.CssSelector, "#someSalad > option[value=Corn]", expectRenders: 0);
             Click(By.CssSelector, "#someSalad > option[value=Eggs]", expectRenders: 0);
             // Multiple select
             Click(By.CssSelector, "#saladSelection > option[value=Corn]", expectRenders: 0);
             Click(By.CssSelector, "#saladSelection > option[value=Lentils]", expectRenders: 0);
-            Write(Component.line, "one-liner");
-            Write(Component.paragraph, @"
+            Write(Cut.line, "one-liner");
+            Write(Cut.paragraph, @"
                 Line 1
                 Line 2");
 
-            Click(Component.submit);
+            Click(Cut.submit);
 
             Assert.Multiple(() =>
             {
-                Assert.That(Component.Main.Check, Is.True);
-                Assert.That(Component.Main.Date, Is.EqualTo(new DateTime(2022, 05, 15)));
-                Assert.That(Component.Main.Decimal, Is.EqualTo(9876543.21m));
-                Assert.That(Component.Main.Integer, Is.EqualTo(256));
-                Assert.That(Component.Main.SomeSalad, Is.EqualTo(Salad.Eggs));
-                Assert.That(Component.Main.SaladSelection, Has.Length.EqualTo(2));
-                Assert.That(Component.Main.Line, Is.EqualTo("one-liner"));
-                Assert.That(Component.Main.Paragraph, Is.EqualTo(@"
+                Assert.That(Cut.Main.Check, Is.True);
+                Assert.That(Cut.Main.Date, Is.EqualTo(new DateTime(2022, 05, 15)));
+                Assert.That(Cut.Main.Decimal, Is.EqualTo(9876543.21m));
+                Assert.That(Cut.Main.Integer, Is.EqualTo(256));
+                Assert.That(Cut.Main.SomeSalad, Is.EqualTo(Salad.Eggs));
+                Assert.That(Cut.Main.SaladSelection, Has.Length.EqualTo(2));
+                Assert.That(Cut.Main.Line, Is.EqualTo("one-liner"));
+                Assert.That(Cut.Main.Paragraph, Is.EqualTo(@"
                 Line 1
                 Line 2".Replace("\r\n", "\n")));    // newlines from an input element seem to get delivered as "\n"
             });
