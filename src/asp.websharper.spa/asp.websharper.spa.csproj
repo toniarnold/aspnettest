@@ -13,12 +13,12 @@
     <PackageReference Include="Microsoft.TestPlatform.ObjectModel" Version="17.4.1" />
     <PackageReference Include="Selenium.Chrome.WebDriver" Version="85.0.0" />
     <PackageReference Include="Selenium.WebDriver.GeckoDriver" Version="0.32.0" />
-    <PackageReference Include="Selenium.WebDriver.MSEdgeDriver" Version="107.0.1418.42" />
-    <PackageReference Include="WebSharper" Version="6.1.0.249" />
-    <PackageReference Include="WebSharper.CSharp" Version="6.1.0.249" />
+    <PackageReference Include="Selenium.WebDriver.MSEdgeDriver" Version="108.0.1462.76" />
+    <PackageReference Include="WebSharper" Version="6.1.1.252" />
+    <PackageReference Include="WebSharper.CSharp" Version="6.1.1.252" />
     <PackageReference Include="WebSharper.UI" Version="6.1.0.249" />
     <PackageReference Include="WebSharper.UI.CSharp" Version="6.1.0.249" />
-    <PackageReference Include="WebSharper.AspNetCore" Version="6.1.0.249" />
+    <PackageReference Include="WebSharper.AspNetCore" Version="6.1.1.252" />
   </ItemGroup>
 
   <ItemGroup>

@@ -16,7 +16,7 @@
     </PackageReference>
     <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.1" />
     <PackageReference Include="Selenium.InternetExplorer.WebDriver" Version="3.150.1" />
-    <PackageReference Include="Selenium.WebDriver.MSEdgeDriver" Version="107.0.1418.42" />
+    <PackageReference Include="Selenium.WebDriver.MSEdgeDriver" Version="108.0.1462.76" />
   </ItemGroup>
 
   <ItemGroup>
