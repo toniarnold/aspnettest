@@ -21,7 +21,7 @@
     <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="108.0.5359.7100" />
     <PackageReference Include="Selenium.WebDriver.GeckoDriver" Version="0.32.0" />
     <PackageReference Include="Selenium.WebDriver.MSEdgeDriver" Version="107.0.1418.42" />
-    <PackageReference Include="System.Data.SqlClient" Version="4.8.5" />
+
   </ItemGroup>
 
   <ItemGroup>

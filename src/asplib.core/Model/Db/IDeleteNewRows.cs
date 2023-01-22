@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Data.SqlClient;    // not Microsoft.Data.SqlClient for EF
+using Microsoft.Data.SqlClient;
 using System.Text.RegularExpressions;
 
 namespace asplib.Model.Db
@@ -11,7 +11,7 @@ namespace asplib.Model.Db
     }
 
     /// <summary>
-    /// Read/Write the database with System.Data.SqlClient (raw ADO.NET), not
+    /// Read/Write the database with Microsoft.Data.SqlClient (raw ADO.NET), not
     /// with EF Core's DbContext.Database.GetDbConnection() from the aspservice
     /// project, as opening/closing it outside of the context seems to interfere
     /// with the framework, eventually loosing the connection string altogether.
