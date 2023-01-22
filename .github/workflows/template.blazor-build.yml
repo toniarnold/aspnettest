@@ -23,9 +23,9 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore src/template.blazor/BlazorApp1.sln
     - name: Build BlazorApp1
-      run:  dotnet build src/template.blazor/BlazorApp1.sln --configuration Release
+      run:  dotnet build src/template.blazor/BlazorApp1.sln
     - name: Test BlazorApp1
-      run: dotnet test src/template.blazor/src/BlazorApp1BunitTest/BlazorApp1BunitTest.csproj --configuration Release --no-restore --no-build --verbosity normal
+      run: dotnet test src/template.blazor/src/BlazorApp1BunitTest/BlazorApp1BunitTest.csproj --no-build --verbosity normal
 
     - name: Create .nupkg package
       run: dotnet pack src/template.blazor/template.blazor.csproj -o ${{ github.workspace }}/packages
@@ -38,9 +38,9 @@ jobs:
     - name: Restore template dependencies
       run: dotnet restore GithubAction/GithubAction.sln
     - name: Build the template
-      run: dotnet build GithubAction/GithubAction.sln --configuration Debug
+      run: dotnet build GithubAction/GithubAction.sln
     - name: Test the template
-      run: dotnet test GithubAction/src/GithubActionBunitTest/GithubActionBunitTest.csproj --configuration Debug --no-restore --no-build --verbosity normal
+      run: dotnet test GithubAction/src/GithubActionBunitTest/GithubActionBunitTest.csproj --no-build --verbosity normal
 
     # Upload the packages when above smoke test was green
     - name: Upload .nupkg package

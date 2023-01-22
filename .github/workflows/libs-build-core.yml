@@ -37,7 +37,7 @@ jobs:
       shell: pwsh
       run: sqlcmd -i ${{ github.workspace }}/src/asp.db/dbo/Tables/Main.sql -d "ASP_DB"
     - name: Test libs
-      run: dotnet test libs.core.sln --configuration Release --no-restore --no-build --verbosity normal
+      run: dotnet test libs.core.sln --configuration Release --no-build --verbosity normal
 
     - name: Create .nupkg packages
       run: dotnet pack libs.core.sln -property:noSmc=true --configuration Release --no-restore -o ${{ github.workspace }}/packages
@@ -63,7 +63,7 @@ jobs:
     - name: Build api with local asplib.core package
       run: msbuild api.core.nuget.sln -property:noSmc=true,Configuration=Release
     - name: Test api
-      run: dotnet test api.core.nuget.sln --configuration Release --no-restore --no-build --verbosity normal
+      run: dotnet test api.core.nuget.sln --configuration Release --no-build --verbosity normal
       env:
         "ConnectionStrings:ApiserviceDb": "${{ env.ASP_DBEntities }}"
 
