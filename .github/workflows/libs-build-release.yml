@@ -12,6 +12,6 @@ jobs:
     needs: [build-core, build-webforms]
     uses: ./.github/workflows/libs-release.yml
     with:
-      version: v0.2.0
+      version: v0.2.1
     secrets:
       nuget_api_key: ${{ secrets.NUGET_API }}

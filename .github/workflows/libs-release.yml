@@ -23,12 +23,12 @@ jobs:
       uses: actions/setup-dotnet@v3
       with:
         dotnet-version: 6.0.x
-    - name: Download .NET Core .nupkg packages
+    - name: Download .NET Core .[s]nupkg packages
       uses: actions/download-artifact@v3
       with:
         name: libs.core
         path: ${{ github.workspace }}/packages/
-    - name: Download .NET WebForms .nupkg packages
+    - name: Download .NET WebForms .[s]nupkg packages
       uses: actions/download-artifact@v3
       with:
         name: libs.webforms

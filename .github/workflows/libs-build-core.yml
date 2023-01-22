@@ -68,9 +68,9 @@ jobs:
         "ConnectionStrings:ApiserviceDb": "${{ env.ASP_DBEntities }}"
 
     # Upload the packages when above smoke test was green
-    - name: Upload .nupkg packages
+    - name: Upload .[s]nupkg packages
       uses: actions/upload-artifact@v3
       with:
         name: libs.core
-        path: ${{ github.workspace }}/packages/*.nupkg
+        path: ${{ github.workspace }}/packages/*.*nupkg
         retention-days: 10

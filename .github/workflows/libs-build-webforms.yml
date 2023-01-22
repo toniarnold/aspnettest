@@ -23,9 +23,9 @@ jobs:
       run: msbuild libs.webforms.sln /p:Configuration=Release
     - name: Create packages
       run: msbuild libs.webforms.sln /p:Configuration=Release -t:pack /p:PackageOutputPath=${{ github.workspace }}/packages
-    - name: Upload .nupkg
+    - name: Upload .[s]nupkg packages
       uses: actions/upload-artifact@v3
       with:
         name: libs.webforms
-        path: ${{ github.workspace }}/packages/*.nupkg
+        path: ${{ github.workspace }}/packages/*.*nupkg
         retention-days: 10
