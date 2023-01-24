@@ -1,18 +1,18 @@
 ﻿using iselenium;
 using NUnit.Framework;
+using OpenQA.Selenium;
+using OpenQA.Selenium.Edge;
 using System.Web.UI.WebControls;
 
 namespace minimaltest
 {
-#pragma warning disable CS0618 // IIE obsolete
-
     /// <summary>
     /// Additionally to DefaultTest, the main Control must inherit from IRootControl
     /// to be able to navigate through the control hierarchy.
     /// </summary>
-    [TestFixture]
-    public class WithRootTest : IETest
-#pragma warning restore CS0618 // IIE obsolete
+    [TestFixture(typeof(EdgeDriver))]
+    public class WithRootTest<TWebDriver> : SeleniumTest<TWebDriver>, ISelenium
+        where TWebDriver : IWebDriver, new()
     {
         [Test]
         public void NavigateWithRootTest()

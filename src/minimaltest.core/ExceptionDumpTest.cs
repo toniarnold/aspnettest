@@ -2,15 +2,13 @@
 using minimal.Controllers;
 using minimal.Models;
 using NUnit.Framework;
+using OpenQA.Selenium.Edge;
 using System.Text.RegularExpressions;
 
 namespace minimaltest
 {
-#pragma warning disable CS0618 // IIE obsolete
-
     [TestFixture]
-    public class ExceptionDumpTest : StorageTest<WithStorageController>
-#pragma warning restore CS0618 // IIE obsolete
+    public class ExceptionDumpTest : SeleniumDbTest<EdgeDriver, WithStorageController>
     {
         /// <summary>
         /// Typed accessor for the only ViewModel used in the app
@@ -43,13 +41,11 @@ namespace minimaltest
             Assert.That(coredumpPath, Does.StartWith("/WithStorage?session="));
             this.Navigate(coredumpPath);
             this.AssertBenignLine();    // restored from the dump before the exception
-#pragma warning disable CS0618 // IIE obsolete
-            this.TearDownIE();
+            this.TearDownBrowser();
             // Next week the bug is still unresolved -> do more postmortem debugging
-            this.SetUpIE();
-#pragma warning restore CS0618 // IIE obsolete
+            this.SetUpBrowser<EdgeDriver>();
             this.Navigate(coredumpPath);
-            this.AssertBenignLine();    // restored again in a new Internet Explorer instance
+            this.AssertBenignLine();    // restored again in a new browser instance
         }
 
         private void AssertBenignLine()

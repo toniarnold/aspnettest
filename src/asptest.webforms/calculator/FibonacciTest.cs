@@ -6,7 +6,6 @@ using System.Linq;
 namespace asptest.calculator
 {
     [TestFixture]
-    [Category("SHDocVw.InternetExplorer")]
     public class FibonacciTest : CalculatorTestBase
     {
         [Test]

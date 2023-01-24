@@ -240,10 +240,11 @@ namespace asplib.Model
         /// GET-arguments:
         /// clear=[true|false]          a valid bool triggers clearing the storage
         /// storage=[Session|Database]  clears the selected storage type regardless of config
+        /// Returns true if it was actually a clear=true-Request.
         /// </summary>
         /// <param name="sessionStorage">the configured session storage</param>
         /// <param name="storageID"></param>
-        internal static void ClearIfRequested(HttpContext? httpContext, Storage sessionStorage, string storageID)
+        internal static bool ClearIfRequested(HttpContext? httpContext, Storage sessionStorage, string storageID)
         {
             if (httpContext != null && // e.g. bUnit
                 httpContext.Request.Method == WebRequestMethods.Http.Get &&
@@ -252,7 +253,9 @@ namespace asplib.Model
             {
                 Enum.TryParse<Storage>(httpContext.Request.Query["storage"], true, out Storage clearstorage);
                 Clear(httpContext, clearstorage, sessionStorage, storageID);
+                return true;
             }
+            return false;
         }
 
         /// <summary>

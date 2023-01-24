@@ -43,7 +43,7 @@ namespace asptest.Calculator
                 Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
                 Assert.That(this.Stack.Peek(), Is.EqualTo("1"));
                 Assert.That(this.Stack.Count, Is.EqualTo(1));
-                Assert.That(this.Html(), Does.Contain(" 1\n"));
+                Assert.That(this.Html(), Does.Contain(" 1\r\n"));
             });
         }
 
@@ -68,7 +68,7 @@ namespace asptest.Calculator
                 Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
                 Assert.That(this.Stack.Peek(), Is.EqualTo("5"));
                 Assert.That(this.Stack.Count, Is.EqualTo(before - 1));
-                Assert.That(this.Html(), Does.Contain(" 5\n"));
+                Assert.That(this.Html(), Does.Contain(" 5\r\n"));
             });
         }
 
@@ -139,7 +139,7 @@ namespace asptest.Calculator
                 Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
                 Assert.That(this.Stack.Peek(), Is.EqualTo("4"));
                 Assert.That(this.Stack.Count, Is.EqualTo(before - 1));
-                Assert.That(this.Html(), Does.Contain(" 4\n"));
+                Assert.That(this.Html(), Does.Contain(" 4\r\n"));
             });
         }
 
@@ -164,7 +164,7 @@ namespace asptest.Calculator
                 Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
                 Assert.That(this.Stack.Peek(), Is.EqualTo("12"));
                 Assert.That(this.Stack.Count, Is.EqualTo(before - 1));
-                Assert.That(this.Html(), Does.Contain(" 12\n"));
+                Assert.That(this.Html(), Does.Contain(" 12\r\n"));
             });
         }
 
@@ -184,7 +184,7 @@ namespace asptest.Calculator
                 Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
                 Assert.That(this.Stack.Peek(), Is.EqualTo("4"));
                 Assert.That(this.Stack.Count, Is.EqualTo(before));
-                Assert.That(this.Html(), Does.Contain(" 4\n"));
+                Assert.That(this.Html(), Does.Contain(" 4\r\n"));
             });
         }
 
@@ -204,7 +204,7 @@ namespace asptest.Calculator
                 Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
                 Assert.That(this.Stack.Peek(), Is.EqualTo("7"));
                 Assert.That(this.Stack.Count, Is.EqualTo(before));
-                Assert.That(this.Html(), Does.Contain(" 7\n"));
+                Assert.That(this.Html(), Does.Contain(" 7\r\n"));
             });
         }
 
@@ -229,7 +229,7 @@ namespace asptest.Calculator
                 Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
                 Assert.That(this.Stack.Peek(), Is.EqualTo("9"));
                 Assert.That(this.Stack.Count, Is.EqualTo(before - 1));
-                Assert.That(this.Html(), Does.Contain(" 9\n"));
+                Assert.That(this.Html(), Does.Contain(" 9\r\n"));
             });
         }
     }

@@ -16,7 +16,7 @@
   <ItemGroup>
     <PackageReference Include="aspnettest.asplib.core" Version="0.2.1" />
     <PackageReference Include="aspnettest.iselenium.core" Version="0.2.1" />
-    <PackageReference Include="Selenium.InternetExplorer.WebDriver" Version="3.150.1" />
+    <PackageReference Include="Selenium.WebDriver.MSEdgeDriver" Version="109.0.1518.44-pre" />
   </ItemGroup>
 
   <ItemGroup>

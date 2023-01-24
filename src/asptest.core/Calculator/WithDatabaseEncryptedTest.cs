@@ -4,7 +4,6 @@ using NUnit.Framework;
 namespace asptest.Calculator
 {
     [TestFixture]
-    [Category("SHDocVw.InternetExplorer")]
     public class WithDatabaseEncryptedTest : WithDatabaseTest
     {
         [OneTimeSetUp]

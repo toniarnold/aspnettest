@@ -11,7 +11,7 @@ using System.Web.UI.WebControls;
 namespace iselenium
 {
     /// <summary>
-    /// Marked intterface for WebFormsExtension ASP.NET WebForms methods
+    /// Marker interface for SeleniumExtension ASP.NET WebForms methods
     /// </summary>
     public interface ISelenium : ISeleniumBase
     {

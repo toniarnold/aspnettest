@@ -11,7 +11,7 @@ namespace iselenium
     /// </summary>
     /// <typeparam name="TWebDriver">Selenium WebDriver</typeparam>
     /// <typeparam name="TMain">the class Main under test</typeparam>
-    public abstract class SeleniumTest<TWebDriver, TMain> : SeleniumTest<TWebDriver>
+    public abstract class SeleniumTest<TWebDriver, TMain> : SeleniumTest<TWebDriver>, ISelenium
         where TWebDriver : IWebDriver, new()
         where TMain : new()
     {

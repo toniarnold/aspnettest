@@ -56,9 +56,7 @@ namespace minimal
         {
             app.UseDeveloperExceptionPage();    // always for this demo
             app.UseExceptionHandler("/Error/Error");
-#pragma warning disable CS0618 // IIE obsolete
-            app.UseMiddleware<IIEMiddleware>(); // Global.asax
-#pragma warning disable CS0618 // IIE obsolete
+            app.UseMiddleware<ISeleniumMiddleware>(); // Global.asax
             app.UseNoCache();
             app.UseDefaultFiles();
             app.UseStaticFiles();

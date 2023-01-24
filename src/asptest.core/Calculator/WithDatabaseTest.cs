@@ -1,11 +1,11 @@
 ﻿using asplib.Model;
 using iselenium;
 using NUnit.Framework;
+using OpenQA.Selenium.Edge;
 
 namespace asptest.Calculator
 {
     [TestFixture]
-    [Category("SHDocVw.InternetExplorer")]
     public class WithDatabaseTest : CalculateTest
     {
         [OneTimeSetUp]
@@ -30,14 +30,21 @@ namespace asptest.Calculator
         }
 
         /// <summary>
-        /// Restart Internet Explorer and navigate to the page, database storage should survive
+        /// Restart Internet Explorer and navigate to the page, database storage should survive.
+        /// This worked only with Internet Explorer which didn't run in private mode with selenium.
         /// </summary>
         private void RestartIE()
         {
-#pragma warning disable CS0618 // IIE obsolete
-            this.TearDownIE();
-            this.SetUpIE();
-#pragma warning restore CS0618 // IIE obsolete
+            this.TearDownBrowser();
+            this.SetUpBrowser<EdgeDriver>();
+            this.Navigate("/");
+        }
+
+        /// <summary>
+        /// Reload the page, database storage should survive
+        /// </summary>
+        private void Reload()
+        {
             this.Navigate("/");
         }
 
@@ -50,22 +57,22 @@ namespace asptest.Calculator
             this.Navigate("/");
             this.Click("EnterButton");
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
-            this.RestartIE();
+            this.Reload();
             this.Write("Operand", "2");
             this.Click("EnterButton");
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
-            this.RestartIE();
+            this.Reload();
             this.Click("EnterButton");
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Enter));
-            this.RestartIE();
+            this.Reload();
             this.Write("Operand", "3");
             this.Click("EnterButton");
             Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
             var before = this.Stack.Count;
-            this.RestartIE();
+            this.Reload();
             this.Click("AddButton");
             this.AssertAddFinalState(before);
-            this.RestartIE();
+            this.Reload();
             this.AssertAddFinalState(before);
         }
 
@@ -79,7 +86,7 @@ namespace asptest.Calculator
                 Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
                 Assert.That(this.Stack.Peek(), Is.EqualTo("5"));
                 Assert.That(this.Stack.Count, Is.EqualTo(before - 1));
-                Assert.That(this.Html(), Does.Contain(" 5\n"));
+                Assert.That(this.Html(), Does.Contain(" 5\r\n"));
             });
         }
     }

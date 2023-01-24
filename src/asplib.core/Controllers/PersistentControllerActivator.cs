@@ -57,7 +57,7 @@ namespace asplib.Controllers
             var sessionStorageID = StorageImplementation.GetSessionStorageID(controllerTypeInfo.Name);
 
             var storage = StorageImplementation.GetStorage(this.Configuration, this.HttpContext, sessionStorageID);
-            StorageImplementation.ClearIfRequested(this.HttpContext, storage, storageID);
+            var cleared = StorageImplementation.ClearIfRequested(this.HttpContext, storage, storageID);
 
             Guid sessionOverride;
             Guid session;
@@ -99,6 +99,7 @@ namespace asplib.Controllers
 
                 // ---------- Load from Database ----------
                 else if (storage == Storage.Database &&
+                         !cleared &&    // cookie is still there, will only be cleared in the response
                          Guid.TryParse(
                              this.HttpContext.Request.Cookies[storageID].FromCookieString()["session"],
                              out session))

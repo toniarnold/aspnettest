@@ -1,24 +1,22 @@
 ﻿using iselenium;
 using NUnit.Framework;
 using OpenQA.Selenium;
+using OpenQA.Selenium.Edge;
 using System;
 using System.Collections.Generic;
 
 namespace minimaltest
 {
-#pragma warning disable CS0618 // IIE obsolete
-
     /// <summary>
     /// No dependencies on the side of the web application itself except
-    /// Application_EndRequest in Global.asax.cs, therefore the client id of
-    /// the controls must be known in advance, as member name navigation cannot be used.
-    /// Minimality here: Directly inherits from IIE, therefore an explicit
-    /// [OneTimeSetUp]/[OneTimeTearDown] for SetUpIE()/TearDownIE() and
-    /// the vars/js/driver properties are required.
+    /// Application_EndRequest in Global.asax.cs, therefore the client id of the
+    /// controls must be known in advance, as member name navigation cannot be
+    /// used. Minimality here: No inheritance, is only marked as
+    /// ISeleniumtherefore an explicit [OneTimeSetUp]/[OneTimeTearDown] for
+    /// SetUpIE()/TearDownIE() and the vars/js/driver properties are required.
     /// </summary>
     [TestFixture]
-    public class DefaultTest : IIE
-#pragma warning restore CS0618 // IIE obsolete
+    public class DefaultTest : ISelenium
     {
 #pragma warning disable IDE1006 // Members in Selenium-generated C# code
         public IDictionary<string, object> vars { get; set; }
@@ -26,21 +24,17 @@ namespace minimaltest
         public IWebDriver driver { get; set; }
 #pragma warning restore IDE1006
 
-#pragma warning disable CS0618 // IIE obsolete
-
         [OneTimeSetUp]
         public void OneTimeSetUpIE()
         {
-            this.SetUpIE();
+            this.SetUpBrowser<EdgeDriver>();
         }
 
         [OneTimeTearDown]
         public void OneTimeTearDownIE()
         {
-            this.TearDownIE();
+            this.TearDownBrowser();
         }
-
-#pragma warning restore CS0618 // IIE obsolete
 
         [Test]
         public void NavigateDefaultTest()

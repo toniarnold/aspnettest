@@ -14,7 +14,7 @@ namespace iselenium
     /// <typeparam name="TWebDriver">Selenium WebDriver</typeparam>
     /// <typeparam name="TMain">the class Main under test</typeparam>
     [Category("ASP_DB")]
-    public abstract class SeleniumDbTest<TWebDriver, TMain> : SeleniumTest<TWebDriver, TMain>, IDatabase
+    public abstract class SeleniumDbTest<TWebDriver, TMain> : SeleniumTest<TWebDriver, TMain>, ISelenium, IDatabase
         where TWebDriver : IWebDriver, new()
         where TMain : new()
     {

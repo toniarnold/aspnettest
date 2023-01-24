@@ -8,7 +8,6 @@ namespace asptest.calculator
     /// Extends CalculatorTest by using Session instead of ViewState as storage
     /// and executes the same tests declared in the base class.
     /// </summary>
-    [Category("SHDocVw.InternetExplorer")]
     public class WithSessionTest : CalculateTest
     {
         [OneTimeSetUp]
@@ -77,7 +76,7 @@ namespace asptest.calculator
                 Assert.That(this.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
                 Assert.That(this.Stack.Peek(), Is.EqualTo("5"));
                 Assert.That(this.Stack.Count, Is.EqualTo(before - 1));
-                Assert.That(this.Html(), Does.Contain(" 5\n"));
+                Assert.That(this.Html(), Does.Contain(" 5\r\n"));
                 this.Navigate("/default.aspx");
             });
         }
