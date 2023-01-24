@@ -1,19 +1,13 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-	<TargetFramework>net6.0</TargetFramework>
+    <TargetFramework>net6.0</TargetFramework>
     <RootNamespace>minimaltest</RootNamespace>
     <AssemblyName>minimaltest.websharper.spa</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
     <PackageReference Include="aspnettest.iselenium.websharper" Version="0.2.1" />
-    <PackageReference Include="Microsoft.NET.Test.Sdk" Version="17.4.1" />
-    <PackageReference Include="NUnit" Version="3.13.3" />
-    <PackageReference Include="NUnit3TestAdapter" Version="4.3.1">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
@@ -30,5 +24,4 @@
     </ItemGroup>
     <Delete Files="@(FilesToDelete)" />
   </Target>
-
 </Project>

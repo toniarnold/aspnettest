@@ -77,9 +77,6 @@
     <PackageReference Include="aspnettest.iselenium.webforms">
       <Version>0.2.1</Version>
     </PackageReference>
-    <PackageReference Include="Selenium.Support">
-      <Version>4.7.0</Version>
-    </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>

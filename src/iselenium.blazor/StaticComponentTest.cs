@@ -75,7 +75,7 @@ namespace iselenium
         /// <param name="awaitRemoved">Whether to wait for the HTML element to disappear (in an SPA)</param>
         /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>///
         /// <param name="delay">Optional delay time in milliseconds before clicking the element</param>
-        /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete (omit if expectRenders is > 0)</param>
+        /// <param name="pause">Optional pause time in milliseconds after Selenium claims DocumentComplete (omit if expectRenders is > 0)</param>
         /// <param name="wait">Explicit WebDriverWait in seconds for the element to appear. 0 when expectRenders is > 0</param>
         /// <param name="expectRenders">Number of renderings where TestFocus.Event is set OnAfterRenderAsync</param>
         /// <param name="expectRerender">Set to true for awaiting a re-render which sets TestFocus.AwaitingRerender = false, as e.g. SmcComponentBase</param>
@@ -114,7 +114,7 @@ namespace iselenium
         /// OnAfterRenderAsync when expectRenders is > 0.
         /// </summary>
         /// <param name="expectRenders">Number of renderings where TestFocus.Event is set OnAfterRenderAsync</param>
-        /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete</param>
+        /// <param name="pause">Optional pause time in milliseconds after Selenium claims DocumentComplete</param>
         public void Refresh(int expectRenders = 1, int pause = 0)
         {
             if (expectRenders > 0)

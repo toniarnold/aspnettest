@@ -82,6 +82,7 @@
     <Reference Include="System.Data" />
     <Reference Include="System.Net.Http" />
     <Reference Include="System.Xml" />
+    <Reference Include="netstandard" />
     <Reference Include="testcentric.engine.metadata, Version=1.7.1.0, Culture=neutral, PublicKeyToken=6fe0a02d2036aa1d, processorArchitecture=MSIL">
       <HintPath>..\..\packages\NUnit.Engine.3.15.2\lib\net20\testcentric.engine.metadata.dll</HintPath>
     </Reference>
@@ -110,8 +111,10 @@
     <Error Condition="!Exists('..\..\packages\Selenium.WebDriver.MSEdgeDriver.107.0.1418.42\build\Selenium.WebDriver.MSEdgeDriver.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Selenium.WebDriver.MSEdgeDriver.107.0.1418.42\build\Selenium.WebDriver.MSEdgeDriver.targets'))" />
     <Error Condition="!Exists('..\..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\EntityFramework.6.4.4\build\EntityFramework.props'))" />
     <Error Condition="!Exists('..\..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
+    <Error Condition="!Exists('..\..\packages\Selenium.WebDriver.MSEdgeDriver.109.0.1518.44-pre\build\Selenium.WebDriver.MSEdgeDriver.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Selenium.WebDriver.MSEdgeDriver.109.0.1518.44-pre\build\Selenium.WebDriver.MSEdgeDriver.targets'))" />
   </Target>
   <Import Project="..\..\packages\Selenium.InternetExplorer.WebDriver.3.150.1\build\Selenium.InternetExplorer.WebDriver.targets" Condition="Exists('..\..\packages\Selenium.InternetExplorer.WebDriver.3.150.1\build\Selenium.InternetExplorer.WebDriver.targets')" />
   <Import Project="..\..\packages\Selenium.WebDriver.MSEdgeDriver.107.0.1418.42\build\Selenium.WebDriver.MSEdgeDriver.targets" Condition="Exists('..\..\packages\Selenium.WebDriver.MSEdgeDriver.107.0.1418.42\build\Selenium.WebDriver.MSEdgeDriver.targets')" />
   <Import Project="..\..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
+  <Import Project="..\..\packages\Selenium.WebDriver.MSEdgeDriver.109.0.1518.44-pre\build\Selenium.WebDriver.MSEdgeDriver.targets" Condition="Exists('..\..\packages\Selenium.WebDriver.MSEdgeDriver.109.0.1518.44-pre\build\Selenium.WebDriver.MSEdgeDriver.targets')" />
 </Project>

@@ -16,7 +16,7 @@
         /// <param name="awaitRemoved">Whether to wait for the HTML element to disappear (in an SPA)</param>
         /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>
         /// <param name="delay">Optional delay time in milliseconds before clicking the element</param>
-        /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete</param>
+        /// <param name="pause">Optional pause time in milliseconds after Selenium claims DocumentComplete</param>
         public static void Click(this ISelenium inst, string id, int index = 0,
                                 bool expectRequest = true, bool samePage = false, bool awaitRemoved = false,
                                 int expectedStatusCode = 200, int delay = 0, int pause = 0)
@@ -35,7 +35,7 @@
         /// <param name="value">value of the item to click on</param>
         /// <param name="expectPostBack">Whether to expect a js-triggered server request from the click</param>
         /// <param name="delay">Optional delay time in milliseconds before clicking the element</param>
-        /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete</param>
+        /// <param name="pause">Optional pause time in milliseconds after Selenium claims DocumentComplete</param>
         public static void Select(this ISeleniumBase inst, string id, string value, bool expectPostBack = false,
                                     int expectedStatusCode = 200, int delay = 0, int pause = 0)
         {

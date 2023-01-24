@@ -133,7 +133,7 @@ namespace iselenium
         /// <summary>
         /// Reloads the page at the current URL
         /// </summary>
-        /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete</param>
+        /// <param name="pause">Optional pause time in milliseconds after Selenium claims DocumentComplete</param>
         public static void Refresh(this ISeleniumBase inst, int pause = 0)
         {
             inst.driver.Navigate().Refresh();
@@ -201,7 +201,7 @@ namespace iselenium
         /// <param name="awaitRemoved">Whether to wait for the HTML element to disappear (in an SPA)</param>
         /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>
         /// <param name="delay">Optional delay time in milliseconds before clicking the element</param>
-        /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete</param>
+        /// <param name="pause">Optional pause time in milliseconds after Selenium claims DocumentComplete</param>
         /// <param name="wait">Explicit WebDriverWait in seconds for the element to appear</param>
         public static void ClickName(this ISeleniumBase inst, string name, int index = 0,
                                     bool expectRequest = true, bool samePage = false, bool awaitRemoved = false,
@@ -221,7 +221,7 @@ namespace iselenium
         /// <param name="awaitRemoved">Whether to wait for the HTML element to disappear (in an SPA)</param>
         /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>///
         /// <param name="delay">Optional delay time in milliseconds before clicking the element</param>
-        /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete</param>
+        /// <param name="pause">Optional pause time in milliseconds after Selenium claims DocumentComplete</param>
         /// <param name="wait">Explicit WebDriverWait in seconds for the element to appear</param>
         public static void ClickID(this ISeleniumBase inst, string id, int index = 0,
                                     bool expectRequest = true, bool samePage = false, bool awaitRemoved = false,
@@ -243,7 +243,7 @@ namespace iselenium
         /// <param name="awaitRemoved">Whether to wait for the HTML element to disappear (in an SPA)</param>
         /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>///
         /// <param name="delay">Optional delay time in milliseconds before clicking the element</param>
-        /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete</param>
+        /// <param name="pause">Optional pause time in milliseconds after Selenium claims DocumentComplete</param>
         /// <param name="wait">Explicit WebDriverWait in seconds for the element to appear</param>
         public static void Click(this ISeleniumBase inst, Func<string, By> selector, string nameOrId, int index = 0,
                                     bool expectRequest = true, bool samePage = false, bool awaitRemoved = false,
@@ -267,7 +267,7 @@ namespace iselenium
         /// <param name="awaitRemoved">Whether to wait for the HTML element to disappear (in an SPA)</param>
         /// <param name="expectedStatusCode">Expected StatusCofe of the response</param>///
         /// <param name="delay">Optional delay time in milliseconds before clicking the element</param>
-        /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete</param>
+        /// <param name="pause">Optional pause time in milliseconds after Selenium claims DocumentComplete</param>
         private static void Click(IWebElement element, bool awaitRemoved, int delay, int pause)
         {
             Thread.Sleep(delay);
@@ -351,7 +351,7 @@ namespace iselenium
         /// <param name="value">value of the item to click on</param>
         /// <param name="expectPostBack">Whether to expect a js-triggered server request from the click</param>
         /// <param name="delay">Optional delay time in milliseconds before clicking the element</param>
-        /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete</param>
+        /// <param name="pause">Optional pause time in milliseconds after Selenium claims DocumentComplete</param>
         /// <param name="wait">Explicit WebDriverWait in seconds for the element to appear</param>
         public static void SelectID(this ISeleniumBase inst, string id, string value, bool expectPostBack = false,
                                     int expectedStatusCode = 200, int delay = 0, int pause = 0, int wait = 0)
@@ -390,7 +390,7 @@ namespace iselenium
         /// <param name="value">value of the item to click on</param>
         /// <param name="expectPostBack">Whether to expect a js-triggered server request from the click</param>
         /// <param name="delay">Optional delay time in milliseconds before clicking the element</param>
-        /// <param name="pause">Optional pause time in milliseconds after IE claims DocumentComplete</param>
+        /// <param name="pause">Optional pause time in milliseconds after Selenium claims DocumentComplete</param>
         /// <param name="wait">Explicit WebDriverWait in seconds for the element to appear</param>
         public static void SelectName(this ISeleniumBase inst, string name, string value, bool expectPostBack = false,
                                     int expectedStatusCode = 200, int delay = 0, int pause = 0, int wait = 0)

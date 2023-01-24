@@ -46,6 +46,14 @@
   </ItemGroup>
 
   <ItemGroup>
+    <!-- Explicit transitive package dependencies due to ProjectBuildInPackage -->
+    <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="6.0.13" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="6.0.13" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.Analyzers" Version="6.0.13" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="6.0.13" />
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\asplib.core\asplib.core.csproj" PrivateAssets="all" />
     <ProjectReference Include="..\asplib\asplib.csproj" PrivateAssets="all" />
     <ProjectReference Include="..\smc\smc.csproj" PrivateAssets="all" />
