@@ -11,8 +11,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="aspnettest.asplib.websharper" Version="0.2.1" />
-    <PackageReference Include="aspnettest.iselenium.websharper" Version="0.2.1" />
+    <PackageReference Include="aspnettest.asplib.websharper" Version="$([System.IO.File]::ReadAllText('$(MSBuildProjectDirectory)/../../nuget-info/version.txt'))" />
+    <PackageReference Include="aspnettest.iselenium.websharper" Version="$([System.IO.File]::ReadAllText('$(MSBuildProjectDirectory)/../../nuget-info/version.txt'))" />
     <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="109.0.5414.7400" />
     <PackageReference Include="Selenium.WebDriver.GeckoDriver" Version="0.32.0" />
     <PackageReference Include="Selenium.WebDriver.MSEdgeDriver" Version="109.0.1518.44-pre" />

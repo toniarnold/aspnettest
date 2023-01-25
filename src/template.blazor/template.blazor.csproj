@@ -2,18 +2,21 @@
 
   <PropertyGroup>
     <PackageType>Template</PackageType>
-    <PackageVersion>0.2.1</PackageVersion>
+	<Authors>Toni Arnold</Authors>
+    <Version>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)/../../nuget-info/version.txt"))</Version>
     <PackageId>aspnettest.template.blazor</PackageId>
+    <Product>aspnettest</Product>
     <PackageIcon>icon.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <Title>aspnettest Blazor Server App with bUnit and Selenium</Title>
-    <Authors>Toni Arnold</Authors>
     <Description>Blazor Server App wired up with bUnit and aspnettest Selenium</Description>
     <PackageLicenseExpression>AGPL-3.0-or-later</PackageLicenseExpression>
-    <PackageTags>dotnet-new;templates;blazor;bunit;selenium</PackageTags>
+	<Copyright>Copyright © 2018-2023</Copyright>
     <PackageProjectUrl>https://github.com/toniarnold/aspnettest/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/toniarnold/aspnettest.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
+	<PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)/../../nuget-info/release-notes.txt"))</PackageReleaseNotes>
+    <PackageTags>dotnet-new;templates;blazor;bunit;selenium</PackageTags>
 
     <TargetFramework>netstandard2.0</TargetFramework>
 

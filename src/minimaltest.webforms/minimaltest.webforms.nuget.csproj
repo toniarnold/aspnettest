@@ -72,10 +72,10 @@
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="aspnettest.asplib.webforms">
-      <Version>0.2.1</Version>
+      <Version>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)/../../nuget-info/version.txt"))</Version>
     </PackageReference>
     <PackageReference Include="aspnettest.iselenium.webforms">
-      <Version>0.2.1</Version>
+      <Version>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)/../../nuget-info/version.txt"))</Version>
     </PackageReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

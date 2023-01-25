@@ -9,16 +9,16 @@
 
   <PropertyGroup>
     <Authors>Toni Arnold, Charles W. Rapp (SMC)</Authors>
-    <Version>0.2.1</Version>
+    <Version>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)/../../nuget-info/version.txt"))</Version>
     <PackageId>aspnettest.asplib.blazor</PackageId>
     <Product>aspnettest</Product>
-    <Description>Base for an ASP.NET Model Control View design pattern with session persistence and optionally SMC, the State Machine Compiler</Description>
+    <Description>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)/../../nuget-info/asplib-description.txt"))</Description>
     <PackageLicenseExpression>AGPL-3.0-or-later</PackageLicenseExpression>
-    <Copyright>Copyright © 2018-2022</Copyright>
+    <Copyright>Copyright © 2018-2023</Copyright>
     <PackageProjectUrl>https://github.com/toniarnold/aspnettest/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/toniarnold/aspnettest.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-    <PackageReleaseNotes>alpha</PackageReleaseNotes>
+    <PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)/../../nuget-info/release-notes.txt"))</PackageReleaseNotes>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 

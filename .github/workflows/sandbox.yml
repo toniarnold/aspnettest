@@ -11,38 +11,10 @@ jobs:
     - uses: actions/checkout@v3
       with:
         fetch-depth: 0
-    - name: Setup .NET
-      uses: actions/setup-dotnet@v3
-      with:
-        dotnet-version: 6.0.x
-
-    # Build and bUnit Test BlazorApp1.sln
-    - name: Restore dependencies
-      run: dotnet restore src/template.blazor/BlazorApp1.sln
-    - name: Build BlazorApp1
-      run:  dotnet build src/template.blazor/BlazorApp1.sln --configuration Release
-    - name: Test BlazorApp1
-      run: dotnet test src/template.blazor/src/BlazorApp1BunitTest/BlazorApp1BunitTest.csproj --configuration Release --no-restore --no-build --verbosity normal
-
-    - name: Create .nupkg package
-      run: dotnet pack src/template.blazor/template.blazor.csproj -o ${{ github.workspace }}/packages
-
-    # Create and test a solution with above template package
-    - name: Install the template package
-      run: dotnet new install ${{ github.workspace }}/packages/aspnettest.template.blazor*.nupkg
-    - name: Instantiate the template
-      run: dotnet new aspnettest-blazor -o GithubAction
-    - name: Restore template dependencies
-      run: dotnet restore GithubAction/GithubAction.sln
-    - name: Build the template
-      run: dotnet build GithubAction/GithubAction.sln --configuration Debug
-    - name: Test the template
-      run: dotnet test GithubAction/src/GithubActionBunitTest/GithubActionBunitTest.csproj --configuration Debug --no-restore --no-build --verbosity normal
-
-    # Upload the packages when above smoke test was green
-    - name: Upload .nupkg package
-      uses: actions/upload-artifact@v3
-      with:
-        name: template.blazor
-        path: ${{ github.workspace }}/packages/*.nupkg
-        retention-days: 10
+    - name: Get version.txt
+      shell: pwsh
+      run: |
+        $version = Get-Content ${{ github.workspace }}/nuget-info/version.txt
+        echo "version=$version" >> $GITHUB_ENV
+    - name: Use version.txt
+      run: echo ">${{ env.version }}<"

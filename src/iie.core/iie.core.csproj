@@ -13,7 +13,7 @@
     <Description>ASP.NET In-App-GUI-Tests with Internet Explorer and NUnit</Description>
     <PackageLicenseExpression>GPL-3.0-or-later</PackageLicenseExpression>
     <Copyright>Copyright © 2018</Copyright>
-    <PackageReleaseNotes>alpha</PackageReleaseNotes>
+    <PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)/../../nuget-info/release-notes.txt"))</PackageReleaseNotes>
     <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
   </PropertyGroup>
 
