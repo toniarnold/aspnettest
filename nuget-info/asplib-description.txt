@@ -1,0 +1,1 @@
+Base for an ASP.NET Model Control View design pattern with session persistence and optionally SMC, the State Machine Compiler
