@@ -8,7 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="aspnettest.asplib.core" Version="$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)/../../nuget-info/version.txt"))" />
+    <PackageReference Include="aspnettest.asplib.core" Version="$([System.IO.File]::ReadAllText('$(MSBuildProjectDirectory)/../../nuget-info/version.txt'))" />
     <PackageReference Include="Microsoft.AspNetCore.TestHost" Version="6.0.13" />
     <PackageReference Include="nunit" Version="3.13.3" />
     <PackageReference Include="NUnit3TestAdapter" Version="4.3.1">

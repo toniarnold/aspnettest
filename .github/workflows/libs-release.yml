@@ -2,11 +2,6 @@ name: Release Libraries
 
 on:
   workflow_call:
-    inputs:
-      version:
-        description: 'version tag name for the GitHub release'
-        required: true
-        type: string
     secrets:
       nuget_api_key:
         description: 'nuget.org API key'
@@ -43,10 +38,15 @@ jobs:
         nuget-api-key: ${{ secrets.nuget_api_key }}
     - name: Publish NuGet packages to nuget.org
       run: nuget push -Source https://api.nuget.org/v3/index.json '${{ github.workspace }}\packages\*.nupkg' -SkipDuplicate
-    - name: Create GitHub release ${{ inputs.version }}
+    - name: Get version.txt
+      shell: pwsh
+      run: |
+        $version = Get-Content ${{ github.workspace }}/nuget-info/version.txt
+        echo "version=$version" >> $Env:GITHUB_ENV
+    - name: Create GitHub release "v${{ env.version }}"
       uses: ncipollo/release-action@v1
       with:
         commit: master
-        tag: ${{ inputs.version }}
+        tag: "v${{ env.version }}"
         artifacts: "${{ github.workspace }}/packages/*.nupkg"
-        bodyFile: "${{ github.workspace }}/.github/workflows/release.md"
+        bodyFile: "${{ github.workspace }}/nuget-info/release-notes.txt"
