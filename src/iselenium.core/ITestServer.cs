@@ -73,7 +73,8 @@ namespace iselenium
             string cserverproject = serverproject ?? config["ServerProject"];
             string croot = root ?? config["Root"];
             int cport = port ?? config.GetValue<int>("Port");
-            int ctimeout = timeout ?? config.GetValue<int>("RequestTimeout");
+            int ctimeout = timeout ?? (String.IsNullOrWhiteSpace(config?["RequestTimeout"]) ? 1 :
+                                        config.GetValue<int>("RequestTimeout"));
             int cservertimeout = servertimeout ?? config.GetValue<int>("ServerStartTimeout");
 
             var info = new ProcessStartInfo();

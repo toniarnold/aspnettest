@@ -16,7 +16,7 @@
   <ItemGroup>
     <PackageReference Include="aspnettest.asplib.core" Version="$([System.IO.File]::ReadAllText('$(MSBuildProjectDirectory)/../../nuget-info/version.txt'))" />
     <PackageReference Include="aspnettest.iselenium.core" Version="$([System.IO.File]::ReadAllText('$(MSBuildProjectDirectory)/../../nuget-info/version.txt'))" />
-    <PackageReference Include="Selenium.WebDriver.MSEdgeDriver" Version="109.0.1518.44-pre" />
+    <PackageReference Include="Selenium.WebDriver.MSEdgeDriver" Version="109.0.1518.61" />
   </ItemGroup>
 
   <ItemGroup>

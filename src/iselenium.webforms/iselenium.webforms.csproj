@@ -26,12 +26,13 @@
     <Product>aspnettest</Product>
     <Description>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)/../../nuget-info/iselenium-description.txt"))</Description>
     <PackageLicenseExpression>AGPL-3.0-or-later</PackageLicenseExpression>
+    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
     <Copyright>Copyright © 2018-2023</Copyright>
     <PackageProjectUrl>https://github.com/toniarnold/aspnettest/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/toniarnold/aspnettest.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)/../../nuget-info/release-notes.txt"))</PackageReleaseNotes>
-    <PackageRequireLicenseAcceptance>true</PackageRequireLicenseAcceptance>
+    <PackageTags>aspnet;test;nunit;selenium;webforms</PackageTags>
   </PropertyGroup>
   <PropertyGroup>
     <!-- Source Link -->

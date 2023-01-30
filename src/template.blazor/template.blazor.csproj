@@ -11,12 +11,12 @@
     <Title>aspnettest Blazor Server App with bUnit and Selenium</Title>
     <Description>Blazor Server App wired up with bUnit and aspnettest Selenium</Description>
     <PackageLicenseExpression>AGPL-3.0-or-later</PackageLicenseExpression>
-	<Copyright>Copyright © 2018-2023</Copyright>
+    <Copyright>Copyright © 2018-2023</Copyright>
     <PackageProjectUrl>https://github.com/toniarnold/aspnettest/</PackageProjectUrl>
     <RepositoryUrl>https://github.com/toniarnold/aspnettest.git</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
-	<PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)/../../nuget-info/release-notes.txt"))</PackageReleaseNotes>
-    <PackageTags>dotnet-new;templates;blazor;bunit;selenium</PackageTags>
+    <PackageReleaseNotes>$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)/../../nuget-info/release-notes.txt"))</PackageReleaseNotes>
+    <PackageTags>dotnet-new;templates;blazor;persistence;test;nunit;selenium;bunit</PackageTags>
 
     <TargetFramework>netstandard2.0</TargetFramework>
 

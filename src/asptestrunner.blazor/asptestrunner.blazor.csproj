@@ -18,7 +18,7 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
-    <PackageReference Include="Selenium.WebDriver.MSEdgeDriver" Version="109.0.1518.44-pre" />
+    <PackageReference Include="Selenium.WebDriver.MSEdgeDriver" Version="109.0.1518.61" />
   </ItemGroup>
 
   <ItemGroup>

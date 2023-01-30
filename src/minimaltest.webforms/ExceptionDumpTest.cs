@@ -27,7 +27,7 @@ namespace minimaltest
             this.Click("submitButton", expectedStatusCode: 500);
             Assert.That(this.Html(), Does.Contain("Malicious Content Exception"));
             // The benign content in the ViewState is lost on the ysod-Page -> Click the core dump of Main
-            var linkToDump = this.GetHTMLElement(IEExtension.EXCEPTION_LINK_ID);
+            var linkToDump = this.GetHTMLElement(SeleniumExtension.EXCEPTION_LINK_ID);
             var coredumpUrl = (string)linkToDump.GetAttribute("href");
             Assert.That(coredumpUrl, Does.Contain("/withstorage.aspx?session="));
             // AS IE was forcibly disabled, this does not work no more:

@@ -1,17 +1,18 @@
-* Fix issue #5 race condition in the PersistentMainFactory due to the static cache 
-  by setting up an identifying Request Correlation Guid in _Host.cshtml according to
-  https://learn.microsoft.com/en-us/aspnet/core/blazor/security/server/additional-scenarios?view=aspnetcore-6.0#pass-tokens-to-a-blazor-server-app
+* Blazor: Fix issue #5 race condition in the `PersistentMainFactory` due to the
+  static ad hoc cache by setting up a request correlation guid in `_Host.cshtml`
 
-* Deprecate the 'Component' accessor in favor of 'Cut' as in
-  https://learn.microsoft.com/en-us/aspnet/core/blazor/test
+* Blazor: Deprecate the `Component` accessor in favor of the apparently
+  canonical `Cut` for "component under test"
 
-* Set Selenium RequestTimeout default to 1 sec if not configured
+* Blazor: Synchronization in `Navigate()` and `Refresh()` now with the same
+  arguments as `Click()` with int `expectRenders` instead of bool `expectRender`
+  (breaking change)
 
-* Blazor synchronization in Navigate() and Refresh() with the same argumenrs as Click() with numeric expectRenders
-  instead of bool expectRender (breaking change)
+* Blazor: Support the `?clear=true` GET argument to clear the storage
 
-* Support the ?clear=true GET argument to clear browser storage also in Blazor
+* WebForms and Core examples: Internet Explorer has been forcibly disabled by
+  Microsoft, thus remove it from old tests
 
-* Internet Explorer has been forcibly disabled by Microsoft, thus remove it from old tests.
+* Set Selenium `RequestTimeout` to 1 sec if not configured
 
 * Add Source Link to the NuGet packages

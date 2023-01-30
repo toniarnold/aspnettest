@@ -12,7 +12,7 @@
     <PackageReference Include="aspnettest.iselenium.blazor" Version="0.2.1" />
     <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="109.0.5414.7400" />
     <PackageReference Include="Selenium.WebDriver.GeckoDriver" Version="0.32.0" />
-    <PackageReference Include="Selenium.WebDriver.MSEdgeDriver" Version="109.0.1518.44-pre" />
+    <PackageReference Include="Selenium.WebDriver.MSEdgeDriver" Version="109.0.1518.61" />
   </ItemGroup>
 
   <ItemGroup>

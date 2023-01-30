@@ -31,6 +31,13 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github-workflows", "github-
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\codeql-analysis.yml = .github\workflows\codeql-analysis.yml
 		.github\workflows\libs-build-core.yml = .github\workflows\libs-build-core.yml
+		.github\workflows\libs-build-release.yml = .github\workflows\libs-build-release.yml
+		.github\workflows\libs-build-webforms.yml = .github\workflows\libs-build-webforms.yml
+		.github\workflows\libs-release.yml = .github\workflows\libs-release.yml
+		.github\workflows\sandbox.yml = .github\workflows\sandbox.yml
+		.github\workflows\template.blazor-build-release.yml = .github\workflows\template.blazor-build-release.yml
+		.github\workflows\template.blazor-build.yml = .github\workflows\template.blazor-build.yml
+		.github\workflows\template.blazor-release.yml = .github\workflows\template.blazor-release.yml
 	EndProjectSection
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "asplib.websharper", "src\asplib.websharper\asplib.websharper.csproj", "{8F404E60-F442-44CA-8A90-CF636F465413}"
@@ -40,6 +47,14 @@ EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "testrunner.sm", "src\iselenium.blazor\TestRunnerSmc\testrunner.sm.vcxproj", "{13CA5986-43F7-476F-8AB9-2DC3E5C23663}"
 EndProject
 Project("{00D1A9C2-B5F0-4AF3-8072-F6C62B433612}") = "asp.db", "src\asp.db\asp.db.sqlproj", "{5CE19FF0-7C2A-40E4-A612-C0B4D81725FE}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuget-info", "nuget-info", "{08CA0B36-3E28-45E6-9ED4-ACD223C6550F}"
+	ProjectSection(SolutionItems) = preProject
+		nuget-info\asplib-description.txt = nuget-info\asplib-description.txt
+		nuget-info\iselenium-description.txt = nuget-info\iselenium-description.txt
+		nuget-info\release-notes.txt = nuget-info\release-notes.txt
+		nuget-info\version.txt = nuget-info\version.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

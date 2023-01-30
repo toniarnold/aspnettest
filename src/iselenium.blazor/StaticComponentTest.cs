@@ -21,6 +21,8 @@ namespace iselenium
         [Obsolete("Cut for 'component under test' has become a well known convention")]
         public TComponent Component => (TComponent?)TestFocus.Component ?? default!;
 
+        // Reference for using "Cut": https://learn.microsoft.com/en-us/aspnet/core/blazor/test
+
         /// <summary>
         /// Accessor for the 'component under test' in focus
         /// </summary>

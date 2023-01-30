@@ -24,10 +24,25 @@ EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "github-workflows", "github-workflows", "{B40564BC-5E4C-47EB-82A4-52AE263E4792}"
 	ProjectSection(SolutionItems) = preProject
 		.github\workflows\codeql-analysis.yml = .github\workflows\codeql-analysis.yml
+		.github\workflows\libs-build-core.yml = .github\workflows\libs-build-core.yml
+		.github\workflows\libs-build-release.yml = .github\workflows\libs-build-release.yml
 		.github\workflows\libs-build-webforms.yml = .github\workflows\libs-build-webforms.yml
+		.github\workflows\libs-release.yml = .github\workflows\libs-release.yml
+		.github\workflows\sandbox.yml = .github\workflows\sandbox.yml
+		.github\workflows\template.blazor-build-release.yml = .github\workflows\template.blazor-build-release.yml
+		.github\workflows\template.blazor-build.yml = .github\workflows\template.blazor-build.yml
+		.github\workflows\template.blazor-release.yml = .github\workflows\template.blazor-release.yml
 	EndProjectSection
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "test.webforms", "src\test.webforms\test.webforms.csproj", "{7ACC2161-77B2-4DBD-BEC3-E4ABB31D3149}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "nuget-info", "nuget-info", "{9AA9D1A2-252F-47AF-8922-D56927EF0313}"
+	ProjectSection(SolutionItems) = preProject
+		nuget-info\asplib-description.txt = nuget-info\asplib-description.txt
+		nuget-info\iselenium-description.txt = nuget-info\iselenium-description.txt
+		nuget-info\release-notes.txt = nuget-info\release-notes.txt
+		nuget-info\version.txt = nuget-info\version.txt
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

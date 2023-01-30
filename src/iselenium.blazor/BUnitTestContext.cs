@@ -32,7 +32,8 @@ namespace iselenium
             JSInterop.Mode = JSRuntimeMode.Loose;
 
             // For synchronized Click() with TestFocus:
-            Configure(config.GetValue<int>("RequestTimeout"));
+            Configure(String.IsNullOrWhiteSpace(config?["RequestTimeout"]) ? 1 :
+                        config.GetValue<int>("RequestTimeout"));
         }
 
         protected void Configure(int requestTimeout)

@@ -35,7 +35,9 @@ namespace iselenium
                                             @"%PROGRAMFILES%\IIS Express\iisexpress.exe";
             string croot = root ?? ConfigurationManager.AppSettings["Root"];
             int cport = port ?? int.Parse(ConfigurationManager.AppSettings["Port"]);
-            int ctimeout = timeout ?? int.Parse(ConfigurationManager.AppSettings["RequestTimeout"]);
+            int ctimeout = timeout ?? (String.IsNullOrWhiteSpace(
+                    ConfigurationManager.AppSettings["RequestTimeout"]) ? 1 :
+                    int.Parse(ConfigurationManager.AppSettings["RequestTimeout"]));
             int cservertimeout = servertimeout ?? int.Parse(ConfigurationManager.AppSettings["ServerStartTimeout"]);
 
             var info = new ProcessStartInfo();

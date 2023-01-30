@@ -262,7 +262,7 @@
     <Error Condition="!Exists('..\..\packages\EntityFramework.6.4.4\build\EntityFramework.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\EntityFramework.6.4.4\build\EntityFramework.props'))" />
     <Error Condition="!Exists('..\..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\EntityFramework.6.4.4\build\EntityFramework.targets'))" />
     <Error Condition="!Exists('..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.3.6.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.3.6.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.targets'))" />
-    <Error Condition="!Exists('..\..\packages\Selenium.WebDriver.MSEdgeDriver.109.0.1518.44-pre\build\Selenium.WebDriver.MSEdgeDriver.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Selenium.WebDriver.MSEdgeDriver.109.0.1518.44-pre\build\Selenium.WebDriver.MSEdgeDriver.targets'))" />
+    <Error Condition="!Exists('..\..\packages\Selenium.WebDriver.MSEdgeDriver.109.0.1518.61\build\Selenium.WebDriver.MSEdgeDriver.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Selenium.WebDriver.MSEdgeDriver.109.0.1518.61\build\Selenium.WebDriver.MSEdgeDriver.targets'))" />
   </Target>
   <PropertyGroup>
     <PreBuildEvent>
@@ -270,8 +270,8 @@
   </PropertyGroup>
   <Import Project="..\..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
   <Import Project="..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.3.6.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.targets" Condition="Exists('..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.3.6.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.targets')" />
-  <Import Project="..\..\packages\Selenium.WebDriver.MSEdgeDriver.109.0.1518.44-pre\build\Selenium.WebDriver.MSEdgeDriver.targets" Condition="Exists('..\..\packages\Selenium.WebDriver.MSEdgeDriver.109.0.1518.44-pre\build\Selenium.WebDriver.MSEdgeDriver.targets')" />
-  <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
+  <Import Project="..\..\packages\Selenium.WebDriver.MSEdgeDriver.109.0.1518.61\build\Selenium.WebDriver.MSEdgeDriver.targets" Condition="Exists('..\..\packages\Selenium.WebDriver.MSEdgeDriver.109.0.1518.61\build\Selenium.WebDriver.MSEdgeDriver.targets')" />
+  <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">
   </Target>

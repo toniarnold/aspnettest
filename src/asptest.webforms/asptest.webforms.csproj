@@ -125,7 +125,7 @@
     <Error Condition="!Exists('..\..\packages\NUnit.3.13.3\build\NUnit.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\NUnit.3.13.3\build\NUnit.props'))" />
     <Error Condition="!Exists('..\..\packages\NUnit3TestAdapter.4.3.1\build\net35\NUnit3TestAdapter.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\NUnit3TestAdapter.4.3.1\build\net35\NUnit3TestAdapter.props'))" />
     <Error Condition="!Exists('..\..\packages\Selenium.WebDriver.4.7.0\build\Selenium.WebDriver.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Selenium.WebDriver.4.7.0\build\Selenium.WebDriver.targets'))" />
-    <Error Condition="!Exists('..\..\packages\Selenium.WebDriver.MSEdgeDriver.109.0.1518.44-pre\build\Selenium.WebDriver.MSEdgeDriver.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Selenium.WebDriver.MSEdgeDriver.109.0.1518.44-pre\build\Selenium.WebDriver.MSEdgeDriver.targets'))" />
+    <Error Condition="!Exists('..\..\packages\Selenium.WebDriver.MSEdgeDriver.109.0.1518.61\build\Selenium.WebDriver.MSEdgeDriver.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Selenium.WebDriver.MSEdgeDriver.109.0.1518.61\build\Selenium.WebDriver.MSEdgeDriver.targets'))" />
   </Target>
   <PropertyGroup>
     <PostBuildEvent>
@@ -141,5 +141,5 @@
   </Target>
   <Import Project="..\..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
   <Import Project="..\..\packages\Selenium.WebDriver.4.7.0\build\Selenium.WebDriver.targets" Condition="Exists('..\..\packages\Selenium.WebDriver.4.7.0\build\Selenium.WebDriver.targets')" />
-  <Import Project="..\..\packages\Selenium.WebDriver.MSEdgeDriver.109.0.1518.44-pre\build\Selenium.WebDriver.MSEdgeDriver.targets" Condition="Exists('..\..\packages\Selenium.WebDriver.MSEdgeDriver.109.0.1518.44-pre\build\Selenium.WebDriver.MSEdgeDriver.targets')" />
+  <Import Project="..\..\packages\Selenium.WebDriver.MSEdgeDriver.109.0.1518.61\build\Selenium.WebDriver.MSEdgeDriver.targets" Condition="Exists('..\..\packages\Selenium.WebDriver.MSEdgeDriver.109.0.1518.61\build\Selenium.WebDriver.MSEdgeDriver.targets')" />
 </Project>

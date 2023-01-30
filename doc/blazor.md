@@ -2,6 +2,7 @@
 
 * [Summary](#summary)
 * [Quickstart](#quickstart)
+* [Screen recordings](#screen-recordings)
 * [Scaffolding of `minimal.blazor`](#scaffolding-of-minimalblazor)
   * [Using the static `TestFocus` accessor](#using-the-static-testfocus-accessor)
     * [Automatic synchronization with `TestFocus`](#automatic-synchronization-with-testfocus)
@@ -55,6 +56,7 @@ React and Anguler), there is no need to wait and poll for changes to happen
 Instead, the `ITestFocus` static class in `asplib.blazor` provides an
 `EndRender` resp. `EndRenderAsync` extension method to synchronize the tests.
 
+
 ## Quickstart
 
 With the `aspnettest.template.blazor` NuGet package, a `dotnet new` template is
@@ -76,6 +78,18 @@ generated MyBlazorApp.playlist. It contains two test projects:
 which starts the web server, an Edge browser instance and runs the tests in
 `MyBlazorAppSeleniumTest` (excluded from the playlist) by pushing the test
 button in the browser.
+
+
+## Screen recordings
+
+Running the `BlazorApp1.playlist` from `aspnettest.template.blazor`:
+
+![aspnettest.template.blazor/BlazorApp1.playlist running](img/template.blazor-running.gif)
+
+Unlike Edge, FireFox doesn't block mouse click events when run by the Selenium
+WebDriver. The additional counter increment causes the test to fail:
+
+![aspnettest.template.blazor interruption with FireFox](img/template.blazor-running-firefox.gif)
 
 
 

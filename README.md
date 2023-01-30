@@ -1,11 +1,11 @@
 # aspnettest
 
-## [Don't Develop GUI Tests, Teach Your App To Test Itself!](http://www.drdobbs.com/testing/dont-develop-gui-tests-teach-your-app-to/240168468) - in ASP.NET/NUnit/C#
-
 [Technical Documentation](./doc/toc.md)
 
 [Most recent development: Blazor Server](./doc/blazor.md),
 [LinkedIn-Artikelserie (in German)](https://www.linkedin.com/pulse/blazor-1-disruptive-entwicklungen-toni-arnold)
+
+## [Don't Develop GUI Tests, Teach Your App To Test Itself!](http://www.drdobbs.com/testing/dont-develop-gui-tests-teach-your-app-to/240168468) - in ASP.NET/NUnit/C#
 
 *While* reading above article on Dr. Dobb's, I immediately knew: 
 "This is it!" - even more so on the ASP.NET stack. Quote from  the article:
