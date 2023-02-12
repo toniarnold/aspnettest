@@ -2,10 +2,13 @@
 using asplib.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Server.ProtectedBrowserStorage;
+using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Primitives;
 using System.ComponentModel;
 using System.Diagnostics;
+using System.Web;
 
 namespace asplib.Components
 {
@@ -22,6 +25,7 @@ namespace asplib.Components
 
         private bool _firstRender = true;
         private bool _shouldRender = true;
+        private bool _doSaveToBrowserUrl = true;
 
         /// <summary>
         /// ?clear=true requests prior deletion of the stored object
@@ -46,6 +50,9 @@ namespace asplib.Components
 
         [Inject]
         private ProtectedLocalStorage ProtectedLocalStore { get; set; } = default!;
+
+        [Inject]
+        private NavigationManager uriHelper { get; set; } = default!;
 
         [Inject]
         private ILogger<PersistentComponentBase<T>> Logger { get; set; } = default!;
@@ -107,6 +114,7 @@ namespace asplib.Components
 
                     case Storage.SessionStorage:
                     case Storage.LocalStorage:
+                    case Storage.UrlQuery:
                         if (IsMainRequestedInstance)
                         {
                             this.HydrateMain(); // the instance we got from the database
@@ -161,11 +169,10 @@ namespace asplib.Components
             {
                 if (!IsMainRequestedInstance)
                 {
-                    Logger.LogInformation(0, "Load Storage {storage}", this.GetStorage());
-
                     switch (this.GetStorage())
                     {
                         case Storage.SessionStorage:
+                            Logger.LogInformation(0, "Load SessionStorage");
                             Main = await this.LoadFromBrowser(k => ProtectedSessionStore.GetAsync<string>(k));
                             this.HydrateMain();
                             _shouldRender = true;
@@ -173,8 +180,18 @@ namespace asplib.Components
                             break;
 
                         case Storage.LocalStorage:
+                            Logger.LogInformation(0, "Load LocalStorage");
                             Main = await this.LoadFromBrowser(k => ProtectedLocalStore.GetAsync<string>(k));
                             this.HydrateMain();
+                            _shouldRender = true;
+                            this.StateHasChanged();
+                            break;
+
+                        case Storage.UrlQuery:
+                            Logger.LogInformation(0, "Load UrlQuery");
+                            Main = this.LoadFromBrowserUrl();
+                            this.HydrateMain();
+                            _doSaveToBrowserUrl = false;    // the same state that was just loaded
                             _shouldRender = true;
                             this.StateHasChanged();
                             break;
@@ -183,8 +200,6 @@ namespace asplib.Components
             }
             else if (!StorageHasChanged)
             {
-                Logger.LogInformation(0, "Save Storage {storage}", this.GetStorage());
-
                 // The IsRequestedInstanceAttribute would be serialized, too, thus remove it now
                 var provider = TypeDescriptor.GetProvider(Main!);
                 TypeDescriptor.RemoveProvider(provider, Main!);
@@ -195,15 +210,30 @@ namespace asplib.Components
                         break;  // Default instance lifetime in Blazor Server
 
                     case Storage.Database:
+                        Logger.LogInformation(0, "Save Database");
                         this.SaveToDatabase();
                         break;
 
                     case Storage.SessionStorage:
+                        Logger.LogInformation(0, "Save SessionStorage");
                         await this.SaveToBrowser((k, v) => ProtectedSessionStore.SetAsync(k, v));
                         break;
 
                     case Storage.LocalStorage:
+                        Logger.LogInformation(0, "Save LocalStorage");
                         await this.SaveToBrowser((k, v) => ProtectedLocalStore.SetAsync(k, v));
+                        break;
+
+                    case Storage.UrlQuery:
+                        if (_doSaveToBrowserUrl)
+                        {
+                            Logger.LogInformation(0, "Save UrlQuery");
+                            this.SaveToBrowserUrl();
+                        }
+                        else
+                        {
+                            _doSaveToBrowserUrl = true; // next time
+                        }
                         break;
 
                     default:
@@ -273,7 +303,7 @@ namespace asplib.Components
             if (result.Success && result.Value != null)
             {
                 var viewState = result.Value;
-                var filter = StorageImplementation.DecryptViewState(Configuration);
+                var filter = StorageImplementation.DecryptDecompressFilter(Configuration);
                 var main = StorageImplementation.LoadFromViewstate(() => this.Main, viewState, filter);
                 PersistentMainFactory<T>.PerformPropertyInjection(ServiceProvider, main);   // always
                 return main;
@@ -284,10 +314,16 @@ namespace asplib.Components
             }
         }
 
+        /// <summary>
+        /// Store the serialized Main with the ProtectedSessionStore method given
+        /// by storeSetAsync.
+        /// </summary>
+        /// <param name="storeSetAsync"></param>
+        /// <returns></returns>
         private async Task SaveToBrowser(Func<string, object, ValueTask> storeSetAsync)
         {
             var storageId = StorageImplementation.GetStorageID(typeof(T).Name);
-            var filter = StorageImplementation.EncryptViewState(Configuration);
+            var filter = StorageImplementation.CompressEncryptFilter(Configuration);
             var viewState = StorageImplementation.ViewState(Main, filter);
             await storeSetAsync(storageId, viewState);
         }
@@ -299,6 +335,52 @@ namespace asplib.Components
         private void SaveToDatabase()
         {
             StorageImplementation.SaveDatabase(Configuration, Main);
+        }
+
+        // Url storage is quite common according to
+        // https://news.ycombinator.com/item?id=34312546:
+        // "How to store your app's entire state in the url" - but they're using
+        // client side JSON serialization, not the server side binary
+        // serialization used here.
+        // Size limit: "seems Chrome/Fx/Safari all support at least 32k"
+
+        /// <summary>
+        /// Returns a deserialized Main instance from the query parameter
+        /// storageId if available, else just returns the one already there.
+        /// </summary>
+        /// <returns></returns>
+        private T LoadFromBrowserUrl()
+        {
+            var query = QueryHelpers.ParseQuery(uriHelper.ToAbsoluteUri(uriHelper.Uri).Query);
+            var storageId = StorageImplementation.GetStorageID(typeof(T).Name);
+            if (query.TryGetValue(storageId, out var viewState))
+            {
+                var filter = StorageImplementation.DecryptDecompressFilter(Configuration);
+                var main = StorageImplementation.LoadFromViewstate(
+                            () => this.Main, HttpUtility.UrlDecode(viewState[0]), filter);
+                PersistentMainFactory<T>.PerformPropertyInjection(ServiceProvider, main);   // always
+                return main;
+            }
+            else
+            {
+                return this.Main;   // Got no instance from the bowser -> return the one from PersistentMainFactoryExtension
+            }
+        }
+
+        /// <summary>
+        /// Store the serialized Main in the query parameter storageId.
+        /// </summary>
+        private void SaveToBrowserUrl()
+        {
+            var filter = StorageImplementation.CompressEncryptFilter(Configuration);
+            var viewState = StorageImplementation.ViewState(Main, filter);
+            var query = QueryHelpers.ParseQuery(uriHelper.ToAbsoluteUri(uriHelper.Uri).Query);
+            var storageId = StorageImplementation.GetStorageID(typeof(T).Name);
+            query[storageId] = new StringValues(HttpUtility.UrlEncode(viewState));
+            var uri = uriHelper.ToAbsoluteUri(uriHelper.Uri).GetLeftPart(UriPartial.Path);
+            var newUri = QueryHelpers.AddQueryString(uri, query);
+            _doSaveToBrowserUrl = false;    // avoid setting the query twice due to the navigation
+            uriHelper.NavigateTo(newUri);
         }
     }
 }

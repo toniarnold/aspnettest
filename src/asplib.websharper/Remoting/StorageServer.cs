@@ -90,7 +90,7 @@ namespace asplib.Remoting
                 if (storage == Storage.ViewState)
                 {
                     viewModel = new V();
-                    filter = StorageImplementation.DecryptViewState(Configuration);
+                    filter = StorageImplementation.DecryptDecompressFilter(Configuration);
                     viewModel.ViewState = viewState;
                     viewModel.DeserializeMain(filter);
                 }
@@ -158,7 +158,7 @@ namespace asplib.Remoting
             switch (stored.SessionStorage)  // guaranteed here, whether overridden or not
             {
                 case Storage.ViewState:
-                    var filter = StorageImplementation.EncryptViewState(Configuration);
+                    var filter = StorageImplementation.CompressEncryptFilter(Configuration);
                     stored.SerializeMain(filter); // save locally into the object
                     return stored.ViewState;
 

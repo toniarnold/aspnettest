@@ -17,7 +17,8 @@
         <InputRadio @ref="storageDatabase" id="storageDatabase" name="Storage" value="@Storage.Database" TValue="Storage" /> Database
         <InputRadio @ref="storageSessionStorage" id="storageSessionStorage" name="Storage" value="@Storage.SessionStorage" TValue="Storage" /> Window.sessionStorage
         <InputRadio @ref="storageLocalStorage" id="storageLocalStorage" name="Storage" value="@Storage.LocalStorage" TValue="Storage" /> Window.localStorage
-        <button type="button" @ref="clearButton" @onclick="@Clear">Clear</button>
+        <InputRadio @ref="storageUrlQuery" id="storageUrlQuery" name="Storage" value="@Storage.UrlQuery" TValue="Storage" /> URL Query string
+        <button type="button" @ref="clearButton" id="clearButton" @onclick="@ClearStorage">Clear</button>
     </InputRadioGroup>
 </EditForm>
 <br />
@@ -41,6 +42,7 @@
     public InputRadio<Storage>? storageDatabase;
     public InputRadio<Storage>? storageSessionStorage;
     public InputRadio<Storage>? storageLocalStorage;
+    public InputRadio<Storage>? storageUrlQuery;
     public ElementReference clearButton;
     public ElementReference contentTextBox;
     public ElementReference submitButton;
@@ -69,9 +71,10 @@
         }
     }
 
-    private async Task Clear()
+    private async Task ClearStorage()
     {
         await this.DeleteBrowserStore();
-        uriHelper.NavigateTo(uriHelper.Uri, forceLoad: true); 
+        var uriNoQuery = uriHelper.ToAbsoluteUri(uriHelper.Uri).GetLeftPart(UriPartial.Path);
+        uriHelper.NavigateTo(uriNoQuery, forceLoad: true);
     }
 }

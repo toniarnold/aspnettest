@@ -35,5 +35,12 @@
         /// Browser JavaScript Window.localStorage via ProtectedLocalStorage
         /// </summary>
         LocalStorage,
+
+        /// <summary>
+        /// Browser URL query string storage
+        /// </summary>
+        UrlQuery,
+        
+        // NavigationManager.HistoryEntryState has only been introduced in .NET 7
     }
 }

@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using System;
 using System.Collections.Specialized;
 using System.ComponentModel;
+using System.IO.Compression;
 using System.Linq;
 using System.Net;
 using System.Net.Http;
@@ -89,15 +90,16 @@ namespace asplib.Model
                 {
                     session = Guid.NewGuid();  // cannot exist in the database
                 }
-                Func<byte[], byte[]>? filter = null;
+                Func<byte[], byte[]>? encryptFilter = null;
                 if (StorageImplementation.GetEncryptDatabaseStorage(configuration))
                 {
                     var key = (cookie["key"] != null) ? Convert.FromBase64String(cookie["key"]!) : null;
                     var secret = StorageImplementation.GetSecret(key);
-                    filter = x => Crypt.Encrypt(secret, x);
+                    encryptFilter = x => Crypt.Encrypt(secret, x);
                     newCookie["key"] = Convert.ToBase64String(secret.Key);
                     TypeDescriptor.AddAttributes(main, new DatabaseKeyAttribute(secret.Key));
                 }
+                var filter = Serialization.ComposeFilters(CompressFilter(configuration), encryptFilter);
                 using (var db = new ASP_DBEntities())
                 {
                     var savedSession = db.SaveMain(main.GetType(), StorageImplementation.Bytes(main, filter), session);
@@ -143,12 +145,13 @@ namespace asplib.Model
             {
                 key = keyAttribute.Key;
             }
-            Func<byte[], byte[]>? filter = null;
+            Func<byte[], byte[]>? encryptFilter = null;
             if (StorageImplementation.GetEncryptDatabaseStorage(configuration))
             {
                 var secret = StorageImplementation.GetSecret(key);
-                filter = x => Crypt.Encrypt(secret, x);
+                encryptFilter = x => Crypt.Encrypt(secret, x);
             }
+            var filter = Serialization.ComposeFilters(CompressFilter(configuration), encryptFilter);
             using (var db = new ASP_DBEntities())
             {
                 var savedSession = db.SaveMain(main.GetType(), StorageImplementation.Bytes(main, filter), session);
@@ -168,40 +171,6 @@ namespace asplib.Model
             client.DefaultRequestHeaders.Add(StorageImplementation.HeaderName, viewState[0]);
         }
 
-        /// <summary>
-        /// Return the filter to encrypt the ViewState with if configured so.
-        /// </summary>
-        /// <param name="configuration">The configuration.</param>
-        /// <returns></returns>
-        public static Func<byte[], byte[]>? EncryptViewState(IConfiguration configuration)
-        {
-            Func<byte[], byte[]>? filter = null;
-            var key = configuration.GetValue<string>("EncryptViewStateKey");
-            if (!String.IsNullOrEmpty(key))
-            {
-                var secret = GetSecret(key);
-                filter = x => Crypt.Encrypt(secret, x);
-            }
-            return filter;
-        }
-
-        /// <summary>
-        /// Return the filter to decrypt the ViewState  with if configured so.
-        /// </summary>
-        /// <param name="configuration">The configuration.</param>
-        /// <returns></returns>
-        public static Func<byte[], byte[]>? DecryptViewState(IConfiguration configuration)
-        {
-            Func<byte[], byte[]>? filter = null;
-            var key = configuration.GetValue<string>("EncryptViewStateKey");
-            if (!String.IsNullOrEmpty(key))
-            {
-                var secret = GetSecret(key);
-                filter = x => Crypt.Decrypt(secret, x);
-            }
-            return filter;
-        }
-
         /// Return the bytes and optionally the filter from a ViewState string as at tuple
         /// </summary>
         /// <param name="configuration">The configuration.</param>
@@ -210,8 +179,8 @@ namespace asplib.Model
         public static (byte[] bytes, Func<byte[], byte[]>? filter) ViewStateBytes(
             IConfiguration configuration, string viewstate)
         {
-            var filter = DecryptViewState(configuration);
             var bytes = Convert.FromBase64String(viewstate);
+            var filter = DecryptDecompressFilter(configuration);
             return (bytes, filter);
         }
 
@@ -219,18 +188,19 @@ namespace asplib.Model
             IConfiguration configuration, HttpContext httpContext, string storageID, Guid session)
         {
             byte[] bytes;
-            Func<byte[], byte[]>? filter = null;
+            Func<byte[], byte[]>? decryptFilter = null;
             if (GetEncryptDatabaseStorage(configuration))
             {
                 var keyString = httpContext.Request.Cookies[storageID].FromCookieString()["key"];
                 var key = (keyString != null) ? Convert.FromBase64String(keyString) : null;
                 var secret = GetSecret(key);
-                filter = x => Crypt.Decrypt(secret, x);
+                decryptFilter = x => Crypt.Decrypt(secret, x);
             }
             using (var db = new ASP_DBEntities())
             {
                 bytes = db.LoadMain(session) ?? throw new ArgumentException($"No data for session={session}"); ;
             }
+            var filter = Serialization.ComposeFilters(decryptFilter, DecompressFilter(configuration));
             return (bytes, filter);
         }
 
@@ -399,6 +369,107 @@ namespace asplib.Model
         }
 
         /// <summary>
+        /// Combines the two filters, unlike the single filters guaranteed to be non-null
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <returns></returns>
+        public static Func<byte[], byte[]> CompressEncryptFilter(IConfiguration configuration)
+        {
+            return Serialization.ComposeFilters(CompressFilter(configuration),
+                                                EncryptViewStateFilter(configuration));
+        }
+
+        /// <summary>
+        /// Combines the two filters, unlike the single filters guaranteed to be non-null
+        /// </summary>
+        public static Func<byte[], byte[]> DecryptDecompressFilter(IConfiguration configuration)
+        {
+            return Serialization.ComposeFilters(DecryptViewStateFilter(configuration),
+                                                DecompressFilter(configuration));
+        }
+
+        /// <summary>
+        /// Return the filter to encrypt the ViewState with if configured so.
+        /// </summary>
+        /// <param name="configuration">The configuration.</param>
+        /// <returns></returns>
+        public static Func<byte[], byte[]>? EncryptViewStateFilter(IConfiguration configuration)
+        {
+            Func<byte[], byte[]>? filter = null;
+            var key = configuration.GetValue<string>("EncryptViewStateKey");
+            if (!String.IsNullOrEmpty(key))
+            {
+                var secret = GetSecret(key);
+                filter = x => Crypt.Encrypt(secret, x);
+            }
+            return filter;
+        }
+
+        /// <summary>
+        /// Return the filter to decrypt the ViewState  with if configured so.
+        /// </summary>
+        /// <param name="configuration">The configuration.</param>
+        /// <returns></returns>
+        public static Func<byte[], byte[]>? DecryptViewStateFilter(IConfiguration configuration)
+        {
+            Func<byte[], byte[]>? filter = null;
+            var key = configuration.GetValue<string>("EncryptViewStateKey");
+            if (!String.IsNullOrEmpty(key))
+            {
+                var secret = GetSecret(key);
+                filter = x => Crypt.Decrypt(secret, x);
+            }
+            return filter;
+        }
+
+        /// <summary>
+        /// Return the Gzip compression filter if configured, otherwise null
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <returns></returns>
+        internal static Func<byte[], byte[]>? CompressFilter(IConfiguration configuration)
+        {
+            var compressionLevel = GetViewStateCompressionLevel(configuration);
+            if (compressionLevel != CompressionLevel.NoCompression)
+            {
+                return x => Compress.Gzip(x, compressionLevel);
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        /// <summary>
+        /// Return the Gunzip compression filter if configured, otherwise null
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <returns></returns>
+        internal static Func<byte[], byte[]>? DecompressFilter(IConfiguration configuration)
+        {
+            return (GetViewStateCompressionLevel(configuration) != CompressionLevel.NoCompression) ?
+                  x => Compress.Gunzip(x) : null;
+        }
+
+        /// <summary>
+        /// Return the configured ViewStateCompressionLevel or
+        /// CompressionLevel.NoCompression if not configured.
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <returns></returns>
+        internal static CompressionLevel GetViewStateCompressionLevel(IConfiguration configuration)
+        {
+            if (Enum.TryParse<CompressionLevel>(configuration?["ViewStateCompressionLevel"], out var level))
+            {
+                return level;
+            }
+            else
+            {
+                return CompressionLevel.NoCompression;
+            }
+        }
+
+        /// <summary>
         /// Base64 encoded serialization of the main object, to be used in
         /// ViewState HTML input fields
         /// </summary>
@@ -412,15 +483,15 @@ namespace asplib.Model
         /// <summary>
         /// Loads from ViewState.  Returns a new object if it is null.
         /// </summary>
-        /// <param name="construct">Constructor function for the object if no ViewState is given</param>
+        /// <param name="constructWhenFail">Constructor function for the object if no valid ViewState is given</param>
         /// <param name="viewstate">The viewstate string</param>
         /// <param name="filter">optional encryption filter</param>
         /// <returns></returns>
-        internal static T LoadFromViewstate<T>(Func<T> construct, string viewstate, Func<byte[], byte[]>? filter = null)
+        internal static T LoadFromViewstate<T>(Func<T> constructWhenFail, string viewstate, Func<byte[], byte[]>? filter = null)
         {
             if (String.IsNullOrEmpty(viewstate))  // Initialization: return a new object
             {
-                return construct();
+                return constructWhenFail();
             }
             byte[] bytes = Convert.FromBase64String(viewstate);
             return (T)Serialization.Deserialize(bytes, filter);

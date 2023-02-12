@@ -12,9 +12,9 @@
   <ItemGroup>
     <PackageReference Include="aspnettest.asplib.blazor" Version="$([System.IO.File]::ReadAllText('$(MSBuildProjectDirectory)/../../nuget-info/version.txt'))" />
     <PackageReference Include="aspnettest.iselenium.blazor" Version="$([System.IO.File]::ReadAllText('$(MSBuildProjectDirectory)/../../nuget-info/version.txt'))" />
-    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="109.0.5414.7400" />
-    <PackageReference Include="Selenium.WebDriver.GeckoDriver" Version="0.32.0" />
-    <PackageReference Include="Selenium.WebDriver.MSEdgeDriver" Version="109.0.1518.61" />
+    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="111.0.5563.1900-beta" />
+    <PackageReference Include="Selenium.WebDriver.GeckoDriver" Version="0.32.2" />
+    <PackageReference Include="Selenium.WebDriver.MSEdgeDriver" Version="110.0.1587.22-pre" />
 
   </ItemGroup>
 

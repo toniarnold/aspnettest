@@ -32,6 +32,10 @@ namespace asplib.Model
         [SuppressMessage("Microsoft.Usage", "CA2202:Do not dispose objects multiple times")]
         public static object Deserialize(byte[] bytes, Func<byte[], byte[]> filter = null)
         {
+            if (bytes == null)
+            {
+                return null;
+            }
             using (var stream = new MemoryStream((filter == null) ? bytes : filter(bytes)))
             using (var writer = new BinaryWriter(stream))
             {
@@ -59,6 +63,35 @@ namespace asplib.Model
         public static T Deserialize<T>(byte[] bytes, Func<byte[], byte[]> filter = null)
         {
             return (T)Deserialize(bytes, filter);
+        }
+
+        /// <summary>
+        /// Nullable tolerant function composition: Compose two byte[] filters
+        /// together and return the resulting function. If one of them is null
+        /// (e.g. disabled by configuration), return the other one. If both are
+        /// null, return null.
+        /// </summary>
+        /// <param name="first"></param>
+        /// <param name="second"></param>
+        /// <returns></returns>
+        public static Func<byte[], byte[]> ComposeFilters(Func<byte[], byte[]> first, Func<byte[], byte[]> second)
+        {
+            if (first == null && second == null)
+            {
+                return x => x;
+            }
+            if (first == null)
+            {
+                return second;
+            }
+            else if (second == null)
+            {
+                return first;
+            }
+            else
+            {
+                return x => second(first(x));
+            }
         }
     }
 }

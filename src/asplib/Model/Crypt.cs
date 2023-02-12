@@ -5,7 +5,7 @@ using System.Text;
 namespace asplib.Model
 {
     /// <summary>
-    /// Encapsulates the encryption of the [Main].[main] storage column
+    /// Encapsulates the encryption of the ViewState or the [Main].[main] storage column
     /// </summary>
     public static class Crypt
     {

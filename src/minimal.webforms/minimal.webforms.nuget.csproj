@@ -47,10 +47,10 @@
   </PropertyGroup>
   <ItemGroup>
     <Reference Include="asplib, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\iselenium.webforms.$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)/../../nuget-info/version.txt"))\lib\net462\asplib.dll</HintPath>
+      <HintPath>..\..\packages\aspnettest.asplib.webforms.0.2.2\lib\net462\asplib.dll</HintPath>
     </Reference>
     <Reference Include="asplib.webforms, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\iselenium.webforms.$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)/../../nuget-info/version.txt"))\lib\net462\asplib.webforms.dll</HintPath>
+      <HintPath>..\..\packages\aspnettest.asplib.webforms.0.2.2\lib\net462\asplib.webforms.dll</HintPath>
     </Reference>
     <Reference Include="EntityFramework, Version=6.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089, processorArchitecture=MSIL">
       <HintPath>..\..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.dll</HintPath>
@@ -59,10 +59,10 @@
       <HintPath>..\..\packages\EntityFramework.6.4.4\lib\net45\EntityFramework.SqlServer.dll</HintPath>
     </Reference>
     <Reference Include="iselenium, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\iselenium.webforms.$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)/../../nuget-info/version.txt"))\lib\net462\iselenium.dll</HintPath>
+      <HintPath>..\..\packages\aspnettest.iselenium.webforms.0.2.2\lib\net462\iselenium.dll</HintPath>
     </Reference>
     <Reference Include="iselenium.webforms, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\iselenium.webforms.$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)/../../nuget-info/version.txt"))\lib\net462\iselenium.webforms.dll</HintPath>
+      <HintPath>..\..\packages\aspnettest.iselenium.webforms.0.2.2\lib\net462\iselenium.webforms.dll</HintPath>
     </Reference>
     <Reference Include="Microsoft.CodeDom.Providers.DotNetCompilerPlatform, Version=3.6.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.3.6.0\lib\net45\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.dll</HintPath>
@@ -86,7 +86,7 @@
       <HintPath>..\..\packages\NUnit.3.13.3\lib\net45\nunit.framework.dll</HintPath>
     </Reference>
     <Reference Include="smc, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\..\packages\iselenium.webforms.$([System.IO.File]::ReadAllText("$(MSBuildProjectDirectory)/../../nuget-info/version.txt"))\lib\net462\smc.dll</HintPath>
+      <HintPath>..\..\packages\aspnettest.asplib.webforms.0.2.2\lib\net462\smc.dll</HintPath>
     </Reference>
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="System.Net.Http" />
@@ -112,10 +112,21 @@
     <Reference Include="WebDriver, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <HintPath>..\..\packages\Selenium.WebDriver.4.7.0\lib\net47\WebDriver.dll</HintPath>
     </Reference>
+    <Reference Include="WebDriver.Support, Version=4.0.0.0, Culture=neutral, processorArchitecture=MSIL">
+      <HintPath>..\..\packages\Selenium.Support.4.8.0\lib\net46\WebDriver.Support.dll</HintPath>
+    </Reference>
   </ItemGroup>
   <ItemGroup>
     <Content Include="default.aspx" />
     <Content Include="Global.asax" />
+    <Content Include="Model\Db.Context.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Db.Context.cs</LastGenOutput>
+    </Content>
+    <Content Include="Model\Db.tt">
+      <Generator>TextTemplatingFileGenerator</Generator>
+      <LastGenOutput>Db.cs</LastGenOutput>
+    </Content>
     <Content Include="nunit.png" />
     <Content Include="Web.config" />
     <Content Include="withstorage.aspx" />
@@ -132,6 +143,16 @@
     </Compile>
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Db.Context.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Db.Context.tt</DependentUpon>
+    </Compile>
+    <Compile Include="Model\Db.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Db.tt</DependentUpon>
     </Compile>
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="withstorage.aspx.cs">
@@ -199,10 +220,12 @@
     <Error Condition="!Exists('..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.3.6.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.3.6.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.targets'))" />
     <Error Condition="!Exists('..\..\packages\NUnit.3.13.3\build\NUnit.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\NUnit.3.13.3\build\NUnit.props'))" />
     <Error Condition="!Exists('..\..\packages\NUnit3TestAdapter.4.3.1\build\net35\NUnit3TestAdapter.props')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\NUnit3TestAdapter.4.3.1\build\net35\NUnit3TestAdapter.props'))" />
+    <Error Condition="!Exists('..\..\packages\Selenium.WebDriver.MSEdgeDriver.110.0.1587.22-pre\build\Selenium.WebDriver.MSEdgeDriver.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\..\packages\Selenium.WebDriver.MSEdgeDriver.110.0.1587.22-pre\build\Selenium.WebDriver.MSEdgeDriver.targets'))" />
   </Target>
   <Import Project="..\..\packages\Selenium.InternetExplorer.WebDriver.3.150.1\build\Selenium.InternetExplorer.WebDriver.targets" Condition="Exists('..\..\packages\Selenium.InternetExplorer.WebDriver.3.150.1\build\Selenium.InternetExplorer.WebDriver.targets')" />
   <Import Project="..\..\packages\EntityFramework.6.4.4\build\EntityFramework.targets" Condition="Exists('..\..\packages\EntityFramework.6.4.4\build\EntityFramework.targets')" />
   <Import Project="..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.3.6.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.targets" Condition="Exists('..\..\packages\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.3.6.0\build\net46\Microsoft.CodeDom.Providers.DotNetCompilerPlatform.targets')" />
+  <Import Project="..\..\packages\Selenium.WebDriver.MSEdgeDriver.110.0.1587.22-pre\build\Selenium.WebDriver.MSEdgeDriver.targets" Condition="Exists('..\..\packages\Selenium.WebDriver.MSEdgeDriver.110.0.1587.22-pre\build\Selenium.WebDriver.MSEdgeDriver.targets')" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it.
        Other similar extension points exist, see Microsoft.Common.targets.
   <Target Name="BeforeBuild">

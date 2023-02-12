@@ -53,18 +53,6 @@ namespace minimaltest.blazor
             WriteContentTest(() => Nop());
         }
 
-        // The InputRadios and the clearButton reload the page to reinitialize
-        // They doe not produce an id attribute in Blazor 6.0.4 yet, therefore use the manual Ids for now
-
-        [Test]
-        public void StorageSessionStorageTest()
-        {
-            Navigate("/Withstorage");
-            Click(By.Id, "storageSessionStorage", expectRequest: true);    // temporary by id
-            Click(Cut.clearButton, expectRequest: true);
-            WriteContentTest(() => Reload());
-        }
-
         // As (at least) of FireFox 101, there seems to be also no persistence
         // no more when run by Selenium, thus these persistence tests can no
         // more be executed over browser restarts with:
@@ -75,19 +63,44 @@ namespace minimaltest.blazor
         {
             {
                 Navigate("/Withstorage");
-                Click(By.Id, "storageDatabase", expectRequest: true);
-                Click(Cut.clearButton, expectRequest: true);
+                Click(By.Id, "storageDatabase", expectRerender: true);
+                Click(By.Id, "clearButton", expectRerender: true);
                 WriteContentTest(() => Reload());
             }
+        }
+
+        // The InputRadios and the clearButton reload the page to reinitialize
+        // They doe not produce an id attribute reliably in Blazor 6.0.13,
+        // therefore use the manual Ids for now
+
+        [Test]
+        public void StorageSessionStorageTest()
+        {
+            Navigate("/Withstorage");
+            Click(By.Id, "storageSessionStorage", expectRerender: true);
+            Click(By.Id, "clearButton", expectRerender: true);
+            WriteContentTest(() => Reload());
         }
 
         [Test]
         public void StorageLocalStorageTest()
         {
             Navigate("/Withstorage");
-            Click(By.Id, "storageLocalStorage", expectRequest: true);
-            Click(Cut.clearButton, expectRequest: true);
+            Click(By.Id, "storageLocalStorage", expectRerender: true);
+            Click(By.Id, "clearButton", expectRerender: true);
             WriteContentTest(() => Reload());
+        }
+
+        [Test]
+        public void StorageUrlQueryTest()
+        {
+            if (typeof(TWebDriver) != typeof(EdgeDriver))   // currently not reliable
+            {
+                Navigate("/Withstorage");
+                Click(By.Id, "storageUrlQuery", expectRerender: true);
+                Click(By.Id, "clearButton", expectRerender: true);
+                WriteContentTest(() => Reload());
+            }
         }
 
         /// <summary>
@@ -111,7 +124,7 @@ namespace minimaltest.blazor
             Assert.That(Content[0], Is.EqualTo("a first content line"));
             Assert.That(Content[1], Is.EqualTo("a second content line"));
 
-            survives(); // Reload() or RestartBrowser()
+            survives(); // Reload() or formerly with IIE RestartBrowser()
             Assert.That(Content[0], Is.EqualTo("a first content line"));
             Assert.That(Content[1], Is.EqualTo("a second content line"));
         }
@@ -125,11 +138,11 @@ namespace minimaltest.blazor
 
         /// <summary>
         /// survives() action: Selenium driver reload on the same URL
-        /// Reload the page, session storage should survive
+        /// session storage should survive
         /// </summary>
         private void Reload()
         {
-            Refresh();
+            Refresh(expectRenders: 1);
         }
 
         /// <summary>

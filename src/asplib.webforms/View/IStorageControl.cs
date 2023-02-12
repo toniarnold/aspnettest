@@ -2,8 +2,10 @@
 using System;
 using System.Collections.Generic;
 using System.Configuration;
+using System.Data.Entity;
 using System.Data.SqlClient;
 using System.Diagnostics;
+using System.IO.Compression;
 using System.Linq;
 using System.Reflection;
 using System.Web;
@@ -85,10 +87,31 @@ namespace asplib.View
         public static object CurrentMain { get; set; }
 
         /// <summary>
+        /// Predefined event handler for the ShareButton to respond with an
+        /// SQL INSERT script for the current Main, just add the button like this:
+        /// <asplib:ShareButton ID="shareButton" runat="server"
+        ///    OnServerClick="shareButton_Click" />
+        /// </summary>
+        /// <typeparam name="M"></typeparam>
+        /// <param name="controlStorage"></param>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        public static void shareButton_Click<M>(this IStorageControl<M> controlStorage, object sender, EventArgs e)
+            where M : class, new()
+        {
+            var mainRow = new Main();
+            mainRow.SetInstance(controlStorage.Main); // serialize without filter
+            controlStorage.Response.Clear();
+            controlStorage.Response.AddHeader("Content-Type", "application/sql");
+            controlStorage.Response.Write(mainRow.InsertSQL());
+            controlStorage.Response.End();
+        }
+
+        /// <summary>
         /// To be called in Page_Load():
         /// Load the M object from the storage, propagate it to all sub-controls
         /// and recursively hide them all below the main control.
-        /// Also sets a global reference to the main control in IIE for testing.
+        /// Also sets a global reference to the main control for testing with ISelenium.
         /// </summary>
         /// <typeparam name="M"></typeparam>
         /// <param name="controlStorage"></param>
@@ -107,7 +130,15 @@ namespace asplib.View
                 switch (controlStorage.GetStorage())
                 {
                     case Storage.ViewState:
-                        controlStorage.Main = (M)controlStorage.ViewState[controlStorage.StorageID()];
+                        if (UseNoViewStateFilters())
+                        {
+                            controlStorage.Main = (M)controlStorage.ViewState[controlStorage.StorageID()];
+                        }
+                        else
+                        {
+                            var bytes = (byte[])controlStorage.ViewState[controlStorage.StorageID()];
+                            controlStorage.Main = Serialization.Deserialize<M>(bytes, DecryptDecompressFilter());
+                        }
                         break;
 
                     case Storage.Session:
@@ -121,11 +152,12 @@ namespace asplib.View
                             Guid session;
                             if (Guid.TryParse(cookie["session"], out session))
                             {
-                                Func<byte[], byte[]> filter = null;
+                                Func<byte[], byte[]> decryptFilter = null;
                                 if (controlStorage.GetEncryptDatabaseStorage())
                                 {
-                                    filter = x => Crypt.Decrypt(controlStorage.GetSecret(), x); // closure
+                                    decryptFilter = x => Crypt.Decrypt(controlStorage.GetSecret(), x); // closure
                                 }
+                                var filter = Serialization.ComposeFilters(decryptFilter, DecompressFilter());
                                 controlStorage.Main = Main.LoadMain<M>(session, filter);
                             }
                         }
@@ -157,11 +189,20 @@ namespace asplib.View
             switch (storage)
             {
                 case Storage.ViewState:
-                    controlStorage.ViewState[controlStorage.StorageID()] = controlStorage.Main;
+                    if (UseNoViewStateFilters())
+                    {
+                        controlStorage.ViewState[controlStorage.StorageID()] = controlStorage.Main;
+                    }
+                    else
+                    {
+                        var bytes = Serialization.Serialize(controlStorage.Main, CompressEncryptFilter());
+                        controlStorage.ViewState[controlStorage.StorageID()] = bytes;
+                    }
                     break;
 
                 case Storage.Session:
                     controlStorage.Session[controlStorage.StorageID()] = controlStorage.Main;
+
                     break;
 
                 case Storage.Database:
@@ -172,11 +213,12 @@ namespace asplib.View
                         Guid.TryParse(controlStorage.Request.Cookies[controlStorage.StorageID()]["session"], out session);
                     }
 
-                    Func<byte[], byte[]> filter = null;
+                    Func<byte[], byte[]> encryptFilter = null;
                     if (controlStorage.GetEncryptDatabaseStorage())
                     {
-                        filter = x => Crypt.Encrypt(controlStorage.GetSecret(), x); // closure
+                        encryptFilter = x => Crypt.Encrypt(controlStorage.GetSecret(), x); // closure
                     }
+                    var filter = Serialization.ComposeFilters(CompressFilter(), encryptFilter);
                     session = Main.SaveMain(controlStorage.Main, session, filter);
 
                     var configDays = ConfigurationManager.AppSettings["DatabaseStorageExpires"];
@@ -200,7 +242,7 @@ namespace asplib.View
         }
 
         /// <summary>
-        /// Set the control-local session storage type from code
+        /// Set the control-local session storage type from code.
         /// </summary>
         /// <typeparam name="M"></typeparam>
         /// <typeparam name="F"></typeparam>
@@ -257,7 +299,8 @@ namespace asplib.View
         }
 
         /// <summary>
-        /// Returns true when encryption is enforced in Web.config with key="EncryptDatabaseStorage" value="True"
+        /// Returns true when encryption is enforced in Web.config with
+        /// key="EncryptDatabaseStorage" value="True"
         /// </summary>
         /// <returns></returns>
         public static bool GetEncryptDatabaseStorage()
@@ -267,29 +310,118 @@ namespace asplib.View
         }
 
         /// <summary>
-        /// Predefined event handler for the ShareButton to respond with an
-        /// SQL INSERT script for the current Main, just add the button like this:
-        /// <asplib:ShareButton ID="shareButton" runat="server"
-        ///    OnServerClick="shareButton_Click" />
+        /// Combines two filters, unlike the single filters guaranteed to be non-null.
         /// </summary>
-        /// <typeparam name="M"></typeparam>
-        /// <param name="controlStorage"></param>
-        /// <param name="sender"></param>
-        /// <param name="e"></param>
-        public static void shareButton_Click<M>(this IStorageControl<M> controlStorage, object sender, EventArgs e)
-            where M : class, new()
+        public static Func<byte[], byte[]> CompressEncryptFilter()
         {
-            var mainRow = new Main();
-            mainRow.SetInstance(controlStorage.Main); // serialize without filter
-            controlStorage.Response.Clear();
-            controlStorage.Response.AddHeader("Content-Type", "application/sql");
-            controlStorage.Response.Write(mainRow.InsertSQL());
-            controlStorage.Response.End();
+            return Serialization.ComposeFilters(CompressFilter(),
+                                                EncryptViewStateFilter());
+        }
+
+        /// <summary>
+        /// Combines two filters. The result is guaranteed to be non-null.
+        /// </summary>
+        public static Func<byte[], byte[]> DecryptDecompressFilter()
+        {
+            return Serialization.ComposeFilters(DecryptViewStateFilter(),
+                                                DecompressFilter());
+        }
+
+        /// <summary>
+        /// Return the filter to encrypt the ViewState with if configured so.
+        /// </summary>
+        /// <param name="configuration">The configuration.</param>
+        /// <returns></returns>
+        public static Func<byte[], byte[]> EncryptViewStateFilter()
+        {
+            Func<byte[], byte[]> filter = null;
+            var key = ConfigurationManager.AppSettings["EncryptViewStateKey"];
+            if (!String.IsNullOrEmpty(key))
+            {
+                var secret = GetSecret(key);
+                filter = x => Crypt.Encrypt(secret, x);
+            }
+            return filter;
+        }
+
+        /// <summary>
+        /// Return the filter to decrypt the ViewState with if configured so.
+        /// </summary>
+        /// <param name="configuration">The configuration.</param>
+        /// <returns></returns>
+        public static Func<byte[], byte[]> DecryptViewStateFilter()
+        {
+            Func<byte[], byte[]> filter = null;
+            var key = ConfigurationManager.AppSettings["EncryptViewStateKey"];
+            if (!String.IsNullOrEmpty(key))
+            {
+                var secret = GetSecret(key);
+                filter = x => Crypt.Decrypt(secret, x);
+            }
+            return filter;
+        }
+
+        /// <summary>
+        /// True when the built-in transparent ViewState serialization and
+        /// encryption should be used.
+        /// </summary>
+        /// <returns></returns>
+        internal static bool UseNoViewStateFilters()
+        {
+            return (GetViewStateCompressionLevel() == CompressionLevel.NoCompression &&
+                    String.IsNullOrEmpty(ConfigurationManager.AppSettings["EncryptViewStateKey"]));
+        }
+
+        /// <summary>
+        /// Return the Gzip compression filter if configured, otherwise null.
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <returns></returns>
+        internal static Func<byte[], byte[]> CompressFilter()
+        {
+            var compressionLevel = GetViewStateCompressionLevel();
+            if (GetViewStateCompressionLevel() != CompressionLevel.NoCompression)
+            {
+                return x => Compress.Gzip(x, compressionLevel);
+            }
+            else { return null; }
+        }
+
+        /// <summary>
+        /// Return the Gunzip compression filter if configured, otherwise null.
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <returns></returns>
+        internal static Func<byte[], byte[]> DecompressFilter()
+        {
+            if (GetViewStateCompressionLevel() != CompressionLevel.NoCompression)
+            {
+                return x => Compress.Gunzip(x);
+            }
+            else { return null; }
+        }
+
+        /// <summary>
+        /// Return the configured ViewStateCompressionLevel or
+        /// CompressionLevel.NoCompression if not configured.
+        /// </summary>
+        /// <param name="configuration"></param>
+        /// <returns></returns>
+        internal static CompressionLevel GetViewStateCompressionLevel()
+        {
+            if (Enum.TryParse<CompressionLevel>(ConfigurationManager.AppSettings["ViewStateCompressionLevel"], out var level))
+            {
+                return level;
+            }
+            else
+            {
+                return CompressionLevel.NoCompression;
+            }
         }
 
         /// <summary>
         /// Get the Key/IV secret from the cookies and generate the parts that don't yet exist
-        /// and directly save it to the cookies collection
+        /// and directly save it to the cookies collection.
         /// </summary>
         /// <returns></returns>
         internal static Crypt.Secret GetSecret<M>(this IStorageControl<M> controlStorage)
@@ -320,12 +452,25 @@ namespace asplib.View
         }
 
         /// <summary>
+        /// Get the Key/IV secret from the cookie, generate the parts that
+        /// don't yet exist. In ASP.NET Core it is no more possible to modify
+        /// the cookie no more, thus GetSecret is called twice for decrypt and
+        /// encrypt.
+        /// </summary>
+        /// <param name="password"></param>
+        /// <returns></returns>
+        internal static Crypt.Secret GetSecret(string password)
+        {
+            return Crypt.NewSecret(Crypt.Key(password));
+        }
+
+        /// <summary>
         /// Hook to clear the storage for that control with ?clear=true
-        /// ViewState is reset anyway on GET requests, therefore NOP in that casefa
+        /// ViewState is reset anyway on GET requests, therefore NOP in that case.
         /// GET-arguments:
-        /// clear=[true|false]  triggers clearing the storage
+        /// clear=[true|false]          triggers clearing the storage
         /// endresponse=[true|false]    whether the page at the given URL
-        /// storage=[Session|Database]    clears the selected storage type regardless of config
+        /// storage=[Session|Database]  clears the selected storage type regardless of config
         /// </summary>
         /// <typeparam name="M"></typeparam>
         /// <param name="controlStorage"></param>

@@ -107,7 +107,7 @@ namespace asplib.Controllers
         public static void SaveViewState(this IPersistentController inst)
         {
             inst.ViewBag.SessionStorage = ViewBagSessionStorage(inst, Storage.ViewState);
-            var filter = StorageImplementation.EncryptViewState(inst.Configuration);
+            var filter = StorageImplementation.CompressEncryptFilter(inst.Configuration);
             inst.ViewBag.ViewState = ViewState(inst, filter);
         }
 
@@ -133,7 +133,7 @@ namespace asplib.Controllers
 
         public static void SaveHeader(this IPersistentController inst)
         {
-            var filter = StorageImplementation.EncryptViewState(inst.Configuration);
+            var filter = StorageImplementation.CompressEncryptFilter(inst.Configuration);
             inst.HttpContext.Response.Headers[StorageImplementation.HeaderName] = StorageImplementation.ViewState(inst, filter);
         }
 

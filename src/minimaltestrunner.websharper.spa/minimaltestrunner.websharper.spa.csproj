@@ -15,7 +15,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Selenium.Chrome.WebDriver" Version="85.0.0" />
-    <PackageReference Include="Selenium.WebDriver.MSEdgeDriver" Version="109.0.1518.61" />
+    <PackageReference Include="Selenium.WebDriver.MSEdgeDriver" Version="110.0.1587.22-pre" />
   </ItemGroup>
 
   <ItemGroup>
