@@ -1,9 +1,34 @@
-﻿.nunitbutton {
+﻿.nunit-figure {
     position: absolute;
+    height: 50px;
     top: 8px;
     right: 8px;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-flow: column;
+    margin-left: auto;
+}
+
+.nunit-caption {
+    margin-left: auto;
+}
+
+.nunitbutton {
+    margin-left: auto;
     height: 50px;
     width: 50px;
+}
+
+.testproject-list {
+    list-style-type: none;
+    margin: 0;
+    padding: 0;
+}
+
+.testproject-item {
+    text-align: right;
+    margin: 3px;
 }
 
 .testresult {

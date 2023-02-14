@@ -22,10 +22,10 @@ namespace BlazorApp1
             foreach (var row in rows)
             {
                 // Assert the data type of the children (the ChildNodes also contain the text, skip it by index)
-                Assert.That(DateTime.TryParse(row.ChildNodes[0].TextContent, out var _), Is.True);
-                Assert.That(int.TryParse(row.ChildNodes[2].TextContent, out var _), Is.True);
-                Assert.That(int.TryParse(row.ChildNodes[4].TextContent, out var _), Is.True);
-                Assert.That(row.ChildNodes[6].TextContent, Is.Not.Empty);
+                Assert.That(DateTime.TryParse(row.ChildNodes[0].TextContent, out var _), Is.True, row.ChildNodes[0].TextContent);
+                Assert.That(int.TryParse(row.ChildNodes[2].TextContent, out var _), Is.True, row.ChildNodes[2].TextContent);
+                Assert.That(int.TryParse(row.ChildNodes[4].TextContent, out var _), Is.True, row.ChildNodes[4].TextContent);
+                Assert.That(row.ChildNodes[6].TextContent, Is.Not.Empty, row.ChildNodes[6].TextContent);
             }
         }
     }

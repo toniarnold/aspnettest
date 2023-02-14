@@ -12,8 +12,8 @@ namespace iselenium
         where TFSMContext : statemap.FSMContext
         where TState : statemap.State
     {
-        protected TFSMContext? Fsm => Main?.Fsm;
-        protected TState? State => Main?.State;
+        public TFSMContext? Fsm => Main?.Fsm;
+        public TState? State => Main?.State;
 
         /// <summary>
         /// SMC State Transition Click

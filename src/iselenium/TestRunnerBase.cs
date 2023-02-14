@@ -206,6 +206,10 @@ namespace iselenium
                 // Assembly.location is isolated in .NET Framework, therefore use .CodeBase which points to ./bin
                 var binPath = Path.GetDirectoryName(new Uri(Assembly.GetExecutingAssembly().CodeBase).AbsolutePath);
                 var dll = Path.Combine(binPath, testproject + ".dll");
+                if (!File.Exists(dll))
+                {
+                    throw new ArgumentException($"Test project file {dll} not found");
+                }
                 var package = new TestPackage(dll);
                 // NUnit.EnginePackageSettings
                 package.AddSetting("ProcessModel", "Single");

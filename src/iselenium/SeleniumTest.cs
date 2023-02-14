@@ -22,7 +22,7 @@ namespace iselenium
         /// <summary>
         /// Suppress [SetUp] DeleteAllCookies()
         /// </summary>
-        public bool KeepCookies { get; set; } = false;
+        public bool KeepCookies { get; set; } = true;   // no more needed with modern browsers (not IE)
 
         /// <summary>
         /// Start the browser

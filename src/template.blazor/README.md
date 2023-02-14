@@ -1,7 +1,7 @@
 ﻿# Solution template for aspnettest Blazor Server App
 
-The template to generate a Blazor Server App already wired up with bUnit and
-aspnettest Selenium (NuGet packages aspnettest.asplib.blazor and
+The template to generate a Blazor Server App already wired up with bUnit,
+SpecFlow and aspnettest Selenium (NuGet packages aspnettest.asplib.blazor and
 aspnettest.iselenium.blazor) can be instantiated with:
 ```sh
 dotnet new install aspnettest.template.blazor

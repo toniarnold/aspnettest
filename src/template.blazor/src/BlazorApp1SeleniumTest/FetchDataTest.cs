@@ -16,10 +16,10 @@
             {
                 // Assert the data type of the children
                 var rowElements = row.FindElements(By.CssSelector("td"));
-                Assert.That(DateTime.TryParse(rowElements[0].Text, out var _), Is.True);
-                Assert.That(int.TryParse(rowElements[1].Text, out var _), Is.True);
-                Assert.That(int.TryParse(rowElements[2].Text, out var _), Is.True);
-                Assert.That(rowElements[3].Text, Is.Not.Empty);
+                Assert.That(DateTime.TryParse(rowElements[0].Text, out var _), Is.True, rowElements[0].Text);
+                Assert.That(int.TryParse(rowElements[1].Text, out var _), Is.True, rowElements[1].Text);
+                Assert.That(int.TryParse(rowElements[2].Text, out var _), Is.True, rowElements[2].Text);
+                Assert.That(rowElements[3].Text, Is.Not.Empty, rowElements[3].Text);
             }
         }
     }

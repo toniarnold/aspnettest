@@ -8,16 +8,22 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="aspnettest.asplib.blazor" Version="0.2.1" />
-    <PackageReference Include="aspnettest.iselenium.blazor" Version="0.2.1" />
-    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="111.0.5563.1900-beta" />
+    <PackageReference Include="aspnettest.asplib.blazor" Version="0.2.2" />
+    <PackageReference Include="aspnettest.iselenium.blazor" Version="0.2.2" />
+    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="110.0.5481.7700" />
     <PackageReference Include="Selenium.WebDriver.GeckoDriver" Version="0.32.2" />
     <PackageReference Include="Selenium.WebDriver.MSEdgeDriver" Version="110.0.1587.22-pre" />
+    <PackageReference Include="SpecFlow.Plus.LivingDocPlugin" Version="3.9.57" />
+    <PackageReference Include="SpecFlow.NUnit" Version="3.9.74" />
   </ItemGroup>
 
   <ItemGroup>
     <Reference Include="BlazorApp1SeleniumTest">
       <HintPath>..\bin\BlazorApp1SeleniumTest.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="BlazorApp1SpecFlowTest">
+      <HintPath>..\bin\BlazorApp1SpecFlowTest.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>

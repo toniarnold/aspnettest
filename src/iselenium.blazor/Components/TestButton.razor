@@ -3,6 +3,26 @@
 @inherits SmcComponentBase<TestRunnerFsm, TestRunnerFsmContext, TestRunnerFsmContext.TestRunnerFsmState>
 
 <div>
-    <input type="image" id="testButton" alt="@imageText" class="nunitbutton @spin" src="@NUnitImgSrc" @onclick="Test" tabindex="@tabindex" />
+    <figure class="nunit-figure">
+        <input type="image" id="testButton" alt="@imageText" class="nunitbutton @spin" src="@NUnitImgSrc"
+            @onclick="@(() => Test(_testprojects[0]))" tabindex="@tabindex" />
+
+        <figcaption class="nunit-caption">
+            <ul class="testproject-list" style="visibility:@testprojectListVisibility">
+                @if (_testprojects.Length > 1) {
+                    for (int i = 0; i < _testprojects.Length; i++)
+                    {
+                        var thisproject = _testprojects[i];
+                        var thisid = $"testButton-{thisproject}";
+                        var thistabindex = tabindex + 1 + i;
+                        <li class="testproject-item">
+                            <input type="button" value="@thisproject" id="@thisid"
+                                onclick="@(() => Test(thisproject))" tabindex="@thistabindex" />
+                        </li>
+                    }
+                }
+            </ul>
+        </figcaption>
+    </figure>
     <a class="testresult" @onclick="ShowResultXml">@((MarkupString)TestResult)</a>
 </div>

@@ -27,13 +27,19 @@
 
   <ItemGroup>
     <PackageReference Include="Selenium.WebDriver" Version="4.8.0" />
-    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="111.0.5563.1900-beta" />
+    <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="110.0.5481.7700" />
     <PackageReference Include="Selenium.WebDriver.MSEdgeDriver" Version="110.0.1587.22-pre" />
+    <PackageReference Include="SpecFlow.Plus.LivingDocPlugin" Version="3.9.57" />
+    <PackageReference Include="SpecFlow.NUnit" Version="3.9.74" />
   </ItemGroup>
 
   <ItemGroup>
     <Reference Include="asptest.blazor">
       <HintPath>..\bin\asptest.blazor.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
+    <Reference Include="asptest.blazor.specflow">
+      <HintPath>..\bin\asptest.blazor.specflow.dll</HintPath>
       <Private>True</Private>
     </Reference>
   </ItemGroup>

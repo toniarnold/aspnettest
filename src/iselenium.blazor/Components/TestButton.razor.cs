@@ -8,11 +8,22 @@ namespace iselenium.Components
 {
     public partial class TestButton
     {
+        private string[] _testprojects = new string[0];
+
         [Parameter]
         public string? src { get; set; } = null;
 
+        /// <summary>
+        /// Test project assembly name or a space separated list of assemblies to choose from
+        /// </summary>
         [Parameter]
-        public string testproject { get; set; } = "";
+        public string testproject
+        {
+            set
+            {
+                _testprojects = value.Split(' ', StringSplitOptions.RemoveEmptyEntries);
+            }
+        }
 
         [Parameter]
         public string tabindex { get; set; } = "9999";
@@ -29,6 +40,8 @@ namespace iselenium.Components
         private IJSRuntime JS { get; set; } = default!;
 
         protected string spin { get; set; } = "";
+
+        private string testprojectListVisibility = "visible";
         protected string imageText => State.ToString();
 
         private const string _contentPath = "/_content/aspnettest.iselenium.blazor";
@@ -85,16 +98,18 @@ namespace iselenium.Components
             }
         }
 
-        public async Task Test()
+        public async Task Test(string testproject)
         {
             Fsm.RunTests();
             TestResult = "Running...";
             spin = "spin";
-            await Task.Run(() => RunTests());
+            testprojectListVisibility = "hidden";
+            await Task.Run(() => RunTests(testproject));
             spin = "";
+            this.StateHasChanged();
         }
 
-        public async Task RunTests()
+        public async Task RunTests(string testproject)
         {
             Main.Run(testproject);
             Fsm.Complete();
