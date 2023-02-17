@@ -34,5 +34,19 @@ namespace asp
                 this.testResult.RenderTestResult(TestRunner.ResultXml);
             }
         }
+
+        protected void testButtonSpecFlow_Click(object sender, ImageClickEventArgs e)
+        {
+            var testRunner = new TestRunner(this.Request.Url.Port);
+            testRunner.Run("asptest.webforms.specflow");
+            if (TestRunner.Passed)
+            {
+                this.testResult.Text = testRunner.SummaryHtml;
+            }
+            else
+            {
+                this.testResult.RenderTestResult(TestRunner.ResultXml);
+            }
+        }
     }
 }

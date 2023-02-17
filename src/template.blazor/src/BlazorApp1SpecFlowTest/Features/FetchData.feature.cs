@@ -94,7 +94,7 @@ this.ScenarioInitialize(scenarioInfo);
  testRunner.Given("the \'/fetchdata\' page is loaded", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Given ");
 #line hidden
 #line 7
- testRunner.Then("the \'h1\' element matches \'<h1 diff:ignoreAttributes>Weather forecast</h1>\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
+ testRunner.Then("the title is \'Weather forecast\'", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "Then ");
 #line hidden
 #line 8
  testRunner.And("the table has 5 rows", ((string)(null)), ((TechTalk.SpecFlow.Table)(null)), "And ");

@@ -7,11 +7,22 @@
 // </automatisch generiert>
 //------------------------------------------------------------------------------
 
-namespace asp {
-    
-    
-    public partial class _default {
-        
+namespace asp
+{
+
+
+    public partial class _default
+    {
+
+        /// <summary>
+        /// testButtonSpecFlow-Steuerelement
+        /// </summary>
+        /// <remarks>
+        /// Automatisch generiertes Feld
+        /// Zum Ändern Felddeklaration aus der Designerdatei in eine Code-Behind-Datei verschieben.
+        /// </remarks>
+        protected global::System.Web.UI.WebControls.ImageButton testButtonSpecFlow;
+
         /// <summary>
         /// testButton-Steuerelement
         /// </summary>
@@ -20,7 +31,7 @@ namespace asp {
         /// Zum Ändern Felddeklaration aus der Designerdatei in eine Code-Behind-Datei verschieben.
         /// </remarks>
         protected global::System.Web.UI.WebControls.ImageButton testButton;
-        
+
         /// <summary>
         /// testResult-Steuerelement
         /// </summary>
@@ -29,7 +40,7 @@ namespace asp {
         /// Zum Ändern Felddeklaration aus der Designerdatei in eine Code-Behind-Datei verschieben.
         /// </remarks>
         protected global::iselenium.TestResult testResult;
-        
+
         /// <summary>
         /// calculator-Steuerelement
         /// </summary>

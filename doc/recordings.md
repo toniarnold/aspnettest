@@ -46,3 +46,13 @@ This is the test filter used to run this subset of the GUI tests:
 ```
 
 ![FibonacciTest in action](img/FibonacciTest.gif)
+
+
+## Blazor Template running the `BlazorApp1.playlist`
+
+![Blazor Template BlazorApp1.playlist](img/template.blazor-running.gif)
+
+
+## Blazor Template Firefox click error
+
+![Blazor Template Firefox Click Error](img/template.blazor-running-firefox.gif)

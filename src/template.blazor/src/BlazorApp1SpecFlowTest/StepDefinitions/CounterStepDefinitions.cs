@@ -25,10 +25,10 @@ namespace BlazorApp1SpecFlowTest.StepDefinitions
             Driver.Navigate(path);
         }
 
-        [Then(@"^the '(.*)' element matches '(.*)'$")]
-        public void ThenTheElementMatches(string element, string match)
+        [Then(@"^the counter text is '(.*)'$")]
+        public void ThenCounterTextIs(string countertext)
         {
-            Driver.Find(element).MarkupMatches(match);
+            Driver.Find("#countP").MarkupMatches($"<p diff:ignoreAttributes>{countertext}</p>");
         }
 
         [When("the increment button is clicked (.*) times")]

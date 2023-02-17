@@ -56,6 +56,7 @@ React and Anguler), there is no need to wait and poll for changes to happen
 Instead, the `ITestFocus` static class in `asplib.blazor` provides an
 `EndRender` resp. `EndRenderAsync` extension method to synchronize the tests.
 
+Read about the [SpecFlow integration](specflow.md) in its own documentation.
 
 ## Quickstart
 

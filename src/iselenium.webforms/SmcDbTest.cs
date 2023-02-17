@@ -22,17 +22,17 @@ namespace iselenium
         where FSMContext : statemap.FSMContext
         where TState : statemap.State
     {
-        protected FSMContext Fsm
+        public FSMContext Fsm
         {
             get { return this.MainControl.Fsm; }
         }
 
-        protected TState State
+        public TState State
         {
             get { return this.MainControl.State; }
         }
 
-        protected new ISmcControl<TMain, FSMContext, TState> MainControl
+        public new ISmcControl<TMain, FSMContext, TState> MainControl
         {
             get { return (ISmcControl<TMain, FSMContext, TState>)ControlRootExtension.GetRoot(); }
         }

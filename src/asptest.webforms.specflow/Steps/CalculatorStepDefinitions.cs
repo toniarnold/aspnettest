@@ -1,7 +1,7 @@
-using asptest.blazor.specflow.Drivers;
-using asptest.blazor.specflow.Features;
+using asptest.webforms.specflow.Drivers;
+using TechTalk.SpecFlow;
 
-namespace asptest.blazor.specflow.StepDefinitions
+namespace asptest.webforms.specflow.StepDefinitions
 {
     [Binding]
     public sealed class CalculatorStepDefinitions

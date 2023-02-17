@@ -37,6 +37,7 @@
     <None Include="recordings.md" />
     <None Include="restapi.md" />
     <None Include="setup.md" />
+    <None Include="specflow.md" />
     <None Include="test-with-storage.dia" />
     <None Include="test-without-storage.dia" />
     <None Include="toc.md" />

@@ -37,3 +37,4 @@ using System.Runtime.InteropServices;
 // Manually added for accessing the state types
 [assembly: InternalsVisibleTo("test.webforms")]
 [assembly: InternalsVisibleTo("asptest.webforms")]
+[assembly: InternalsVisibleTo("asptest.webforms.specflow")]

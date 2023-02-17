@@ -12,6 +12,14 @@
             width: 50px;
         }
 
+        .spefclowimg {
+            position: absolute;
+            top: 8px;
+            right: 60px;
+            height: 50px;
+            width: 50px;
+        }
+
         .testresult {
             position: absolute;
             right: 0px;
@@ -22,11 +30,13 @@
     </style>
 </asp:Content>
 <asp:Content ID="Content2" ContentPlaceHolderID="ContentPlaceHolder1" runat="server">
+    <asp:ImageButton ID="testButtonSpecFlow" runat="server" OnClick="testButtonSpecFlow_Click"
+        ImageUrl="specflow.gif" CssClass="spefclowimg" />
     <asp:ImageButton ID="testButton" runat="server" OnClick="testButton_Click"
         ImageUrl="nunit.png" CssClass="nunitimg" />
-    <iie:testresult id="testResult" runat="server"
-        cssclass="testresult" />
-    <uc:calculator id="calculator" runat="server"
-        storagelinkurl="triptych.aspx"
-        storagelinkclientid="TriptychLink" />
+    <iie:TestResult ID="testResult" runat="server"
+        CssClass="testresult" />
+    <uc:calculator ID="calculator" runat="server"
+        StorageLinkUrl="triptych.aspx"
+        StorageLinkClientID="TriptychLink" />
 </asp:Content>

@@ -25,10 +25,18 @@ namespace asptestrunner
         }
 
         [Test]
-        public void RunTests()
+        public void RunSeleniumTests()
         {
             this.Navigate("/", pause: 200); // allow the testButton time to render
             this.ClickID("testButton");
+            this.AssertTestsOK();
+        }
+
+        [Test]
+        public void RunSpecFlowTests()
+        {
+            this.Navigate("/", pause: 200);
+            this.ClickID("testButton-asptest.blazor.specflow");
             this.AssertTestsOK();
         }
     }

@@ -1,5 +1,6 @@
 ﻿using BlazorApp1SpecFlowTest.Drivers;
 using iselenium;
+using Moq;
 using static BlazorApp1SpecFlowTest.Features.FetchDataFeature;
 
 namespace BlazorApp1SpecFlowTest.StepDefinitions
@@ -25,10 +26,10 @@ namespace BlazorApp1SpecFlowTest.StepDefinitions
             Driver.Navigate(path);
         }
 
-        [Then(@"^the '(.*)' element matches '(.*)'$")]
-        public void ThenTheElementMatches(string element, string match)
+        [Then(@"^the title is '(.*)'$")]
+        public void ThenTheTitleIs(string title)
         {
-            Driver.Find(element).MarkupMatches(match);
+            Driver.Find("h1").MarkupMatches($"<h1 diff:ignoreAttributes>{title}</h1>");
         }
 
         [Then("the table has (.*) rows")]

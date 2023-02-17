@@ -5,6 +5,7 @@
 * [WebSharper with SMC](websharper.md)
 * [REST API with SMC](restapi.md)
 * [Blazor Server](blazor.md)
+* [SpecFlow (Blazor)](specflow.md)
 * [Initial Setup](setup.md)
 * [Writing GUI Tests](writing.md)
 * [Architecture](architecture.md)

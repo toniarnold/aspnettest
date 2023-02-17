@@ -61,6 +61,7 @@
     <None Include="blazor-inoutprocess.dia">
       <Filter>Sources</Filter>
     </None>
+    <None Include="specflow.md" />
   </ItemGroup>
   <ItemGroup>
     <Image Include="components.png">

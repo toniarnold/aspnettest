@@ -14,10 +14,11 @@ namespace BlazorApp1SpecFlowTest.StepDefinitions
             Driver.Navigate("/");
         }
 
-        [Then(@"^the '(.*)' element matches '(.*)'$")]
-        public void ThenTheElementMatches(string element, string match)
+        [Then(@"^the '(.*)' element contains '(.*)'$")]
+        public void ThenTheElementContains(string element, string match)
         {
-            Driver.Find(element).MarkupMatches(match);
+            // The SurveyPrompt Title gets rendered as <strong>@Title</strong>
+            Driver.Find(element).MarkupMatches($"<strong>{match}</strong>");
         }
     }
 }
