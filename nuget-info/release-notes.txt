@@ -1,9 +1,9 @@
-* Blazor: Add URL QueryString persistence, enable it with:
+* Blazor: Add URL QueryString persistence, use it with:
   `"SessionStorage": "UrlQuery"`
 
 * Blazor: Allow multiple test assemblies in the `<testbutton>`
 
-* Add SpecFlow test suite, enabling writing GUI tests 
+* Add SpecFlow test suite, which allows writing GUI tests
   in the Gherkin language.
 
 * Add optional ViewState gzip compression, enable it with:

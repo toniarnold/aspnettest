@@ -1,4 +1,4 @@
-﻿# Solution template for aspnettest Blazor Server App
+﻿# Solution Template for aspnettest Blazor Server App
 
 The template to generate a Blazor Server App already wired up with bUnit,
 SpecFlow and aspnettest Selenium (NuGet packages aspnettest.asplib.blazor and

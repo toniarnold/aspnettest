@@ -107,7 +107,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
-    <None Include="iselenium.webforms.nuspec" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="EntityFramework">

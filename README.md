@@ -2,8 +2,9 @@
 
 [Technical Documentation](./doc/toc.md)
 
-[Most recent development: Blazor Server with SpecFlow](./doc/blazor.md),
-[LinkedIn-Artikelserie (in German)](https://www.linkedin.com/pulse/blazor-1-disruptive-entwicklungen-toni-arnold)
+Most recent development: [Blazor Server](./doc/blazor.md) with
+[SpecFlow](./doc/specflow.md), [LinkedIn-Artikelserie (in
+German)](https://www.linkedin.com/pulse/blazor-1-disruptive-entwicklungen-toni-arnold)
 
 ## [Don't Develop GUI Tests, Teach Your App To Test Itself!](http://www.drdobbs.com/testing/dont-develop-gui-tests-teach-your-app-to/240168468) - in ASP.NET/NUnit/C#
 

@@ -20,6 +20,7 @@
 * [Comparison with bUnit](#comparison-with-bunit)
   * [Semantic HTML comparison in bUnit](#semantic-html-comparison-in-bunit)
   * [The `BUnitTestContext`](#the-bunittestcontext)
+* [Double the test speed with whitebox tests](#double-the-test-speed-with-whitebox-tests)
 * [The Text Explorer test runner](#the-test-explorer-test-runner)
 
 ## Summary
@@ -48,6 +49,7 @@ persistence mechanisms:
 * Database - implemented as in the other frameworks using a cookie
 * Window.sessionStorage - JavaScript Session Storage provided by Blazor
 * Window.localStorage - JavaScript local storage provided by Blazor
+* UrlQuery - URL query string
 
 Unlike for WebSharper SPAs (and ultimately *all* modern SPA frameworks as
 React and Anguler), there is no need to wait and poll for changes to happen
@@ -620,6 +622,105 @@ Navigate("/");
 this.Write(Dynamic<Enter>(Component.calculatorPart).operand, "3.141");
 Click(Component.footer.enterButton);
 ```
+
+
+## Double the test speed with whitebox tests
+
+Assertions with bUnit and Selenium can be performed on two levels: either as
+usual on the rendered HTML or directly as assertions on the underlying model.
+The first one shall be called "blackbox tests", the second one "whitebox tests".
+
+The `BlazorApp1BunitTest` and `BlazorApp1SeleniumTest` projects in the
+`aspnettest.template.blazor` package contain both variants for the Count button.
+The difference is both in bUnit and Selenium whether the assertion happens in
+
+- Blackbox: `Find("#countP").MarkupMatches($...`
+- Whitebox: `Main.CurrentCount`
+
+The performance measures in tabular form show, that the performance can roughly
+be doubled by omitting the 2nd browser/component round trip for the assertion
+immediately after the click (1st round trip):
+
+|              | bUnit (5000) | Selenium (100) |
+|--------------|--------------|----------------|
+| Blackbox     |   **2.8 s**  |   **6.1 s**    |
+| Whitebox     |   **1.4 s**  |   **3.6 s**    |
+
+<table>
+
+<tr><th>BlazorApp1BunitTest</th><th>BlazorApp1SeleniumTest</th></tr>
+
+<tr style="font-size: smaller;"><td>
+
+```csharp
+private const int COUNT_NUMBER = 5000;
+
+[Test]
+public void CountBlackboxTest()     // 2.8 Sek.
+{
+    var cut = RenderComponent<Counter>();
+    cut.Find("#countP").MarkupMatches("<p diff:ignoreAttributes>Current count: 0</p>");
+
+    // Click multiple times and verify that the HTML contains the current i
+    for (int i = 1; i <= COUNT_NUMBER; i++)
+    {
+        cut.Find("#incrementButton").Click();
+        cut.Find("#countP").MarkupMatches($"<p diff:ignoreAttributes>Current count: {i}</p>");
+    }
+}
+
+[Test]
+public void CountWhiteboxTest()     // 1.4 Sek.
+{
+    var cut = RenderComponent<Counter>();
+    Assert.That(cut.Instance.Main.CurrentCount, Is.EqualTo(0));
+
+    // Click multiple times and verify that the model object contains the current i
+    for (int i = 1; i <= COUNT_NUMBER; i++)
+    {
+        cut.Find("#incrementButton").Click();
+        Assert.That(cut.Instance.Main.CurrentCount, Is.EqualTo(i));
+    }
+}
+```
+
+</td><td>
+
+```csharp
+private const int COUNT_NUMBER = 100;
+
+[Test]
+public void CountBlackboxTest() // duration="6.112222"
+{
+    Assert.That(Main.CurrentCount, Is.EqualTo(0));
+    Find("#countP").MarkupMatches("<p diff:ignoreAttributes>Current count: 0</p>");
+
+    // Click multiple times and verify that the HTML contains the current i
+    for (int i = 1; i <= 100; i++)
+    {
+        Click(Cut.incrementButton);
+        Find("#countP").MarkupMatches($"<p diff:ignoreAttributes>Current count: {i}</p>");
+    }
+}
+
+[Test]
+public void CountWhiteboxTest() // duration="3.602152"
+{
+    Assert.That(Main.CurrentCount, Is.EqualTo(0));
+
+    // Click multiple times and verify that model object contains the current i
+    for (int i = 1; i <= 100; i++)
+    {
+        Click(Cut.incrementButton);
+        Assert.That(Main.CurrentCount, Is.EqualTo(i));
+    }
+}
+```
+
+</td></tr>
+
+</table>
+
 
 
 ## The Test Explorer test runner

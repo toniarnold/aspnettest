@@ -6,43 +6,46 @@ namespace BlazorApp1
 {
     public class CounterTest : BUnitTestContext
     {
+        private const int COUNT_NUMBER = 5000;
+
         [OneTimeSetUp]
         public void RegisterModelService()
         {
             Services.AddPersistent<CounterModel>();
         }
 
+        // bUnit caches component rendering which interferes with the benchmark
         [Test]
-        public void CountHtmlAssertion()
+        public void CacheComponent()
+        {
+            RenderComponent<Counter>();
+        }
+
+        [Test]
+        public void CountBlackboxTest()     // 2.8 Sek.
         {
             var cut = RenderComponent<Counter>();
-            // First the strict model assertion, then the shaky markup assertion:
-            Assert.That(cut.Instance.Main.CurrentCount, Is.EqualTo(0));
             cut.Find("#countP").MarkupMatches("<p diff:ignoreAttributes>Current count: 0</p>");
 
             // Click multiple times and verify that the HTML contains the current i
-            for (int i = 1; i <= 100; i++)
+            for (int i = 1; i <= COUNT_NUMBER; i++)
             {
                 cut.Find("#incrementButton").Click();
-                Assert.That(cut.Instance.Main.CurrentCount, Is.EqualTo(i));
                 cut.Find("#countP").MarkupMatches($"<p diff:ignoreAttributes>Current count: {i}</p>");
             }
         }
 
         [Test]
-        public void CountModelOnlyAssertion()
+        public void CountWhiteboxTest()     // 1.4 Sek.
         {
             var cut = RenderComponent<Counter>();
-            // First the strict model assertion, then the shaky markup assertion:
             Assert.That(cut.Instance.Main.CurrentCount, Is.EqualTo(0));
-            cut.Find("#countP").MarkupMatches("<p diff:ignoreAttributes>Current count: 0</p>");
 
-            // Click multiple times and verify that the HTML contains the current i
-            for (int i = 1; i <= 100; i++)
+            // Click multiple times and verify that the model object contains the current i
+            for (int i = 1; i <= COUNT_NUMBER; i++)
             {
                 cut.Find("#incrementButton").Click();
                 Assert.That(cut.Instance.Main.CurrentCount, Is.EqualTo(i));
-                cut.Find("#countP").MarkupMatches($"<p diff:ignoreAttributes>Current count: {i}</p>");
             }
         }
     }

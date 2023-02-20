@@ -6,6 +6,8 @@ namespace BlazorApp1
     public class CounterTest<TWebDriver> : StaticOwningComponentTest<TWebDriver, Pages.Counter, Models.CounterModel>
         where TWebDriver : IWebDriver, new()
     {
+        private const int COUNT_NUMBER = 100;
+
         [OneTimeSetUp]
         public void SetSessionStorage()
         {
@@ -33,33 +35,27 @@ namespace BlazorApp1
             this.Navigate("/counter?clear=true");
         }
 
-        // duration="6.418394" asserts="203"
         [Test]
-        public void CountHtmlAssertion()
+        public void CountBlackboxTest() // duration="6.112222"
         {
-            // First the strict model assertion, then the shaky markup assertion:
             Assert.That(Main.CurrentCount, Is.EqualTo(0));
             Find("#countP").MarkupMatches("<p diff:ignoreAttributes>Current count: 0</p>");
 
             // Click multiple times and verify that the HTML contains the current i
-            for (int i = 1; i <= 100; i++)
+            for (int i = 1; i <= COUNT_NUMBER; i++)
             {
                 Click(Cut.incrementButton);
-                Assert.That(Main.CurrentCount, Is.EqualTo(i));
                 Find("#countP").MarkupMatches($"<p diff:ignoreAttributes>Current count: {i}</p>");
             }
         }
 
-        // duration="3.382291" asserts="203
         [Test]
-        public void CountModelOnlyAssertion()
+        public void CountWhiteboxTest() // duration="3.602152"
         {
-            // First the strict model assertion, then the shaky markup assertion:
             Assert.That(Main.CurrentCount, Is.EqualTo(0));
-            Find("#countP").MarkupMatches("<p diff:ignoreAttributes>Current count: 0</p>");
 
-            // Click multiple times and verify that the HTML contains the current i
-            for (int i = 1; i <= 100; i++)
+            // Click multiple times and verify that model object contains the current i
+            for (int i = 1; i <= COUNT_NUMBER; i++)
             {
                 Click(Cut.incrementButton);
                 Assert.That(Main.CurrentCount, Is.EqualTo(i));
@@ -71,17 +67,14 @@ namespace BlazorApp1
         {
             // Count() runs first and would persist 100 without ClearSession() in [TearDown]
             Assert.That(Main.CurrentCount, Is.EqualTo(0));
-            // Omitting the markup test round trip causes the Cut.incrementButton reference to be brittle:
+            // Omitting the markup test round trip causes the Cut.incrementButton reference to be brittle?
             Find("#countP").MarkupMatches("<p diff:ignoreAttributes>Current count: 0</p>");
             Click(Cut.incrementButton);
             Assert.That(Main.CurrentCount, Is.EqualTo(1));
-            Find("#countP").MarkupMatches("<p diff:ignoreAttributes>Current count: 1</p>");
             Refresh(expectRenders: 2);  // F5 in the browser
             Assert.That(Main.CurrentCount, Is.EqualTo(1));  // the counter value is persisted
-            Find("#countP").MarkupMatches("<p diff:ignoreAttributes>Current count: 1</p>");
             Navigate("/counter?clear=true", expectRenders: 2);
             Assert.That(Main.CurrentCount, Is.EqualTo(0));  // the counter value was cleared
-            Find("#countP").MarkupMatches("<p diff:ignoreAttributes>Current count: 0</p>");
         }
     }
 }

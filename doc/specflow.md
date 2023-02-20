@@ -1,15 +1,337 @@
 # SpecFlow integration
 
-The Blazor template and asp.blazor contaion a [SpecFlow](https://specflow.org)
-test suite performing some of the same tests as the direct Selenium tests suite.
+The Blazor template and asp blazor/webforms include a
+[SpecFlow](https://specflow.org) test suite that performs some of the same tests
+as the direct Selenium tests suite. SpecFlow is a  behaviour-driven development
+([BDD](https://en.wikipedia.org/wiki/Behavior-driven_development)) framework
+that translates textual test scenarios into executable unit test classes.
 
-The WebForms example (`asptest.webforms.specflow`) was originally created with
-VS 2019 (the VS SpecFlow 2022 package creates C# with `global using` incompatible with
-.NET Framework). It follows the same pattern as the Blazor example, it compiles,
-but it currently does not run (although the required
-`TechTalk.SpecFlow.NUnit.SpecFlowPlugin.dll` is present in the `bin` directory):
+There are `asptest.blazor.specflow` and `asptest.webforms.specflow` tests of the
+`asp.blazor` and `asp.webforms` application respectively and
+`BlazorApp1SpecFlowTest` in the template. The libraries (`iselenium`.\*)
+themselves have no SpecFlow dependency, only the applications and tests  that
+actually use it.
 
-`Interface cannot be resolved: TechTalk.SpecFlow.UnitTestProvider.IUnitTestRuntimeProvider('nunit')`
+The WebForms example was originally created using VS 2019 (the VS 2022 SpecFlow
+package created C# with `global using` incompatible with .NET Framework). It
+follows the same pattern as the Blazor example, it compiles, but it does not
+currently run with some sort of DLL hell exception: `Interface cannot be
+resolved: TechTalk.SpecFlow.UnitTestProvider.IUnitTestRuntimeProvider('nunit')`
+\- even though the required `TechTalk.SpecFlow.NUnit.SpecFlowPlugin.dll` is
+present in the `bin` directory.
 
-The libraries (NuGet packages) themselves have no SpecFlow dependency, only the
-applications and tests which are actually  using it.
+
+Textual test scenarios are written in the
+[Gherkin](https://specflow.org/learn/gherkin/) language. Expressions are mapped
+to methods in a [step
+definition](https://docs.specflow.org/projects/specflow/en/latest/Bindings/Step-Definitions.html)
+C# class. The SpecFlow framework encourages a [driver
+pattern](https://docs.specflow.org/projects/specflow/en/latest/Guides/DriverPattern.html)
+that keeps the step definitions lean and free of logic. This SpecFlow driver
+actually executes the test automation through a second driver that wraps the
+Selenium WebDriver provided by `iselenium` extension methods, either directly or
+via base classes.
+
+
+## Side by side comparison Blazor/WebForms
+
+The distinct layers are illustrated here using the Blazor and the WebForms example.
+
+1. The `Calculator.feature` Gherkin
+   [feature](https://docs.specflow.org/projects/specflow/en/latest/Gherkin/Feature-Language.html)
+   files are literally identical for both frameworks. The "Add" scenario has
+   been copied as such from the original SpecFlow project template which also
+   uses a calculator as an example.
+
+2. Thanks to the driver pattern, the C# step definitions in
+   `CalculatorStepDefinitions.cs` are also literally identical for both
+   frameworks (except usings/namespace).
+
+3. By contrast, the SpecFlow driver `CalculatorDriver.cs` (within the
+   `Drivers` folder) uses the framework-specific functions from the `iselenium`
+   package. These are called on a statically accessed instance of the actual
+   test class executed by NUnit *within the server process*. This pattern differs
+   from the SpecFlow Selenium pattern in their sample solutions.
+
+   In the pattern presented here, these drivers also perform some low-level white
+   box assertions on the application under test. This is only possible because
+   "the app tests itself" and the tests are executed in the web server process.
+
+   To access elements in the browser DOM, the Blazor variant directly uses the
+   `@ref` component instance (e.g. `Cut.footer.enterButton`) originally
+   intended for Blazor JS interop, while the WebForms variant uses string paths
+   (e.g. `"footer.enterButton"`) which are resolved via reflection to the
+   WebControl in the instance tree.
+
+
+4. As the Blazor pattern in particular is type-based for the component under
+   test (`Cut`), "the app tests itself" imposes a structural restriction that is
+   not present in the SpecFlow Selenium examples: Each "Feature" file is
+   transpiled by the SpecFlow framework into a partial C# class, which in turn
+   is executed by NUnit. But this generic base class needs the type of the
+   component under test.
+
+   In Blazor, the component under test is the
+   `asp.blazor.Components.CalculatorComponent`, in WebForms the
+   `CalculatorControl : UserControl` which contains the declared
+   `asp.calculator.Control.Calculator` model object.
+
+   Additionally, these generic test classes declare the browser to use. Because
+   the partial class generated by SpecFlow is not generic, the [generic test
+   fixture](https://docs.nunit.org/articles/nunit/writing-tests/attributes/testfixture.html#generic-test-fixtures)
+   pattern for specifying multiple browser drivers in plain NUnit test classes
+   is not available here.
+
+   Instead, there is a non-generic base class (thus with a browser specification)
+   `CalculatorTestBase.cs` which is common to all feature files.
+
+   Consequently, the top-level feature structure directly mirrors the Blazor
+   component structure in the application under test (which can be considered as
+   an arbitrary implementation detail) - instead of being defined purely
+   *contentually* (as in plain SpecFlow without this dependency).
+
+5. These feature specific partial classes are located besides the feature files
+   as:
+   1. `Calculator.feature` (Gherkin source)
+   2. `Calculator.feature.cs` (transpilated prartial class)
+   3. `Calculator.feature.driver.cs` (`iselenium` partial class inheriting from
+      `CalculatorTestBase`)
+
+
+<table>
+
+<tr><th>Blazor</th><th>WebForms</th></tr>
+
+<tr><td colspan="2">
+
+**1. Gherkin Feature File: `Calculator.feature`**
+
+</td></tr>
+
+<tr style="font-size: smaller;"><td>
+
+```gherkin
+Scenario: Add two numbers
+	Given the first number is 50
+	And the second number is 70
+	When the add button is clicked
+	Then the result should be 120
+```
+</td><td>
+
+```gherkin
+Scenario: Add two numbers
+	Given the first number is 50
+	And the second number is 70
+	When the add button is clicked
+	Then the result should be 120
+```
+
+</td></tr>
+
+<tr><td colspan="2">
+
+**2. Step Definitions: `CalculatorStepDefinitions.cs`**
+
+</td></tr>
+
+<tr style="font-size: smaller;"><td>
+
+```csharp
+[Given("the first number is (.*)")]
+public void GivenTheFirstNumberIs(int number)
+{
+    _driver.EnterTheNumber(number);
+}
+
+[Given("the second number is (.*)")]
+public void GivenTheSecondNumberIs(int number)
+{
+    _driver.EnterTheNumber(number);
+}
+
+[When("the add button is clicked")]
+public void WhenTheTwoNumbersAreAdded()
+{
+    _driver.ClickAdd();
+}
+
+[Then("the result should be (.*)")]
+public void ThenTheResultShouldBe(int result)
+{
+    _driver.AssertResultIs(result);
+}
+```
+
+</td><td>
+
+```csharp
+[Given("the first number is (.*)")]
+public void GivenTheFirstNumberIs(int number)
+{
+    _driver.EnterTheNumber(number);
+}
+
+[Given("the second number is (.*)")]
+public void GivenTheSecondNumberIs(int number)
+{
+    _driver.EnterTheNumber(number);
+}
+
+[When("the add button is clicked")]
+public void WhenTheTwoNumbersAreAdded()
+{
+    _driver.ClickAdd();
+}
+
+[Then("the result should be (.*)")]
+public void ThenTheResultShouldBe(int result)
+{
+    _driver.AssertResultIs(result);
+}
+```
+
+</td></tr>
+
+<tr><td colspan="2">
+
+**3. Specflow Driver: `CalculatorDriver.cs`**
+
+</td></tr>
+
+<tr style="font-size: smaller;"><td>
+
+```csharp
+public void EnterTheNumber(int number)
+{
+    Driver.Navigate("/");
+    Driver.Click(Driver.Cut.footer.enterButton);
+    Assert.That(Driver.State, Is.EqualTo(CalculatorContext.Map1.Enter));
+    Driver.Write(Driver.Dynamic<Enter>(Driver.Cut.calculatorPart).operand, number.ToString());
+    Driver.Click(Driver.Cut.footer.enterButton);
+    Assert.That(Driver.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
+}
+
+public void ClickAdd()
+{
+    var before = Driver.Stack.Count;
+    Driver.Click(Driver.Dynamic<Calculate>(Driver.Cut.calculatorPart).addButton);
+    Assert.That(Driver.Stack.Count, Is.EqualTo(before - 1));
+}
+
+public void AssertResultIs(int result)
+{
+    Assert.Multiple(() =>
+    {
+        Assert.That(Driver.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
+        Assert.That(Driver.Stack.Peek(), Is.EqualTo(result.ToString()));
+        Assert.That(Driver.Html(), Does.Contain(result.ToString()));
+    });
+}
+```
+
+</td><td>
+
+```csharp
+public void EnterTheNumber(int number)
+{
+    Driver.Navigate("/default.aspx");
+    Driver.Click("footer.enterButton");
+    Assert.That(Driver.State, Is.EqualTo(CalculatorContext.Map1.Enter));
+    Driver.Write("enter.operandTextBox", number.ToString());
+    Driver.Click("footer.enterButton");
+    Assert.That(Driver.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
+}
+
+public void ClickAdd()
+{
+    var before = Driver.Stack.Count;
+    Driver.Click("calculate.addButton");
+    Assert.That(Driver.Stack.Count, Is.EqualTo(before - 1));
+}
+
+public void AssertResultIs(int result)
+{
+    Assert.Multiple(() =>
+    {
+        Assert.That(Driver.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
+        Assert.That(Driver.Stack.Peek(), Is.EqualTo(result.ToString()));
+        Assert.That(Driver.Html(), Does.Contain(result.ToString()));
+    });
+}
+```
+
+</td></tr>
+
+<tr><td colspan="2">
+
+**4. iselenium driver base: `CalculatorTestBase.cs`**
+
+</td></tr>
+
+<tr style="font-size: smaller;"><td>
+
+```csharp
+public abstract class CalculatorTestBase<TWebDriver> :
+    SmcComponentDbTest<TWebDriver, CalculatorComponent, Calculator, CalculatorContext, CalculatorContext.CalculatorState>
+    where TWebDriver : IWebDriver, new()
+{
+    public Stack<string> Stack
+    {
+        get { return Main.Stack; }
+    }
+}
+```
+
+</td><td>
+
+```csharp
+public abstract class CalculatorTestBase : SmcDbTest<EdgeDriver, Calculator, CalculatorContext, CalculatorContext.CalculatorState>
+{
+    public Stack<string> Stack
+    {
+        get { return this.MainControl.Main.Stack; }
+    }
+}
+```
+
+</td></tr>
+
+<tr><td colspan="2">
+
+**5. Derived iselenium driver instance accessor: `Calculator.feature.driver.cs`**
+
+</td></tr>
+
+<tr style="font-size: smaller;"><td>
+
+```csharp
+    public partial class CalculatorFeature : CalculatorTestBase<EdgeDriver>
+    {
+        public static CalculatorFeature Driver { get; set; } = default!;
+
+        public CalculatorFeature()
+        {
+            Driver = this;
+        }
+    }
+```
+
+</td><td>
+
+```csharp
+public partial class CalculatorFeature : CalculatorTestBase<EdgeDriver>
+{
+    public static CalculatorFeature Driver { get; set; }
+
+    public CalculatorFeature()
+    {
+        Driver = this;
+    }
+}
+```
+
+</td></tr>
+
+</table>
+
