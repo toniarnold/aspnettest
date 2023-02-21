@@ -7,7 +7,6 @@ namespace asptest.blazor.specflow.Drivers
     {
         public void EnterTheNumber(int number)
         {
-            Driver.Navigate("/");
             Driver.Click(Driver.Cut.footer.enterButton);
             Assert.That(Driver.State, Is.EqualTo(CalculatorContext.Map1.Enter));
             Driver.Write(Driver.Dynamic<Enter>(Driver.Cut.calculatorPart).operand, number.ToString());

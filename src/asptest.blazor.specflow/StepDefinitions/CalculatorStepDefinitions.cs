@@ -1,5 +1,5 @@
 using asptest.blazor.specflow.Drivers;
-using asptest.blazor.specflow.Features;
+using static asptest.blazor.specflow.Features.CalculatorFeature;
 
 namespace asptest.blazor.specflow.StepDefinitions
 {
@@ -16,6 +16,12 @@ namespace asptest.blazor.specflow.StepDefinitions
         public CalculatorStepDefinitions(CalculatorDriver driver)
         {
             _driver = driver;
+        }
+
+        [BeforeScenario]
+        public void NavigateToCalculatorComponent()
+        {
+            Driver.Navigate("/");
         }
 
         [Given("the first number is (.*)")]

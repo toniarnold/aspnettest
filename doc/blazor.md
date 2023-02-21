@@ -264,7 +264,7 @@ Add the `param-CorrelationGuid="@Guid.NewGuid()"` to the app component:
 
 ```
 @page "/"
-(…)
+(ï¿½)
 <component type="typeof(App)" param-CorrelationGuid="@Guid.NewGuid()" render-mode="ServerPrerendered" />
 ```
 
@@ -276,7 +276,7 @@ On top, add `@inject ScopeCorrelationProvider provider` and the following
 
 ```
 @inject ScopeCorrelationProvider provider
-(…)
+(ï¿½)
 @code {
     [Parameter] // received once from _Host.cshtml
     public Guid CorrelationGuid { get; set; } = default!;
@@ -650,7 +650,7 @@ immediately after the click (1st round trip):
 
 <tr><th>BlazorApp1BunitTest</th><th>BlazorApp1SeleniumTest</th></tr>
 
-<tr style="font-size: smaller;"><td>
+<tr><td>
 
 ```csharp
 private const int COUNT_NUMBER = 5000;

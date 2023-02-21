@@ -21,13 +21,14 @@ namespace asplib.Model
         /// </summary>
         /// <typeparam name="M"></typeparam>
         /// <param name="filter">encrypt filter</param>
+
         /// <returns></returns>
         public static IEnumerable<Main> AllMainRows<M>(Func<byte[], byte[]> filter = null)
             where M : class
         {
             using (var db = new ASP_DBEntities())
             {
-                return AllMainRows<M>(db, filter).ToList(); // enumerate within the DbContext
+                return AllMainRows<M>(db, SerializationFilter.DecompressFilter(filter)).ToList();
             }
         }
 
@@ -140,7 +141,7 @@ namespace asplib.Model
         public M GetInstance<M>(Func<byte[], byte[]> filter = null)
             where M : class
         {
-            var obj = Serialization.Deserialize(this.main, filter);
+            var obj = Serialization.Deserialize(this.main, SerializationFilter.DecompressFilter(filter));
             this.mainInstance = (obj != null && obj.GetType() == typeof(M)) ? (M)obj : null;
             return (M)this.mainInstance;
         }

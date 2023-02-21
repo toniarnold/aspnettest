@@ -1,5 +1,7 @@
 using asptest.webforms.specflow.Drivers;
 using TechTalk.SpecFlow;
+using static asptest.webforms.specflow.Features.CalculatorFeature;
+using iselenium;
 
 namespace asptest.webforms.specflow.StepDefinitions
 {
@@ -16,6 +18,12 @@ namespace asptest.webforms.specflow.StepDefinitions
         public CalculatorStepDefinitions(CalculatorDriver driver)
         {
             _driver = driver;
+        }
+
+        [BeforeScenario]
+        public void NavigateToCalculatorComponent()
+        {
+            Driver.Navigate("/default.aspx");
         }
 
         [Given("the first number is (.*)")]

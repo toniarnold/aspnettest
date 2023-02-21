@@ -157,7 +157,7 @@ namespace asplib.View
                                 {
                                     decryptFilter = x => Crypt.Decrypt(controlStorage.GetSecret(), x); // closure
                                 }
-                                var filter = Serialization.ComposeFilters(decryptFilter, DecompressFilter());
+                                var filter = Serialization.ComposeFilters(decryptFilter, SerializationFilter.DecompressFilter());
                                 controlStorage.Main = Main.LoadMain<M>(session, filter);
                             }
                         }
@@ -218,7 +218,7 @@ namespace asplib.View
                     {
                         encryptFilter = x => Crypt.Encrypt(controlStorage.GetSecret(), x); // closure
                     }
-                    var filter = Serialization.ComposeFilters(CompressFilter(), encryptFilter);
+                    var filter = Serialization.ComposeFilters(SerializationFilter.CompressFilter(), encryptFilter);
                     session = Main.SaveMain(controlStorage.Main, session, filter);
 
                     var configDays = ConfigurationManager.AppSettings["DatabaseStorageExpires"];
@@ -314,7 +314,7 @@ namespace asplib.View
         /// </summary>
         public static Func<byte[], byte[]> CompressEncryptFilter()
         {
-            return Serialization.ComposeFilters(CompressFilter(),
+            return Serialization.ComposeFilters(SerializationFilter.CompressFilter(),
                                                 EncryptViewStateFilter());
         }
 
@@ -324,7 +324,7 @@ namespace asplib.View
         public static Func<byte[], byte[]> DecryptDecompressFilter()
         {
             return Serialization.ComposeFilters(DecryptViewStateFilter(),
-                                                DecompressFilter());
+                                                SerializationFilter.DecompressFilter());
         }
 
         /// <summary>
@@ -368,55 +368,8 @@ namespace asplib.View
         /// <returns></returns>
         internal static bool UseNoViewStateFilters()
         {
-            return (GetViewStateCompressionLevel() == CompressionLevel.NoCompression &&
+            return (SerializationFilter.GetViewStateCompressionLevel() == CompressionLevel.NoCompression &&
                     String.IsNullOrEmpty(ConfigurationManager.AppSettings["EncryptViewStateKey"]));
-        }
-
-        /// <summary>
-        /// Return the Gzip compression filter if configured, otherwise null.
-        /// </summary>
-        /// <param name="configuration"></param>
-        /// <returns></returns>
-        internal static Func<byte[], byte[]> CompressFilter()
-        {
-            var compressionLevel = GetViewStateCompressionLevel();
-            if (GetViewStateCompressionLevel() != CompressionLevel.NoCompression)
-            {
-                return x => Compress.Gzip(x, compressionLevel);
-            }
-            else { return null; }
-        }
-
-        /// <summary>
-        /// Return the Gunzip compression filter if configured, otherwise null.
-        /// </summary>
-        /// <param name="configuration"></param>
-        /// <returns></returns>
-        internal static Func<byte[], byte[]> DecompressFilter()
-        {
-            if (GetViewStateCompressionLevel() != CompressionLevel.NoCompression)
-            {
-                return x => Compress.Gunzip(x);
-            }
-            else { return null; }
-        }
-
-        /// <summary>
-        /// Return the configured ViewStateCompressionLevel or
-        /// CompressionLevel.NoCompression if not configured.
-        /// </summary>
-        /// <param name="configuration"></param>
-        /// <returns></returns>
-        internal static CompressionLevel GetViewStateCompressionLevel()
-        {
-            if (Enum.TryParse<CompressionLevel>(ConfigurationManager.AppSettings["ViewStateCompressionLevel"], out var level))
-            {
-                return level;
-            }
-            else
-            {
-                return CompressionLevel.NoCompression;
-            }
         }
 
         /// <summary>

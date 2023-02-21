@@ -7,115 +7,117 @@
 // </automatisch generiert>
 //------------------------------------------------------------------------------
 
-namespace asp.calculator {
-    
-    
-    public partial class Main {
-        
+namespace asp.calculator
+{
+
+
+    public partial class Main
+    {
+
         /// <summary>
-        /// shareButton-Steuerelement
+        /// shareButton-Steuerelement.
         /// </summary>
         /// <remarks>
-        /// Automatisch generiertes Feld
+        /// Automatisch generiertes Feld.
         /// Zum Ändern Felddeklaration aus der Designerdatei in eine Code-Behind-Datei verschieben.
         /// </remarks>
         protected global::asplib.View.ShareButton shareButton;
-        
+
         /// <summary>
-        /// hamburgerDiv-Steuerelement
+        /// hamburgerDiv-Steuerelement.
         /// </summary>
         /// <remarks>
-        /// Automatisch generiertes Feld
+        /// Automatisch generiertes Feld.
         /// Zum Ändern Felddeklaration aus der Designerdatei in eine Code-Behind-Datei verschieben.
         /// </remarks>
         protected global::System.Web.UI.HtmlControls.HtmlGenericControl hamburgerDiv;
-        
+
         /// <summary>
-        /// PopEx-Steuerelement
+        /// PopEx-Steuerelement.
         /// </summary>
         /// <remarks>
-        /// Automatisch generiertes Feld
+        /// Automatisch generiertes Feld.
         /// Zum Ändern Felddeklaration aus der Designerdatei in eine Code-Behind-Datei verschieben.
         /// </remarks>
         protected global::AjaxControlToolkit.PopupControlExtender PopEx;
-        
+
         /// <summary>
-        /// sessionDumpDataSource-Steuerelement
+        /// sessionDumpDataSource-Steuerelement.
         /// </summary>
         /// <remarks>
-        /// Automatisch generiertes Feld
+        /// Automatisch generiertes Feld.
         /// Zum Ändern Felddeklaration aus der Designerdatei in eine Code-Behind-Datei verschieben.
         /// </remarks>
         protected global::System.Web.UI.WebControls.ObjectDataSource sessionDumpDataSource;
-        
+
         /// <summary>
-        /// gridViewPanel-Steuerelement
+        /// gridViewPanel-Steuerelement.
         /// </summary>
         /// <remarks>
-        /// Automatisch generiertes Feld
+        /// Automatisch generiertes Feld.
         /// Zum Ändern Felddeklaration aus der Designerdatei in eine Code-Behind-Datei verschieben.
         /// </remarks>
         protected global::System.Web.UI.UpdatePanel gridViewPanel;
-        
+
         /// <summary>
-        /// sessionDumpGridView-Steuerelement
+        /// sessionDumpGridView-Steuerelement.
         /// </summary>
         /// <remarks>
-        /// Automatisch generiertes Feld
+        /// Automatisch generiertes Feld.
         /// Zum Ändern Felddeklaration aus der Designerdatei in eine Code-Behind-Datei verschieben.
         /// </remarks>
         protected global::System.Web.UI.WebControls.GridView sessionDumpGridView;
-        
+
         /// <summary>
-        /// title-Steuerelement
+        /// title-Steuerelement.
         /// </summary>
         /// <remarks>
-        /// Automatisch generiertes Feld
+        /// Automatisch generiertes Feld.
         /// Zum Ändern Felddeklaration aus der Designerdatei in eine Code-Behind-Datei verschieben.
         /// </remarks>
         protected global::asp.calculator.View.Title title;
-        
+
         /// <summary>
-        /// splash-Steuerelement
+        /// splash-Steuerelement.
         /// </summary>
         /// <remarks>
-        /// Automatisch generiertes Feld
+        /// Automatisch generiertes Feld.
         /// Zum Ändern Felddeklaration aus der Designerdatei in eine Code-Behind-Datei verschieben.
         /// </remarks>
         protected global::asp.calculator.View.Splash splash;
-        
+
         /// <summary>
-        /// enter-Steuerelement
+        /// enter-Steuerelement.
         /// </summary>
         /// <remarks>
-        /// Automatisch generiertes Feld
+        /// Automatisch generiertes Feld.
         /// Zum Ändern Felddeklaration aus der Designerdatei in eine Code-Behind-Datei verschieben.
         /// </remarks>
         protected global::asp.calculator.View.Enter enter;
-        
+
         /// <summary>
-        /// calculate-Steuerelement
+        /// calculate-Steuerelement.
         /// </summary>
         /// <remarks>
-        /// Automatisch generiertes Feld
+        /// Automatisch generiertes Feld.
         /// Zum Ändern Felddeklaration aus der Designerdatei in eine Code-Behind-Datei verschieben.
         /// </remarks>
         protected global::asp.calculator.View.Calculate calculate;
-        
+
         /// <summary>
-        /// error-Steuerelement
+        /// error-Steuerelement.
         /// </summary>
         /// <remarks>
-        /// Automatisch generiertes Feld
+        /// Automatisch generiertes Feld.
         /// Zum Ändern Felddeklaration aus der Designerdatei in eine Code-Behind-Datei verschieben.
         /// </remarks>
         protected global::asp.calculator.View.Error error;
-        
+
         /// <summary>
-        /// footer-Steuerelement
+        /// footer-Steuerelement.
         /// </summary>
         /// <remarks>
-        /// Automatisch generiertes Feld
+        /// Automatisch generiertes Feld.
         /// Zum Ändern Felddeklaration aus der Designerdatei in eine Code-Behind-Datei verschieben.
         /// </remarks>
         protected global::asp.calculator.View.Footer footer;

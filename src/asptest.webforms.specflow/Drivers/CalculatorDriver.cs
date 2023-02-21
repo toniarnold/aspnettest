@@ -8,7 +8,6 @@ namespace asptest.webforms.specflow.Drivers
     {
         public void EnterTheNumber(int number)
         {
-            Driver.Navigate("/default.aspx");
             Driver.Click("footer.enterButton");
             Assert.That(Driver.State, Is.EqualTo(CalculatorContext.Map1.Enter));
             Driver.Write("enter.operandTextBox", number.ToString());

@@ -1,5 +1,17 @@
 # SpecFlow integration
 
+* [Introduction](#introduction)
+* [Side by side comparison Blazor/WebForms](#side-by-side-comparison-blazorwebforms)
+  * [1. Gherkin Feature File: Calculator.feature](#1-gherkin-feature-file-calculatorfeature)
+  * [2. Step Definitions: CalculatorStepDefinitions.cs](#2-step-definitions-calculatorstepdefinitionscs)
+  * [3. Specflow Driver: CalculatorDriver.cs](#3-specflow-driver-calculatordrivercs)
+  * [4. iselenium driver base: CalculatorTestBase.cs](#4-iselenium-driver-base-calculatortestbasecs)
+  * [5. iselenium driver instance accessor: Calculator.feature.driver.cs](#5-iselenium-driver-instance-accessor-calculatorfeaturedrivercs)
+* [Living Documentation](#living-documentation)
+
+
+## Introduction
+
 The Blazor template and asp blazor/webforms include a
 [SpecFlow](https://specflow.org) test suite that performs some of the same tests
 as the direct Selenium tests suite. SpecFlow is a  behaviour-driven development
@@ -100,15 +112,23 @@ The distinct layers are illustrated here using the Blazor and the WebForms examp
 
 <table>
 
-<tr><th>Blazor</th><th>WebForms</th></tr>
+<tr><th>
+
+## Blazor
+
+</th><th>
+
+## WebForms
+
+</th></tr>
 
 <tr><td colspan="2">
 
-**1. Gherkin Feature File: `Calculator.feature`**
+#### 1. Gherkin Feature File: `Calculator.feature`
 
 </td></tr>
 
-<tr style="font-size: smaller;"><td>
+<tr><td>
 
 ```gherkin
 Scenario: Add two numbers
@@ -131,11 +151,11 @@ Scenario: Add two numbers
 
 <tr><td colspan="2">
 
-**2. Step Definitions: `CalculatorStepDefinitions.cs`**
+#### 2. Step Definitions: `CalculatorStepDefinitions.cs`
 
 </td></tr>
 
-<tr style="font-size: smaller;"><td>
+<tr><td>
 
 ```csharp
 [Given("the first number is (.*)")]
@@ -195,11 +215,11 @@ public void ThenTheResultShouldBe(int result)
 
 <tr><td colspan="2">
 
-**3. Specflow Driver: `CalculatorDriver.cs`**
+#### 3. Specflow Driver: `CalculatorDriver.cs`
 
 </td></tr>
 
-<tr style="font-size: smaller;"><td>
+<tr><td>
 
 ```csharp
 public void EnterTheNumber(int number)
@@ -265,11 +285,11 @@ public void AssertResultIs(int result)
 
 <tr><td colspan="2">
 
-**4. iselenium driver base: `CalculatorTestBase.cs`**
+#### 4. iselenium driver base: `CalculatorTestBase.cs`
 
 </td></tr>
 
-<tr style="font-size: smaller;"><td>
+<tr><td>
 
 ```csharp
 public abstract class CalculatorTestBase<TWebDriver> :
@@ -299,11 +319,11 @@ public abstract class CalculatorTestBase : SmcDbTest<EdgeDriver, Calculator, Cal
 
 <tr><td colspan="2">
 
-**5. Derived iselenium driver instance accessor: `Calculator.feature.driver.cs`**
+#### 5. iselenium driver instance accessor: `Calculator.feature.driver.cs`
 
 </td></tr>
 
-<tr style="font-size: smaller;"><td>
+<tr><td>
 
 ```csharp
     public partial class CalculatorFeature : CalculatorTestBase<EdgeDriver>
@@ -335,3 +355,25 @@ public partial class CalculatorFeature : CalculatorTestBase<EdgeDriver>
 
 </table>
 
+
+## Living Documentation
+
+Living documentation from the test execution can be generated according to the
+[SpecFlow
+manual](https://docs.specflow.org/projects/getting-started/en/latest/GettingStarted/Step9.html).
+Simply execute the following command in the corresponding `.\bin\Debug\net6.0`
+folder of the web application project (which is actually executing the tests).
+The warnings about System.Runtime and "No bindings found in assembly"  can
+apparently be ignored.
+
+```sh
+livingdoc test-assembly asptest.blazor.specflow.dll -t TestExecution.json
+livingdoc test-assembly BlazorApp1SpecFlowTest.dll -t TestExecution.json
+```
+
+The resulting HTML file is `LivingDoc.html`.
+
+These are the results:
+
+- asp.blazor Calculator: [asptest.blazor.specflow-LivingDoc.html](livingdoc/asptest.blazor.specflow-LivingDoc.html)
+- aspnettest.template.blazor: [BlazorApp1-LivingDoc.html](livingdoc/BlazorApp1-LivingDoc.html)

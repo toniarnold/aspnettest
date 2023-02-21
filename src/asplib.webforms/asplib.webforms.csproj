@@ -97,6 +97,7 @@
       <DependentUpon>Db.tt</DependentUpon>
     </Compile>
     <Compile Include="Model\MainInstance.cs" />
+    <Compile Include="Model\SerializationFilter.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="View\ISmcControl.cs" />
     <Compile Include="View\IRootControl.cs" />
