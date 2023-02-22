@@ -10,15 +10,19 @@ namespace asptest.webforms.specflow.Drivers
         {
             Driver.Click("footer.enterButton");
             Assert.That(Driver.State, Is.EqualTo(CalculatorContext.Map1.Enter));
-            Driver.Write("enter.operandTextBox", number.ToString());
+            Driver.Write(
+                "enter.operandTextBox",
+                number.ToString());
             Driver.Click("footer.enterButton");
-            Assert.That(Driver.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
+            Assert.That(Driver.State,
+                Is.EqualTo(CalculatorContext.Map1.Calculate));
         }
 
         public void ClickAdd()
         {
             var before = Driver.Stack.Count;
-            Driver.Click("calculate.addButton");
+            Driver.Click(
+                "calculate.addButton");
             Assert.That(Driver.Stack.Count, Is.EqualTo(before - 1));
         }
 
@@ -61,9 +65,12 @@ namespace asptest.webforms.specflow.Drivers
         {
             Assert.Multiple(() =>
             {
-                Assert.That(Driver.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
-                Assert.That(Driver.Stack.Peek(), Is.EqualTo(result.ToString()));
-                Assert.That(Driver.Html(), Does.Contain(result.ToString()));
+                Assert.That(Driver.State,
+                    Is.EqualTo(CalculatorContext.Map1.Calculate));
+                Assert.That(Driver.Stack.Peek(),
+                    Is.EqualTo(result.ToString()));
+                Assert.That(Driver.Html(),
+                    Does.Contain(result.ToString()));
             });
         }
     }

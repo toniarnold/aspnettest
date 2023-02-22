@@ -6,7 +6,8 @@ using OpenQA.Selenium;
 namespace asptest.blazor.specflow.Drivers
 {
     public abstract class CalculatorTestBase<TWebDriver> :
-        SmcComponentDbTest<TWebDriver, CalculatorComponent, Calculator, CalculatorContext, CalculatorContext.CalculatorState>
+        SmcComponentDbTest<TWebDriver, CalculatorComponent, Calculator,
+            CalculatorContext, CalculatorContext.CalculatorState>
         where TWebDriver : IWebDriver, new()
     {
         public Stack<string> Stack

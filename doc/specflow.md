@@ -8,6 +8,7 @@
   * [4. iselenium driver base: CalculatorTestBase.cs](#4-iselenium-driver-base-calculatortestbasecs)
   * [5. iselenium driver instance accessor: Calculator.feature.driver.cs](#5-iselenium-driver-instance-accessor-calculatorfeaturedrivercs)
 * [Living Documentation](#living-documentation)
+* [The WebForms SpecFlow rabbit hole](#the-webforms-specflow-rabbit-hole)
 
 
 ## Introduction
@@ -27,10 +28,7 @@ actually use it.
 The WebForms example was originally created using VS 2019 (the VS 2022 SpecFlow
 package created C# with `global using` incompatible with .NET Framework). It
 follows the same pattern as the Blazor example, it compiles, but it does not
-currently run with some sort of DLL hell exception: `Interface cannot be
-resolved: TechTalk.SpecFlow.UnitTestProvider.IUnitTestRuntimeProvider('nunit')`
-\- even though the required `TechTalk.SpecFlow.NUnit.SpecFlowPlugin.dll` is
-present in the `bin` directory.
+currently run with some sort of [DLL hell exception](#the-webforms-specflow-rabbit-hole).
 
 
 Textual test scenarios are written in the
@@ -128,7 +126,8 @@ The distinct layers are illustrated here using the Blazor and the WebForms examp
 
 </td></tr>
 
-<tr><td>
+<!-- <sub>  </sub> is the GitHub idiom for the filtered style="font-size: smaller;" -->
+<tr><td><sub>
 
 ```gherkin
 Scenario: Add two numbers
@@ -137,7 +136,7 @@ Scenario: Add two numbers
 	When the add button is clicked
 	Then the result should be 120
 ```
-</td><td>
+</sub></sub></td><td><sub>
 
 ```gherkin
 Scenario: Add two numbers
@@ -147,7 +146,7 @@ Scenario: Add two numbers
 	Then the result should be 120
 ```
 
-</td></tr>
+</sub></td></tr>
 
 <tr><td colspan="2">
 
@@ -155,7 +154,7 @@ Scenario: Add two numbers
 
 </td></tr>
 
-<tr><td>
+<tr><td><sub>
 
 ```csharp
 [Given("the first number is (.*)")]
@@ -183,7 +182,7 @@ public void ThenTheResultShouldBe(int result)
 }
 ```
 
-</td><td>
+</sub></td><td><sub>
 
 ```csharp
 [Given("the first number is (.*)")]
@@ -211,7 +210,7 @@ public void ThenTheResultShouldBe(int result)
 }
 ```
 
-</td></tr>
+</sub></td></tr>
 
 <tr><td colspan="2">
 
@@ -219,23 +218,26 @@ public void ThenTheResultShouldBe(int result)
 
 </td></tr>
 
-<tr><td>
+<tr><td><sub>
 
 ```csharp
 public void EnterTheNumber(int number)
 {
-    Driver.Navigate("/");
     Driver.Click(Driver.Cut.footer.enterButton);
     Assert.That(Driver.State, Is.EqualTo(CalculatorContext.Map1.Enter));
-    Driver.Write(Driver.Dynamic<Enter>(Driver.Cut.calculatorPart).operand, number.ToString());
+    Driver.Write(
+        Driver.Dynamic<Enter>(Driver.Cut.calculatorPart).operand,
+        number.ToString());
     Driver.Click(Driver.Cut.footer.enterButton);
-    Assert.That(Driver.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
+    Assert.That(Driver.State,
+        Is.EqualTo(CalculatorContext.Map1.Calculate));
 }
 
 public void ClickAdd()
 {
     var before = Driver.Stack.Count;
-    Driver.Click(Driver.Dynamic<Calculate>(Driver.Cut.calculatorPart).addButton);
+    Driver.Click(
+        Driver.Dynamic<Calculate>(Driver.Cut.calculatorPart).addButton);
     Assert.That(Driver.Stack.Count, Is.EqualTo(before - 1));
 }
 
@@ -243,30 +245,36 @@ public void AssertResultIs(int result)
 {
     Assert.Multiple(() =>
     {
-        Assert.That(Driver.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
-        Assert.That(Driver.Stack.Peek(), Is.EqualTo(result.ToString()));
-        Assert.That(Driver.Html(), Does.Contain(result.ToString()));
+        Assert.That(Driver.State,
+            Is.EqualTo(CalculatorContext.Map1.Calculate));
+        Assert.That(Driver.Stack.Peek(),
+            Is.EqualTo(result.ToString()));
+        Assert.That(Driver.Html(),
+            Does.Contain(result.ToString()));
     });
 }
 ```
 
-</td><td>
+</sub></td><td><sub>
 
 ```csharp
 public void EnterTheNumber(int number)
 {
-    Driver.Navigate("/default.aspx");
     Driver.Click("footer.enterButton");
     Assert.That(Driver.State, Is.EqualTo(CalculatorContext.Map1.Enter));
-    Driver.Write("enter.operandTextBox", number.ToString());
+    Driver.Write(
+        "enter.operandTextBox",
+        number.ToString());
     Driver.Click("footer.enterButton");
-    Assert.That(Driver.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
+    Assert.That(Driver.State,
+        Is.EqualTo(CalculatorContext.Map1.Calculate));
 }
 
 public void ClickAdd()
 {
     var before = Driver.Stack.Count;
-    Driver.Click("calculate.addButton");
+    Driver.Click(
+        "calculate.addButton");
     Assert.That(Driver.Stack.Count, Is.EqualTo(before - 1));
 }
 
@@ -274,14 +282,17 @@ public void AssertResultIs(int result)
 {
     Assert.Multiple(() =>
     {
-        Assert.That(Driver.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
-        Assert.That(Driver.Stack.Peek(), Is.EqualTo(result.ToString()));
-        Assert.That(Driver.Html(), Does.Contain(result.ToString()));
+        Assert.That(Driver.State,
+            Is.EqualTo(CalculatorContext.Map1.Calculate));
+        Assert.That(Driver.Stack.Peek(),
+            Is.EqualTo(result.ToString()));
+        Assert.That(Driver.Html(),
+            Does.Contain(result.ToString()));
     });
 }
 ```
 
-</td></tr>
+</sub></td></tr>
 
 <tr><td colspan="2">
 
@@ -289,24 +300,13 @@ public void AssertResultIs(int result)
 
 </td></tr>
 
-<tr><td>
+<tr><td><sub>
 
 ```csharp
 public abstract class CalculatorTestBase<TWebDriver> :
-    SmcComponentDbTest<TWebDriver, CalculatorComponent, Calculator, CalculatorContext, CalculatorContext.CalculatorState>
+    SmcDbTest<EdgeDriver, Calculator,
+        CalculatorContext, CalculatorContext.CalculatorState>
     where TWebDriver : IWebDriver, new()
-{
-    public Stack<string> Stack
-    {
-        get { return Main.Stack; }
-    }
-}
-```
-
-</td><td>
-
-```csharp
-public abstract class CalculatorTestBase : SmcDbTest<EdgeDriver, Calculator, CalculatorContext, CalculatorContext.CalculatorState>
 {
     public Stack<string> Stack
     {
@@ -315,7 +315,22 @@ public abstract class CalculatorTestBase : SmcDbTest<EdgeDriver, Calculator, Cal
 }
 ```
 
-</td></tr>
+</sub></td><td><sub>
+
+```csharp
+public abstract class CalculatorTestBase<TWebDriver> :
+    SmcDbTest<EdgeDriver, Calculator,
+        CalculatorContext, CalculatorContext.CalculatorState>
+    where TWebDriver : IWebDriver, new()
+{
+    public Stack<string> Stack
+    {
+        get { return this.MainControl.Main.Stack; }
+    }
+}
+```
+
+</sub></td></tr>
 
 <tr><td colspan="2">
 
@@ -323,21 +338,21 @@ public abstract class CalculatorTestBase : SmcDbTest<EdgeDriver, Calculator, Cal
 
 </td></tr>
 
-<tr><td>
+<tr><td><sub>
 
 ```csharp
-    public partial class CalculatorFeature : CalculatorTestBase<EdgeDriver>
-    {
-        public static CalculatorFeature Driver { get; set; } = default!;
+public partial class CalculatorFeature : CalculatorTestBase<EdgeDriver>
+{
+    public static CalculatorFeature Driver { get; set; } = default!;
 
-        public CalculatorFeature()
-        {
-            Driver = this;
-        }
+    public CalculatorFeature()
+    {
+        Driver = this;
     }
+}
 ```
 
-</td><td>
+</sub></td><td><sub>
 
 ```csharp
 public partial class CalculatorFeature : CalculatorTestBase<EdgeDriver>
@@ -351,7 +366,7 @@ public partial class CalculatorFeature : CalculatorTestBase<EdgeDriver>
 }
 ```
 
-</td></tr>
+</sub></td></tr>
 
 </table>
 
@@ -368,6 +383,7 @@ apparently be ignored.
 
 ```sh
 livingdoc test-assembly asptest.blazor.specflow.dll -t TestExecution.json
+livingdoc test-assembly asptest.webforms.specflow.dll -t TestExecution.json
 livingdoc test-assembly BlazorApp1SpecFlowTest.dll -t TestExecution.json
 ```
 
@@ -376,4 +392,26 @@ The resulting HTML file is `LivingDoc.html`.
 These are the results:
 
 - asp.blazor Calculator: [asptest.blazor.specflow-LivingDoc.html](livingdoc/asptest.blazor.specflow-LivingDoc.html)
-- aspnettest.template.blazor: [BlazorApp1-LivingDoc.html](livingdoc/BlazorApp1-LivingDoc.html)
+- asp.webforms Calculator: [asptest.webforms.specflow-LivingDoc](livingdoc/asptest.webforms.specflow-LivingDoc.html)
+- aspnettest.template.blazor: [BlazorApp1SpecFlowTest-LivingDoc.html](livingdoc/BlazorApp1SpecFlowTest-LivingDoc.html)
+
+
+## The WebForms SpecFlow rabbit hole
+
+When  running the SpecFlow WebForms tests, the following exception is thrown:
+`Interface cannot be resolved:
+TechTalk.SpecFlow.UnitTestProvider.IUnitTestRuntimeProvider('nunit')` \- even
+though the required `TechTalk.SpecFlow.NUnit.SpecFlowPlugin.dll` is present in
+the `bin` directory.
+
+This is because the [`BoDi`](https://github.com/SpecFlowOSS/BoDi) IoC container
+used by SpecFlow loads the assembly from
+`C:\Windows\Microsoft.NET\Framework64\v4.0.30319\Temporary ASP.NET Files` - but
+the WebForms framework only copies the main `asptest.webforms.specflow.DLL` to a
+subdirectory there, not the dependencies. And it prunes the directory after each
+change. As a workaround, I manually copied all the DLLs from
+`src\asp.webforms\bin\` there (repeat after each compilation after changes).
+
+The tests then run, but the engine hangs after the tests have finished. However,
+the result `TestExecution.json` is generated and can be copied back to the
+original `bin` folder. There the `livingdoc` utility succeeds.

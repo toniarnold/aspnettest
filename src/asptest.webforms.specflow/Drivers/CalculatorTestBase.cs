@@ -7,8 +7,9 @@ using System.Collections.Generic;
 
 namespace asptest.webforms.specflow.Drivers
 {
-    [TestFixture]
-    public abstract class CalculatorTestBase<TWebDriver> : SmcDbTest<EdgeDriver, Calculator, CalculatorContext, CalculatorContext.CalculatorState>
+    public abstract class CalculatorTestBase<TWebDriver> :
+        SmcDbTest<EdgeDriver, Calculator,
+            CalculatorContext, CalculatorContext.CalculatorState>
         where TWebDriver : IWebDriver, new()
     {
         public Stack<string> Stack

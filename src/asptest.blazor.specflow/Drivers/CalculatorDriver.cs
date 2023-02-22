@@ -9,15 +9,19 @@ namespace asptest.blazor.specflow.Drivers
         {
             Driver.Click(Driver.Cut.footer.enterButton);
             Assert.That(Driver.State, Is.EqualTo(CalculatorContext.Map1.Enter));
-            Driver.Write(Driver.Dynamic<Enter>(Driver.Cut.calculatorPart).operand, number.ToString());
+            Driver.Write(
+                Driver.Dynamic<Enter>(Driver.Cut.calculatorPart).operand,
+                number.ToString());
             Driver.Click(Driver.Cut.footer.enterButton);
-            Assert.That(Driver.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
+            Assert.That(Driver.State,
+                Is.EqualTo(CalculatorContext.Map1.Calculate));
         }
 
         public void ClickAdd()
         {
             var before = Driver.Stack.Count;
-            Driver.Click(Driver.Dynamic<Calculate>(Driver.Cut.calculatorPart).addButton);
+            Driver.Click(
+                Driver.Dynamic<Calculate>(Driver.Cut.calculatorPart).addButton);
             Assert.That(Driver.Stack.Count, Is.EqualTo(before - 1));
         }
 
@@ -60,9 +64,12 @@ namespace asptest.blazor.specflow.Drivers
         {
             Assert.Multiple(() =>
             {
-                Assert.That(Driver.State, Is.EqualTo(CalculatorContext.Map1.Calculate));
-                Assert.That(Driver.Stack.Peek(), Is.EqualTo(result.ToString()));
-                Assert.That(Driver.Html(), Does.Contain(result.ToString()));
+                Assert.That(Driver.State,
+                    Is.EqualTo(CalculatorContext.Map1.Calculate));
+                Assert.That(Driver.Stack.Peek(),
+                    Is.EqualTo(result.ToString()));
+                Assert.That(Driver.Html(),
+                    Does.Contain(result.ToString()));
             });
         }
     }
