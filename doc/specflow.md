@@ -304,13 +304,13 @@ public void AssertResultIs(int result)
 
 ```csharp
 public abstract class CalculatorTestBase<TWebDriver> :
-    SmcDbTest<EdgeDriver, Calculator,
+    SmcComponentDbTest<TWebDriver, CalculatorComponent, Calculator,
         CalculatorContext, CalculatorContext.CalculatorState>
     where TWebDriver : IWebDriver, new()
 {
     public Stack<string> Stack
     {
-        get { return this.MainControl.Main.Stack; }
+        get { return Main.Stack; }
     }
 }
 ```
