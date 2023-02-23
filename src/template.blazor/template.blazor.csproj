@@ -9,7 +9,7 @@
     <PackageIcon>icon.png</PackageIcon>
     <PackageReadmeFile>README.md</PackageReadmeFile>
     <Title>aspnettest Blazor Server App with bUnit, Selenium and SpecFlow</Title>
-    <Description>Blazor Server App wired up with bUnit and aspnettest Selenium</Description>
+    <Description>Blazor Server App wired up with bUnit, aspnettest Selenium and SpecFlow</Description>
     <PackageLicenseExpression>AGPL-3.0-or-later</PackageLicenseExpression>
     <Copyright>Copyright © 2018-2023</Copyright>
     <PackageProjectUrl>https://github.com/toniarnold/aspnettest/</PackageProjectUrl>
