@@ -15,7 +15,7 @@
     <PackageReference Include="aspnettest.iselenium.websharper" Version="$([System.IO.File]::ReadAllText('$(MSBuildProjectDirectory)/../../nuget-info/version.txt'))" />
     <PackageReference Include="Selenium.WebDriver.ChromeDriver" Version="110.0.5481.7700" />
     <PackageReference Include="Selenium.WebDriver.GeckoDriver" Version="0.32.2" />
-    <PackageReference Include="Selenium.WebDriver.MSEdgeDriver" Version="110.0.1587.22-pre" />
+    <PackageReference Include="Selenium.WebDriver.MSEdgeDriver" Version="110.0.1587.50" />
     <PackageReference Include="WebSharper.AspNetCore" Version="6.1.1.252" />
   </ItemGroup>
 
