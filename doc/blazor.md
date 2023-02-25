@@ -721,6 +721,16 @@ public void CountWhiteboxTest() // duration="3.602152"
 
 </table>
 
+While pure whitebox test assertions are significantly faster, they also make the
+timing brittle due to a race condition: The `OnAfterRenderAsync` synchronization
+event may fire a slightly out of sync, causing the assertion to fail. A 2nd
+browser round trip for the assertion (with an implicit Selenium WebDriverWait)
+will ensure proper synchronization.
+
+This screencast of `aspnettest.template.blazor` illustrates the Count button
+speedup (ca. sec 12/18):
+
+![Blazor Template BlazorApp1.playlist](img/template.blazor-running.gif)
 
 
 ## The Test Explorer test runner
