@@ -19,7 +19,7 @@ jobs:
       with:
         dotnet-version: 6.0.x
     - name: Download Template .nupkg package
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4.1.7
       with:
         name: template.blazor
         path: ${{ github.workspace }}/packages/

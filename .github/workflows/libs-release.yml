@@ -19,12 +19,12 @@ jobs:
       with:
         dotnet-version: 6.0.x
     - name: Download .NET Core .[s]nupkg packages
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4.1.7
       with:
         name: libs.core
         path: ${{ github.workspace }}/packages/
     - name: Download .NET WebForms .[s]nupkg packages
-      uses: actions/download-artifact@v3
+      uses: actions/download-artifact@v4.1.7
       with:
         name: libs.webforms
         path: ${{ github.workspace }}/packages/
